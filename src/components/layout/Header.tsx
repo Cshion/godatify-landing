@@ -3,12 +3,17 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { NAV_LINKS, SERVICES_NAV, SOCIAL_LINKS } from '@/lib/constants';
 import styles from './Header.module.css';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Check if we are on a case detail page (starts with /casos/ but is not just /casos)
+  const isCaseDetail = pathname.startsWith('/casos/') && pathname !== '/casos';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,9 +24,12 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Force scrolled style on case detail pages or when actually scrolled
+  const headerClass = `${styles.header} ${isScrolled || isCaseDetail ? styles.scrolled : ''}`;
+
   return (
     <>
-      <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
+      <header className={headerClass}>
         <div className="container mx-auto px-6">
           <div className={styles.headerContent}>
             {/* Logo */}
@@ -58,28 +66,32 @@ export default function Header() {
                 </div>
               </div>
 
-              {NAV_LINKS.slice(3).map((link) => (
-                <Link key={link.href} href={link.href} className={styles.navLink}>
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
+              {
+                NAV_LINKS.slice(3).map((link) => (
+                  <Link key={link.href} href={link.href} className={styles.navLink}>
+                    {link.label}
+                  </Link>
+                ))
+              }
+            </nav >
 
             {/* Social Links */}
-            <div className={styles.socialLinks}>
-              {SOCIAL_LINKS.map((social) => (
-                <a
-                  key={social.id}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.socialLink}
-                  aria-label={social.label}
-                >
-                  <i className={`fab fa-${social.icon}`}></i>
-                </a>
-              ))}
-            </div>
+            < div className={styles.socialLinks} >
+              {
+                SOCIAL_LINKS.map((social) => (
+                  <a
+                    key={social.id}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.socialLink}
+                    aria-label={social.label}
+                  >
+                    <i className={`fab fa-${social.icon}`}></i>
+                  </a>
+                ))
+              }
+            </div >
 
             {/* Mobile Menu Button */}
             <button
@@ -95,16 +107,18 @@ export default function Header() {
         </div>
 
         {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className={styles.mobileMenu}>
-            {NAV_LINKS.map((link) => (
-              <Link key={link.href} href={link.href} className={styles.mobileLink}>
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        )}
-      </header>
+        {
+          isMobileMenuOpen && (
+            <div className={styles.mobileMenu}>
+              {NAV_LINKS.map((link) => (
+                <Link key={link.href} href={link.href} className={styles.mobileLink}>
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          )
+        }
+      </header >
     </>
   );
 }

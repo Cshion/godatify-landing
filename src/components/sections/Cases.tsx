@@ -1,12 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import casesData from '@/lib/data/cases.json';
-import { CaseStudy } from '@/lib/types';
+import Link from 'next/link';
+import { CASES_CONTENT } from '@/lib/constants';
 import styles from './Cases.module.css';
 
 export default function Cases() {
-  const cases: CaseStudy[] = casesData;
+  const cases = CASES_CONTENT;
 
   return (
     <section className="section py-20 bg-white" id="casos">
@@ -18,7 +18,7 @@ export default function Cases() {
         <div className={styles.casesContainer}>
           <div className={styles.casesGrid}>
             {cases.map((caseItem) => (
-              <div key={caseItem.id} className={`${styles.caseCard} group reveal`}>
+              <div key={caseItem.slug} className={`${styles.caseCard} group reveal`}>
                 {/* Image */}
                 <div className={styles.caseImageWrapper}>
                   <Image
@@ -31,16 +31,16 @@ export default function Cases() {
 
                   {/* Overlay */}
                   <div className={styles.caseOverlay}>
-                    <a href="#" className={styles.caseLink}>
+                    <Link href={`/casos/${caseItem.slug}`} className={styles.caseLink}>
                       Ver Proyecto
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className={styles.caseContent}>
                   <span className={styles.caseCategory}>
-                    {caseItem.category}
+                    {caseItem.industry}
                   </span>
                   <h3 className={styles.caseTitle}>{caseItem.title}</h3>
                   <p className={styles.caseDescription}>{caseItem.description}</p>
