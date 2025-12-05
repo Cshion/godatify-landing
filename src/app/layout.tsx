@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Barlow } from "next/font/google";
 import { defaultMetadata } from "@/lib/seo";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
 const barlow = Barlow({
@@ -21,6 +23,10 @@ export default function RootLayout({
     <html lang="es">
       <head>
         <link rel="icon" href="/images/favicon.png" type="image/png" />
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
       </head>
       <body className={`${barlow.variable} antialiased`}>
         <script
@@ -47,7 +53,9 @@ export default function RootLayout({
             })
           }}
         />
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
