@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { NOSOTROS_CONTENT } from '@/lib/constants';
+import { NOSOTROS_CONTENT, VIDEO_CONFIG } from '@/lib/constants';
 import styles from './NosotrosTabs.module.css';
 
 type Tab = 'quienes' | 'mision' | 'valores' | 'cultura';
@@ -39,14 +39,38 @@ export default function NosotrosTabs() {
 
                     {/* Quiénes Somos */}
                     {activeTab === 'quienes' && (
-                        <div className={`${styles.whoWeAre} reveal`}>
-                            <p className={styles.bigText}>{hero.description}</p>
+                        <div className={styles.splitLayout}>
+                            {/* Video Section (Left) */}
+                            <div className={styles.videoContainer}>
+                                <div className={styles.videoWrapper}>
+                                    <iframe
+                                        src={VIDEO_CONFIG.url}
+                                        title={VIDEO_CONFIG.title}
+                                        className={styles.videoFrame}
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Text Content (Right) */}
+                            <div className={styles.whoWeAre}>
+                                <p className={styles.bigText}>{hero.description}</p>
+                            </div>
                         </div>
                     )}
 
                     {/* Misión y Visión */}
                     {activeTab === 'mision' && (
                         <div className={styles.splitLayout}>
+                            <div className={styles.imageWrapper}>
+                                <Image
+                                    src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"
+                                    alt="Misión y Visión"
+                                    fill
+                                    className={styles.image}
+                                />
+                            </div>
                             <div className={styles.textContent}>
                                 <div className="mb-12">
                                     <h3>{mission.title}</h3>
@@ -56,14 +80,6 @@ export default function NosotrosTabs() {
                                     <h3>{vision.title}</h3>
                                     <p>{vision.text}</p>
                                 </div>
-                            </div>
-                            <div className={styles.imageWrapper}>
-                                <Image
-                                    src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"
-                                    alt="Misión y Visión"
-                                    fill
-                                    className={styles.image}
-                                />
                             </div>
                         </div>
                     )}

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { COMPANY_INFO, FOOTER_LINKS, SOCIAL_LINKS } from '@/lib/constants';
 import styles from './Footer.module.css';
 
@@ -13,7 +14,15 @@ export default function Footer() {
         <div className={styles.footerGrid}>
           {/* Company Info */}
           <div className={styles.footerColumn}>
-            <h3 className={styles.footerTitle}>{COMPANY_INFO.name}</h3>
+            <Link href="/" className="mb-6 inline-block">
+              <Image
+                src="/images/logo.png"
+                alt="Datify Logo"
+                width={140}
+                height={46}
+                className="brightness-0 invert opacity-90"
+              />
+            </Link>
             <p className={styles.footerDescription}>
               {COMPANY_INFO.description}
             </p>

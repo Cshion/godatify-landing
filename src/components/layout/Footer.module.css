@@ -18,8 +18,9 @@
 .footerGrid {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 3rem;
-    margin-bottom: 3rem;
+    gap: 5rem;
+    /* Increased gap */
+    margin-bottom: 4rem;
     position: relative;
     z-index: 1;
 }
