@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { STATS, VIDEO_CONFIG } from '@/lib/constants';
 import { Stat } from '@/lib/types';
@@ -86,6 +87,14 @@ export default function Nosotros() {
             />
           </div>
           <p className={styles.videoCaption}>{VIDEO_CONFIG.caption}</p>
+        </div>
+
+        {/* CTA Button */}
+        <div className={`${styles.ctaContainer} reveal`}>
+          <Link href="/nosotros" className={styles.ctaButton}>
+            Conoce más sobre nosotros
+            <i className="fas fa-arrow-right"></i>
+          </Link>
         </div>
       </div>
     </section>

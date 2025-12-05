@@ -81,3 +81,28 @@
         font-size: 3rem;
     }
 }
+
+.ctaContainer {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.ctaButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: var(--color-brand-green);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 1.125rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(28, 124, 84, 0.2);
+}
+
+.ctaButton:hover {
+    background-color: var(--color-brand-green-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(28, 124, 84, 0.3);
+}

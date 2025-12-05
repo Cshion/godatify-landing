@@ -28,12 +28,12 @@ export const SOCIAL_LINKS = [
 
 // Navigation Links
 export const NAV_LINKS = [
-    { href: '#inicio', label: 'Inicio' },
-    { href: '#nosotros', label: 'Nosotros' },
-    { href: '#industrias', label: 'Industrias' },
-    { href: '#casos', label: 'Casos de éxito' },
-    { href: '#blog', label: 'Blog' },
-    { href: '#contacto', label: 'Contacto' },
+    { href: '/#inicio', label: 'Inicio' },
+    { href: '/nosotros', label: 'Nosotros' },
+    { href: '/#industrias', label: 'Industrias' },
+    { href: '/#casos', label: 'Casos de éxito' },
+    { href: '/#blog', label: 'Blog' },
+    { href: '/#contacto', label: 'Contacto' },
 ] as const;
 
 // Services for Dropdown
@@ -102,4 +102,53 @@ export const VIDEO_CONFIG = {
 export const CAROUSEL_CONFIG = {
     cardsPerView: 3,
     autoPlayInterval: 5000,
+} as const;
+
+// Nosotros Page Content
+export const NOSOTROS_CONTENT = {
+    hero: {
+        title: 'Nosotros',
+        subtitle: 'Nuestra razón de ser es generar impacto real, convirtiendo la complejidad en claridad, y el dato en una ventaja competitiva.',
+        description: 'Desde 2022 hemos trabajado con empresas líderes como Heineken, Grupo Rocío y SPACE AG, adaptándonos a sus necesidades y desafíos. Nos eligen por nuestra capacidad de entender su negocio, anticipar soluciones y entregar resultados que generan confianza. Creemos en un modelo ágil, colaborativo y centrado en el valor: operamos de forma remota con oficinas híbridas en Lima y Madrid, listos para estar donde nuestros clientes lo necesiten.',
+    },
+    mission: {
+        title: 'Nuestra Misión',
+        text: 'Empoderar a las organizaciones para que tomen decisiones estratégicas basadas en datos, impulsando su crecimiento y eficiencia mediante soluciones tecnológicas innovadoras y un acompañamiento cercano.',
+    },
+    vision: {
+        title: 'Nuestra Visión',
+        text: 'Ser el referente líder en consultoría de datos y transformación digital en LATAM, reconocidos por nuestra capacidad de convertir información compleja en valor tangible y sostenible para nuestros clientes.',
+    },
+    values: [
+        {
+            id: 'compromiso',
+            title: 'Compromiso con el resultado',
+            description: 'Trabajamos para generar valor tangible y medible.',
+            icon: 'chart-line',
+        },
+        {
+            id: 'empatia',
+            title: 'Empatía empresarial',
+            description: 'Escuchamos, entendemos y nos alineamos a los objetivos de cada cliente.',
+            icon: 'handshake',
+        },
+        {
+            id: 'innovacion',
+            title: 'Innovación constante',
+            description: 'Nos mantenemos a la vanguardia tecnológica para proponer soluciones que marquen la diferencia.',
+            icon: 'lightbulb',
+        },
+        {
+            id: 'transparencia',
+            title: 'Transparencia',
+            description: 'Comunicamos con claridad, cumplimos lo que prometemos y construimos relaciones de confianza.',
+            icon: 'check-circle',
+        },
+        {
+            id: 'excelencia',
+            title: 'Excelencia en equipo',
+            description: 'Creemos en el poder de un equipo multidisciplinario, colaborativo y apasionado por los datos.',
+            icon: 'users',
+        },
+    ],
 } as const;
