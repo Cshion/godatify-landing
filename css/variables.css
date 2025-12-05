@@ -1,9 +1,10 @@
 /* CSS Variables - Design System */
 :root {
-    /* Colors - Primary Palette */
     /* Godatify Brand Colors */
     --color-brand-green: #1C7C54;
     /* User specified */
+    --color-brand-green-light: #26a86f;
+    /* Lighter shade for gradients */
     --color-brand-green-dark: #135c51;
     /* Darker shade found in inspection */
 
