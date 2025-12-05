@@ -27,7 +27,7 @@ export default function Services() {
                 <p className={styles.serviceDescription}>
                   {service.description}
                 </p>
-                <a href="#" className={styles.btnOutline}>Leer Más</a>
+                <a href="#" className={styles.btnOutline} aria-label={`Leer más sobre ${service.title}`}>Leer Más</a>
               </div>
             ))}
           </div>
