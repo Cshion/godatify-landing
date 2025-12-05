@@ -37,121 +37,247 @@ export default function Testimonials() {
     }, [currentIndex, maxIndex]);
 
     return (
-        <section
-            id="testimonios"
-            className="py-20 relative overflow-hidden"
-            style={{
-                background: 'linear-gradient(135deg, #135c51 0%, #1C7C54 50%, #26a86f 100%)',
-            }}
-        >
-            {/* Background Pattern */}
-            <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                    backgroundImage: `
-            radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%)
-          `,
-                }}
-            />
+        <>
+            <section
+                className="section py-20 testimonials-section"
+                id="testimonios"
+            >
+                <div className="container mx-auto px-6">
+                    <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-white reveal">
+                        Testimonios
+                    </h2>
 
-            <div className="container mx-auto px-6 relative z-10">
-                <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-white">
-                    Testimonios
-                </h2>
-
-                {/* Carousel Container */}
-                <div className="max-w-7xl mx-auto overflow-hidden">
-                    <div
-                        className="flex gap-6 transition-transform duration-500 ease-out px-4"
-                        style={{
-                            transform: `translateX(-${currentIndex * (100 / cardsPerView + 2)}%)`,
-                        }}
-                    >
-                        {testimonialsData.map((testimonial) => (
+                    {/* Carousel Container */}
+                    <div className="testimonials-container">
+                        <div className="testimonials-wrapper">
                             <div
-                                key={testimonial.id}
-                                className="flex-shrink-0 bg-white rounded-2xl p-8 shadow-xl relative"
+                                className="testimonials-track"
                                 style={{
-                                    minWidth: `calc((100% - ${(cardsPerView - 1) * 1.5}rem) / ${cardsPerView})`,
-                                    maxWidth: '360px',
+                                    transform: `translateX(-${(currentIndex * 100) / cardsPerView}%)`,
                                 }}
                             >
-                                {/* Quote Icon */}
-                                <div className="absolute top-6 left-8 text-8xl text-gray-100 font-serif leading-none">
-                                    "
-                                </div>
+                                {testimonialsData.map((testimonial) => (
+                                    <div key={testimonial.id} className="testimonial-card">
+                                        {/* Quote Icon */}
+                                        <div className="quote-icon">"</div>
 
-                                {/* Content */}
-                                <div className="relative z-10 mb-8">
-                                    <p className="text-gray-700 leading-relaxed italic text-center">
-                                        {testimonial.text}
-                                    </p>
-                                </div>
+                                        {/* Content */}
+                                        <div className="testimonial-content">
+                                            <p className="testimonial-text">
+                                                {testimonial.text}
+                                            </p>
+                                        </div>
 
-                                {/* Author */}
-                                <div className="text-center">
-                                    <h4 className="text-lg font-bold text-gray-900 mb-1">
-                                        {testimonial.author}
-                                    </h4>
-                                    <p className="text-sm text-gray-600">{testimonial.role}</p>
-                                </div>
+                                        {/* Author */}
+                                        <div className="testimonial-author">
+                                            <h4 className="author-name">
+                                                {testimonial.author}
+                                            </h4>
+                                            <p className="author-role">{testimonial.role}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Controls */}
-                <div className="flex justify-center items-center gap-4 mt-8">
-                    <button
-                        onClick={prevSlide}
-                        disabled={currentIndex === 0}
-                        className="w-12 h-12 rounded-full bg-white text-[#1C7C54] border-2 border-[#1C7C54] flex items-center justify-center hover:bg-[#1C7C54] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-
-                    {/* Dots */}
-                    <div className="flex gap-3">
-                        {Array.from({ length: totalPages }).map((_, index) => (
-                            <button
-                                key={index}
-                                onClick={() => goToPage(index)}
-                                className={`h-3 rounded-full transition-all ${index === currentPage
-                                        ? 'w-8 bg-white'
-                                        : 'w-3 bg-white/40 hover:bg-white/70'
-                                    }`}
-                            />
-                        ))}
+                        </div>
                     </div>
 
-                    <button
-                        onClick={nextSlide}
-                        disabled={currentIndex >= maxIndex}
-                        className="w-12 h-12 rounded-full bg-white text-[#1C7C54] border-2 border-[#1C7C54] flex items-center justify-center hover:bg-[#1C7C54] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+                    {/* Controls */}
+                    <div className="carousel-controls">
+                        <button
+                            onClick={prevSlide}
+                            disabled={currentIndex === 0}
+                            className="carousel-btn"
+                        >
+                            <i className="fas fa-chevron-left"></i>
+                        </button>
 
-            {/* Responsive Styles */}
-            <style jsx>{`
+                        {/* Dots */}
+                        <div className="carousel-dots">
+                            {Array.from({ length: totalPages }).map((_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => goToPage(index)}
+                                    className={`carousel-dot ${index === currentPage ? 'active' : ''}`}
+                                />
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={nextSlide}
+                            disabled={currentIndex >= maxIndex}
+                            className="carousel-btn"
+                        >
+                            <i className="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <style jsx global>{`
+        .testimonials-section {
+          background: linear-gradient(135deg, #135c51 0%, #1C7C54 50%, #26a86f 100%);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .testimonials-section::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image:
+            radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+          pointer-events: none;
+        }
+
+        .testimonials-container {
+          max-width: 1100px;
+          margin: 0 auto;
+          position: relative;
+          z-index: 1;
+        }
+
+        .testimonials-wrapper {
+          overflow: hidden;
+          padding: 0 1rem;
+        }
+
+        .testimonials-track {
+          display: flex;
+          gap: 1.5rem;
+          transition: transform 0.5s ease;
+        }
+
+        .testimonial-card {
+          flex: 0 0 calc(33.333% - 1rem);
+          max-width: 340px;
+          background: white;
+          border-radius: 1.5rem;
+          padding: 2rem 1.5rem;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+          position: relative;
+        }
+
+        .quote-icon {
+          position: absolute;
+          top: 1.5rem;
+          left: 1.5rem;
+          font-size: 5rem;
+          font-family: Georgia, serif;
+          color: #f3f4f6;
+          line-height: 1;
+          z-index: 0;
+        }
+
+        .testimonial-content {
+          position: relative;
+          z-index: 1;
+          margin-bottom: 1.5rem;
+        }
+
+        .testimonial-text {
+          color: #374151;
+          line-height: 1.6;
+          font-style: italic;
+          text-align: center;
+          font-size: 0.95rem;
+        }
+
+        .testimonial-author {
+          text-align: center;
+        }
+
+        .author-name {
+          font-size: 1.125rem;
+          font-weight: 700;
+          color: #111827;
+          margin-bottom: 0.25rem;
+        }
+
+        .author-role {
+          font-size: 0.875rem;
+          color: #6b7280;
+        }
+
+        .carousel-controls {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 1rem;
+          margin-top: 2rem;
+        }
+
+        .carousel-btn {
+          width: 48px;
+          height: 48px;
+          border-radius: 9999px;
+          background: white;
+          color: #1C7C54;
+          border: 2px solid #1C7C54;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-size: 1.125rem;
+        }
+
+        .carousel-btn:hover:not(:disabled) {
+          background: #1C7C54;
+          color: white;
+          transform: scale(1.1);
+        }
+
+        .carousel-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .carousel-dots {
+          display: flex;
+          gap: 0.75rem;
+        }
+
+        .carousel-dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 9999px;
+          background: rgba(255, 255, 255, 0.4);
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+          background: white;
+          width: 32px;
+        }
+
+        .carousel-dot:hover {
+          background: rgba(255, 255, 255, 0.7);
+        }
+
         @media (max-width: 1024px) {
-          .flex-shrink-0 {
-            min-width: calc((100% - 1.5rem) / 2) !important;
+          .testimonial-card {
+            flex: 0 0 calc(50% - 0.75rem);
           }
         }
+
         @media (max-width: 768px) {
-          .flex-shrink-0 {
-            min-width: 100% !important;
+          .testimonial-card {
+            flex: 0 0 100%;
+            max-width: 100%;
+          }
+
+          .testimonials-wrapper {
+            padding: 0;
+          }
+
+          .testimonials-track {
+            gap: 1rem;
           }
         }
       `}</style>
-        </section>
+        </>
     );
 }
