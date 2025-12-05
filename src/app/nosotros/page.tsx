@@ -4,6 +4,7 @@ import Footer from '@/components/layout/Footer';
 import ScrollReveal from '@/components/ui/ScrollReveal';
 import NosotrosHero from '@/components/nosotros/NosotrosHero';
 import NosotrosTabs from '@/components/nosotros/NosotrosTabs';
+import Clients from '@/components/sections/Clients';
 
 export const metadata: Metadata = {
     title: 'Nosotros | Datify',
@@ -17,6 +18,7 @@ export default function NosotrosPage() {
             <main>
                 <NosotrosHero />
                 <NosotrosTabs />
+                <Clients />
             </main>
             <Footer />
             <ScrollReveal />

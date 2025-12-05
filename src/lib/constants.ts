@@ -98,6 +98,20 @@ export const VIDEO_CONFIG = {
     caption: 'Descubre cómo transformamos datos en decisiones',
 } as const;
 
+// Clients
+export const CLIENTS_CONTENT = [
+    { name: 'Distribuidora Nacional', logo: 'https://placehold.co/200x80.png?text=Distribuidora&font=roboto' },
+    { name: 'AgroExport Peru', logo: 'https://placehold.co/200x80.png?text=AgroExport&font=roboto' },
+    { name: 'Pesquera del Mar', logo: 'https://placehold.co/200x80.png?text=Pesquera&font=roboto' },
+    { name: 'Financiera Futuro', logo: 'https://placehold.co/200x80.png?text=Financiera&font=roboto' },
+    { name: 'Retail Corp', logo: 'https://placehold.co/200x80.png?text=Retail&font=roboto' },
+    { name: 'Salud Integral', logo: 'https://placehold.co/200x80.png?text=Salud&font=roboto' },
+    { name: 'Constructora Global', logo: 'https://placehold.co/200x80.png?text=Constructora&font=roboto' },
+    { name: 'Tech Solutions', logo: 'https://placehold.co/200x80.png?text=Tech&font=roboto' },
+    { name: 'EducaMás', logo: 'https://placehold.co/200x80.png?text=EducaMás&font=roboto' },
+    { name: 'Energía Verde', logo: 'https://placehold.co/200x80.png?text=Energía&font=roboto' },
+] as const;
+
 // Carousel Settings
 export const CAROUSEL_CONFIG = {
     cardsPerView: 3,
@@ -250,6 +264,18 @@ export const CASES_CONTENT = [
         ],
         techStack: ['Power BI', 'SQL Server', 'Azure'],
         image: '/images/cases/case_kpis_comerciales_1764948784061.png',
+        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Placeholder video
+        client: {
+            name: 'Distribuidora Nacional S.A.',
+            website: 'https://example.com',
+            anonymous: false
+        },
+        testimonial: {
+            quote: "Datify transformó nuestra cultura comercial. Ahora cada gerente tiene el pulso del negocio en su bolsillo, lo que nos ha permitido reaccionar ante oportunidades de mercado en horas, no en semanas.",
+            author: "Roberto Méndez",
+            role: "Director Comercial",
+            linkedIn: "https://linkedin.com"
+        },
         content: `
             <h3>El Desafío</h3>
             <p>El equipo comercial dependía de reportes estáticos en Excel que tardaban días en generarse. Esto provocaba que las estrategias correctivas se aplicaran cuando ya era tarde.</p>
@@ -271,6 +297,17 @@ export const CASES_CONTENT = [
         ],
         techStack: ['Tableau', 'Python', 'Snowflake'],
         image: '/images/cases/case_sell_in_out_1764948806601.png',
+        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Placeholder video
+        client: {
+            name: 'Confidencial',
+            anonymous: true
+        },
+        testimonial: {
+            quote: "Logramos sincronizar nuestra producción con la demanda real del mercado. La reducción de quiebres de stock ha tenido un impacto directo en nuestra rentabilidad y satisfacción del cliente.",
+            author: "Ana Lucía Vega",
+            role: "Gerente de Supply Chain",
+            linkedIn: "https://linkedin.com"
+        },
         content: `
             <h3>El Desafío</h3>
             <p>La marca perdía ventas por no tener el producto correcto en el punto de venta, mientras que otros productos se acumulaban en los almacenes de los distribuidores.</p>
@@ -292,6 +329,11 @@ export const CASES_CONTENT = [
         ],
         techStack: ['Azure IoT', 'Databricks', 'Power BI'],
         image: '/images/cases/case_inteligencia_operativa_1764948826943.png',
+        testimonial: {
+            quote: "La capacidad de predecir zonas de pesca con alta probabilidad ha optimizado nuestras salidas. Ahorramos combustible y pescamos más en menos tiempo. Es una ventaja competitiva brutal.",
+            author: "Cap. Jorge Arriola",
+            role: "Gerente de Flota"
+        },
         content: `
             <h3>El Desafío</h3>
             <p>La pesca es una actividad de alto costo operativo. Mover la flota sin certeza de captura genera pérdidas millonarias en combustible y tiempo.</p>
@@ -313,6 +355,11 @@ export const CASES_CONTENT = [
         ],
         techStack: ['Python', 'Satellite API', 'QGIS'],
         image: '/images/cases/case_agricultura_precision_1764948848374.png',
+        testimonial: {
+            quote: "Pasamos de gestionar el campo por intuición a gestionarlo por datos. Saber exactamente qué lote necesita atención antes de que sea visible al ojo humano ha salvado cosechas enteras.",
+            author: "Ing. Miguel Campos",
+            role: "Gerente Agrícola"
+        },
         content: `
             <h3>El Desafío</h3>
             <p>La agricultura tradicional trata a todo el campo por igual. Sin embargo, las condiciones del suelo varían metro a metro, lo que lleva a un uso ineficiente de fertilizantes y agua.</p>
@@ -334,6 +381,11 @@ export const CASES_CONTENT = [
         ],
         techStack: ['IoT', 'SCADA', 'Power BI'],
         image: '/images/cases/case_costos_irrigacion_1764948875476.png',
+        testimonial: {
+            quote: "El ROI de este proyecto fue de menos de 6 meses. Automatizar el bombeo no solo redujo la factura eléctrica, sino que aseguró que nunca nos falte agua en los momentos críticos.",
+            author: "Fernando Ruiz",
+            role: "Jefe de Mantenimiento e Infraestructura"
+        },
         content: `
             <h3>El Desafío</h3>
             <p>El agua es un recurso escaso y costoso de mover. La falta de sincronización entre la necesidad del cultivo y la operación de bombeo generaba desperdicios enormes.</p>
@@ -355,6 +407,11 @@ export const CASES_CONTENT = [
         ],
         techStack: ['Salesforce NPSP', 'Tableau', 'Power Automate'],
         image: '/images/cases/case_kpis_npo_1764948909347.png',
+        testimonial: {
+            quote: "La transparencia que hemos logrado con estos dashboards ha sido clave para ganar grandes subvenciones internacionales. Ahora podemos demostrar con datos que cada dólar cuenta.",
+            author: "Sofia Alarcón",
+            role: "Directora Ejecutiva"
+        },
         content: `
             <h3>El Desafío</h3>
             <p>Para una ONG, la confianza es su activo más valioso. La falta de datos claros sobre el impacto ponía en riesgo la continuidad de las donaciones.</p>

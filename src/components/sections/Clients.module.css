@@ -1,0 +1,93 @@
+.clientsSection {
+    background-color: white;
+    padding: var(--space-20) 0;
+    border-top: 1px solid var(--color-gray-100);
+    overflow: hidden;
+    /* Hide overflow for marquee */
+}
+
+.title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-400);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-12);
+}
+
+.marqueeContainer {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.marqueeTrack {
+    display: flex;
+    gap: var(--space-16);
+    width: max-content;
+    animation: scroll 40s linear infinite;
+}
+
+.marqueeTrack:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(-50% - var(--space-8)));
+        /* Adjust based on gap/duplication */
+    }
+}
+
+.clientCard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    /* Fixed width for consistency */
+    height: 80px;
+    transition: all 0.3s ease;
+    filter: grayscale(100%) opacity(0.5);
+    cursor: pointer;
+}
+
+.clientCard:hover {
+    filter: grayscale(0%) opacity(1);
+    transform: scale(1.1);
+}
+
+.logoWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.logo {
+    object-fit: contain;
+}
+
+.icon {
+    font-size: var(--font-size-4xl);
+    color: var(--color-brand-green);
+    margin-bottom: var(--space-2);
+}
+
+.name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-700);
+    text-align: center;
+}
+
+.industry {
+    font-size: var(--font-size-xs);
+    color: var(--color-gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
