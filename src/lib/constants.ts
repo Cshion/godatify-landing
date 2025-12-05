@@ -78,7 +78,7 @@ export const COMPANY_INFO = {
 // Hero Content
 export const HERO_CONTENT = {
     title: 'Datificando las Organizaciones',
-    subtitle: 'Te acompañamos en cada paso para transformar tus datos en decisiones que impulsen el crecimiento de tu organización.',
+    subtitle: 'En Datify acompañamos a las organizaciones a descubrir el verdadero poder de sus datos, transformando la forma en que las organizaciones piensan, operan y deciden. Nos convertimos en sus aliados estratégicos para lograr mayor eficiencia, agilidad y crecimiento sostenido a partir del valor de sus datos.',
     ctaText: 'Contáctanos',
     ctaHref: '#contacto',
     scrollText: 'Descubre más',

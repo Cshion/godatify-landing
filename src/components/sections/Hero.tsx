@@ -26,7 +26,7 @@ export default function Hero() {
           <h1 className={`${styles.heroTitle} reveal`}>
             {HERO_CONTENT.title}
           </h1>
-          <p className={`${styles.heroSubtitle} reveal`}>
+          <p className={styles.heroSubtitle}>
             {HERO_CONTENT.subtitle}
           </p>
           <a href={HERO_CONTENT.ctaHref} className={`${styles.heroCta} reveal`}>

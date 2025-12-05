@@ -8,10 +8,25 @@
 }
 
 .heroContainer {
-    max-width: 64rem;
+    max-width: 50%;
     text-align: left;
     margin-left: 0;
     padding-left: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .heroContainer {
+        max-width: 70%;
+    }
+}
+
+@media (max-width: 768px) {
+    .heroContainer {
+        max-width: 100%;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        text-align: center;
+    }
 }
 
 .heroTitle {
