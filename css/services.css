@@ -28,7 +28,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    background: linear-gradient(90deg, var(--color-brand-green) 0%, var(--color-brand-green-light) 100%);
     transform: scaleX(0);
     transition: transform var(--transition-base);
 }
@@ -46,20 +46,20 @@
     width: 80px;
     height: 80px;
     border-radius: var(--radius-full);
-    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary) 100%);
+    background: linear-gradient(135deg, var(--color-brand-green-light) 0%, var(--color-brand-green) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: var(--space-6);
     font-size: var(--font-size-3xl);
     color: var(--color-white);
-    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 10px 30px rgba(28, 124, 84, 0.3);
     transition: all var(--transition-base);
 }
 
 .service-card:hover .service-icon {
     transform: scale(1.1) rotate(5deg);
-    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 15px 40px rgba(28, 124, 84, 0.4);
 }
 
 .service-title {
@@ -103,7 +103,7 @@
 .stat-number {
     font-size: var(--font-size-6xl);
     font-weight: var(--font-weight-extrabold);
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    background: linear-gradient(135deg, var(--color-brand-green) 0%, var(--color-brand-green-light) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -124,4 +124,38 @@
     .stat-label {
         font-size: var(--font-size-base);
     }
+}
+
+/* Video Container */
+.video-container {
+    margin-top: var(--space-16);
+    text-align: center;
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-2xl);
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-2xl);
+}
+
+.video-caption {
+    margin-top: var(--space-6);
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-600);
+    font-style: italic;
 }

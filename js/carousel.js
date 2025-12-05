@@ -10,13 +10,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let currentIndex = 0;
     const totalSlides = cards.length;
+    const cardsPerView = window.innerWidth > 1024 ? 3 : (window.innerWidth > 768 ? 2 : 1);
+    const maxIndex = Math.max(0, totalSlides - cardsPerView);
 
-    // Create dots
-    for (let i = 0; i < totalSlides; i++) {
+    // Create dots based on number of pages
+    const totalPages = Math.ceil(totalSlides / cardsPerView);
+    for (let i = 0; i < totalPages; i++) {
         const dot = document.createElement('div');
         dot.classList.add('carousel-dot');
         if (i === 0) dot.classList.add('active');
-        dot.addEventListener('click', () => goToSlide(i));
+        dot.addEventListener('click', () => goToSlide(i * cardsPerView));
         dotsContainer.appendChild(dot);
     }
 
@@ -24,29 +27,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Update carousel position
     function updateCarousel() {
-        const offset = -currentIndex * 100;
-        track.style.transform = `translateX(${offset}%)`;
+        const cardWidth = cards[0].offsetWidth;
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        const offset = -currentIndex * (cardWidth + gap);
+        track.style.transform = `translateX(${offset}px)`;
 
         // Update dots
+        const currentPage = Math.floor(currentIndex / cardsPerView);
         dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentIndex);
+            dot.classList.toggle('active', index === currentPage);
         });
 
         // Update button states
         prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex === totalSlides - 1;
+        nextBtn.disabled = currentIndex >= maxIndex;
     }
 
     // Go to specific slide
     function goToSlide(index) {
-        currentIndex = index;
+        currentIndex = Math.min(Math.max(0, index), maxIndex);
         updateCarousel();
     }
 
     // Next slide
     function nextSlide() {
-        if (currentIndex < totalSlides - 1) {
-            currentIndex++;
+        if (currentIndex < maxIndex) {
+            currentIndex = Math.min(currentIndex + cardsPerView, maxIndex);
             updateCarousel();
         }
     }
@@ -54,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Previous slide
     function prevSlide() {
         if (currentIndex > 0) {
-            currentIndex--;
+            currentIndex = Math.max(currentIndex - cardsPerView, 0);
             updateCarousel();
         }
     }
