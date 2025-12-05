@@ -1,0 +1,126 @@
+.footer {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 20% 20%, rgba(28, 124, 84, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(28, 124, 84, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.footerGrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 1024px) {
+    .footerGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .footerGrid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+.footerColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+.footerTitle {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+}
+
+.footerDescription {
+    color: #d1d5db;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.socialLinks {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.socialLink {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #d1d5db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.socialLink:hover {
+    background: #1C7C54;
+    color: white;
+    transform: translateY(-3px);
+}
+
+.footerHeading {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.footerLinks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.footerLinks li {
+    margin: 0;
+}
+
+.footerLinks a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.footerLinks a:hover {
+    color: #26a86f;
+}
+
+.footerBottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.footerCopyright {
+    color: #9ca3af;
+    font-size: 0.875rem;
+}
