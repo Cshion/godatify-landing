@@ -1,0 +1,98 @@
+/* Cases Section Styles */
+.cases-section {
+    background: var(--color-white);
+}
+
+.cases-grid {
+    margin-top: var(--space-12);
+}
+
+.case-card {
+    background: var(--color-white);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+}
+
+.case-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-2xl);
+}
+
+.case-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+.case-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.case-card:hover .case-image img {
+    transform: scale(1.1);
+}
+
+.case-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.9) 0%, rgba(8, 145, 178, 0.9) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.case-card:hover .case-overlay {
+    opacity: 1;
+}
+
+.case-link {
+    padding: var(--space-4) var(--space-8);
+    background: var(--color-white);
+    color: var(--color-primary);
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-semibold);
+    transform: translateY(20px);
+    transition: all var(--transition-base);
+}
+
+.case-card:hover .case-link {
+    transform: translateY(0);
+}
+
+.case-link:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+.case-content {
+    padding: var(--space-6);
+}
+
+.case-category {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary) 100%);
+    color: var(--color-white);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-3);
+}
+
+.case-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+    margin-bottom: 0;
+}
