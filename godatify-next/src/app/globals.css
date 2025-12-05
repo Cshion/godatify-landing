@@ -9,6 +9,20 @@
   /* Z-index */
   --z-sticky: 1000;
   --z-modal: 2000;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
 }
 
 * {
@@ -52,6 +66,7 @@ h1 {
 
 h2 {
   font-size: 2.25rem;
+  margin-bottom: 1rem;
 }
 
 h3 {
@@ -75,13 +90,13 @@ img {
   max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
 }
 
 .section {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-top: var(--space-20);
+  padding-bottom: var(--space-20);
 }
 
 .text-center {
@@ -90,19 +105,21 @@ img {
 
 .grid {
   display: grid;
-  gap: 2rem;
 }
 
 .grid-cols-1 {
   grid-template-columns: repeat(1, 1fr);
+  gap: var(--space-8);
 }
 
 .grid-cols-2 {
   grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-8);
 }
 
 .grid-cols-3 {
   grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-8);
 }
 
 @media (max-width: 1024px) {
@@ -113,13 +130,18 @@ img {
 
 @media (max-width: 768px) {
   .section {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-16);
   }
 
   .grid-cols-2,
   .grid-cols-3 {
     grid-template-columns: repeat(1, 1fr);
+  }
+
+  .container {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
   }
 
   h1 {
@@ -164,11 +186,4 @@ img {
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* Smooth transitions */
-* {
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
 }
