@@ -23,7 +23,6 @@ export default function NosotrosHero() {
                         </h1>
                     </div>
                     <h2 className={`${styles.subtitle} reveal`}>{hero.subtitle}</h2>
-                    <p className={`${styles.description} reveal`}>{hero.description}</p>
                 </div>
             </div>
         </section>

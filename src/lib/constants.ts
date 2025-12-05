@@ -151,4 +151,13 @@ export const NOSOTROS_CONTENT = {
             icon: 'users',
         },
     ],
+    culture: {
+        title: 'Innovación sin fronteras',
+        description: 'En Datify, creemos que el talento no tiene código postal. Fomentamos una cultura de trabajo remoto y flexible que prioriza los resultados sobre la presencia física. Nuestros equipos multidisciplinarios colaboran desde diferentes partes del mundo, unidos por la pasión de transformar datos en valor.',
+        stats: [
+            { value: '100%', label: 'Remoto' },
+            { value: '+10', label: 'Países' },
+            { value: '24/7', label: 'Soporte' },
+        ],
+    },
 } as const;
