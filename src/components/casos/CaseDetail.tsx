@@ -76,29 +76,45 @@ export default function CaseDetail({ caseStudy }: CaseDetailProps) {
                                 <div className="mb-8 p-6 bg-white rounded-2xl border border-gray-200 shadow-sm">
                                     <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Cliente</h3>
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
-                                            <i className={`fas ${caseStudy.client.anonymous ? 'fa-user-secret' : 'fa-building'}`}></i>
-                                        </div>
-                                        <div>
+                                        <div className="flex-1">
                                             {caseStudy.client.anonymous ? (
-                                                <span className="font-bold text-gray-900 block">Confidencial</span>
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                                                        <i className="fas fa-user-secret"></i>
+                                                    </div>
+                                                    <span className="font-bold text-gray-900 block">Confidencial</span>
+                                                </div>
+                                            ) : caseStudy.client.logo ? (
+                                                <div className="relative w-32 h-12">
+                                                    <Image
+                                                        src={caseStudy.client.logo}
+                                                        alt={caseStudy.client.name}
+                                                        fill
+                                                        className="object-contain object-left"
+                                                    />
+                                                </div>
                                             ) : (
-                                                caseStudy.client.website ? (
-                                                    <a
-                                                        href={caseStudy.client.website}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="font-bold text-gray-900 hover:text-brand-green transition-colors flex items-center gap-2"
-                                                    >
-                                                        {caseStudy.client.name}
-                                                        <i className="fas fa-external-link-alt text-xs text-gray-400"></i>
-                                                    </a>
-                                                ) : (
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                                                        <i className="fas fa-building"></i>
+                                                    </div>
                                                     <span className="font-bold text-gray-900 block">{caseStudy.client.name}</span>
-                                                )
+                                                </div>
                                             )}
-                                            <span className="text-xs text-gray-500 block mt-0.5">
-                                                {caseStudy.client.anonymous ? 'Sector Privado' : 'Empresa Partner'}
+
+                                            {!caseStudy.client.anonymous && caseStudy.client.website && (
+                                                <a
+                                                    href={caseStudy.client.website}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-xs text-gray-500 hover:text-brand-green transition-colors flex items-center gap-1 mt-1"
+                                                >
+                                                    Visitar sitio web
+                                                    <i className="fas fa-external-link-alt text-[10px]"></i>
+                                                </a>
+                                            )}
+                                            <span className="text-xs text-gray-400 block mt-1">
+                                                {caseStudy.client.anonymous ? 'Sector Privado' : 'Cliente Partner'}
                                             </span>
                                         </div>
                                     </div>

@@ -27,7 +27,33 @@ export default function CasesGrid({ cases = CASES_CONTENT }: CasesGridProps) {
                             </div>
 
                             <div className={styles.content}>
-                                <span className={styles.industryTag}>{caseStudy.industry}</span>
+                                <div className="flex items-center justify-between mb-3">
+                                    <span className={styles.industryTag}>{caseStudy.industry}</span>
+                                    {/* Client Logo or Name */}
+                                    {'client' in caseStudy && (
+                                        <div className="flex items-center">
+                                            {caseStudy.client.anonymous ? (
+                                                <span className="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded">
+                                                    <i className="fas fa-user-secret mr-1"></i>
+                                                    Confidencial
+                                                </span>
+                                            ) : caseStudy.client.logo ? (
+                                                <div className="relative w-20 h-8">
+                                                    <Image
+                                                        src={caseStudy.client.logo}
+                                                        alt={caseStudy.client.name}
+                                                        fill
+                                                        className="object-contain opacity-80"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <span className="text-sm text-gray-600 font-medium">
+                                                    {caseStudy.client.name}
+                                                </span>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
                                 <h3 className={styles.title}>{caseStudy.title}</h3>
                                 <p className={styles.description}>{caseStudy.description}</p>
 

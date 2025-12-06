@@ -254,6 +254,7 @@ export const CASES_CONTENT = [
         slug: 'kpis-comerciales',
         title: 'KPIs Comerciales',
         industry: 'Business Intelligence',
+        relatedIndustryId: 'logistica',
         description: 'Dashboard de KPIs comerciales para seguimiento en tiempo real de ventas y rendimiento.',
         challenge: 'La falta de visibilidad en tiempo real sobre las métricas comerciales impedía la toma de decisiones ágiles. Los reportes mensuales llegaban demasiado tarde para corregir desviaciones en las ventas.',
         solution: 'Implementación de un Dashboard interactivo en Power BI conectado directamente al ERP. Visualización de ventas por zona, vendedor, categoría y producto en tiempo real.',
@@ -266,7 +267,8 @@ export const CASES_CONTENT = [
         image: '/images/cases/case_kpis_comerciales_1764948784061.png',
         videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Placeholder video
         client: {
-            name: 'Distribuidora Nacional S.A.',
+            name: 'Distribuidora Nacional',
+            logo: 'https://placehold.co/200x80.png?text=Distribuidora&font=roboto',
             website: 'https://example.com',
             anonymous: false
         },
@@ -287,6 +289,7 @@ export const CASES_CONTENT = [
         slug: 'sell-in-out',
         title: 'Sell In y Sell Out',
         industry: 'Business Analytics',
+        relatedIndustryId: 'cervecera',
         description: 'Análisis integral de canales de distribución para optimizar el inventario y las ventas.',
         challenge: 'Desconexión entre lo que se vendía a los distribuidores (Sell In) y lo que estos vendían al consumidor final (Sell Out), generando quiebres de stock o sobrestock.',
         solution: 'Integración de datos de inventarios de distribuidores para calcular el Sell Out real. Algoritmos de reabastecimiento sugerido basados en la rotación real del producto.',
@@ -319,6 +322,7 @@ export const CASES_CONTENT = [
         slug: 'inteligencia-operativa',
         title: 'Inteligencia Operativa Pesquera',
         industry: 'Data Engineering',
+        relatedIndustryId: 'pesquera',
         description: 'Sistema de gestión de flota y operaciones marítimas para maximizar la captura y eficiencia.',
         challenge: 'La gestión de la flota pesquera se basaba en reportes manuales vía radio, con poca precisión sobre la ubicación exacta de los cardúmenes y el consumo de combustible.',
         solution: 'Plataforma de inteligencia operativa que integra datos satelitales, oceanográficos y de telemetría de las embarcaciones para dirigir la flota a las zonas más productivas.',
@@ -329,6 +333,11 @@ export const CASES_CONTENT = [
         ],
         techStack: ['Azure IoT', 'Databricks', 'Power BI'],
         image: '/images/cases/case_inteligencia_operativa_1764948826943.png',
+        client: {
+            name: 'Pesquera del Mar',
+            logo: 'https://placehold.co/200x80.png?text=Pesquera&font=roboto',
+            anonymous: false
+        },
         testimonial: {
             quote: "La capacidad de predecir zonas de pesca con alta probabilidad ha optimizado nuestras salidas. Ahorramos combustible y pescamos más en menos tiempo. Es una ventaja competitiva brutal.",
             author: "Cap. Jorge Arriola",
@@ -345,6 +354,7 @@ export const CASES_CONTENT = [
         slug: 'agricultura-precision',
         title: 'Agricultura de Precisión',
         industry: 'Big Data Management',
+        relatedIndustryId: 'agricola',
         description: 'Monitoreo satelital y análisis de cultivos para optimizar el rendimiento por hectárea.',
         challenge: 'La variabilidad en el rendimiento de los lotes de cultivo era una incógnita. No se sabía por qué ciertas zonas producían menos que otras bajo las mismas condiciones aparentes.',
         solution: 'Uso de imágenes espectrales para analizar la salud de la vegetación (NDVI) y correlacionarlo con análisis de suelo y riego. Detección temprana de plagas y estrés hídrico.',
@@ -355,6 +365,11 @@ export const CASES_CONTENT = [
         ],
         techStack: ['Python', 'Satellite API', 'QGIS'],
         image: '/images/cases/case_agricultura_precision_1764948848374.png',
+        client: {
+            name: 'AgroExport Peru',
+            logo: 'https://placehold.co/200x80.png?text=AgroExport&font=roboto',
+            anonymous: false
+        },
         testimonial: {
             quote: "Pasamos de gestionar el campo por intuición a gestionarlo por datos. Saber exactamente qué lote necesita atención antes de que sea visible al ojo humano ha salvado cosechas enteras.",
             author: "Ing. Miguel Campos",
@@ -371,6 +386,7 @@ export const CASES_CONTENT = [
         slug: 'costos-irrigacion',
         title: 'Costos de Irrigación',
         industry: 'Business Intelligence',
+        relatedIndustryId: 'agricola',
         description: 'Optimización de recursos hídricos y energéticos para reducir el costo por metro cúbico de agua.',
         challenge: 'El costo energético del bombeo de agua representaba el 30% del costo de producción. Las bombas operaban en horarios de tarifa punta sin control automatizado.',
         solution: 'Sistema de gestión energética que programa el riego en horarios de tarifa baja y optimiza la presión de bombeo según la demanda real del cultivo.',
@@ -381,6 +397,11 @@ export const CASES_CONTENT = [
         ],
         techStack: ['IoT', 'SCADA', 'Power BI'],
         image: '/images/cases/case_costos_irrigacion_1764948875476.png',
+        client: {
+            name: 'AgroExport Peru',
+            logo: 'https://placehold.co/200x80.png?text=AgroExport&font=roboto',
+            anonymous: false
+        },
         testimonial: {
             quote: "El ROI de este proyecto fue de menos de 6 meses. Automatizar el bombeo no solo redujo la factura eléctrica, sino que aseguró que nunca nos falte agua en los momentos críticos.",
             author: "Fernando Ruiz",
@@ -407,6 +428,11 @@ export const CASES_CONTENT = [
         ],
         techStack: ['Salesforce NPSP', 'Tableau', 'Power Automate'],
         image: '/images/cases/case_kpis_npo_1764948909347.png',
+        client: {
+            name: 'EducaMás',
+            logo: 'https://placehold.co/200x80.png?text=EducaMás&font=roboto',
+            anonymous: false
+        },
         testimonial: {
             quote: "La transparencia que hemos logrado con estos dashboards ha sido clave para ganar grandes subvenciones internacionales. Ahora podemos demostrar con datos que cada dólar cuenta.",
             author: "Sofia Alarcón",
