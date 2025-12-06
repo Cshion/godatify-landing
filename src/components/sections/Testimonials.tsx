@@ -18,11 +18,19 @@ export default function Testimonials({ testimonials, carouselConfig, title }: Te
   const maxIndex = Math.max(0, testimonials.length - cardsPerView);
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => Math.min(prev + cardsPerView, maxIndex));
+    setCurrentIndex((prev) => {
+      // Loop back to 0 if at end
+      if (prev >= maxIndex) return 0;
+      return Math.min(prev + cardsPerView, maxIndex);
+    });
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => Math.max(prev - cardsPerView, 0));
+    setCurrentIndex((prev) => {
+      // Loop to end if at start
+      if (prev === 0) return maxIndex; // Or align to last page? simple maxIndex works
+      return Math.max(prev - cardsPerView, 0);
+    });
   };
 
   const goToPage = (pageIndex: number) => {
@@ -36,11 +44,7 @@ export default function Testimonials({ testimonials, carouselConfig, title }: Te
   // Auto-play
   useEffect(() => {
     const interval = setInterval(() => {
-      if (currentIndex >= maxIndex) {
-        setCurrentIndex(0);
-      } else {
-        nextSlide();
-      }
+      nextSlide(); // functionality is now built-in to loop
     }, autoPlayInterval);
 
     return () => clearInterval(interval);
@@ -113,20 +117,30 @@ export default function Testimonials({ testimonials, carouselConfig, title }: Te
         <div className={styles.carouselControls}>
           <button
             onClick={prevSlide}
-            disabled={currentIndex === 0}
             className={styles.carouselBtn}
             aria-label="Previous slide"
           >
-            ←
+            <i className="fas fa-chevron-left" />
           </button>
+
+          <div className={styles.dots}>
+            {Array.from({ length: totalPages }).map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => goToPage(idx)}
+                className={`${styles.dot} ${currentPage === idx ? styles.active : ''
+                  }`}
+                aria-label={`Go to page ${idx + 1}`}
+              />
+            ))}
+          </div>
 
           <button
             onClick={nextSlide}
-            disabled={currentIndex >= maxIndex}
             className={styles.carouselBtn}
             aria-label="Next slide"
           >
-            →
+            <i className="fas fa-chevron-right" />
           </button>
         </div>
       </div>

@@ -178,15 +178,24 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
                        Current nextSlide logic jumps by itemsPerView (block).
                        So dots should correspond to blocks.
                     */}
-                    {Array.from({ length: Math.ceil(totalItems / itemsPerView) }).map((_, idx) => {
-                        // Determine active state is a bit tricky if currentIndex is item index.
-                        // Block 0: index 0. Block 1: index itemsPerView.
-                        const isActive = Math.floor(currentIndex / itemsPerView) === idx;
+                    {Array.from({ length: totalPages }).map((_, idx) => {
+                        // Improved active state logic
+                        // If we are at the very end (maxIndex), highlight the last dot
+                        // Otherwise, use standard floor division
+                        const isLastDot = idx === totalPages - 1;
+                        const isAtEnd = currentIndex >= maxIndex;
+
+                        let isActive = false;
+                        if (isAtEnd) {
+                            isActive = isLastDot;
+                        } else {
+                            isActive = Math.floor(currentIndex / itemsPerView) === idx;
+                        }
 
                         return (
                             <button
                                 key={idx}
-                                onClick={() => goToIndex(idx * itemsPerView)}
+                                onClick={() => goToIndex(Math.min(idx * itemsPerView, maxIndex))}
                                 className={`${styles.dot} ${isActive ? styles.active : ''}`}
                                 aria-label={`Go to slide group ${idx + 1}`}
                             />

@@ -87,17 +87,16 @@
     display: block;
     transform: translateY(0);
 
-    /* Masking technique for exact color match */
-    background-color: #0f4a41;
-    /* Even darker green as requested */
-    -webkit-mask-image: url('/images/quote-icon.png');
-    mask-image: url('/images/quote-icon.png');
-    -webkit-mask-size: contain;
+    /* Masking technique - Stacking multiple layers to boost alpha/opacity of the source image */
+    background-color: #2C4B31 !important;
+    mask-image: url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png');
+    -webkit-mask-image: url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png');
     mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
     mask-repeat: no-repeat;
-    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
     mask-position: center;
+    -webkit-mask-position: center;
 }
 
 /* .quoteImg removed as we use CSS mask on the container */
@@ -174,12 +173,12 @@
 }
 
 .carouselBtn {
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -191,12 +190,41 @@
 .carouselBtn:hover:not(:disabled) {
     background: #1C7C54;
     border-color: #1C7C54;
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
 .carouselBtn:disabled {
     opacity: 0.3;
     cursor: not-allowed;
+}
+
+.dots {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 1.5rem;
+    /* Add spacing around dots */
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    /* Transparent white for inactive */
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.dot.active {
+    background: #ffffff;
+    transform: scale(1.2);
+}
+
+.dot:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.6);
 }
 
 @media (max-width: 1024px) {
