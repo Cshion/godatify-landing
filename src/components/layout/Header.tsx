@@ -11,9 +11,16 @@ interface HeaderProps {
   navLinks: NavLink[];
   socialLinks: SocialLink[];
   servicesNav: ServiceNav[];
+  servicesLabel: string;
+  logo: {
+    url: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
 }
 
-export default function Header({ navLinks, socialLinks, servicesNav }: HeaderProps) {
+export default function Header({ navLinks, socialLinks, servicesNav, servicesLabel, logo }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -41,10 +48,10 @@ export default function Header({ navLinks, socialLinks, servicesNav }: HeaderPro
             {/* Logo */}
             <Link href="/" className={styles.logo}>
               <Image
-                src="/images/logo.png"
-                alt="Datify Logo"
-                width={120}
-                height={40}
+                src={logo.url}
+                alt={logo.alt}
+                width={logo.width}
+                height={logo.height}
                 className={styles.logoImg}
               />
             </Link>
@@ -60,7 +67,7 @@ export default function Header({ navLinks, socialLinks, servicesNav }: HeaderPro
               {/* Services Dropdown */}
               <div className={styles.dropdown}>
                 <button className={`${styles.navLink} ${styles.dropdownToggle}`}>
-                  Servicios
+                  {servicesLabel}
                   <i className="fas fa-chevron-down ml-1 text-xs"></i>
                 </button>
                 <div className={styles.dropdownMenu}>

@@ -10,10 +10,12 @@ export const NOSOTROS_CONTENT: NosotrosContent = {
     mission: {
         title: 'Nuestra Misión',
         text: 'Empoderar a las organizaciones para que tomen decisiones estratégicas basadas en datos, impulsando su crecimiento y eficiencia mediante soluciones tecnológicas innovadoras y un acompañamiento cercano.',
+        image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800'
     },
     vision: {
         title: 'Nuestra Visión',
         text: 'Ser el referente líder en consultoría de datos y transformación digital en LATAM, reconocidos por nuestra capacidad de convertir información compleja en valor tangible y sostenible para nuestros clientes.',
+        image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800'
     },
     values: [
         {
@@ -55,5 +57,12 @@ export const NOSOTROS_CONTENT: NosotrosContent = {
             { value: '+10', label: 'Países' },
             { value: '24/7', label: 'Soporte' },
         ],
+        image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800'
     },
+    tabs: [
+        { id: 'quienes', label: 'Quiénes Somos' },
+        { id: 'mision', label: 'Misión y Visión' },
+        { id: 'valores', label: 'Valores' },
+        { id: 'cultura', label: 'Cultura' },
+    ],
 };

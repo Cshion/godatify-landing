@@ -66,4 +66,10 @@ export const COMPANY_INFO: CompanyInfo = {
     description: 'En Datify acompañamos a las organizaciones a descubrir el verdadero poder de sus datos, transformando la forma en que las organizaciones piensan, operan y deciden.',
     email: 'contacto@godatify.com',
     website: 'https://godatify.com',
+    logo: {
+        url: '/images/logo.png',
+        alt: 'Datify Logo',
+        width: 120,
+        height: 40
+    }
 };

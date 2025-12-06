@@ -20,12 +20,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [navLinks, socialLinks, servicesNav, companyInfo, footerLinks] = await Promise.all([
+  const [navLinks, socialLinks, servicesNav, companyInfo, footerLinks, sectionLabels] = await Promise.all([
     api.company.getNavLinks(),
     api.company.getSocialLinks(),
     api.services.getNav(),
     api.company.getInfo(),
     api.company.getFooterLinks(),
+    api.home.getSectionLabels()
   ]);
   return (
     <html lang="es">
@@ -61,9 +62,20 @@ export default async function RootLayout({
             })
           }}
         />
-        <Header navLinks={navLinks} socialLinks={socialLinks} servicesNav={servicesNav as any} />
+        <Header
+          navLinks={navLinks}
+          socialLinks={socialLinks}
+          servicesNav={servicesNav as any}
+          servicesLabel={sectionLabels.header.servicesDropdown}
+          logo={companyInfo.logo}
+        />
         {children}
-        <Footer companyInfo={companyInfo} footerLinks={footerLinks} socialLinks={socialLinks} />
+        <Footer
+          companyInfo={companyInfo}
+          footerLinks={footerLinks}
+          socialLinks={socialLinks}
+          labels={sectionLabels.footer}
+        />
       </body>
     </html>
   );

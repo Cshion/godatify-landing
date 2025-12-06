@@ -14,14 +14,7 @@ interface NosotrosTabsProps {
 
 export default function NosotrosTabs({ content, videoConfig }: NosotrosTabsProps) {
     const [activeTab, setActiveTab] = useState<Tab>('quienes');
-    const { hero, mission, vision, values, culture } = content;
-
-    const tabs = [
-        { id: 'quienes', label: 'Quiénes Somos' },
-        { id: 'mision', label: 'Misión y Visión' },
-        { id: 'valores', label: 'Valores' },
-        { id: 'cultura', label: 'Cultura' },
-    ];
+    const { hero, mission, vision, values, culture, tabs } = content;
 
     return (
         <section className={styles.tabsSection}>
@@ -70,7 +63,7 @@ export default function NosotrosTabs({ content, videoConfig }: NosotrosTabsProps
                         <div className={styles.splitLayout}>
                             <div className={styles.imageWrapper}>
                                 <Image
-                                    src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"
+                                    src={mission.image}
                                     alt="Misión y Visión"
                                     fill
                                     className={styles.image}
@@ -109,7 +102,7 @@ export default function NosotrosTabs({ content, videoConfig }: NosotrosTabsProps
                         <div className={styles.splitLayout}>
                             <div className={styles.imageWrapper}>
                                 <Image
-                                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800"
+                                    src={culture.image}
                                     alt="Cultura Datify"
                                     fill
                                     className={styles.image}

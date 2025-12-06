@@ -11,7 +11,7 @@ export default function Hero({ heroContent }: HeroProps) {
       className={`${styles.heroSection} relative min-h-screen flex items-center justify-center overflow-hidden`}
       id="inicio"
       style={{
-        backgroundImage: 'url(/images/hero-bg.jpg)',
+        backgroundImage: `url(${heroContent.backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -21,7 +21,7 @@ export default function Hero({ heroContent }: HeroProps) {
       <div
         className="absolute inset-0 z-0"
         style={{
-          background: 'linear-gradient(90deg, rgba(19, 92, 81, 0.85) 0%, rgba(19, 92, 81, 0.6) 50%, rgba(19, 92, 81, 0.4) 100%)',
+          background: heroContent.gradient,
         }}
       />
 

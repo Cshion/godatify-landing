@@ -31,6 +31,15 @@ export const SECTION_LABELS: SectionLabels = {
         title: 'Nosotros',
         button: 'Conoce más sobre nosotros',
     },
+    header: {
+        servicesDropdown: 'Servicios',
+    },
+    footer: {
+        quickLinks: 'Enlaces Rápidos',
+        services: 'Servicios',
+        contact: 'Contacto',
+        rights: 'Todos los derechos reservados.',
+    },
 };
 
 // Stats

@@ -5,13 +5,21 @@ import Image from 'next/image';
 import { CompanyInfo, FooterLinks, SocialLink } from '@/types';
 import styles from './Footer.module.css';
 
+interface FooterLabels {
+  quickLinks: string;
+  services: string;
+  contact: string;
+  rights: string;
+}
+
 interface FooterProps {
   companyInfo: CompanyInfo;
   footerLinks: FooterLinks;
   socialLinks: SocialLink[];
+  labels: FooterLabels;
 }
 
-export default function Footer({ companyInfo, footerLinks, socialLinks }: FooterProps) {
+export default function Footer({ companyInfo, footerLinks, socialLinks, labels }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -22,8 +30,8 @@ export default function Footer({ companyInfo, footerLinks, socialLinks }: Footer
           <div className={styles.footerColumn}>
             <Link href="/" className="mb-6 inline-block">
               <Image
-                src="/images/logo.png"
-                alt="Datify Logo"
+                src={companyInfo.logo.url}
+                alt={companyInfo.logo.alt}
                 width={140}
                 height={46}
                 className="brightness-0 invert opacity-90"
@@ -50,7 +58,7 @@ export default function Footer({ companyInfo, footerLinks, socialLinks }: Footer
 
           {/* Quick Links */}
           <div className={styles.footerColumn}>
-            <h4 className={styles.footerHeading}>Enlaces Rápidos</h4>
+            <h4 className={styles.footerHeading}>{labels.quickLinks}</h4>
             <ul className={styles.footerLinks}>
               {footerLinks.quickLinks.map((link) => (
                 <li key={link.href}>
@@ -62,7 +70,7 @@ export default function Footer({ companyInfo, footerLinks, socialLinks }: Footer
 
           {/* Services */}
           <div className={styles.footerColumn}>
-            <h4 className={styles.footerHeading}>Servicios</h4>
+            <h4 className={styles.footerHeading}>{labels.services}</h4>
             <ul className={styles.footerLinks}>
               {footerLinks.services.map((link) => (
                 <li key={link.href}>
@@ -74,7 +82,7 @@ export default function Footer({ companyInfo, footerLinks, socialLinks }: Footer
 
           {/* Contact */}
           <div className={styles.footerColumn}>
-            <h4 className={styles.footerHeading}>Contacto</h4>
+            <h4 className={styles.footerHeading}>{labels.contact}</h4>
             <ul className={styles.footerLinks}>
               {footerLinks.contact.map((link) => (
                 <li key={link.href}>

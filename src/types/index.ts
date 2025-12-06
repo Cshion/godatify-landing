@@ -99,6 +99,12 @@ export interface CompanyInfo {
     description: string;
     email: string;
     website: string;
+    logo: {
+        url: string;
+        alt: string;
+        width: number;
+        height: number;
+    };
 }
 
 export interface HeroContent {
@@ -109,6 +115,7 @@ export interface HeroContent {
     scrollText: string;
     backgroundImage: string;
     gradient: string;
+    image?: string; // Optional image for hero background or side image
 }
 
 export interface SectionLabels {
@@ -129,6 +136,15 @@ export interface SectionLabels {
     about: {
         title: string;
         button: string;
+    };
+    header: {
+        servicesDropdown: string;
+    };
+    footer: {
+        quickLinks: string;
+        services: string;
+        contact: string;
+        rights: string;
     };
 }
 
@@ -160,6 +176,11 @@ export interface CultureStat {
     label: string;
 }
 
+export interface TabLabel {
+    id: string;
+    label: string;
+}
+
 export interface NosotrosContent {
     hero: {
         title: string;
@@ -169,17 +190,21 @@ export interface NosotrosContent {
     mission: {
         title: string;
         text: string;
+        image: string;
     };
     vision: {
         title: string;
         text: string;
+        image: string;
     };
     values: Value[];
     culture: {
         title: string;
         description: string;
         stats: CultureStat[];
+        image: string;
     };
+    tabs: TabLabel[];
 }
 
 export interface FooterLinks {
