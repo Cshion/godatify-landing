@@ -85,42 +85,7 @@ export interface IndustriesPageContent {
     sectors: Industry[];
 }
 
-export interface CaseResult {
-    label: string;
-    value: string;
-    suffix: string;
-}
 
-export interface Client {
-    name: string;
-    logo?: string;
-    website?: string;
-    anonymous?: boolean;
-}
-
-export interface Testimonial {
-    quote: string;
-    author: string;
-    role: string;
-    linkedIn?: string;
-}
-
-export interface CaseStudy {
-    slug: string;
-    title: string;
-    industry: string;
-    relatedIndustryId?: string;
-    description: string;
-    challenge: string;
-    solution: string;
-    results: CaseResult[];
-    techStack: string[];
-    image: string;
-    videoUrl?: string;
-    client: Client;
-    testimonial?: Testimonial;
-    content: string;
-}
 
 export interface CaseResult {
     label: string;
@@ -260,32 +225,7 @@ export interface TabLabel {
     label: string;
 }
 
-export interface NosotrosContent {
-    hero: {
-        title: string;
-        subtitle: string;
-        description: string;
-        phrases?: string[];
-    };
-    mission: {
-        title: string;
-        text: string;
-        image: string;
-    };
-    vision: {
-        title: string;
-        text: string;
-        image: string;
-    };
-    values: Value[];
-    culture: {
-        title: string;
-        description: string;
-        stats: CultureStat[];
-        image: string;
-    };
-    tabs: TabLabel[];
-}
+
 
 export interface Office {
     country: string;
@@ -342,13 +282,4 @@ export interface CasesPageContent {
     }
 }
 
-// Helper type for Industries Page Content
-export interface IndustriesPageContent {
-    hero: {
-        title: string;
-        subtitle: string;
-        description: string;
-        phrases?: string[];
-    };
-    sectors: Industry[];
-}
+

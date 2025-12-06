@@ -1,6 +1,5 @@
 import { api } from '@/lib/api';
 import PageHero from '@/components/common/PageHero';
-
 export default async function IndustriesHero() {
     const hero = await api.industries.getHero();
 

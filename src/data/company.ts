@@ -23,7 +23,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
     {
         id: 'youtube',
         icon: 'youtube',
-        url: 'https://godatify.com',
+        url: 'https://www.youtube.com/@godatify',
         label: 'YouTube'
     },
 ];

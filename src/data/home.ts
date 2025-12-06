@@ -5,7 +5,7 @@ export const HERO_CONTENT: HeroContent = {
     title: 'Datificando las Organizaciones',
     subtitle: 'En Datify acompañamos a las organizaciones a descubrir el verdadero poder de sus datos, transformando la forma en que las organizaciones piensan, operan y deciden. Nos convertimos en sus aliados estratégicos para lograr mayor eficiencia, agilidad y crecimiento sostenido a partir del valor de sus datos.',
     ctaText: 'Contáctanos',
-    ctaHref: '#contacto',
+    ctaHref: '/contacto',
     scrollText: 'Descubre más',
     backgroundImage: '/images/hero-bg.jpg',
     gradient: 'linear-gradient(90deg, rgba(19, 92, 81, 0.85) 0%, rgba(19, 92, 81, 0.6) 50%, rgba(19, 92, 81, 0.4) 100%)',
