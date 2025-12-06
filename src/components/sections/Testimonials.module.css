@@ -2,7 +2,8 @@
     position: relative;
     padding: 5rem 0;
     overflow: hidden;
-    background: url('/images/hero-nosotros.png') no-repeat center center/cover;
+    /* User requested background similar to logo color. Using Generated Image */
+    background: url('/images/testimonials-bg.png') no-repeat center center/cover;
 }
 
 .overlay {
@@ -11,7 +12,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(23, 70, 52, 0.95) 0%, rgba(31, 88, 66, 0.9) 100%);
+    /* Adding a gradient overlay for depth, staying in the green family */
+    background: linear-gradient(135deg, rgba(19, 92, 81, 0.9) 0%, rgba(28, 124, 84, 0.8) 100%);
     z-index: 0;
 }
 
@@ -57,47 +59,80 @@
     display: flex;
     gap: 2rem;
     transition: transform 0.5s ease;
+    align-items: stretch;
+    /* Ensure all items stretch to max height */
 }
 
 .testimonialCard {
     flex: 0 0 calc(33.333% - 1.333rem);
     /* Adjust for gap */
-    max-width: 100%;
+    width: 100%;
+    /* Ensure width fills flex basis */
     background: rgba(255, 255, 255, 0.9);
     border-radius: 1rem;
-    padding: 3rem 2rem;
+    padding: 2rem 1.5rem;
+    /* Reduced padding from 3rem 2rem */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     position: relative;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    /* height: 100%; removed to allow flex stretch to control height */
     backdrop-filter: blur(10px);
 }
 
 .quoteIcon {
-    font-size: 4rem;
-    font-family: Georgia, serif;
-    color: #3f4f64;
-    line-height: 1;
-    margin-bottom: 1.5rem;
-    opacity: 0.8;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 1rem;
+    display: block;
+    transform: translateY(0);
+
+    /* Masking technique for exact color match */
+    background-color: #0f4a41;
+    /* Even darker green as requested */
+    -webkit-mask-image: url('/images/quote-icon.png');
+    mask-image: url('/images/quote-icon.png');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
 }
+
+/* .quoteImg removed as we use CSS mask on the container */
 
 .testimonialContent {
     flex-grow: 1;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    /* Reduced margin */
+    display: flex;
+    /* align-items: center; removed to allow text to flow naturally */
 }
 
 .testimonialText {
-    color: #6b7280;
-    line-height: 1.7;
+    color: #374151;
+    /* Gray-700 for better readability */
+    line-height: 1.6;
+    /* Slightly tighter line height */
     font-size: 1rem;
+    /* Reduced from 1.15rem */
+    font-weight: 500;
+    /* Bolder */
+    font-family: var(--font-primary);
+    /* Theme font */
 }
 
 .testimonialAuthor {
     display: flex;
     align-items: center;
     gap: 1rem;
+    padding-top: 1rem;
+    /* Reduced padding */
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    /* Visual separation */
+    margin-top: auto;
+    /* Push to bottom */
 }
 
 .authorImageWrapper {

@@ -111,10 +111,7 @@ export const api = {
     testimonials: {
         getAll: async (): Promise<Testimonial[]> => {
             // Mapping text to quote to match Testimonial interface
-            return TESTIMONIALS_CONTENT.map(t => ({
-                ...t,
-                quote: t.text
-            }));
+            return TESTIMONIALS_CONTENT;
         }
     },
     contact: {

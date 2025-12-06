@@ -74,7 +74,7 @@ export default function Testimonials({ testimonials, carouselConfig, title }: Te
               {testimonials.map((testimonial, index) => (
                 <div key={index} className={styles.testimonialCard}>
                   {/* Quote Icon */}
-                  <div className={styles.quoteIcon}>“</div>
+                  <div className={styles.quoteIcon}></div>
 
                   {/* Content */}
                   <div className={styles.testimonialContent}>

@@ -30,7 +30,7 @@ export default function Footer({ companyInfo, footerLinks, socialLinks, labels }
           <div className={styles.footerColumn}>
             <Link href="/" className="mb-6 inline-block">
               <Image
-                src="/images/logo-brand-green.png"
+                src="/images/logo-brand-harmonized.png"
                 alt={companyInfo.logo.alt}
                 width={140}
                 height={46}
