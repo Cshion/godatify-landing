@@ -51,8 +51,8 @@
 
 .testimonialsWrapper {
     overflow: hidden;
-    padding: 2rem 0.5rem;
-    /* Add vertical padding for shadow */
+    padding: 2rem 2rem;
+    /* Increased horizontal padding to prevent shadow clipping */
 }
 
 .testimonialsTrack {
@@ -114,8 +114,8 @@
     /* Gray-700 for better readability */
     line-height: 1.6;
     /* Slightly tighter line height */
-    font-size: 1rem;
-    /* Reduced from 1.15rem */
+    font-size: 1.125rem;
+    /* Increased size for better visibility */
     font-weight: 500;
     /* Bolder */
     font-family: var(--font-primary);
