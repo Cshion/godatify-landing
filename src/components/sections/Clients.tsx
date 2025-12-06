@@ -2,20 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { api } from '@/lib/api';
 import { Client } from '@/types';
 import styles from './Clients.module.css';
 
-export default function Clients() {
-    const [clients, setClients] = useState<Client[]>([]);
+interface ClientsProps {
+    clients: Client[];
+    title: string;
+}
 
-    useEffect(() => {
-        const fetchClients = async () => {
-            const data = await api.home.getClients();
-            setClients(data);
-        };
-        fetchClients();
-    }, []);
+export default function Clients({ clients, title }: ClientsProps) {
 
     // Duplicate the list to ensure seamless scrolling
     const marqueeClients = [...clients, ...clients];
@@ -23,7 +18,7 @@ export default function Clients() {
     return (
         <section className={styles.clientsSection}>
             <div className="container mx-auto px-6">
-                <h2 className={styles.title}>Confían en Nosotros</h2>
+                <h2 className={styles.title}>{title}</h2>
 
                 <div className={styles.marqueeContainer}>
                     <div className={styles.marqueeTrack}>

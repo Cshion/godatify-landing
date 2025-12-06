@@ -16,9 +16,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function NosotrosPage() {
-    const [content, videoConfig] = await Promise.all([
+    const [content, videoConfig, clients, sectionLabels] = await Promise.all([
         api.about.getContent(),
-        api.home.getVideoConfig()
+        api.home.getVideoConfig(),
+        api.home.getClients(),
+        api.home.getSectionLabels()
     ]);
 
     return (
@@ -26,7 +28,7 @@ export default async function NosotrosPage() {
             <main>
                 <NosotrosHero hero={content.hero} />
                 <NosotrosTabs content={content} videoConfig={videoConfig} />
-                <Clients />
+                <Clients clients={clients} title={sectionLabels.clients.title} />
             </main>
             <ScrollReveal />
 

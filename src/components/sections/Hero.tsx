@@ -1,8 +1,11 @@
-import { api } from '@/lib/api';
+import { HeroContent } from '@/types';
 import styles from './Hero.module.css';
 
-export default async function Hero() {
-  const heroContent = await api.home.getHeroContent();
+interface HeroProps {
+  heroContent: HeroContent;
+}
+
+export default function Hero({ heroContent }: HeroProps) {
   return (
     <section
       className={`${styles.heroSection} relative min-h-screen flex items-center justify-center overflow-hidden`}

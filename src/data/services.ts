@@ -2,11 +2,11 @@ import { Service } from '@/types';
 
 // Services for Dropdown (derived from content for consistency, but kept separate if needed for simple nav)
 export const SERVICES_NAV = [
-    { id: 'big-data-management', name: 'Big Data Management (BD)' },
-    { id: 'business-analytics', name: 'Business Analytics (BA)' },
-    { id: 'business-intelligence', name: 'Business Intelligence (BI)' },
-    { id: 'data-engineering', name: 'Data Engineering (DE)' },
-    { id: 'digital-platform', name: 'Digital Platform (DP)' },
+    { id: 'big-data-management', name: 'Big Data Management' },
+    { id: 'business-analytics', name: 'Business Analytics' },
+    { id: 'business-intelligence', name: 'Business Intelligence' },
+    { id: 'data-engineering', name: 'Data Engineering' },
+    { id: 'digital-platform', name: 'Digital Platform' },
 ] as const;
 
 // Services Content

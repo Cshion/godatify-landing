@@ -1,4 +1,4 @@
-import { HeroContent, Stat, VideoConfig, Client, CarouselConfig } from '@/types';
+import { HeroContent, Stat, VideoConfig, Client, CarouselConfig, SectionLabels } from '@/types';
 
 // Hero Content
 export const HERO_CONTENT: HeroContent = {
@@ -7,6 +7,30 @@ export const HERO_CONTENT: HeroContent = {
     ctaText: 'Contáctanos',
     ctaHref: '#contacto',
     scrollText: 'Descubre más',
+    backgroundImage: '/images/hero-bg.jpg',
+    gradient: 'linear-gradient(90deg, rgba(19, 92, 81, 0.85) 0%, rgba(19, 92, 81, 0.6) 50%, rgba(19, 92, 81, 0.4) 100%)',
+};
+
+// Section Labels
+export const SECTION_LABELS: SectionLabels = {
+    services: {
+        title: 'Nuestros Servicios',
+        button: 'Leer Más',
+    },
+    cases: {
+        title: 'Casos de Éxito',
+        button: 'Ver Proyecto',
+    },
+    testimonials: {
+        title: 'Testimonios',
+    },
+    clients: {
+        title: 'Confían en Nosotros',
+    },
+    about: {
+        title: 'Nosotros',
+        button: 'Conoce más sobre nosotros',
+    },
 };
 
 // Stats

@@ -107,6 +107,29 @@ export interface HeroContent {
     ctaText: string;
     ctaHref: string;
     scrollText: string;
+    backgroundImage: string;
+    gradient: string;
+}
+
+export interface SectionLabels {
+    services: {
+        title: string;
+        button: string;
+    };
+    cases: {
+        title: string;
+        button: string;
+    };
+    testimonials: {
+        title: string;
+    };
+    clients: {
+        title: string;
+    };
+    about: {
+        title: string;
+        button: string;
+    };
 }
 
 export interface Stat {

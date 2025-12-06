@@ -4,27 +4,23 @@ import { useState, useEffect } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { api } from '@/lib/api';
 import { CaseStudy } from '@/types';
 import styles from './Cases.module.css';
 
-export default function Cases() {
-  const [cases, setCases] = useState<CaseStudy[]>([]);
+interface CasesProps {
+  cases: CaseStudy[];
+  title: string;
+  buttonText: string;
+}
 
-  useEffect(() => {
-    const fetchCases = async () => {
-      const data = await api.cases.getAll();
-      setCases(data);
-    };
-    fetchCases();
-  }, []);
+export default function Cases({ cases, title, buttonText }: CasesProps) {
 
 
   return (
     <section className="section py-20 bg-white" id="casos">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900 reveal">
-          Casos de Éxito
+          {title}
         </h2>
 
         <div className={styles.casesContainer}>
@@ -44,7 +40,7 @@ export default function Cases() {
                   {/* Overlay */}
                   <div className={styles.caseOverlay}>
                     <Link href={`/casos/${caseStudy.slug}`} className={styles.caseLink}>
-                      Ver Proyecto
+                      {buttonText}
                     </Link>
                   </div>
                 </div>

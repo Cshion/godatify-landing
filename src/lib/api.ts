@@ -20,7 +20,7 @@ import { CASES_CONTENT } from '@/data/cases';
 import { INDUSTRIES_CONTENT } from '@/data/industries';
 import { TESTIMONIALS_CONTENT } from '@/data/testimonials';
 import { COMPANY_INFO, SOCIAL_LINKS, NAV_LINKS, FOOTER_LINKS } from '@/data/company';
-import { HERO_CONTENT, STATS, VIDEO_CONFIG, CLIENTS_CONTENT, CAROUSEL_CONFIG } from '@/data/home';
+import { HERO_CONTENT, STATS, VIDEO_CONFIG, CLIENTS_CONTENT, CAROUSEL_CONFIG, SECTION_LABELS } from '@/data/home';
 import { NOSOTROS_CONTENT } from '@/data/about';
 
 // Simulate API delay to ensure components handle async data correctly (optional, can be removed for production build)
@@ -56,7 +56,10 @@ export const api = {
         },
         getCarouselConfig: async (): Promise<CarouselConfig> => {
             return CAROUSEL_CONFIG;
-        }
+        },
+        getSectionLabels: async () => {
+            return SECTION_LABELS;
+        },
     },
     services: {
         getAll: async (): Promise<Service[]> => {

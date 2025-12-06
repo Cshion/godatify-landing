@@ -1,26 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { api } from '@/lib/api';
 import { Service } from '@/types';
 import styles from './Services.module.css';
 
-export default function Services() {
-  const [services, setServices] = useState<Service[]>([]);
+interface ServicesProps {
+  services: Service[];
+  title: string;
+  buttonText: string;
+}
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      const data = await api.services.getAll();
-      setServices(data);
-    };
-    fetchServices();
-  }, []);
-
+export default function Services({ services, title, buttonText }: ServicesProps) {
   return (
     <section className={`section py-20 ${styles.servicesSection}`} id="servicios">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900 reveal">
-          Nuestros Servicios
+          {title}
         </h2>
 
         <div className={styles.servicesContainer}>
@@ -36,7 +30,7 @@ export default function Services() {
                 <p className={styles.serviceDescription}>
                   {service.description}
                 </p>
-                <a href="#" className={styles.btnOutline} aria-label={`Leer más sobre ${service.title}`}>Leer Más</a>
+                <a href="#" className={styles.btnOutline} aria-label={`Leer más sobre ${service.title}`}>{buttonText}</a>
               </div>
             ))}
           </div>

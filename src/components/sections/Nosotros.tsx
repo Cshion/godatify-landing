@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { api } from '@/lib/api';
 import { Stat, VideoConfig } from '@/types';
 import styles from './Nosotros.module.css';
 
@@ -10,23 +9,22 @@ interface AnimatedStat extends Stat {
   current: number;
 }
 
-export default function Nosotros() {
-  const [stats, setStats] = useState<AnimatedStat[]>([]);
-  const [videoConfig, setVideoConfig] = useState<VideoConfig | null>(null);
+interface NosotrosProps {
+  stats: Stat[];
+  videoConfig: VideoConfig | null;
+  title: string;
+  buttonText: string;
+}
+
+export default function Nosotros({ stats: initialStats, videoConfig, title, buttonText }: NosotrosProps) {
+  const [stats, setStats] = useState<AnimatedStat[]>(initialStats.map(s => ({ ...s, current: 0 })));
   const sectionRef = useRef<HTMLElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const [statsData, videoData] = await Promise.all([
-        api.home.getStats(),
-        api.home.getVideoConfig()
-      ]);
-      setStats(statsData.map(s => ({ ...s, current: 0 })));
-      setVideoConfig(videoData);
-    };
-    fetchData();
-  }, []);
+    // Reset stats if initialStats changes (optional, but good for HMR)
+    setStats(initialStats.map(s => ({ ...s, current: 0 })));
+  }, [initialStats]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -73,7 +71,7 @@ export default function Nosotros() {
     <section className="section py-20 bg-white" id="nosotros" ref={sectionRef}>
       <div className="container mx-auto px-6">
         <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900 reveal">
-          Nosotros
+          {title}
         </h2>
 
         {/* Stats Grid */}
@@ -111,7 +109,7 @@ export default function Nosotros() {
         {/* CTA Button */}
         <div className={`${styles.ctaContainer} reveal`}>
           <Link href="/nosotros" className={styles.ctaButton}>
-            Conoce más sobre nosotros
+            {buttonText}
             <i className="fas fa-arrow-right"></i>
           </Link>
         </div>

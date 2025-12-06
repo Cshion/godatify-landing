@@ -1,26 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { api } from '@/lib/api';
-import { Testimonial } from '@/types';
+import { Testimonial, CarouselConfig } from '@/types';
 import styles from './Testimonials.module.css';
 
-export default function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [carouselConfig, setCarouselConfig] = useState({ cardsPerView: 3, autoPlayInterval: 5000 });
+interface TestimonialsProps {
+  testimonials: Testimonial[];
+  carouselConfig: CarouselConfig;
+  title: string;
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const [testimonialsData, configData] = await Promise.all([
-        api.testimonials.getAll(),
-        api.home.getCarouselConfig()
-      ]);
-      setTestimonials(testimonialsData);
-      setCarouselConfig(configData);
-    };
-    fetchData();
-  }, []);
+export default function Testimonials({ testimonials, carouselConfig, title }: TestimonialsProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
 
   const { cardsPerView, autoPlayInterval } = carouselConfig;
 
@@ -61,7 +53,7 @@ export default function Testimonials() {
     >
       <div className="container mx-auto px-6">
         <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-white reveal">
-          Testimonios
+          {title}
         </h2>
 
         {/* Carousel Container */}
