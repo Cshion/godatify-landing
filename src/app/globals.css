@@ -87,7 +87,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; - Disabled for Lenis */
 }
 
 body {

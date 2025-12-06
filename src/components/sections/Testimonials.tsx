@@ -52,7 +52,7 @@ export default function Testimonials({ testimonials, carouselConfig, title }: Te
       id="testimonios"
     >
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-white reveal">
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900 reveal">
           {title}
         </h2>
 

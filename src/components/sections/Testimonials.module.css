@@ -1,18 +1,10 @@
 .testimonialsSection {
-    background: linear-gradient(135deg, #135c51 0%, #1C7C54 50%, #26a86f 100%);
+    background: #ffffff;
     position: relative;
     overflow: hidden;
 }
 
-.testimonialsSection::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-}
+
 
 .testimonialsContainer {
     max-width: 1100px;
@@ -48,7 +40,7 @@
     left: 1.5rem;
     font-size: 5rem;
     font-family: Georgia, serif;
-    color: #f3f4f6;
+    color: #e5e7eb;
     line-height: 1;
     z-index: 0;
 }
@@ -126,19 +118,19 @@
     width: 12px;
     height: 12px;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.4);
+    background: #d1d5db;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .carouselDot.active {
-    background: white;
+    background: #1C7C54;
     width: 32px;
 }
 
 .carouselDot:hover {
-    background: rgba(255, 255, 255, 0.7);
+    background: #9ca3af;
 }
 
 @media (max-width: 1024px) {
