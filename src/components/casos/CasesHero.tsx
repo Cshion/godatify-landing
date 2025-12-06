@@ -6,6 +6,7 @@ export default function CasesHero() {
             title="Impacto Real"
             subtitle="No solo entregamos tecnología, entregamos resultados de negocio medibles. Descubre cómo transformamos datos en rentabilidad."
             backgroundImage="/images/hero-cases.png"
+            phrases={['Evidencia Tangible', 'Retorno de Inversión', 'Historias de Éxito']}
         />
     );
 }

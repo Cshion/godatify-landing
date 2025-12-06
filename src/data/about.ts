@@ -3,7 +3,7 @@ import { NosotrosContent } from '@/types';
 // Nosotros Page Content
 export const NOSOTROS_CONTENT: NosotrosContent = {
     hero: {
-        title: 'Nosotros',
+        title: 'Nuestro Propósito',
         subtitle: 'Nuestra razón de ser es generar impacto real, convirtiendo la complejidad en claridad, y el dato en una ventaja competitiva.',
         description: 'Desde 2022 hemos trabajado con empresas líderes como Heineken, Grupo Rocío y SPACE AG, adaptándonos a sus necesidades y desafíos. Nos eligen por nuestra capacidad de entender su negocio, anticipar soluciones y entregar resultados que generan confianza. Creemos en un modelo ágil, colaborativo y centrado en el valor: operamos de forma remota con oficinas híbridas en Lima y Madrid, listos para estar donde nuestros clientes lo necesiten.',
     },

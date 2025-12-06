@@ -3,7 +3,7 @@ import { Industry } from '@/types';
 // Industries Page Content
 export const INDUSTRIES_CONTENT: { hero: any; sectors: Industry[] } = {
     hero: {
-        title: 'Industrias',
+        title: 'Potencia tu Sector',
         subtitle: 'Soluciones especializadas para retos sectoriales únicos.',
         description: 'Entendemos que cada industria tiene su propio ADN. Nuestra experiencia nos permite adaptar la tecnología y el análisis de datos a las necesidades específicas de tu sector, generando valor tangible desde el primer día.',
     },

@@ -134,54 +134,28 @@
     z-index: 2;
 }
 
-/* Glitch Effect */
-.title::after,
-.title::before {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    color: white;
-    background: var(--color-brand-green-dark);
-    overflow: hidden;
-    clip: rect(0, 900px, 0, 0);
-}
-
-.title::after {
-    left: 2px;
-    text-shadow: -1px 0 var(--color-brand-green-light);
-    animation: glitch 2s infinite linear alternate-reverse;
-}
-
-.title::before {
-    left: -2px;
-    text-shadow: 1px 0 #ffffff;
-    animation: glitch 3s infinite linear alternate-reverse;
-}
-
-@keyframes glitch {
+@keyframes fadeSlideIn {
     0% {
-        clip: rect(44px, 9999px, 56px, 0);
-    }
-
-    5% {
-        clip: rect(20px, 9999px, 80px, 0);
-    }
-
-    10% {
-        clip: rect(10px, 9999px, 90px, 0);
-    }
-
-    15% {
-        clip: rect(80px, 9999px, 10px, 0);
-    }
-
-    20% {
-        clip: rect(0, 9999px, 0, 0);
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(10px);
     }
 
     100% {
-        clip: rect(0, 9999px, 0, 0);
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
     }
+}
+
+.title.animate {
+    animation: fadeSlideIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Remove Glitch pseudo-elements to prevent artifacts */
+.title::after,
+.title::before {
+    display: none;
 }
 
 .subtitle {
