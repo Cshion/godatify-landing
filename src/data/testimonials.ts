@@ -2,7 +2,8 @@ import { Testimonial } from '@/types';
 
 export interface TestimonialWithId extends Testimonial {
     id: number;
-    text: string; // Mapping 'text' to 'quote' or keeping it separate if needed. The JSON used 'text'.
+    id: number;
+    quote: string;
 }
 
 // Adapting to match the JSON structure used in Testimonials.tsx
@@ -12,41 +13,47 @@ export interface TestimonialWithId extends Testimonial {
 // Let's adapt the component to use the standard Testimonial type, but for now, let's replicate the data structure to minimize friction, 
 // then we can refactor the component to use 'quote' instead of 'text'.
 
-export const TESTIMONIALS_CONTENT = [
+export const TESTIMONIALS_CONTENT: TestimonialWithId[] = [
     {
         id: 1,
-        text: "Es increíble, es realmente maravilloso. Datify ha superado completamente nuestras expectativas. La facilidad de lectura y el análisis de datos han transformado nuestra forma de trabajar.",
+        quote: "Es increíble, es realmente maravilloso. Datify ha superado completamente nuestras expectativas. La facilidad de lectura y el análisis de datos han transformado nuestra forma de trabajar.",
         author: "Cliente Satisfecho",
-        role: "CEO, Empresa"
+        role: "CEO, Empresa",
+        image: "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random"
     },
     {
         id: 2,
-        text: "Datify ha transformado completamente nuestra capacidad de tomar decisiones basadas en datos. El equipo es profesional y los resultados son excepcionales.",
+        quote: "Datify ha transformado completamente nuestra capacidad de tomar decisiones basadas en datos. El equipo es profesional y los resultados son excepcionales.",
         author: "Cliente Satisfecho",
-        role: "Director, Organización"
+        role: "Director, Organización",
+        image: "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random"
     },
     {
         id: 3,
-        text: "La implementación fue rápida y eficiente. Ahora tenemos visibilidad completa de nuestros procesos y podemos optimizar nuestras operaciones de manera efectiva.",
+        quote: "La implementación fue rápida y eficiente. Ahora tenemos visibilidad completa de nuestros procesos y podemos optimizar nuestras operaciones de manera efectiva.",
         author: "Cliente Satisfecho",
-        role: "Gerente, Compañía"
+        role: "Gerente, Compañía",
+        image: "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random"
     },
     {
         id: 4,
-        text: "El soporte y la atención al cliente son excepcionales. Siempre están disponibles para ayudarnos y resolver cualquier duda. Una inversión que realmente vale la pena.",
+        quote: "El soporte y la atención al cliente son excepcionales. Siempre están disponibles para ayudarnos y resolver cualquier duda. Una inversión que realmente vale la pena.",
         author: "María González",
-        role: "CFO, Tech Solutions"
+        role: "CFO, Tech Solutions",
+        image: "https://ui-avatars.com/api/?name=Maria+Gonzalez&background=random"
     },
     {
         id: 5,
-        text: "Los insights que hemos obtenido gracias a Datify han sido fundamentales para nuestro crecimiento. Recomiendo sus servicios sin dudarlo.",
+        quote: "Los insights que hemos obtenido gracias a Datify han sido fundamentales para nuestro crecimiento. Recomiendo sus servicios sin dudarlo.",
         author: "Carlos Mendoza",
-        role: "VP Operaciones, Retail Corp"
+        role: "VP Operaciones, Retail Corp",
+        image: "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random"
     },
     {
         id: 6,
-        text: "Datify nos ayudó a centralizar toda nuestra información y ahora podemos tomar decisiones estratégicas con confianza. Un cambio total en nuestra organización.",
+        quote: "Datify nos ayudó a centralizar toda nuestra información y ahora podemos tomar decisiones estratégicas con confianza. Un cambio total en nuestra organización.",
         author: "Ana Rodríguez",
-        role: "Directora General, Innovación SA"
+        role: "Directora General, Innovación SA",
+        image: "https://ui-avatars.com/api/?name=Ana+Rodriguez&background=random"
     }
 ];

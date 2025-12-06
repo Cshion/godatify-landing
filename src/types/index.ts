@@ -105,6 +105,7 @@ export interface Testimonial {
     author: string;
     role: string;
     linkedIn?: string;
+    image?: string;
 }
 
 export interface CaseStudy {
