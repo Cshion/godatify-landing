@@ -34,7 +34,7 @@ export default function Footer({ companyInfo, footerLinks, socialLinks, labels }
                 alt={companyInfo.logo.alt}
                 width={140}
                 height={46}
-                className="brightness-0 invert opacity-90"
+                className="opacity-90"
               />
             </Link>
             <p className={styles.footerDescription}>
