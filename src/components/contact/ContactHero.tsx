@@ -1,6 +1,7 @@
 import { ContactPageContent, ContactFormLabels, Office, SocialLink } from '@/types';
 import ContactForm from './ContactForm';
 import Offices from './Offices';
+import PageHero from '@/components/common/PageHero';
 import styles from './ContactHero.module.css';
 
 interface ContactHeroProps {
@@ -15,24 +16,8 @@ interface ContactHeroProps {
 export default function ContactHero({ hero, offices, formLabels, formTitle, formSubtitle, socialLinks }: ContactHeroProps) {
     return (
         <>
-            {/* Hero Banner Section */}
-            <section className={styles.heroBanner}>
-                {/* Particles */}
-                <div className={styles.particles}>
-                    <div className={styles.particle}></div>
-                    <div className={styles.particle}></div>
-                    <div className={styles.particle}></div>
-                    <div className={styles.particle}></div>
-                    <div className={styles.particle}></div>
-                </div>
-
-                <div className="container mx-auto px-6">
-                    <div className={styles.bannerContent}>
-                        <h1 className={styles.bannerTitle}>{hero.title}</h1>
-                        <p className={styles.bannerSubtitle}>{hero.subtitle}</p>
-                    </div>
-                </div>
-            </section>
+            {/* Hero Banner Section using PageHero */}
+            <PageHero title={hero.title} subtitle={hero.subtitle} />
 
             {/* Content Section */}
             <section className={styles.contentSection}>
