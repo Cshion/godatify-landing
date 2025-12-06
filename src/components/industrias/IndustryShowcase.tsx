@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { INDUSTRIES_CONTENT, CASES_CONTENT } from '@/lib/constants';
+import { INDUSTRIES_CONTENT } from '@/data/industries';
+import { CASES_CONTENT } from '@/data/cases';
 import styles from './IndustryShowcase.module.css';
 
 type Sector = typeof INDUSTRIES_CONTENT.sectors[number];

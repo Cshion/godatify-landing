@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { COMPANY_INFO, FOOTER_LINKS, SOCIAL_LINKS } from '@/lib/constants';
+import { FOOTER_LINKS, SOCIAL_LINKS, COMPANY_INFO } from '@/data/company';
 import styles from './Footer.module.css';
 
 export default function Footer() {

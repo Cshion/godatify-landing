@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import testimonialsData from '@/lib/data/testimonials.json';
 import { Testimonial } from '@/lib/types';
-import { CAROUSEL_CONFIG } from '@/lib/constants';
+import { CASES_CONTENT } from '@/data/cases';
+import { CAROUSEL_CONFIG } from '@/data/home';
 import styles from './Testimonials.module.css';
 
 export default function Testimonials() {

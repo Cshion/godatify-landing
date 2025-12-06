@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { NOSOTROS_CONTENT, VIDEO_CONFIG } from '@/lib/constants';
+import { NOSOTROS_CONTENT } from '@/data/about';
+import { VIDEO_CONFIG } from '@/data/home';
 import styles from './NosotrosTabs.module.css';
 
 type Tab = 'quienes' | 'mision' | 'valores' | 'cultura';

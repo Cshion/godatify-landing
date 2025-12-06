@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
-import { SERVICES_CONTENT, CASES_CONTENT } from '@/lib/constants';
+import { SERVICES_CONTENT } from '@/data/services';
+import { CASES_CONTENT } from '@/data/cases';
 import ServiceHero from '@/components/servicios/ServiceHero';
 import ServiceFeatures from '@/components/servicios/ServiceFeatures';
 import ServiceMethodology from '@/components/servicios/ServiceMethodology';

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { CASES_CONTENT } from '@/lib/constants';
+import { CASES_CONTENT } from '@/data/cases';
 import styles from './Cases.module.css';
 
 export default function Cases() {

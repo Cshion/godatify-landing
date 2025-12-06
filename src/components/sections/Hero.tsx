@@ -1,4 +1,4 @@
-import { HERO_CONTENT } from '@/lib/constants';
+import { HERO_CONTENT, STATS, VIDEO_CONFIG } from '@/data/home';
 import styles from './Hero.module.css';
 
 export default function Hero() {

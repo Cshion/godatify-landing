@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import IndustriesHero from '@/components/industrias/IndustriesHero';
 import IndustryShowcase from '@/components/industrias/IndustryShowcase';
-import { INDUSTRIES_CONTENT } from '@/lib/constants';
+import { INDUSTRIES_CONTENT } from '@/data/industries';
 
 export const metadata: Metadata = {
     title: 'Industrias | Datify',

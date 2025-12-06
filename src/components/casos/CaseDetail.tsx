@@ -1,9 +1,8 @@
 import Image from 'next/image';
-import { CASES_CONTENT } from '@/lib/constants';
+import { CaseStudy } from '@/types';
+import { CASES_CONTENT } from '@/data/cases';
 import CasesGrid from './CasesGrid';
 import styles from './CaseDetail.module.css';
-
-type CaseStudy = typeof CASES_CONTENT[number];
 
 interface CaseDetailProps {
     caseStudy: CaseStudy;

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { CASES_CONTENT } from '@/lib/constants';
+import { CASES_CONTENT } from '@/data/cases';
+import { CaseStudy } from '@/types';
 import styles from './CasesGrid.module.css';
 
 interface CasesGridProps {

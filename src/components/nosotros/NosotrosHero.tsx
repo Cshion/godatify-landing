@@ -1,4 +1,4 @@
-import { NOSOTROS_CONTENT } from '@/lib/constants';
+import { NOSOTROS_CONTENT } from '@/data/about';
 import styles from './NosotrosHero.module.css';
 
 export default function NosotrosHero() {

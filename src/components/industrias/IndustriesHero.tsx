@@ -1,4 +1,4 @@
-import { INDUSTRIES_CONTENT } from '@/lib/constants';
+import { INDUSTRIES_CONTENT } from '@/data/industries';
 import styles from './IndustriesHero.module.css';
 
 export default function IndustriesHero() {

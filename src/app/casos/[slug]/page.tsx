@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import CaseDetail from '@/components/casos/CaseDetail';
-import { CASES_CONTENT } from '@/lib/constants';
+import { CASES_CONTENT } from '@/data/cases';
 
 interface PageProps {
     params: Promise<{

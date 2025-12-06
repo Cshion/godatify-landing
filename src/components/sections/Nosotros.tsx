@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { STATS, VIDEO_CONFIG } from '@/lib/constants';
+import { NOSOTROS_CONTENT } from '@/data/about';
+import { STATS, VIDEO_CONFIG } from '@/data/home';
 import { Stat } from '@/lib/types';
 import styles from './Nosotros.module.css';
 

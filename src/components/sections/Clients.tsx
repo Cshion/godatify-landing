@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { CLIENTS_CONTENT } from '@/lib/constants';
+import { CLIENTS_CONTENT } from '@/data/home';
 import styles from './Clients.module.css';
 
 export default function Clients() {
@@ -19,7 +19,7 @@ export default function Clients() {
                             <div key={idx} className={styles.clientCard}>
                                 <div className={styles.logoWrapper}>
                                     <Image
-                                        src={client.logo}
+                                        src={client.logo || ''}
                                         alt={`Logo ${client.name}`}
                                         fill
                                         className={styles.logo}

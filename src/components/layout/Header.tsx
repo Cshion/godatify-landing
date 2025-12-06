@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { NAV_LINKS, SERVICES_NAV, SOCIAL_LINKS } from '@/lib/constants';
+import { NAV_LINKS, SOCIAL_LINKS } from '@/data/company';
+import { SERVICES_NAV } from '@/data/services';
 import styles from './Header.module.css';
 
 export default function Header() {
