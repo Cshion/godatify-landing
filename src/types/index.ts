@@ -38,10 +38,51 @@ export interface Service {
     description: string;
     icon: string;
     image: string;
-    phrases?: string[]; // Added for text cycling
+    phrases?: string[];
+    backgroundImage?: string; // Added for hero background
     features: ServiceFeature[];
     methodology: ServiceMethodologyStep[];
     techStack: ServiceTech[];
+}
+
+export interface NosotrosContent {
+    hero: {
+        title: string;
+        subtitle: string;
+        description: string;
+        phrases?: string[];
+        backgroundImage?: string; // Added for hero background
+    };
+    mission: {
+        title: string;
+        text: string;
+        image: string;
+    };
+    vision: {
+        title: string;
+        text: string;
+        image: string;
+    };
+    values: Value[];
+    culture: {
+        title: string;
+        description: string;
+        stats: CultureStat[];
+        image: string;
+    };
+    tabs: TabLabel[];
+}
+
+// Helper type for Industries Page Content
+export interface IndustriesPageContent {
+    hero: {
+        title: string;
+        subtitle: string;
+        description: string;
+        phrases?: string[];
+        backgroundImage?: string; // Added for hero background
+    };
+    sectors: Industry[];
 }
 
 export interface CaseResult {

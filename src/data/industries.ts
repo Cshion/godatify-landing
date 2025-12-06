@@ -9,7 +9,8 @@ export const INDUSTRIES_CONTENT: IndustriesPageContent = {
         title: 'Potencia tu Sector',
         subtitle: 'Soluciones especializadas para retos sectoriales únicos.',
         description: 'Entendemos que cada industria tiene su propio ADN. Nuestra experiencia nos permite adaptar la tecnología y el análisis de datos a las necesidades específicas de tu sector, generando valor tangible desde el primer día.',
-        phrases: ['Dominio Sectorial', 'Valor Específico', 'Transformación Vertical']
+        phrases: ['Dominio Sectorial', 'Valor Específico', 'Transformación Vertical'],
+        backgroundImage: '/images/hero-industries.png'
     },
     sectors: [
         {

@@ -50,7 +50,12 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
     return (
         <main>
-            <ServiceHero title={service.title} description={service.description} phrases={service.phrases} />
+            <ServiceHero
+                title={service.title}
+                description={service.description}
+                phrases={service.phrases}
+                backgroundImage={service.backgroundImage}
+            />
             <div className="container mx-auto px-6 py-16">
 
                 <ServiceFeatures features={service.features} />
