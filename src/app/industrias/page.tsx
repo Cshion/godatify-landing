@@ -1,12 +1,15 @@
 import { Metadata } from 'next';
 import IndustriesHero from '@/components/industrias/IndustriesHero';
 import IndustryShowcase from '@/components/industrias/IndustryShowcase';
-import { INDUSTRIES_CONTENT } from '@/data/industries';
+import { api } from '@/lib/api';
 
-export const metadata: Metadata = {
-    title: 'Industrias | Datify',
-    description: INDUSTRIES_CONTENT.hero.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const hero = await api.industries.getHero();
+    return {
+        title: 'Industrias | Datify',
+        description: hero.description,
+    };
+}
 
 export default function IndustriasPage() {
     return (

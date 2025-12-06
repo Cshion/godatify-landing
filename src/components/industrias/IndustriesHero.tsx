@@ -1,8 +1,8 @@
-import { INDUSTRIES_CONTENT } from '@/data/industries';
+import { api } from '@/lib/api';
 import styles from './IndustriesHero.module.css';
 
-export default function IndustriesHero() {
-    const { hero } = INDUSTRIES_CONTENT;
+export default async function IndustriesHero() {
+    const hero = await api.industries.getHero();
 
     return (
         <section className={styles.heroSection}>

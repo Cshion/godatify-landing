@@ -1,7 +1,8 @@
-import { HERO_CONTENT, STATS, VIDEO_CONFIG } from '@/data/home';
+import { api } from '@/lib/api';
 import styles from './Hero.module.css';
 
-export default function Hero() {
+export default async function Hero() {
+  const heroContent = await api.home.getHeroContent();
   return (
     <section
       className={`${styles.heroSection} relative min-h-screen flex items-center justify-center overflow-hidden`}
@@ -24,13 +25,13 @@ export default function Hero() {
       <div className="container relative z-10">
         <div className={styles.heroContainer}>
           <h1 className={`${styles.heroTitle} reveal`}>
-            {HERO_CONTENT.title}
+            {heroContent.title}
           </h1>
           <p className={styles.heroSubtitle}>
-            {HERO_CONTENT.subtitle}
+            {heroContent.subtitle}
           </p>
-          <a href={HERO_CONTENT.ctaHref} className={`${styles.heroCta} reveal`}>
-            {HERO_CONTENT.ctaText}
+          <a href={heroContent.ctaHref} className={`${styles.heroCta} reveal`}>
+            {heroContent.ctaText}
             <i className="fas fa-arrow-right"></i>
           </a>
         </div>
@@ -38,7 +39,7 @@ export default function Hero() {
 
       {/* Scroll Indicator */}
       <div className={styles.scrollIndicator}>
-        {HERO_CONTENT.scrollText}
+        {heroContent.scrollText}
       </div>
     </section>
   );

@@ -1,11 +1,20 @@
 'use client';
 
-import { SERVICES_CONTENT } from '@/data/services';
+import { useState, useEffect } from 'react';
+import { api } from '@/lib/api';
 import { Service } from '@/types';
 import styles from './Services.module.css';
 
 export default function Services() {
-  const services: Service[] = Object.values(SERVICES_CONTENT);
+  const [services, setServices] = useState<Service[]>([]);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      const data = await api.services.getAll();
+      setServices(data);
+    };
+    fetchServices();
+  }, []);
 
   return (
     <section className={`section py-20 ${styles.servicesSection}`} id="servicios">

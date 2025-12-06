@@ -3,6 +3,7 @@ import { Barlow } from "next/font/google";
 import { defaultMetadata } from "@/lib/seo";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { api } from "@/lib/api";
 import "./globals.css";
 
 const barlow = Barlow({
@@ -14,11 +15,18 @@ const barlow = Barlow({
 
 export const metadata: Metadata = defaultMetadata;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [navLinks, socialLinks, servicesNav, companyInfo, footerLinks] = await Promise.all([
+    api.company.getNavLinks(),
+    api.company.getSocialLinks(),
+    api.services.getNav(),
+    api.company.getInfo(),
+    api.company.getFooterLinks(),
+  ]);
   return (
     <html lang="es">
       <head>
@@ -53,9 +61,9 @@ export default function RootLayout({
             })
           }}
         />
-        <Header />
+        <Header navLinks={navLinks} socialLinks={socialLinks} servicesNav={servicesNav as any} />
         {children}
-        <Footer />
+        <Footer companyInfo={companyInfo} footerLinks={footerLinks} socialLinks={socialLinks} />
       </body>
     </html>
   );

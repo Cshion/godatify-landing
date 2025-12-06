@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
-import { SERVICES_CONTENT } from '@/data/services';
-import { CASES_CONTENT } from '@/data/cases';
+import { api } from '@/lib/api';
 import ServiceHero from '@/components/servicios/ServiceHero';
 import ServiceFeatures from '@/components/servicios/ServiceFeatures';
 import ServiceMethodology from '@/components/servicios/ServiceMethodology';
@@ -9,15 +8,16 @@ import CasesGrid from '@/components/casos/CasesGrid';
 import { Metadata } from 'next';
 
 // Generate static params for all services
-export function generateStaticParams() {
-    return Object.keys(SERVICES_CONTENT).map((slug) => ({
-        slug,
+export async function generateStaticParams() {
+    const services = await api.services.getAll();
+    return services.map((service) => ({
+        slug: service.id,
     }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
-    const service = SERVICES_CONTENT[slug as keyof typeof SERVICES_CONTENT];
+    const service = await api.services.getById(slug);
 
     if (!service) {
         return {
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const service = SERVICES_CONTENT[slug as keyof typeof SERVICES_CONTENT];
+    const service = await api.services.getById(slug);
 
     if (!service) {
         notFound();
@@ -41,7 +41,10 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
     // Filter cases related to this service
     // We match cases where case.industry equals service.title
-    const relatedCases = CASES_CONTENT.filter(
+    // Filter cases related to this service
+    // We match cases where case.industry equals service.title
+    const allCases = await api.cases.getAll();
+    const relatedCases = allCases.filter(
         (c) => c.industry === service.title
     );
 

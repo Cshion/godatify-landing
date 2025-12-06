@@ -1,16 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { INDUSTRIES_CONTENT } from '@/data/industries';
-import { CASES_CONTENT } from '@/data/cases';
+import { api } from '@/lib/api';
+import { Industry, CaseStudy } from '@/types';
 import styles from './IndustryShowcase.module.css';
 
-type Sector = typeof INDUSTRIES_CONTENT.sectors[number];
+
 
 export default function IndustryShowcase() {
-    const [activeSector, setActiveSector] = useState<Sector>(INDUSTRIES_CONTENT.sectors[0]);
+    const [sectors, setSectors] = useState<Industry[]>([]);
+    const [cases, setCases] = useState<CaseStudy[]>([]);
+    const [activeSector, setActiveSector] = useState<Industry | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const [sectorsData, casesData] = await Promise.all([
+                api.industries.getAll(),
+                api.cases.getAll()
+            ]);
+            setSectors(sectorsData);
+            setCases(casesData);
+            if (sectorsData.length > 0) {
+                setActiveSector(sectorsData[0]);
+            }
+        };
+        fetchData();
+    }, []);
+
+    if (!activeSector) return null;
 
     return (
         <section className={styles.section} id="showcase">
@@ -19,7 +38,7 @@ export default function IndustryShowcase() {
 
                     {/* Left Column: List */}
                     <div className={styles.industryList}>
-                        {INDUSTRIES_CONTENT.sectors.map((sector) => (
+                        {sectors.map((sector) => (
                             <button
                                 key={sector.id}
                                 className={`${styles.industryButton} ${activeSector.id === sector.id ? styles.activeButton : ''}`}
@@ -66,7 +85,7 @@ export default function IndustryShowcase() {
                                     Casos de Éxito
                                 </h4>
                                 <div className="grid grid-cols-1 gap-3">
-                                    {CASES_CONTENT.filter(c => 'relatedIndustryId' in c && c.relatedIndustryId === activeSector.id).map((caseStudy) => (
+                                    {cases.filter(c => c.relatedIndustryId === activeSector.id).map((caseStudy) => (
                                         <Link
                                             key={caseStudy.slug}
                                             href={`/casos/${caseStudy.slug}`}
@@ -96,7 +115,7 @@ export default function IndustryShowcase() {
                                     ))}
 
                                     {/* Fallback if no cases found */}
-                                    {CASES_CONTENT.filter(c => 'relatedIndustryId' in c && c.relatedIndustryId === activeSector.id).length === 0 && (
+                                    {cases.filter(c => c.relatedIndustryId === activeSector.id).length === 0 && (
                                         <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                                             <ul className="space-y-2">
                                                 {activeSector.projects.map((project, idx) => (

@@ -25,6 +25,12 @@ export interface ServiceTech {
     icon: string;
 }
 
+export interface ServiceNav {
+    id: string;
+    name: string;
+}
+
+// Service Type
 export interface Service {
     id: string;
     title: string;

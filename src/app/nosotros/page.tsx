@@ -1,26 +1,33 @@
 import type { Metadata } from 'next';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+
 import ScrollReveal from '@/components/ui/ScrollReveal';
 import NosotrosHero from '@/components/nosotros/NosotrosHero';
 import NosotrosTabs from '@/components/nosotros/NosotrosTabs';
 import Clients from '@/components/sections/Clients';
 
-export const metadata: Metadata = {
-    title: 'Nosotros | Datify',
-    description: 'Conoce a Datify, tu aliado estratégico en la transformación de datos. Descubre nuestra misión, visión y los valores que nos impulsan.',
-};
+import { api } from '@/lib/api';
 
-export default function NosotrosPage() {
+export async function generateMetadata(): Promise<Metadata> {
+    const content = await api.about.getContent();
+    return {
+        title: 'Nosotros | Datify',
+        description: 'Conoce a Datify, tu aliado estratégico en la transformación de datos. Descubre nuestra misión, visión y los valores que nos impulsan.',
+    };
+}
+
+export default async function NosotrosPage() {
+    const [content, videoConfig] = await Promise.all([
+        api.about.getContent(),
+        api.home.getVideoConfig()
+    ]);
+
     return (
         <>
-            <Header />
             <main>
-                <NosotrosHero />
-                <NosotrosTabs />
+                <NosotrosHero hero={content.hero} />
+                <NosotrosTabs content={content} videoConfig={videoConfig} />
                 <Clients />
             </main>
-            <Footer />
             <ScrollReveal />
 
             {/* Font Awesome */}

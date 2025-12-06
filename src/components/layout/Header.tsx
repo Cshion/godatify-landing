@@ -4,11 +4,16 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { NAV_LINKS, SOCIAL_LINKS } from '@/data/company';
-import { SERVICES_NAV } from '@/data/services';
+import { NavLink, SocialLink, ServiceNav } from '@/types';
 import styles from './Header.module.css';
 
-export default function Header() {
+interface HeaderProps {
+  navLinks: NavLink[];
+  socialLinks: SocialLink[];
+  servicesNav: ServiceNav[];
+}
+
+export default function Header({ navLinks, socialLinks, servicesNav }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -46,7 +51,7 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <nav className={styles.navMenu}>
-              {NAV_LINKS.slice(0, 3).map((link) => (
+              {navLinks.slice(0, 3).map((link) => (
                 <Link key={link.href} href={link.href} className={styles.navLink}>
                   {link.label}
                 </Link>
@@ -59,7 +64,7 @@ export default function Header() {
                   <i className="fas fa-chevron-down ml-1 text-xs"></i>
                 </button>
                 <div className={styles.dropdownMenu}>
-                  {SERVICES_NAV.map((service) => (
+                  {servicesNav.map((service) => (
                     <Link key={service.id} href={`/servicios/${service.id}`} className={styles.dropdownItem}>
                       {service.name}
                     </Link>
@@ -68,7 +73,7 @@ export default function Header() {
               </div>
 
               {
-                NAV_LINKS.slice(3).map((link) => (
+                navLinks.slice(3).map((link) => (
                   <Link key={link.href} href={link.href} className={styles.navLink}>
                     {link.label}
                   </Link>
@@ -79,7 +84,7 @@ export default function Header() {
             {/* Social Links */}
             < div className={styles.socialLinks} >
               {
-                SOCIAL_LINKS.map((social) => (
+                socialLinks.map((social) => (
                   <a
                     key={social.id}
                     href={social.url}
@@ -111,7 +116,7 @@ export default function Header() {
         {
           isMobileMenuOpen && (
             <div className={styles.mobileMenu}>
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <Link key={link.href} href={link.href} className={styles.mobileLink}>
                   {link.label}
                 </Link>

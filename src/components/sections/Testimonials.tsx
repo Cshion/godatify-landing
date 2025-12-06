@@ -1,16 +1,28 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TESTIMONIALS_CONTENT } from '@/data/testimonials';
+import { api } from '@/lib/api';
 import { Testimonial } from '@/types';
-import { CASES_CONTENT } from '@/data/cases';
-import { CAROUSEL_CONFIG } from '@/data/home';
 import styles from './Testimonials.module.css';
 
 export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const testimonials = TESTIMONIALS_CONTENT;
-  const { cardsPerView, autoPlayInterval } = CAROUSEL_CONFIG;
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [carouselConfig, setCarouselConfig] = useState({ cardsPerView: 3, autoPlayInterval: 5000 });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [testimonialsData, configData] = await Promise.all([
+        api.testimonials.getAll(),
+        api.home.getCarouselConfig()
+      ]);
+      setTestimonials(testimonialsData);
+      setCarouselConfig(configData);
+    };
+    fetchData();
+  }, []);
+
+  const { cardsPerView, autoPlayInterval } = carouselConfig;
 
   const maxIndex = Math.max(0, testimonials.length - cardsPerView);
 
@@ -61,15 +73,15 @@ export default function Testimonials() {
                 transform: `translateX(-${(currentIndex * 100) / cardsPerView}%)`,
               }}
             >
-              {testimonials.map((testimonial) => (
-                <div key={testimonial.id} className={styles.testimonialCard}>
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className={styles.testimonialCard}>
                   {/* Quote Icon */}
                   <div className={styles.quoteIcon}>"</div>
 
                   {/* Content */}
                   <div className={styles.testimonialContent}>
                     <p className={styles.testimonialText}>
-                      {testimonial.text}
+                      {testimonial.quote}
                     </p>
                   </div>
 

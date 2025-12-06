@@ -1,8 +1,11 @@
-import { NOSOTROS_CONTENT } from '@/data/about';
+import { NosotrosContent } from '@/types';
 import styles from './NosotrosHero.module.css';
 
-export default function NosotrosHero() {
-    const { hero } = NOSOTROS_CONTENT;
+interface NosotrosHeroProps {
+    hero: NosotrosContent['hero'];
+}
+
+export default function NosotrosHero({ hero }: NosotrosHeroProps) {
 
     return (
         <section className={styles.heroSection}>

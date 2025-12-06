@@ -2,15 +2,19 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { NOSOTROS_CONTENT } from '@/data/about';
-import { VIDEO_CONFIG } from '@/data/home';
+import { NosotrosContent, VideoConfig } from '@/types';
 import styles from './NosotrosTabs.module.css';
 
 type Tab = 'quienes' | 'mision' | 'valores' | 'cultura';
 
-export default function NosotrosTabs() {
+interface NosotrosTabsProps {
+    content: NosotrosContent;
+    videoConfig: VideoConfig;
+}
+
+export default function NosotrosTabs({ content, videoConfig }: NosotrosTabsProps) {
     const [activeTab, setActiveTab] = useState<Tab>('quienes');
-    const { hero, mission, vision, values, culture } = NOSOTROS_CONTENT;
+    const { hero, mission, vision, values, culture } = content;
 
     const tabs = [
         { id: 'quienes', label: 'Quiénes Somos' },
@@ -45,8 +49,8 @@ export default function NosotrosTabs() {
                             <div className={styles.videoContainer}>
                                 <div className={styles.videoWrapper}>
                                     <iframe
-                                        src={VIDEO_CONFIG.url}
-                                        title={VIDEO_CONFIG.title}
+                                        src={videoConfig.url}
+                                        title={videoConfig.title}
                                         className={styles.videoFrame}
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowFullScreen

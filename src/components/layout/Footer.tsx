@@ -2,10 +2,16 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FOOTER_LINKS, SOCIAL_LINKS, COMPANY_INFO } from '@/data/company';
+import { CompanyInfo, FooterLinks, SocialLink } from '@/types';
 import styles from './Footer.module.css';
 
-export default function Footer() {
+interface FooterProps {
+  companyInfo: CompanyInfo;
+  footerLinks: FooterLinks;
+  socialLinks: SocialLink[];
+}
+
+export default function Footer({ companyInfo, footerLinks, socialLinks }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -24,10 +30,10 @@ export default function Footer() {
               />
             </Link>
             <p className={styles.footerDescription}>
-              {COMPANY_INFO.description}
+              {companyInfo.description}
             </p>
             <div className={styles.socialLinks}>
-              {SOCIAL_LINKS.map((social) => (
+              {socialLinks.map((social) => (
                 <a
                   key={social.id}
                   href={social.url}
@@ -46,7 +52,7 @@ export default function Footer() {
           <div className={styles.footerColumn}>
             <h4 className={styles.footerHeading}>Enlaces Rápidos</h4>
             <ul className={styles.footerLinks}>
-              {FOOTER_LINKS.quickLinks.map((link) => (
+              {footerLinks.quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href}>{link.label}</Link>
                 </li>
@@ -58,7 +64,7 @@ export default function Footer() {
           <div className={styles.footerColumn}>
             <h4 className={styles.footerHeading}>Servicios</h4>
             <ul className={styles.footerLinks}>
-              {FOOTER_LINKS.services.map((link) => (
+              {footerLinks.services.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href}>{link.label}</Link>
                 </li>
@@ -70,7 +76,7 @@ export default function Footer() {
           <div className={styles.footerColumn}>
             <h4 className={styles.footerHeading}>Contacto</h4>
             <ul className={styles.footerLinks}>
-              {FOOTER_LINKS.contact.map((link) => (
+              {footerLinks.contact.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href}>{link.label}</Link>
                 </li>
@@ -82,7 +88,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className={styles.footerBottom}>
           <p className={styles.footerCopyright}>
-            &copy; {currentYear} {COMPANY_INFO.name}. Todos los derechos reservados.
+            &copy; {currentYear} {companyInfo.name}. Todos los derechos reservados.
           </p>
         </div>
       </div>

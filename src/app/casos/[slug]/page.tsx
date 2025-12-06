@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import CaseDetail from '@/components/casos/CaseDetail';
-import { CASES_CONTENT } from '@/data/cases';
+import { api } from '@/lib/api';
 
 interface PageProps {
     params: Promise<{
@@ -10,14 +10,15 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-    return CASES_CONTENT.map((caseStudy) => ({
+    const cases = await api.cases.getAll();
+    return cases.map((caseStudy) => ({
         slug: caseStudy.slug,
     }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { slug } = await params;
-    const caseStudy = CASES_CONTENT.find((c) => c.slug === slug);
+    const caseStudy = await api.cases.getBySlug(slug);
 
     if (!caseStudy) {
         return {
@@ -33,15 +34,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CaseDetailPage({ params }: PageProps) {
     const { slug } = await params;
-    const caseStudy = CASES_CONTENT.find((c) => c.slug === slug);
+    const caseStudy = await api.cases.getBySlug(slug);
 
     if (!caseStudy) {
         notFound();
     }
 
+    const allCases = await api.cases.getAll();
+    const relatedCases = allCases
+        .filter(c => c.slug !== caseStudy.slug)
+        .slice(0, 3);
+
     return (
         <main>
-            <CaseDetail caseStudy={caseStudy} />
+            <CaseDetail caseStudy={caseStudy} relatedCases={relatedCases} />
         </main>
     );
 }

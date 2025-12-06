@@ -2,9 +2,8 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { NOSOTROS_CONTENT } from '@/data/about';
-import { STATS, VIDEO_CONFIG } from '@/data/home';
-import { Stat } from '@/types';
+import { api } from '@/lib/api';
+import { Stat, VideoConfig } from '@/types';
 import styles from './Nosotros.module.css';
 
 interface AnimatedStat extends Stat {
@@ -12,9 +11,22 @@ interface AnimatedStat extends Stat {
 }
 
 export default function Nosotros() {
-  const [stats, setStats] = useState<AnimatedStat[]>(STATS.map(s => ({ ...s, current: 0 })));
+  const [stats, setStats] = useState<AnimatedStat[]>([]);
+  const [videoConfig, setVideoConfig] = useState<VideoConfig | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [statsData, videoData] = await Promise.all([
+        api.home.getStats(),
+        api.home.getVideoConfig()
+      ]);
+      setStats(statsData.map(s => ({ ...s, current: 0 })));
+      setVideoConfig(videoData);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -79,20 +91,22 @@ export default function Nosotros() {
         </div>
 
         {/* Video Section */}
-        <div className={styles.videoContainer}>
-          <div className={styles.videoWrapper}>
-            <iframe
-              width="100%"
-              height="500"
-              src={VIDEO_CONFIG.url}
-              title={VIDEO_CONFIG.title}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+        {videoConfig && (
+          <div className={styles.videoContainer}>
+            <div className={styles.videoWrapper}>
+              <iframe
+                width="100%"
+                height="500"
+                src={videoConfig.url}
+                title={videoConfig.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            <p className={styles.videoCaption}>{videoConfig.caption}</p>
           </div>
-          <p className={styles.videoCaption}>{VIDEO_CONFIG.caption}</p>
-        </div>
+        )}
 
         {/* CTA Button */}
         <div className={`${styles.ctaContainer} reveal`}>

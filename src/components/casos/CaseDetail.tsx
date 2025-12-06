@@ -1,18 +1,14 @@
 import Image from 'next/image';
 import { CaseStudy } from '@/types';
-import { CASES_CONTENT } from '@/data/cases';
 import CasesGrid from './CasesGrid';
 import styles from './CaseDetail.module.css';
 
 interface CaseDetailProps {
     caseStudy: CaseStudy;
+    relatedCases: CaseStudy[];
 }
 
-export default function CaseDetail({ caseStudy }: CaseDetailProps) {
-    // Get 3 related cases (excluding current one)
-    const relatedCases = CASES_CONTENT
-        .filter(c => c.slug !== caseStudy.slug)
-        .slice(0, 3);
+export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps) {
 
     return (
         <>

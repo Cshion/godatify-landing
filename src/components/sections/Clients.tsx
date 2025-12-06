@@ -1,12 +1,24 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { CLIENTS_CONTENT } from '@/data/home';
+import { api } from '@/lib/api';
+import { Client } from '@/types';
 import styles from './Clients.module.css';
 
 export default function Clients() {
+    const [clients, setClients] = useState<Client[]>([]);
+
+    useEffect(() => {
+        const fetchClients = async () => {
+            const data = await api.home.getClients();
+            setClients(data);
+        };
+        fetchClients();
+    }, []);
+
     // Duplicate the list to ensure seamless scrolling
-    const marqueeClients = [...CLIENTS_CONTENT, ...CLIENTS_CONTENT];
+    const marqueeClients = [...clients, ...clients];
 
     return (
         <section className={styles.clientsSection}>
