@@ -3,23 +3,7 @@
     margin: 0 auto;
 }
 
-.casesGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-}
-
-@media (max-width: 1024px) {
-    .casesGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .casesGrid {
-        grid-template-columns: repeat(1, 1fr);
-    }
-}
+/* Grid style removed for Carousel */
 
 .caseCard {
     background: white;

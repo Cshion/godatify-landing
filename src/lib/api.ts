@@ -65,7 +65,14 @@ export const api = {
     },
     services: {
         getAll: async (): Promise<Service[]> => {
-            return Object.values(SERVICES_CONTENT);
+            const order = [
+                'business-intelligence',
+                'data-engineering',
+                'digital-platform',
+                'business-analytics',
+                'big-data-management'
+            ];
+            return order.map(id => SERVICES_CONTENT[id]);
         },
         getById: async (id: string): Promise<Service | undefined> => {
             return SERVICES_CONTENT[id];

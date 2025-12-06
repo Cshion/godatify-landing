@@ -1,6 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { Service } from '@/types';
+import Carousel from '@/components/ui/Carousel';
 import styles from './Services.module.css';
 
 interface ServicesProps {
@@ -18,7 +20,13 @@ export default function Services({ services, title, buttonText }: ServicesProps)
         </h2>
 
         <div className={styles.servicesContainer}>
-          <div className={styles.servicesGrid}>
+          <Carousel
+            config={{
+              autoPlay: true,
+              autoPlayInterval: 5000,
+              itemsPerView: { mobile: 1, tablet: 2, desktop: 3 }
+            }}
+          >
             {services.map((service) => (
               <div key={service.id} className={`${styles.serviceCard} group`} id={service.id}>
                 <div className={styles.serviceIconWrapper}>
@@ -30,10 +38,10 @@ export default function Services({ services, title, buttonText }: ServicesProps)
                 <p className={styles.serviceDescription}>
                   {service.description}
                 </p>
-                <a href="#" className={styles.btnOutline} aria-label={`Leer más sobre ${service.title}`}>{buttonText}</a>
+                <Link href={`/servicios/${service.id}`} className={styles.btnOutline} aria-label={`Leer más sobre ${service.title}`}>{buttonText}</Link>
               </div>
             ))}
-          </div>
+          </Carousel>
         </div>
       </div>
     </section>

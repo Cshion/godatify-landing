@@ -13,7 +13,7 @@ export const SERVICES_NAV = [
 export const SERVICES_CONTENT: Record<string, Service> = {
     'big-data-management': {
         id: 'big-data-management',
-        title: 'Arquitectura de Datos',
+        title: 'Big Data Management',
         phrases: ['Escalabilidad Masiva', 'Seguridad 360', 'Fuente Única de Verdad'],
         backgroundImage: '/images/hero-services.png',
         subtitle: 'Gobierno y control de datos a gran escala',
@@ -53,7 +53,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
     },
     'business-analytics': {
         id: 'business-analytics',
-        title: 'Poder Predictivo',
+        title: 'Business Analytics',
         phrases: ['Anticipación', 'Precisión Científica', 'Optimización'],
         backgroundImage: '/images/hero-services.png',
         subtitle: 'Predicción y ciencia de datos aplicada',
@@ -93,7 +93,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
     },
     'business-intelligence': {
         id: 'business-intelligence',
-        title: 'Inteligencia Visual',
+        title: 'Business Intelligence',
         phrases: ['Claridad Estratégica', 'Decisiones Reales', 'Control Total'],
         backgroundImage: '/images/hero-services.png',
         subtitle: 'Visualización que impulsa decisiones',
@@ -133,7 +133,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
     },
     'data-engineering': {
         id: 'data-engineering',
-        title: 'Ingeniería Robusta',
+        title: 'Data Engineering',
         phrases: ['Flujos Automatizados', 'Integración Total', 'Calidad de Dato'],
         backgroundImage: '/images/hero-services.png',
         subtitle: 'La ingeniería detrás de tus datos',
@@ -173,7 +173,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
     },
     'digital-platform': {
         id: 'digital-platform',
-        title: 'Ecosistemas Digitales',
+        title: 'Digital Platform',
         phrases: ['Experiencia de Usuario', 'Procesos Ágiles', 'Conectividad'],
         backgroundImage: '/images/hero-services.png',
         subtitle: 'Ecosistemas digitales a medida',

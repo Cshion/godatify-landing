@@ -43,6 +43,8 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
 }
 
 .heroSubtitle {
@@ -51,6 +53,8 @@
     margin-bottom: var(--space-10);
     line-height: var(--line-height-relaxed);
     max-width: 700px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.2s forwards;
 }
 
 .heroCta {
@@ -66,6 +70,8 @@
     box-shadow: 0 20px 40px rgba(28, 124, 84, 0.3);
     transition: all 0.3s ease;
     text-decoration: none;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.4s forwards;
 }
 
 .heroCta:hover {
@@ -112,6 +118,18 @@
 
     60% {
         transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 

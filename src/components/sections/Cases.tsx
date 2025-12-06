@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { CaseStudy } from '@/types';
+import Carousel from '@/components/ui/Carousel';
 import styles from './Cases.module.css';
 
 interface CasesProps {
@@ -24,8 +25,14 @@ export default function Cases({ cases, title, buttonText }: CasesProps) {
         </h2>
 
         <div className={styles.casesContainer}>
-          <div className={styles.casesGrid}>
-            {cases.slice(0, 3).map((caseStudy) => (
+          <Carousel
+            config={{
+              autoPlay: true,
+              autoPlayInterval: 6000,
+              itemsPerView: { mobile: 1, tablet: 2, desktop: 3 }
+            }}
+          >
+            {cases.map((caseStudy) => (
               <div key={caseStudy.slug} className={`${styles.caseCard} group reveal`}>
                 {/* Image */}
                 <div className={styles.caseImageWrapper}>
@@ -55,7 +62,7 @@ export default function Cases({ cases, title, buttonText }: CasesProps) {
                 </div>
               </div>
             ))}
-          </div>
+          </Carousel>
         </div>
       </div>
     </section>
