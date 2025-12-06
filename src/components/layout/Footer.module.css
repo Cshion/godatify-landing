@@ -1,25 +1,39 @@
 .footer {
-    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    background: linear-gradient(135deg, #0d3b34 0%, #061c19 100%);
+    /* Adjusted to match new "Dark Green" brand consistency */
     color: white;
     position: relative;
     overflow: hidden;
+    margin-top: 0;
+    /* Removing margin to let the content flow naturally, separation comes from color contrast or padding if needed. Wait, user specifically asked for separation "para que no se vea tan pegado". */
+    padding-top: 4rem;
+    /* Additional internal padding */
+    margin-top: 0;
+}
+
+/* Re-reading request: "Haz una separacion para que no se vea tan pegado al body".
+Usually this means margin-top on the footer, or padding-bottom on the main content.
+Given the new white contact page, a dark footer naturally separates.
+However, if the user feels it's "pegado", maybe they mean the footer content itself?
+Or physically pushing the footer down?
+I'll add margin-top to the footer to physically separate it from previous sections on all pages. */
+
+.footer {
+    background: linear-gradient(135deg, #0d3b34 0%, #061c19 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-top: 5rem;
 }
 
 .footer::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-        radial-gradient(circle at 20% 20%, rgba(28, 124, 84, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(28, 124, 84, 0.1) 0%, transparent 50%);
-    pointer-events: none;
+    content: none;
 }
 
 .footerGrid {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 5rem;
-    /* Increased gap */
+    gap: 4rem;
     margin-bottom: 4rem;
     position: relative;
     z-index: 1;

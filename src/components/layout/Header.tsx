@@ -47,13 +47,32 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
           <div className={styles.headerContent}>
             {/* Logo */}
             <Link href="/" className={styles.logo}>
-              <Image
-                src={logo.url}
-                alt={logo.alt}
-                width={logo.width}
-                height={logo.height}
-                className={styles.logoImg}
-              />
+              <div className="relative" style={{ width: logo.width, height: logo.height }}>
+                {/* White Logo (Default) */}
+                <Image
+                  src={logo.url}
+                  alt={logo.alt}
+                  fill
+                  className={`${styles.logoImg} transition-opacity duration-300`}
+                  style={{
+                    objectFit: 'contain',
+                    opacity: (isScrolled || isCaseDetail) ? 0 : 1
+                  }}
+                  priority
+                />
+                {/* Green Logo (Scrolled) */}
+                <Image
+                  src="/images/logo-brand-green.png"
+                  alt={logo.alt}
+                  fill
+                  className={`${styles.logoImg} transition-opacity duration-300`}
+                  style={{
+                    objectFit: 'contain',
+                    opacity: (isScrolled || isCaseDetail) ? 1 : 0
+                  }}
+                  priority
+                />
+              </div>
             </Link>
 
             {/* Desktop Navigation */}

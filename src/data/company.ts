@@ -39,10 +39,10 @@ export const NAV_LINKS: NavLink[] = [
 // Footer Links
 export const FOOTER_LINKS: FooterLinks = {
     quickLinks: [
-        { href: '#inicio', label: 'Inicio' },
-        { href: '#nosotros', label: 'Nosotros' },
-        { href: '#servicios', label: 'Servicios' },
-        { href: '#casos', label: 'Casos de éxito' },
+        { href: '/', label: 'Inicio' },
+        { href: '/nosotros', label: 'Nosotros' },
+        { href: '/industrias', label: 'Industrias' },
+        { href: '/casos', label: 'Casos de éxito' },
     ],
     services: [
         { href: '/servicios/digital-platform', label: 'Digital Platform' },
@@ -52,8 +52,8 @@ export const FOOTER_LINKS: FooterLinks = {
         { href: '/servicios/business-analytics', label: 'Business Analytics' },
     ],
     contact: [
-        { href: '#blog', label: 'Blog' },
-        { href: '#contacto', label: 'Contacto' },
+        { href: '/contacto', label: 'Contacto' },
+        { href: 'https://www.linkedin.com/company/godatify/', label: 'LinkedIn' },
         { href: '#', label: 'Términos y Políticas' },
     ],
 };
