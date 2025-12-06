@@ -4,11 +4,15 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { NOSOTROS_CONTENT } from '@/data/about';
 import { STATS, VIDEO_CONFIG } from '@/data/home';
-import { Stat } from '@/lib/types';
+import { Stat } from '@/types';
 import styles from './Nosotros.module.css';
 
+interface AnimatedStat extends Stat {
+  current: number;
+}
+
 export default function Nosotros() {
-  const [stats, setStats] = useState<Stat[]>(STATS.map(s => ({ ...s, current: 0 })));
+  const [stats, setStats] = useState<AnimatedStat[]>(STATS.map(s => ({ ...s, current: 0 })));
   const sectionRef = useRef<HTMLElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
 

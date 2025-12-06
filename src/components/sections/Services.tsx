@@ -1,11 +1,11 @@
 'use client';
 
-import servicesData from '@/lib/data/services.json';
-import { Service } from '@/lib/types';
+import { SERVICES_CONTENT } from '@/data/services';
+import { Service } from '@/types';
 import styles from './Services.module.css';
 
 export default function Services() {
-  const services: Service[] = servicesData;
+  const services: Service[] = Object.values(SERVICES_CONTENT);
 
   return (
     <section className={`section py-20 ${styles.servicesSection}`} id="servicios">

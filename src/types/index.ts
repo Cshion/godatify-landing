@@ -30,6 +30,7 @@ export interface Service {
     title: string;
     subtitle: string;
     description: string;
+    icon: string;
     image: string;
     features: ServiceFeature[];
     methodology: ServiceMethodologyStep[];

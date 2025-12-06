@@ -16,6 +16,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
         title: 'Big Data Management',
         subtitle: 'Gobierno y control de datos a gran escala',
         description: 'Transformamos el caos de datos en activos estratégicos. Implementamos arquitecturas escalables que garantizan la calidad, seguridad y disponibilidad de tu información, permitiéndote tomar decisiones basadas en una única fuente de verdad.',
+        icon: 'server',
         image: 'https://images.unsplash.com/photo-1544197150-b99a580bbc7c?auto=format&fit=crop&q=80&w=1000',
         features: [
             {
@@ -53,6 +54,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
         title: 'Business Analytics',
         subtitle: 'Predicción y ciencia de datos aplicada',
         description: 'No solo analizamos el pasado, predecimos el futuro. Utilizamos modelos matemáticos avanzados y Machine Learning para descubrir patrones ocultos, anticipar tendencias y optimizar tus operaciones con precisión científica.',
+        icon: 'brain',
         image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000',
         features: [
             {
@@ -90,6 +92,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
         title: 'Business Intelligence',
         subtitle: 'Visualización que impulsa decisiones',
         description: 'Convertimos datos complejos en historias visuales claras. Diseñamos dashboards intuitivos que permiten a cada nivel de la organización monitorear sus KPIs en tiempo real y reaccionar antes de que sea tarde.',
+        icon: 'chart-line',
         image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000',
         features: [
             {
@@ -127,6 +130,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
         title: 'Data Engineering',
         subtitle: 'La ingeniería detrás de tus datos',
         description: 'Construimos las autopistas por donde viajan tus datos. Diseñamos pipelines robustos, automatizados y monitoreados que aseguran que la información llegue desde el origen hasta el destino en el tiempo y formato correctos.',
+        icon: 'database',
         image: 'https://images.unsplash.com/photo-1558494949-ef526b0042a0?auto=format&fit=crop&q=80&w=1000',
         features: [
             {
@@ -164,6 +168,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
         title: 'Digital Platform',
         subtitle: 'Ecosistemas digitales a medida',
         description: 'Desarrollamos plataformas web y móviles que digitalizan tus procesos core. Creamos herramientas operativas que capturan datos en el origen, eliminan el papel y conectan a tu fuerza laboral con la estrategia digital.',
+        icon: 'laptop-code',
         image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1000',
         features: [
             {

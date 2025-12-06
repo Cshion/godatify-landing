@@ -1,15 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import testimonialsData from '@/lib/data/testimonials.json';
-import { Testimonial } from '@/lib/types';
+import { TESTIMONIALS_CONTENT } from '@/data/testimonials';
+import { Testimonial } from '@/types';
 import { CASES_CONTENT } from '@/data/cases';
 import { CAROUSEL_CONFIG } from '@/data/home';
 import styles from './Testimonials.module.css';
 
 export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const testimonials: Testimonial[] = testimonialsData;
+  const testimonials = TESTIMONIALS_CONTENT;
   const { cardsPerView, autoPlayInterval } = CAROUSEL_CONFIG;
 
   const maxIndex = Math.max(0, testimonials.length - cardsPerView);
