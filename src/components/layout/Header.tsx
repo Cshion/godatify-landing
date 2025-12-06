@@ -62,7 +62,7 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
                 />
                 {/* Green Logo (Scrolled) */}
                 <Image
-                  src="/images/logo-brand-green.png"
+                  src="/images/logo-brand-harmonized.png"
                   alt={logo.alt}
                   fill
                   className={`${styles.logoImg} transition-opacity duration-300`}
