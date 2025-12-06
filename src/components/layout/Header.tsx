@@ -88,23 +88,12 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
               }
             </nav >
 
-            {/* Social Links */}
-            < div className={styles.socialLinks} >
-              {
-                socialLinks.map((social) => (
-                  <a
-                    key={social.id}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.socialLink}
-                    aria-label={social.label}
-                  >
-                    <i className={`fab fa-${social.icon}`}></i>
-                  </a>
-                ))
-              }
-            </div >
+            {/* Contact CTA */}
+            <div className={styles.ctaWrapper}>
+              <Link href="/contacto" className={styles.contactCta}>
+                Contáctanos
+              </Link>
+            </div>
 
             {/* Mobile Menu Button */}
             <button

@@ -5,24 +5,28 @@ export const CONTACT_CONTENT: ContactPageContent = {
         title: 'Hablemos de tus Datos',
         subtitle: '¿Listo para transformar tu organización? Cuéntanos tu desafío y encontremos juntos la solución.',
     },
-    offices: [
-        {
-            country: 'Perú',
-            city: 'Lima',
-            address: 'Av. Jorge Basadre 607, San Isidro',
-            phone: '+51 999 999 999',
-            email: 'contacto.pe@godatify.com',
-            image: 'https://images.unsplash.com/photo-1550966871-3ed3c47e2ce2?auto=format&fit=crop&q=80&w=800',
-        },
-        {
-            country: 'España',
-            city: 'Madrid',
-            address: 'Paseo de la Castellana 259',
-            phone: '+34 91 123 45 67',
-            email: 'contacto.es@godatify.com',
-            image: 'https://images.unsplash.com/photo-1517816001150-5d66d5b03730?auto=format&fit=crop&q=80&w=800',
-        },
-    ],
+    officesSection: {
+        title: 'Presencia Global',
+        subtitle: 'Operamos con una mentalidad remote-first, apoyados por hubs estratégicos para servir a clientes en toda la región.',
+        offices: [
+            {
+                country: 'Perú',
+                city: 'Lima',
+                address: 'Lima, Perú',
+                phone: '+51 999 999 999',
+                email: 'contacto.pe@godatify.com',
+                image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800',
+            },
+            {
+                country: 'España',
+                city: 'Madrid',
+                address: 'Madrid, España',
+                phone: '+34 91 123 45 67',
+                email: 'contacto.es@godatify.com',
+                image: 'https://images.unsplash.com/photo-1577916960096-7c9b32e04eab?auto=format&fit=crop&q=80&w=800',
+            },
+        ],
+    },
     form: {
         title: 'Agenda una Llamada',
         subtitle: 'Completa el formulario y nos pondremos en contacto contigo a la brevedad.',

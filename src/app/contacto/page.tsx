@@ -1,7 +1,6 @@
 import { api } from '@/lib/api';
 import ContactHero from '@/components/contact/ContactHero';
 import Offices from '@/components/contact/Offices';
-import ContactForm from '@/components/contact/ContactForm';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -11,15 +10,17 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
     const contactContent = await api.contact.getPageContent();
+    const socialLinks = await api.company.getSocialLinks();
 
     return (
         <main>
-            <ContactHero hero={contactContent.hero} />
-            <Offices offices={contactContent.offices} />
-            <ContactForm
-                title={contactContent.form.title}
-                subtitle={contactContent.form.subtitle}
-                labels={contactContent.form.labels}
+            <ContactHero
+                hero={contactContent.hero}
+                formLabels={contactContent.form.labels}
+                formTitle={contactContent.form.title}
+                formSubtitle={contactContent.form.subtitle}
+                offices={contactContent.officesSection.offices}
+                socialLinks={socialLinks}
             />
         </main>
     );

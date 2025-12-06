@@ -1,21 +1,83 @@
-import { ContactPageContent } from '@/types';
+import { ContactPageContent, ContactFormLabels, Office, SocialLink } from '@/types';
+import ContactForm from './ContactForm';
+import Offices from './Offices';
 import styles from './ContactHero.module.css';
 
 interface ContactHeroProps {
     hero: ContactPageContent['hero'];
+    offices: Office[];
+    formLabels: ContactFormLabels;
+    formTitle: string;
+    formSubtitle: string;
+    socialLinks: SocialLink[];
 }
 
-export default function ContactHero({ hero }: ContactHeroProps) {
+export default function ContactHero({ hero, offices, formLabels, formTitle, formSubtitle, socialLinks }: ContactHeroProps) {
     return (
-        <section className={styles.heroSection}>
-            <div className="container mx-auto px-6">
-                <div className={styles.content}>
-                    <h1 className={styles.title}>{hero.title}</h1>
-                    <p className={styles.subtitle}>{hero.subtitle}</p>
+        <>
+            {/* Hero Banner Section */}
+            <section className={styles.heroBanner}>
+                {/* Particles */}
+                <div className={styles.particles}>
+                    <div className={styles.particle}></div>
+                    <div className={styles.particle}></div>
+                    <div className={styles.particle}></div>
+                    <div className={styles.particle}></div>
+                    <div className={styles.particle}></div>
                 </div>
-            </div>
-            {/* Background elements if needed */}
-            <div className={styles.backgroundOverlay}></div>
-        </section>
+
+                <div className="container mx-auto px-6">
+                    <div className={styles.bannerContent}>
+                        <h1 className={styles.bannerTitle}>{hero.title}</h1>
+                        <p className={styles.bannerSubtitle}>{hero.subtitle}</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Content Section */}
+            <section className={styles.contentSection}>
+                <div className="container mx-auto px-6">
+                    <div className={styles.grid}>
+                        {/* Left Column: Form */}
+                        <div className={styles.formColumn}>
+                            <ContactForm
+                                title={formTitle}
+                                subtitle={formSubtitle}
+                                labels={formLabels}
+                            />
+                        </div>
+
+                        {/* Right Column: Socials + Offices */}
+                        <div className={styles.sidebar}>
+                            {/* Social Links */}
+                            <div className={styles.socialWrapper}>
+                                <p className={styles.socialLabel}>Síguenos en:</p>
+                                <div className={styles.socialLinks}>
+                                    {socialLinks.map((social) => (
+                                        <a
+                                            key={social.id}
+                                            href={social.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={styles.socialLink}
+                                            aria-label={social.label}
+                                        >
+                                            <i className={`fab fa-${social.icon}`}></i>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Global Hubs */}
+                            <Offices
+                                title="Presencia Global"
+                                subtitle="Nuestros hubs estratégicos"
+                                offices={offices}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </>
     );
 }

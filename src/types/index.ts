@@ -234,7 +234,11 @@ export interface ContactPageContent {
         title: string;
         subtitle: string;
     };
-    offices: Office[];
+    officesSection: {
+        title: string;
+        subtitle: string;
+        offices: Office[];
+    };
     form: {
         title: string;
         subtitle: string;

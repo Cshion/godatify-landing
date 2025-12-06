@@ -34,7 +34,6 @@ export const NAV_LINKS: NavLink[] = [
     { href: '/nosotros', label: 'Nosotros' },
     { href: '/industrias', label: 'Industrias' },
     { href: '/casos', label: 'Casos de éxito' },
-    { href: '/contacto', label: 'Contacto' },
 ];
 
 // Footer Links

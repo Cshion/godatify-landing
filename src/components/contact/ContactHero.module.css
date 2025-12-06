@@ -1,46 +1,198 @@
-.heroSection {
+/* Hero Banner Styles (Copied/Adapted from NosotrosHero) */
+.heroBanner {
     position: relative;
-    background-color: var(--color-brand-green);
+    padding: 180px 0 100px;
+    background-color: var(--color-brand-green-dark);
+    /* Brand Green Dark (fallback if var undefined: #0f4a41) */
+    background-color: #0d3b34;
     color: white;
-    padding: 160px 0 80px;
-    text-align: center;
+    overflow: hidden;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.heroBanner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* Use same/similar bg texture if available, or just keeping it clean/dark */
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.particles {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
     overflow: hidden;
 }
 
-.content {
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: float 10s infinite linear;
+}
+
+.particle:nth-child(1) {
+    top: 20%;
+    left: 10%;
+    animation-duration: 15s;
+}
+
+.particle:nth-child(2) {
+    top: 60%;
+    left: 80%;
+    animation-duration: 20s;
+    animation-delay: -5s;
+}
+
+.particle:nth-child(3) {
+    top: 80%;
+    left: 20%;
+    animation-duration: 12s;
+    animation-delay: -2s;
+}
+
+.particle:nth-child(4) {
+    top: 30%;
+    left: 90%;
+    animation-duration: 18s;
+    animation-delay: -8s;
+}
+
+.particle:nth-child(5) {
+    top: 10%;
+    left: 50%;
+    animation-duration: 25s;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-100px) translateX(20px);
+        opacity: 0;
+    }
+}
+
+.bannerContent {
     position: relative;
     z-index: 10;
+    text-align: center;
     max-width: 800px;
     margin: 0 auto;
 }
 
-.title {
+.bannerTitle {
     font-family: var(--font-barlow);
     font-size: 3.5rem;
-    font-weight: 700;
+    font-weight: 800;
+    color: white;
     margin-bottom: 1.5rem;
     line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
 }
 
-.subtitle {
+.bannerSubtitle {
     font-family: var(--font-outfit);
     font-size: 1.25rem;
     color: rgba(255, 255, 255, 0.9);
     line-height: 1.6;
 }
 
-.backgroundOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
-    pointer-events: none;
+/* Content Section Styles */
+.contentSection {
+    background-color: #ffffff;
+    padding: 80px 0;
+    position: relative;
+    z-index: 20;
 }
 
-@media (max-width: 768px) {
-    .title {
+.grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 6rem;
+    align-items: start;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.socialWrapper {
+    /* Styles for social links container */
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.socialLabel {
+    font-family: var(--font-outfit);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-gray-600);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.socialLinks {
+    display: flex;
+    gap: 1rem;
+}
+
+.socialLink {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f4f6;
+    color: var(--color-gray-600);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.socialLink:hover {
+    background-color: var(--color-brand-green);
+    color: white;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+    }
+
+    .bannerTitle {
         font-size: 2.5rem;
+    }
+
+    .socialWrapper {
+        /* On mobile, social might look better centered or just normal */
+        text-align: left;
     }
 }
