@@ -207,6 +207,41 @@ export interface NosotrosContent {
     tabs: TabLabel[];
 }
 
+export interface Office {
+    country: string;
+    city: string;
+    address: string;
+    phone: string;
+    email: string;
+    coordinates?: {
+        lat: number;
+        lng: number;
+    };
+    image?: string;
+}
+
+export interface ContactFormLabels {
+    name: string;
+    email: string;
+    company: string;
+    role: string;
+    message: string;
+    submit: string;
+}
+
+export interface ContactPageContent {
+    hero: {
+        title: string;
+        subtitle: string;
+    };
+    offices: Office[];
+    form: {
+        title: string;
+        subtitle: string;
+        labels: ContactFormLabels;
+    };
+}
+
 export interface FooterLinks {
     quickLinks: NavLink[];
     services: NavLink[];

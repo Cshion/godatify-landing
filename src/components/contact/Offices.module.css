@@ -1,0 +1,75 @@
+.section {
+    padding: 80px 0;
+    background-color: #f8fafc;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.card {
+    background: white;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.imageWrapper {
+    position: relative;
+    height: 200px;
+    width: 100%;
+}
+
+.image {
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    padding: 1.5rem;
+}
+
+.country {
+    color: white;
+    font-family: var(--font-barlow);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.details {
+    padding: 2rem;
+}
+
+.city {
+    font-family: var(--font-barlow);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.infoRow {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #4b5563;
+    font-size: 0.95rem;
+}
+
+.infoRow:last-child {
+    margin-bottom: 0;
+}

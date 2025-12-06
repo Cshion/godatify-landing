@@ -30,12 +30,11 @@ export const SOCIAL_LINKS: SocialLink[] = [
 
 // Navigation Links
 export const NAV_LINKS: NavLink[] = [
-    { href: '/#inicio', label: 'Inicio' },
+    { href: '/', label: 'Inicio' },
     { href: '/nosotros', label: 'Nosotros' },
     { href: '/industrias', label: 'Industrias' },
     { href: '/casos', label: 'Casos de éxito' },
-    { href: '/#blog', label: 'Blog' },
-    { href: '/#contacto', label: 'Contacto' },
+    { href: '/contacto', label: 'Contacto' },
 ];
 
 // Footer Links
