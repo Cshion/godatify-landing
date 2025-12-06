@@ -14,6 +14,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
     'big-data-management': {
         id: 'big-data-management',
         title: 'Arquitectura de Datos',
+        phrases: ['Escalabilidad Masiva', 'Seguridad 360', 'Fuente Única de Verdad'],
         subtitle: 'Gobierno y control de datos a gran escala',
         description: 'Transformamos el caos de datos en activos estratégicos. Implementamos arquitecturas escalables que garantizan la calidad, seguridad y disponibilidad de tu información, permitiéndote tomar decisiones basadas en una única fuente de verdad.',
         icon: 'server',
@@ -52,6 +53,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
     'business-analytics': {
         id: 'business-analytics',
         title: 'Poder Predictivo',
+        phrases: ['Anticipación', 'Precisión Científica', 'Optimización'],
         subtitle: 'Predicción y ciencia de datos aplicada',
         description: 'No solo analizamos el pasado, predecimos el futuro. Utilizamos modelos matemáticos avanzados y Machine Learning para descubrir patrones ocultos, anticipar tendencias y optimizar tus operaciones con precisión científica.',
         icon: 'brain',
@@ -90,6 +92,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
     'business-intelligence': {
         id: 'business-intelligence',
         title: 'Inteligencia Visual',
+        phrases: ['Claridad Estratégica', 'Decisiones Reales', 'Control Total'],
         subtitle: 'Visualización que impulsa decisiones',
         description: 'Convertimos datos complejos en historias visuales claras. Diseñamos dashboards intuitivos que permiten a cada nivel de la organización monitorear sus KPIs en tiempo real y reaccionar antes de que sea tarde.',
         icon: 'chart-line',
@@ -128,6 +131,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
     'data-engineering': {
         id: 'data-engineering',
         title: 'Ingeniería Robusta',
+        phrases: ['Flujos Automatizados', 'Integración Total', 'Calidad de Dato'],
         subtitle: 'La ingeniería detrás de tus datos',
         description: 'Construimos las autopistas por donde viajan tus datos. Diseñamos pipelines robustos, automatizados y monitoreados que aseguran que la información llegue desde el origen hasta el destino en el tiempo y formato correctos.',
         icon: 'database',
@@ -166,6 +170,7 @@ export const SERVICES_CONTENT: Record<string, Service> = {
     'digital-platform': {
         id: 'digital-platform',
         title: 'Ecosistemas Digitales',
+        phrases: ['Experiencia de Usuario', 'Procesos Ágiles', 'Conectividad'],
         subtitle: 'Ecosistemas digitales a medida',
         description: 'Desarrollamos plataformas web y móviles que digitalizan tus procesos core. Creamos herramientas operativas que capturan datos en el origen, eliminan el papel y conectan a tu fuerza laboral con la estrategia digital.',
         icon: 'laptop-code',

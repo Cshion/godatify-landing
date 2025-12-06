@@ -6,5 +6,5 @@ interface NosotrosHeroProps {
 }
 
 export default function NosotrosHero({ hero }: NosotrosHeroProps) {
-    return <PageHero title={hero.title} subtitle={hero.subtitle} backgroundImage="/images/hero-nosotros.png" phrases={['Talento Sin Fronteras', 'Cultura de Datos', 'Innovación Humana']} />;
+    return <PageHero title={hero.title} subtitle={hero.subtitle} backgroundImage="/images/hero-nosotros.png" phrases={hero.phrases} />;
 }

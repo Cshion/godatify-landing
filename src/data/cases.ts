@@ -1,6 +1,16 @@
-import { CaseStudy } from '@/types';
+import { CaseStudy, CasesPageContent } from '@/types';
 
-// Case Studies Content
+// Cases Landing Page Content
+export const CASES_PAGE_CONTENT: CasesPageContent = {
+    hero: {
+        title: 'Impacto Real',
+        subtitle: 'No solo entregamos tecnología, entregamos resultados de negocio medibles. Descubre cómo transformamos datos en rentabilidad.',
+        backgroundImage: '/images/hero-cases.png',
+        phrases: ['Evidencia Tangible', 'Retorno de Inversión', 'Historias de Éxito']
+    }
+};
+
+// Case Studies List Content
 export const CASES_CONTENT: CaseStudy[] = [
     {
         slug: 'kpis-comerciales',

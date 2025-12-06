@@ -12,11 +12,12 @@ import {
     NosotrosContent,
     SocialLink,
     NavLink,
-    FooterLinks
+    FooterLinks,
+    CasesPageContent
 } from '@/types';
 
 import { SERVICES_CONTENT, SERVICES_NAV } from '@/data/services';
-import { CASES_CONTENT } from '@/data/cases';
+import { CASES_CONTENT, CASES_PAGE_CONTENT } from '@/data/cases';
 import { INDUSTRIES_CONTENT } from '@/data/industries';
 import { TESTIMONIALS_CONTENT } from '@/data/testimonials';
 import { COMPANY_INFO, SOCIAL_LINKS, NAV_LINKS, FOOTER_LINKS } from '@/data/company';
@@ -82,6 +83,9 @@ export const api = {
         },
         getByIndustry: async (industryId: string): Promise<CaseStudy[]> => {
             return CASES_CONTENT.filter(c => c.relatedIndustryId === industryId);
+        },
+        getPageContent: async (): Promise<CasesPageContent> => {
+            return CASES_PAGE_CONTENT;
         }
     },
     industries: {

@@ -38,9 +38,47 @@ export interface Service {
     description: string;
     icon: string;
     image: string;
+    phrases?: string[]; // Added for text cycling
     features: ServiceFeature[];
     methodology: ServiceMethodologyStep[];
     techStack: ServiceTech[];
+}
+
+export interface CaseResult {
+    label: string;
+    value: string;
+    suffix: string;
+}
+
+export interface Client {
+    name: string;
+    logo?: string;
+    website?: string;
+    anonymous?: boolean;
+}
+
+export interface Testimonial {
+    quote: string;
+    author: string;
+    role: string;
+    linkedIn?: string;
+}
+
+export interface CaseStudy {
+    slug: string;
+    title: string;
+    industry: string;
+    relatedIndustryId?: string;
+    description: string;
+    challenge: string;
+    solution: string;
+    results: CaseResult[];
+    techStack: string[];
+    image: string;
+    videoUrl?: string;
+    client: Client;
+    testimonial?: Testimonial;
+    content: string;
 }
 
 export interface CaseResult {
@@ -186,6 +224,7 @@ export interface NosotrosContent {
         title: string;
         subtitle: string;
         description: string;
+        phrases?: string[];
     };
     mission: {
         title: string;
@@ -250,4 +289,25 @@ export interface FooterLinks {
     quickLinks: NavLink[];
     services: NavLink[];
     contact: NavLink[];
+}
+
+// Added CasesPageContent for the main Cases landing page
+export interface CasesPageContent {
+    hero: {
+        title: string;
+        subtitle: string;
+        phrases?: string[];
+        backgroundImage?: string;
+    }
+}
+
+// Helper type for Industries Page Content
+export interface IndustriesPageContent {
+    hero: {
+        title: string;
+        subtitle: string;
+        description: string;
+        phrases?: string[];
+    };
+    sectors: Industry[];
 }

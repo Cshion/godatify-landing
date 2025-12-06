@@ -1,12 +1,15 @@
+import { api } from '@/lib/api';
 import PageHero from '@/components/common/PageHero';
 
-export default function CasesHero() {
+export default async function CasesHero() {
+    const { hero } = await api.cases.getPageContent();
+
     return (
         <PageHero
-            title="Impacto Real"
-            subtitle="No solo entregamos tecnología, entregamos resultados de negocio medibles. Descubre cómo transformamos datos en rentabilidad."
-            backgroundImage="/images/hero-cases.png"
-            phrases={['Evidencia Tangible', 'Retorno de Inversión', 'Historias de Éxito']}
+            title={hero.title}
+            subtitle={hero.subtitle}
+            backgroundImage={hero.backgroundImage}
+            phrases={hero.phrases}
         />
     );
 }
