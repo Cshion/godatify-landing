@@ -59,7 +59,7 @@ export default function Header() {
                 </button>
                 <div className={styles.dropdownMenu}>
                   {SERVICES_NAV.map((service) => (
-                    <Link key={service.id} href={`#${service.id}`} className={styles.dropdownItem}>
+                    <Link key={service.id} href={`/servicios/${service.id}`} className={styles.dropdownItem}>
                       {service.name}
                     </Link>
                   ))}
