@@ -1,6 +1,6 @@
 .heroSection {
     position: relative;
-    padding: var(--space-16) 0 var(--space-12);
+    padding: 8rem 0 var(--space-12);
     background-color: #0d3b34;
     /* Fallback */
     background-color: var(--color-brand-green-dark);
