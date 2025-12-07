@@ -1,0 +1,32 @@
+{
+    "kind": "collectionType",
+    "collectionName": "social_links",
+    "info": {
+        "singularName": "social-link",
+        "pluralName": "social-links",
+        "displayName": "Social Link",
+        "description": "Social media links"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "label": {
+            "type": "string",
+            "required": true
+        },
+        "url": {
+            "type": "string",
+            "required": true
+        },
+        "slug": {
+            "type": "string",
+            "required": true,
+            "unique": true
+        },
+        "icon": {
+            "type": "string"
+        }
+    }
+}

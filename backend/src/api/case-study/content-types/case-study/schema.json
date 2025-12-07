@@ -1,0 +1,62 @@
+{
+    "kind": "collectionType",
+    "collectionName": "case_studies",
+    "info": {
+        "singularName": "case-study",
+        "pluralName": "case-studies",
+        "displayName": "Case Study",
+        "description": "Customer success stories"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "slug": {
+            "type": "uid",
+            "targetField": "title",
+            "required": true
+        },
+        "industry": {
+            "type": "string"
+        },
+        "clientName": {
+            "type": "string"
+        },
+        "description": {
+            "type": "text"
+        },
+        "challenge": {
+            "type": "text"
+        },
+        "solution": {
+            "type": "text"
+        },
+        "results": {
+            "type": "json"
+        },
+        "techStack": {
+            "type": "json"
+        },
+        "mainImageUrl": {
+            "type": "string"
+        },
+        "mainImage": {
+            "type": "media",
+            "multiple": false,
+            "allowedTypes": [
+                "images"
+            ]
+        },
+        "testimonialQuote": {
+            "type": "text"
+        },
+        "testimonialAuthor": {
+            "type": "string"
+        }
+    }
+}

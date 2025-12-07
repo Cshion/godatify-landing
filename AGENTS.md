@@ -1,14 +1,22 @@
 # AGENTS.md - Protocolo de Colaboración y Arquitectura
 
 ## 1. Visión General
-Este repositorio aloja la landing page corporativa de **Datify**, construida con **Next.js 16 (App Router)** y **TypeScript**. El objetivo es mantener una arquitectura limpia, modular y escalable que permita la transición futura a un CMS dinámico sin reescribir la capa de presentación.
+Este repositorio aloja la solución digital corporativa de **Datify**, compuesta por usuarios frontales y administrativos.
 
 ## 2. Stack Tecnológico
-- **Framework**: Next.js 16 (Turbopack habilitado).
-- **Lenguaje**: TypeScript (Strict Mode).
-- **Estilos**: CSS Modules (`*.module.css`) para componentes complejos + Tailwind CSS (`v4`) para utilidades rápidas y layout.
-- **Fuentes**: `next/font` (Barlow).
-- **Iconos**: FontAwesome (vía CDN en `layout.tsx`).
+
+### Frontend (`/frontend`)
+- **Framework**: Next.js 16 (App Router).
+- **Lenguaje**: TypeScript.
+- **Estilos**: Tailwind CSS v4 + CSS Modules.
+
+### Backend (`/backend`)
+- **CMS**: Strapi v5 (Self-hosted).
+- **Database**:
+  - **Dev**: SQLite (default). Auto-seeds Master + Mock Data.
+  - **Prod**: PostgreSQL (Supabase). Auto-seeds Master Data only.
+- **Seeding Logic**: Implementada en `src/index.ts`. Lee de `/seed-data`.
+- **Rol**: Gestión de contenidos y API REST.
 
 ## 3. Arquitectura del Proyecto
 

@@ -1,0 +1,37 @@
+[
+    {
+        "slug": "big-data-management",
+        "title": "Big Data Management",
+        "subtitle": "Gobierno y control de datos a gran escala",
+        "description": "Transformamos el caos de datos en activos estratégicos...",
+        "icon": "server"
+    },
+    {
+        "slug": "business-analytics",
+        "title": "Business Analytics",
+        "subtitle": "Predicción y ciencia de datos aplicada",
+        "description": "No solo analizamos el pasado, predecimos el futuro...",
+        "icon": "brain"
+    },
+    {
+        "slug": "business-intelligence",
+        "title": "Business Intelligence",
+        "subtitle": "Visualización que impulsa decisiones",
+        "description": "Convertimos datos complejos en historias visuales claras...",
+        "icon": "chart-line"
+    },
+    {
+        "slug": "data-engineering",
+        "title": "Data Engineering",
+        "subtitle": "La ingeniería detrás de tus datos",
+        "description": "Construimos las autopistas por donde viajan tus datos...",
+        "icon": "database"
+    },
+    {
+        "slug": "digital-platform",
+        "title": "Digital Platform",
+        "subtitle": "Ecosistemas digitales a medida",
+        "description": "Desarrollamos plataformas web y móviles...",
+        "icon": "laptop-code"
+    }
+]

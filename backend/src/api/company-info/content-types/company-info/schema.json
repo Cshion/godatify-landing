@@ -1,0 +1,37 @@
+{
+    "kind": "singleType",
+    "collectionName": "company_infos",
+    "info": {
+        "singularName": "company-info",
+        "pluralName": "company-infos",
+        "displayName": "Company Info",
+        "description": "General company information"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "name": {
+            "type": "string",
+            "required": true,
+            "default": "Datify"
+        },
+        "description": {
+            "type": "text"
+        },
+        "email": {
+            "type": "email"
+        },
+        "website": {
+            "type": "string"
+        },
+        "logo": {
+            "type": "media",
+            "multiple": false,
+            "allowedTypes": [
+                "images"
+            ]
+        }
+    }
+}

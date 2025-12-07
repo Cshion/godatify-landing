@@ -1,0 +1,59 @@
+{
+    "kind": "collectionType",
+    "collectionName": "services",
+    "info": {
+        "singularName": "service",
+        "pluralName": "services",
+        "displayName": "Service",
+        "description": "Services offered by Datify"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "slug": {
+            "type": "uid",
+            "targetField": "title",
+            "required": true
+        },
+        "subtitle": {
+            "type": "string"
+        },
+        "description": {
+            "type": "text"
+        },
+        "icon": {
+            "type": "string"
+        },
+        "imageUrl": {
+            "type": "string"
+        },
+        "bgImageUrl": {
+            "type": "string"
+        },
+        "bgImage": {
+            "type": "media",
+            "multiple": false,
+            "allowedTypes": [
+                "images"
+            ]
+        },
+        "phrases": {
+            "type": "json"
+        },
+        "features": {
+            "type": "json"
+        },
+        "methodology": {
+            "type": "json"
+        },
+        "techStack": {
+            "type": "json"
+        }
+    }
+}

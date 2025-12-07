@@ -1,0 +1,30 @@
+[
+    {
+        "title": "El Impacto de la IA Generativa en la Toma de Decisiones Empresariales",
+        "slug": "impacto-ia-generativa-decisiones",
+        "excerpt": "Descubre cómo la inteligencia artificial generativa está redefiniendo las estrategias corporativas...",
+        "content": "<p>La inteligencia artificial generativa ha pasado de ser una curiosidad tecnológica...</p>",
+        "date": "2024-11-20",
+        "readingTime": "10 min",
+        "featured": true,
+        "tags": [
+            "Inteligencia Artificial",
+            "Estrategia",
+            "Innovación"
+        ]
+    },
+    {
+        "title": "Cloud Computing: ¿Nube Pública, Privada o Híbrida?",
+        "slug": "guia-cloud-hibrida-publica-privada",
+        "excerpt": "Una guía esencial para líderes de TI que buscan optimizar costos...",
+        "content": "<p>La elección de la infraestructura en la nube es una de las decisiones más críticas...</p>",
+        "date": "2024-11-15",
+        "readingTime": "7 min",
+        "featured": false,
+        "tags": [
+            "Cloud Computing",
+            "Infraestructura",
+            "Costos"
+        ]
+    }
+]

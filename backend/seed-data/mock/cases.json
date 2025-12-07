@@ -1,0 +1,39 @@
+[
+    {
+        "slug": "kpis-comerciales",
+        "title": "KPIs Comerciales",
+        "industry": "Business Intelligence",
+        "description": "Dashboard de KPIs comerciales para seguimiento en tiempo real...",
+        "challenge": "La falta de visibilidad en tiempo real sobre las métricas comerciales...",
+        "solution": "Implementación de un Dashboard interactivo en Power BI...",
+        "client": "Distribuidora Nacional",
+        "results": [
+            {
+                "label": "Visibilidad",
+                "value": "100%",
+                "suffix": " Tiempo Real"
+            },
+            {
+                "label": "Decisiones",
+                "value": "2x",
+                "suffix": " Más Rápidas"
+            }
+        ]
+    },
+    {
+        "slug": "sell-in-out",
+        "title": "Sell In y Sell Out",
+        "industry": "Business Analytics",
+        "description": "Análisis integral de canales de distribución...",
+        "challenge": "Desconexión entre lo que se vendía a los distribuidores...",
+        "solution": "Integración de datos de inventarios de distribuidores...",
+        "client": "Confidencial",
+        "results": [
+            {
+                "label": "Inventario",
+                "value": "-20%",
+                "suffix": " Días Calle"
+            }
+        ]
+    }
+]
