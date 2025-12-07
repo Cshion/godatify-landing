@@ -18,14 +18,19 @@
         },
         "slug": {
             "type": "uid",
-            "targetField": "title",
-            "required": true
+            "targetField": "title"
         },
         "industry": {
-            "type": "string"
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::industry.industry",
+            "inversedBy": "case_studies"
         },
-        "clientName": {
-            "type": "string"
+        "client": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::client.client",
+            "inversedBy": "case_studies"
         },
         "description": {
             "type": "text"
@@ -42,21 +47,22 @@
         "techStack": {
             "type": "json"
         },
+        "mainImage": {
+            "type": "media",
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ]
+        },
         "mainImageUrl": {
             "type": "string"
         },
-        "mainImage": {
-            "type": "media",
-            "multiple": false,
-            "allowedTypes": [
-                "images"
-            ]
-        },
-        "testimonialQuote": {
-            "type": "text"
-        },
-        "testimonialAuthor": {
-            "type": "string"
+        "testimonial": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "api::testimonial.testimonial"
         }
     }
 }

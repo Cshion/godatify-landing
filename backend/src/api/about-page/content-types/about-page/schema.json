@@ -1,0 +1,67 @@
+{
+    "kind": "singleType",
+    "collectionName": "about_pages",
+    "info": {
+        "singularName": "about-page",
+        "pluralName": "about-pages",
+        "displayName": "About Page",
+        "description": "Content for the About Us Page"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "heroTitle": {
+            "type": "string"
+        },
+        "heroSubtitle": {
+            "type": "text"
+        },
+        "heroDescription": {
+            "type": "text"
+        },
+        "heroPhrases": {
+            "type": "json"
+        },
+        "heroBackgroundImageUrl": {
+            "type": "string"
+        },
+        "missionTitle": {
+            "type": "string"
+        },
+        "missionText": {
+            "type": "text"
+        },
+        "missionImageUrl": {
+            "type": "string"
+        },
+        "visionTitle": {
+            "type": "string"
+        },
+        "visionText": {
+            "type": "text"
+        },
+        "visionImageUrl": {
+            "type": "string"
+        },
+        "values": {
+            "type": "json"
+        },
+        "cultureTitle": {
+            "type": "string"
+        },
+        "cultureDescription": {
+            "type": "text"
+        },
+        "cultureStats": {
+            "type": "json"
+        },
+        "cultureImageUrl": {
+            "type": "string"
+        },
+        "tabs": {
+            "type": "json"
+        }
+    }
+}

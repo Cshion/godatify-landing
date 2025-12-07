@@ -1,0 +1,84 @@
+{
+    "heroTitle": "Nuestro Propósito",
+    "heroSubtitle": "Nuestra razón de ser es generar impacto real, convirtiendo la complejidad en claridad, y el dato en una ventaja competitiva.",
+    "heroDescription": "Desde 2022 hemos trabajado con empresas líderes como Heineken, Grupo Rocío y SPACE AG...",
+    "heroPhrases": [
+        "Talento Sin Fronteras",
+        "Cultura de Datos",
+        "Innovación Humana"
+    ],
+    "heroBackgroundImageUrl": "/images/hero-nosotros.png",
+    "missionTitle": "Nuestra Misión",
+    "missionText": "Empoderar a las organizaciones para que tomen decisiones estratégicas basadas en datos...",
+    "missionImageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
+    "visionTitle": "Nuestra Visión",
+    "visionText": "Ser el referente líder en consultoría de datos y transformación digital en LATAM...",
+    "visionImageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
+    "values": [
+        {
+            "id": "compromiso",
+            "title": "Compromiso con el resultado",
+            "description": "Trabajamos para generar valor tangible y medible.",
+            "icon": "chart-line"
+        },
+        {
+            "id": "empatia",
+            "title": "Empatía empresarial",
+            "description": "Escuchamos, entendemos y nos alineamos a los objetivos de cada cliente.",
+            "icon": "handshake"
+        },
+        {
+            "id": "innovacion",
+            "title": "Innovación constante",
+            "description": "Nos mantenemos a la vanguardia tecnológica...",
+            "icon": "lightbulb"
+        },
+        {
+            "id": "transparencia",
+            "title": "Transparencia",
+            "description": "Comunicamos con claridad...",
+            "icon": "check-circle"
+        },
+        {
+            "id": "excelencia",
+            "title": "Excelencia en equipo",
+            "description": "Creemos en el poder de un equipo multidisciplinario...",
+            "icon": "users"
+        }
+    ],
+    "cultureTitle": "Innovación sin fronteras",
+    "cultureDescription": "En Datify, creemos que el talento no tiene código postal...",
+    "cultureStats": [
+        {
+            "value": "100%",
+            "label": "Remoto"
+        },
+        {
+            "value": "+10",
+            "label": "Países"
+        },
+        {
+            "value": "24/7",
+            "label": "Soporte"
+        }
+    ],
+    "cultureImageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800",
+    "tabs": [
+        {
+            "id": "quienes",
+            "label": "Quiénes Somos"
+        },
+        {
+            "id": "mision",
+            "label": "Misión y Visión"
+        },
+        {
+            "id": "valores",
+            "label": "Valores"
+        },
+        {
+            "id": "cultura",
+            "label": "Cultura"
+        }
+    ]
+}

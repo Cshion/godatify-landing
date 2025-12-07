@@ -1,0 +1,48 @@
+{
+    "kind": "collectionType",
+    "collectionName": "industries",
+    "info": {
+        "singularName": "industry",
+        "pluralName": "industries",
+        "displayName": "Industry",
+        "description": "Industry sectors served"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "slug": {
+            "type": "uid",
+            "targetField": "title"
+        },
+        "description": {
+            "type": "text"
+        },
+        "imageUrl": {
+            "type": "string"
+        },
+        "image": {
+            "type": "media",
+            "allowedTypes": [
+                "images"
+            ]
+        },
+        "stats": {
+            "type": "json"
+        },
+        "projects": {
+            "type": "json"
+        },
+        "case_studies": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::case-study.case-study",
+            "mappedBy": "industry"
+        }
+    }
+}

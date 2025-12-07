@@ -1,0 +1,55 @@
+{
+    "kind": "singleType",
+    "collectionName": "home_pages",
+    "info": {
+        "singularName": "home-page",
+        "pluralName": "home-pages",
+        "displayName": "Home Page",
+        "description": "Content for the Home Page"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "heroTitle": {
+            "type": "string"
+        },
+        "heroSubtitle": {
+            "type": "text"
+        },
+        "heroCtaText": {
+            "type": "string"
+        },
+        "heroCtaHref": {
+            "type": "string"
+        },
+        "heroScrollText": {
+            "type": "string"
+        },
+        "heroBackgroundImageUrl": {
+            "type": "string"
+        },
+        "heroGradient": {
+            "type": "string"
+        },
+        "sectionLabels": {
+            "type": "json"
+        },
+        "stats": {
+            "type": "json"
+        },
+        "videoConfig": {
+            "type": "json"
+        },
+        "clients": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::client.client",
+            "mappedBy": "home_page"
+        },
+        "carouselConfig": {
+            "type": "json"
+        }
+    }
+}

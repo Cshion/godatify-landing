@@ -89,6 +89,42 @@ export default {
                 // Company Info
                 const companyInfo = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'company.json'), 'utf-8'));
                 await seedSingle('api::company-info.company-info', companyInfo);
+
+                // Clients (Seed first for relations)
+                const clientsData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'clients.json'), 'utf-8'));
+                await seedCollection('api::client.client', clientsData);
+                const allClients = await strapi.documents('api::client.client' as any).findMany();
+
+                // Industries (Page + Collection)
+                const industriesData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'industries.json'), 'utf-8'));
+                if (industriesData.page) {
+                    await seedSingle('api::industries-page.industries-page', industriesData.page);
+                }
+                if (industriesData.industries) {
+                    await seedCollection('api::industry.industry', industriesData.industries);
+                }
+                const allIndustries = await strapi.documents('api::industry.industry' as any).findMany();
+
+                // Testimonials
+                const testimonialsData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'testimonials.json'), 'utf-8'));
+                await seedCollection('api::testimonial.testimonial', testimonialsData);
+                const allTestimonials = await strapi.documents('api::testimonial.testimonial' as any).findMany();
+
+                // Home Page (Link Clients)
+                const homeData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'home.json'), 'utf-8'));
+                // Remove raw clients list if you want to rely solely on relations, or keep it.
+                // Linking relation:
+                homeData.clients = allClients.map((c: any) => c.documentId);
+                await seedSingle('api::home-page.home-page', homeData);
+
+                // About Page
+                const aboutData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'about.json'), 'utf-8'));
+                await seedSingle('api::about-page.about-page', aboutData);
+
+                // Contact Page
+                const contactData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'contact.json'), 'utf-8'));
+                await seedSingle('api::contact-page.contact-page', contactData);
+
             }
         } catch (error) {
             console.error('[SEED] Error seeding Master Data:', error);
@@ -109,13 +145,29 @@ export default {
                     }));
                     await seedCollection('api::blog-post.blog-post', publishedBlogPosts);
 
-                    // Cases
+                    // Cases (Link Relations)
+                    // Need to fetch Clients, Industries, Testimonials again if not in scope, but they are.
+                    const allClients = await strapi.documents('api::client.client' as any).findMany();
+                    const allIndustries = await strapi.documents('api::industry.industry' as any).findMany();
+                    const allTestimonials = await strapi.documents('api::testimonial.testimonial' as any).findMany();
+
                     const cases = JSON.parse(fs.readFileSync(path.join(MOCK_DATA_PATH, 'cases.json'), 'utf-8'));
-                    const publishedCases = cases.map((c: any) => ({
-                        ...c,
-                        clientName: c.client?.name || c.client,
-                        mainImageUrl: c.image
-                    }));
+                    const publishedCases = cases.map((c: any) => {
+                        const relatedClient = allClients.find((cl: any) => cl.name === (c.client?.name || c.client));
+                        const relatedIndustry = allIndustries.find((ind: any) => ind.title.includes(c.industry) || ind.slug === c.industry.toLowerCase());
+
+                        // Heuristic match for testimonial (since current cases.json doesn't link to testimonials.json id)
+                        // This might be null if no direct match, which is fine.
+                        const relatedTestimonial = null; // Defining strict logic here is hard without explicit IDs in json.
+
+                        return {
+                            ...c,
+                            client: relatedClient ? relatedClient.documentId : undefined,
+                            industry: relatedIndustry ? relatedIndustry.documentId : undefined,
+                            testimonial: relatedTestimonial,
+                            mainImageUrl: c.image
+                        };
+                    });
                     await seedCollection('api::case-study.case-study', publishedCases);
                 }
             } catch (error) {

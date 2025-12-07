@@ -1,0 +1,41 @@
+{
+    "kind": "collectionType",
+    "collectionName": "clients",
+    "info": {
+        "singularName": "client",
+        "pluralName": "clients",
+        "displayName": "Client",
+        "description": "Corporate Clients"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "name": {
+            "type": "string",
+            "required": true
+        },
+        "logoUrl": {
+            "type": "string"
+        },
+        "logo": {
+            "type": "media",
+            "allowedTypes": [
+                "images"
+            ]
+        },
+        "case_studies": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::case-study.case-study",
+            "mappedBy": "client"
+        },
+        "home_page": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::home-page.home-page",
+            "inversedBy": "clients"
+        }
+    }
+}
