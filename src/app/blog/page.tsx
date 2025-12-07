@@ -3,28 +3,25 @@ import BlogHero from '@/components/blog/BlogHero';
 import BlogList from '@/components/blog/BlogList';
 import { api } from '@/lib/api';
 
+import { BLOG_STATIC_DATA } from "@/data/blog-data";
+
 export const metadata: Metadata = {
-    title: 'Blog | Datify',
-    description: 'Explora nuestras últimas ideas, análisis y tendencias sobre Data & AI, Cloud Computing y transformación digital.',
+    title: BLOG_STATIC_DATA.metadata.title,
+    description: BLOG_STATIC_DATA.metadata.description,
 };
 
 export default async function BlogPage() {
+    // Sorting happens on the server (or in api.ts)
     const posts = await api.blog.getAll();
 
-    // Sort posts by date descending
-    const sortedPosts = posts.sort((a, b) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
-
     return (
-        <main className="bg-gray-50 min-h-screen">
+        <main className="min-h-screen bg-white">
             <BlogHero
-                title="Nuestras Ideas"
-                subtitle="BLOG"
-                description="Insights estratégicos para líderes que buscan transformar sus organizaciones a través de los datos y la inteligencia artificial."
+                title={BLOG_STATIC_DATA.hero.title}
+                subtitle={BLOG_STATIC_DATA.hero.subtitle}
+                description={BLOG_STATIC_DATA.hero.description}
             />
-
-            <BlogList initialPosts={sortedPosts} />
+            <BlogList initialPosts={posts} />
         </main>
     );
 }

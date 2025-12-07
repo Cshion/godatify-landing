@@ -4,6 +4,8 @@ import { BlogPost } from '@/types';
 import { formatDate } from '@/lib/formatDate';
 import styles from './FeaturedPost.module.css';
 
+import { BLOG_STATIC_DATA } from '@/data/blog-data';
+
 interface FeaturedPostProps {
     post: BlogPost;
 }
@@ -22,7 +24,7 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
                     />
                 </div>
                 <div className={styles.content}>
-                    <span className={styles.label}>Destacado</span>
+                    <span className={styles.label}>{BLOG_STATIC_DATA.featured.label}</span>
                     <h2 className={styles.title}>
                         <Link href={`/blog/${post.slug}`} className="hover:text-brand-green transition-colors">
                             {post.title}
@@ -35,7 +37,7 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
                             {formatDate(post.date)} &nbsp;&nbsp;·&nbsp;&nbsp; {post.readingTime}
                         </div>
                         <Link href={`/blog/${post.slug}`} className={styles.readMore}>
-                            Leer artículo <i className="fas fa-arrow-right" />
+                            {BLOG_STATIC_DATA.featured.readMore} <i className="fas fa-arrow-right" />
                         </Link>
                     </div>
                 </div>

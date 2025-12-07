@@ -8,6 +8,8 @@ import styles from "./page.module.css";
 import { Metadata } from "next";
 import { formatDate } from "@/lib/formatDate";
 
+import { BLOG_STATIC_DATA } from "@/data/blog-data";
+
 interface Props {
     params: Promise<{ slug: string }>;
 }
@@ -18,12 +20,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     if (!post) {
         return {
-            title: "Post no encontrado | Datify",
+            title: BLOG_STATIC_DATA.metadata.notFoundTitle,
         };
     }
 
     return {
-        title: `${post.title} | Blog Datify`,
+        title: `${post.title}${BLOG_STATIC_DATA.metadata.titleSuffix}`,
         description: post.excerpt,
         openGraph: {
             images: [post.image],
@@ -48,7 +50,7 @@ export default async function BlogPostPage({ params }: Props) {
         <article className={styles.articleContainer}>
             <div className="container mx-auto px-6">
                 <Link href="/blog" className={styles.backLink}>
-                    <i className="fas fa-arrow-left" /> Volver al Blog
+                    <i className="fas fa-arrow-left" /> {BLOG_STATIC_DATA.detail.back}
                 </Link>
 
                 <header className={styles.hero}>
@@ -80,8 +82,8 @@ export default async function BlogPostPage({ params }: Props) {
                         </div>
                         <div className="hidden md:block w-px h-8 bg-gray-200"></div>
                         <div>
-                            <span className="block font-semibold text-gray-900">Publicado</span>
-                            <span>{formatDate(post.date)} &nbsp;&nbsp;·&nbsp;&nbsp; {post.readingTime} de lectura</span>
+                            <span className="block font-semibold text-gray-900">{BLOG_STATIC_DATA.detail.published}</span>
+                            <span>{formatDate(post.date)} &nbsp;&nbsp;·&nbsp;&nbsp; {post.readingTime} {BLOG_STATIC_DATA.detail.readingTime}</span>
                         </div>
                     </div>
                 </header>
@@ -107,7 +109,7 @@ export default async function BlogPostPage({ params }: Props) {
 
                 {relatedPosts.length > 0 && (
                     <div className="mt-20 pt-10 border-t border-gray-100">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-8">Artículos Relacionados</h2>
+                        <h2 className="text-3xl font-bold text-gray-900 mb-8">{BLOG_STATIC_DATA.related.title}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {relatedPosts.map((relatedPost) => (
                                 <div key={relatedPost.id} className="h-full">

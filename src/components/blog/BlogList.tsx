@@ -6,6 +6,8 @@ import FeaturedPost from './FeaturedPost';
 import BlogCard from './BlogCard';
 import styles from './BlogList.module.css';
 
+import { BLOG_STATIC_DATA } from '@/data/blog-data';
+
 interface BlogListProps {
     initialPosts: BlogPost[];
 }
@@ -13,18 +15,11 @@ interface BlogListProps {
 const BATCH_SIZE = 4;
 
 export default function BlogList({ initialPosts }: BlogListProps) {
-    // initialPosts are already sorted by date desc from the server
     const [posts, setPosts] = useState<BlogPost[]>([]);
-    const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const loader = useRef<HTMLDivElement>(null);
 
-    // Initial Load: Featured + First Batch
     useEffect(() => {
-        // Featured is index 0
-        // We load index 0 to BATCH_SIZE initially?
-        // Let's say we show Featured (1) + Grid (BATCH_SIZE)
-        // Total shown = 1 + BATCH_SIZE
         const initialCount = 1 + BATCH_SIZE;
         setPosts(initialPosts.slice(0, initialCount));
         if (initialPosts.length <= initialCount) {
@@ -40,7 +35,6 @@ export default function BlogList({ initialPosts }: BlogListProps) {
     };
 
     const loadMore = () => {
-        // Simulate network delay for "infinite scroll" feel
         setTimeout(() => {
             const currentLength = posts.length;
             const nextBatch = initialPosts.slice(currentLength, currentLength + BATCH_SIZE);
@@ -50,10 +44,6 @@ export default function BlogList({ initialPosts }: BlogListProps) {
             } else {
                 setPosts((prev) => [...prev, ...nextBatch]);
 
-                // If we've reached the end of local data, should we loop?
-                // User requirement: "scroll infinio para cargar mas".
-                // Since we only have ~10 posts, let's just stop or duplicate for demo.
-                // Let's stop for correctness, duplication might confuse ID keys.
                 if (currentLength + nextBatch.length >= initialPosts.length) {
                     setHasMore(false);
                 }
@@ -73,7 +63,7 @@ export default function BlogList({ initialPosts }: BlogListProps) {
         return () => {
             if (loader.current) observer.unobserve(loader.current);
         };
-    }, [posts, hasMore]); // Re-attach observer when posts change or hasMore
+    }, [posts, hasMore]);
 
     if (posts.length === 0) return null;
 
@@ -101,7 +91,7 @@ export default function BlogList({ initialPosts }: BlogListProps) {
 
             {!hasMore && (
                 <div className={styles.endMessage}>
-                    Has llegado al final del contenido.
+                    {BLOG_STATIC_DATA.list.endMessage}
                 </div>
             )}
         </section>
