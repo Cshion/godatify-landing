@@ -23,6 +23,8 @@ export const SECTION_LABELS: SectionLabels = {
     },
     testimonials: {
         title: 'Testimonios',
+        subtitle: 'NUESTROS CLIENTES',
+        description: 'Descubre cómo hemos ayudado a empresas líderes a transformar sus datos en ventajas competitivas y resultados tangibles.',
     },
     clients: {
         title: 'Confían en Nosotros',

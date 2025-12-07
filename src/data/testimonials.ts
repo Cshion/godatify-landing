@@ -2,7 +2,6 @@ import { Testimonial } from '@/types';
 
 export interface TestimonialWithId extends Testimonial {
     id: number;
-    id: number;
     quote: string;
 }
 
@@ -19,41 +18,41 @@ export const TESTIMONIALS_CONTENT: TestimonialWithId[] = [
         quote: "Es increíble, es realmente maravilloso. Datify ha superado completamente nuestras expectativas. La facilidad de lectura y el análisis de datos han transformado nuestra forma de trabajar.",
         author: "Cliente Satisfecho",
         role: "CEO, Empresa",
-        image: "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random"
+        image: "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random&format=png"
     },
     {
         id: 2,
         quote: "Datify ha transformado completamente nuestra capacidad de tomar decisiones basadas en datos. El equipo es profesional y los resultados son excepcionales.",
         author: "Cliente Satisfecho",
         role: "Director, Organización",
-        image: "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random"
+        image: "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random&format=png"
     },
     {
         id: 3,
         quote: "La implementación fue rápida y eficiente. Ahora tenemos visibilidad completa de nuestros procesos y podemos optimizar nuestras operaciones de manera efectiva.",
         author: "Cliente Satisfecho",
         role: "Gerente, Compañía",
-        image: "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random"
+        image: "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random&format=png"
     },
     {
         id: 4,
         quote: "El soporte y la atención al cliente son excepcionales. Siempre están disponibles para ayudarnos y resolver cualquier duda. Una inversión que realmente vale la pena.",
         author: "María González",
         role: "CFO, Tech Solutions",
-        image: "https://ui-avatars.com/api/?name=Maria+Gonzalez&background=random"
+        image: "https://ui-avatars.com/api/?name=Maria+Gonzalez&background=random&format=png"
     },
     {
         id: 5,
         quote: "Los insights que hemos obtenido gracias a Datify han sido fundamentales para nuestro crecimiento. Recomiendo sus servicios sin dudarlo.",
         author: "Carlos Mendoza",
         role: "VP Operaciones, Retail Corp",
-        image: "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random"
+        image: "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random&format=png"
     },
     {
         id: 6,
         quote: "Datify nos ayudó a centralizar toda nuestra información y ahora podemos tomar decisiones estratégicas con confianza. Un cambio total en nuestra organización.",
         author: "Ana Rodríguez",
         role: "Directora General, Innovación SA",
-        image: "https://ui-avatars.com/api/?name=Ana+Rodriguez&background=random"
+        image: "https://ui-avatars.com/api/?name=Ana+Rodriguez&background=random&format=png"
     }
 ];

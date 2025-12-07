@@ -41,7 +41,7 @@ export const BLOG_POSTS: BlogPost[] = [
         author: {
             name: "Carlos Mendoza",
             role: "CTO, Datify",
-            image: "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random"
+            image: "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random&format=png"
         },
         date: "2024-11-20", // ISO format
         readingTime: "10 min",
@@ -108,7 +108,7 @@ export const BLOG_POSTS: BlogPost[] = [
         author: {
             name: "Carlos Mendoza",
             role: "CTO, Datify",
-            image: "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random"
+            image: "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random&format=png"
         },
         date: "2024-11-12",
         readingTime: "8 min",
@@ -190,7 +190,7 @@ export const BLOG_POSTS: BlogPost[] = [
         author: {
             name: "Carlos Mendoza",
             role: "CTO, Datify",
-            image: "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random"
+            image: "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random&format=png"
         },
         date: "2024-10-18",
         readingTime: "9 min",
@@ -253,7 +253,7 @@ export const BLOG_POSTS: BlogPost[] = [
         author: {
             name: "Carlos Mendoza",
             role: "CTO, Datify",
-            image: "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random"
+            image: "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random&format=png"
         },
         date: "2024-09-02",
         readingTime: "4 min",

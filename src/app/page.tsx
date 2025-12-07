@@ -58,6 +58,8 @@ export default async function Home() {
           testimonials={testimonials}
           carouselConfig={carouselConfig}
           title={sectionLabels.testimonials.title}
+          subtitle={sectionLabels.testimonials.subtitle}
+          description={sectionLabels.testimonials.description}
         />
       </main>
       <ScrollReveal />

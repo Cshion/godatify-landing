@@ -9,9 +9,11 @@ interface TestimonialsProps {
   testimonials: Testimonial[];
   carouselConfig: CarouselConfig;
   title: string;
+  subtitle: string;
+  description: string;
 }
 
-export default function Testimonials({ testimonials, carouselConfig, title }: TestimonialsProps) {
+export default function Testimonials({ testimonials, carouselConfig, title, subtitle, description }: TestimonialsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const { cardsPerView, autoPlayInterval } = carouselConfig;
@@ -58,11 +60,10 @@ export default function Testimonials({ testimonials, carouselConfig, title }: Te
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-          <h3 className={styles.subtitle}>NUESTROS CLIENTES</h3>
-          <h2 className={styles.title}>Testimonios</h2>
+          <h3 className={styles.subtitle}>{subtitle}</h3>
+          <h2 className={styles.title}>{title}</h2>
           <p className={styles.description}>
-            Vestibulum lectus mauris ultrices eros in. Cursus sit amet dictum sit amet.
-            Adipiscing tristique risus nec feugiat the aenean bcom here
+            {description}
           </p>
         </div>
 

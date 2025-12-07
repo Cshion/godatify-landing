@@ -174,6 +174,8 @@ export interface SectionLabels {
     };
     testimonials: {
         title: string;
+        subtitle: string;
+        description: string;
     };
     clients: {
         title: string;
