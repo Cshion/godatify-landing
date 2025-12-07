@@ -89,7 +89,6 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
               <div className={styles.dropdown}>
                 <button className={`${styles.navLink} ${styles.dropdownToggle}`}>
                   {servicesLabel}
-                  <i className="fas fa-chevron-down ml-1 text-xs"></i>
                 </button>
                 <div className={styles.dropdownMenu}>
                   {servicesNav.map((service) => (

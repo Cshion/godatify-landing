@@ -95,7 +95,7 @@ export default function Footer({ companyInfo, footerLinks, socialLinks, labels }
 
         {/* Bottom Bar */}
         <div className={styles.footerBottom}>
-          <p className={styles.footerCopyright}>
+          <p className={styles.footerCopyright} suppressHydrationWarning>
             &copy; {currentYear} {companyInfo.name}. Todos los derechos reservados.
           </p>
         </div>

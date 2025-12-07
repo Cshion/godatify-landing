@@ -68,7 +68,7 @@ export const COMPANY_INFO: CompanyInfo = {
     logo: {
         url: '/images/logo.png',
         alt: 'Datify Logo',
-        width: 120,
-        height: 40
+        width: 180,
+        height: 60
     }
 };

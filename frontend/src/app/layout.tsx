@@ -30,7 +30,7 @@ export default async function RootLayout({
     api.home.getSectionLabels()
   ]);
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/images/favicon.png" type="image/png" />
         <link
