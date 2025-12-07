@@ -71,7 +71,7 @@ export default function BlogList({ initialPosts }: BlogListProps) {
     const gridPosts = posts.slice(1);
 
     return (
-        <section className="container mx-auto px-6 relative z-20 pb-20 mt-24">
+        <section className="container mx-auto px-6 relative z-20 pb-20 mt-24" style={{ paddingTop: '2em' }}>
             {/* Featured Post */}
             <FeaturedPost post={featuredPost} />
 
