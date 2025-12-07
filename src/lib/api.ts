@@ -23,7 +23,9 @@ import { TESTIMONIALS_CONTENT } from '@/data/testimonials';
 import { COMPANY_INFO, SOCIAL_LINKS, NAV_LINKS, FOOTER_LINKS } from '@/data/company';
 import { HERO_CONTENT, STATS, VIDEO_CONFIG, CLIENTS_CONTENT, CAROUSEL_CONFIG, SECTION_LABELS } from '@/data/home';
 import { NOSOTROS_CONTENT } from '@/data/about';
-import { CONTACT_CONTENT } from '@/data/contact'; // Added import for CONTACT_CONTENT
+import { CONTACT_CONTENT } from '@/data/contact';
+import { BLOG_POSTS } from '@/data/blog';
+import { BlogPost } from '@/types';
 
 // Simulate API delay to ensure components handle async data correctly (optional, can be removed for production build)
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -117,4 +119,15 @@ export const api = {
     contact: {
         getPageContent: async () => CONTACT_CONTENT,
     },
+    blog: {
+        getAll: async (): Promise<BlogPost[]> => {
+            return BLOG_POSTS;
+        },
+        getBySlug: async (slug: string): Promise<BlogPost | undefined> => {
+            return BLOG_POSTS.find(p => p.slug === slug);
+        },
+        getFeatured: async (): Promise<BlogPost[]> => {
+            return BLOG_POSTS.filter(p => p.featured);
+        }
+    }
 };

@@ -25,8 +25,10 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // Check if we are on a case detail page (starts with /casos/ but is not just /casos)
+  // Check if we are on a case detail page or blog detail page
   const isCaseDetail = pathname.startsWith('/casos/') && pathname !== '/casos';
+  const isBlogDetail = pathname.startsWith('/blog/') && pathname !== '/blog';
+  const shouldForceScrolled = isCaseDetail || isBlogDetail;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,8 +39,8 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Force scrolled style on case detail pages or when actually scrolled
-  const headerClass = `${styles.header} ${isScrolled || isCaseDetail ? styles.scrolled : ''}`;
+  // Force scrolled style on case/blog detail pages or when actually scrolled
+  const headerClass = `${styles.header} ${isScrolled || shouldForceScrolled ? styles.scrolled : ''}`;
 
   return (
     <>
@@ -56,7 +58,7 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
                   className={`${styles.logoImg} transition-opacity duration-300`}
                   style={{
                     objectFit: 'contain',
-                    opacity: (isScrolled || isCaseDetail) ? 0 : 1
+                    opacity: (isScrolled || shouldForceScrolled) ? 0 : 1
                   }}
                   priority
                 />
@@ -68,7 +70,7 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
                   className={`${styles.logoImg} transition-opacity duration-300`}
                   style={{
                     objectFit: 'contain',
-                    opacity: (isScrolled || isCaseDetail) ? 1 : 0
+                    opacity: (isScrolled || shouldForceScrolled) ? 1 : 0
                   }}
                   priority
                 />

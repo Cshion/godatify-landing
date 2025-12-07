@@ -284,3 +284,21 @@ export interface CasesPageContent {
 }
 
 
+// Blog Types
+export interface BlogPost {
+    id: string;
+    title: string;
+    excerpt: string;
+    content: string; // HTML or Markdown
+    author: {
+        name: string;
+        role: string;
+        image?: string;
+    };
+    date: string;
+    readingTime: string;
+    image: string; // Featured Image
+    tags: string[];
+    slug: string;
+    featured?: boolean;
+}
