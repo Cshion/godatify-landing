@@ -14,6 +14,13 @@ interface Props {
     params: Promise<{ slug: string }>;
 }
 
+export async function generateStaticParams() {
+    const posts = await api.blog.getAll();
+    return posts.map((post) => ({
+        slug: post.slug,
+    }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
     const post = await api.blog.getBySlug(slug);
@@ -97,6 +104,64 @@ export default async function BlogPostPage({ params }: Props) {
                         priority
                     />
                 </div>
+
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "BlogPosting",
+                            headline: post.title,
+                            description: post.excerpt,
+                            image: post.image,
+                            datePublished: post.date,
+                            author: {
+                                "@type": "Person",
+                                name: post.author.name,
+                                image: post.author.image,
+                                jobTitle: post.author.role
+                            },
+                            publisher: {
+                                "@type": "Organization",
+                                name: "Datify",
+                                logo: {
+                                    "@type": "ImageObject",
+                                    url: "https://godatify.com/images/logo.png"
+                                }
+                            },
+                            mainEntityOfPage: {
+                                "@type": "WebPage",
+                                "@id": `https://godatify.com/blog/${slug}`
+                            },
+                            keywords: post.tags.join(", ")
+                        })
+                    }}
+                />
+
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "BreadcrumbList",
+                            "itemListElement": [{
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Inicio",
+                                "item": "https://godatify.com/"
+                            }, {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "Blog",
+                                "item": "https://godatify.com/blog"
+                            }, {
+                                "@type": "ListItem",
+                                "position": 3,
+                                "name": post.title
+                            }]
+                        })
+                    }}
+                />
 
                 <div
                     className={styles.content}
