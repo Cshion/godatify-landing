@@ -95,6 +95,11 @@ export default {
                 await seedCollection('api::client.client', clientsData);
                 const allClients = await strapi.documents('api::client.client' as any).findMany();
 
+                // Authors
+                const authorsData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'authors.json'), 'utf-8'));
+                await seedCollection('api::author.author', authorsData);
+                const allAuthors = await strapi.documents('api::author.author' as any).findMany();
+
                 // Industries (Page + Collection)
                 const industriesData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'industries.json'), 'utf-8'));
                 if (industriesData.page) {
@@ -135,14 +140,18 @@ export default {
             try {
                 if (fs.existsSync(MOCK_DATA_PATH)) {
                     // Blog Posts
+                    const allAuthors = await strapi.documents('api::author.author' as any).findMany();
                     const blogPosts = JSON.parse(fs.readFileSync(path.join(MOCK_DATA_PATH, 'blog-posts.json'), 'utf-8'));
-                    const publishedBlogPosts = blogPosts.map((p: any) => ({
-                        ...p,
-                        id: undefined,
-                        authorName: p.author?.name,
-                        authorRole: p.author?.role,
-                        coverImageUrl: p.image
-                    }));
+                    const publishedBlogPosts = blogPosts.map((p: any) => {
+                        const authorName = p.author?.name;
+                        const relatedAuthor = allAuthors.find((a: any) => a.name === authorName);
+                        return {
+                            ...p,
+                            id: undefined,
+                            author: relatedAuthor ? relatedAuthor.documentId : undefined,
+                            coverImageUrl: p.image
+                        };
+                    });
                     await seedCollection('api::blog-post.blog-post', publishedBlogPosts);
 
                     // Cases (Link Relations)

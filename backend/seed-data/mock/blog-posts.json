@@ -3,7 +3,36 @@
         "title": "El Impacto de la IA Generativa en la Toma de Decisiones Empresariales",
         "slug": "impacto-ia-generativa-decisiones",
         "excerpt": "Descubre cómo la inteligencia artificial generativa está redefiniendo las estrategias corporativas...",
-        "content": "<p>La inteligencia artificial generativa ha pasado de ser una curiosidad tecnológica...</p>",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "La inteligencia artificial generativa ha pasado de ser una curiosidad tecnológica a convertirse en el motor de una nueva revolución industrial. En este artículo exploramos cómo los líderes empresariales pueden aprovechar esta tecnología para tomar decisiones más informadas, rápidas y precisas."
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 2,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "¿Qué es la IA Generativa?"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "A diferencia de la IA tradicional que analiza datos para predecir resultados, la IA generativa crea nuevo contenido. Esto abre un abanico de posibilidades para la simulación de escenarios, la creación de prototipos y la personalización a escala."
+                    }
+                ]
+            }
+        ],
         "date": "2024-11-20",
         "readingTime": "10 min",
         "featured": true,
@@ -11,13 +40,45 @@
             "Inteligencia Artificial",
             "Estrategia",
             "Innovación"
-        ]
+        ],
+        "author": {
+            "name": "Maria Rodriguez"
+        }
     },
     {
         "title": "Cloud Computing: ¿Nube Pública, Privada o Híbrida?",
         "slug": "guia-cloud-hibrida-publica-privada",
         "excerpt": "Una guía esencial para líderes de TI que buscan optimizar costos...",
-        "content": "<p>La elección de la infraestructura en la nube es una de las decisiones más críticas...</p>",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "La elección de la infraestructura en la nube es una de las decisiones más críticas que enfrentan los CTOs hoy en día. No se trata solo de costos, sino de soberanía de datos, latencia y escalabilidad."
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 2,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Nube Pública vs Privada"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Mientras la nube pública ofrece elasticidad infinita, la privada garantiza control total. La tendencia actual apunta hacia arquitecturas híbridas que combinan lo mejor de ambos mundos, permitiendo cargas de trabajo flexibles sin comprometer datos sensibles."
+                    }
+                ]
+            }
+        ],
         "date": "2024-11-15",
         "readingTime": "7 min",
         "featured": false,
@@ -25,6 +86,69 @@
             "Cloud Computing",
             "Infraestructura",
             "Costos"
+        ],
+        "author": {
+            "name": "Carlos Gomez"
+        }
+    },
+    {
+        "title": "La Importancia del Gobierno de Datos en la Era de la IA",
+        "slug": "importancia-gobierno-datos-ia",
+        "excerpt": "Sin datos de calidad, la IA es solo ruido. Aprende por qué el gobierno de datos es el cimiento de cualquier estrategia...",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "La calidad de los datos es fundamental para el éxito de cualquier iniciativa de IA. Sin un gobierno de datos robusto, las organizaciones corren el riesgo de alimentar sus modelos con información sesgada, incompleta o inexacta."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+        "coverImageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+        "date": "2024-12-05",
+        "readingTime": "8 min",
+        "featured": false,
+        "author": {
+            "name": "Maria Rodriguez",
+            "role": "Data Architect"
+        },
+        "tags": [
+            "Gobierno de Datos",
+            "Calidad",
+            "Estrategia"
+        ]
+    },
+    {
+        "title": "Modern Data Stack: ¿Por qué migrar a la nube?",
+        "slug": "modern-data-stack-migracion-nube",
+        "excerpt": "Exploramos los beneficios de escalabilidad, costos y flexibilidad que ofrece una arquitectura de datos moderna en la nube...",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Migrar a la nube no es solo una actualización tecnológica, es un cambio de paradigma. Permite escalar recursos bajo demanda, pagar solo por lo que se usa y acceder a herramientas de análisis de vanguardia como BigQuery o Snowflake."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000",
+        "coverImageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000",
+        "date": "2024-12-01",
+        "readingTime": "12 min",
+        "featured": false,
+        "author": {
+            "name": "Carlos Gomez",
+            "role": "Cloud Engineer"
+        },
+        "tags": [
+            "Cloud Computing",
+            "Arquitectura",
+            "Big Query"
         ]
     }
 ]

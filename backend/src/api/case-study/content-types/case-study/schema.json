@@ -24,7 +24,8 @@
             "type": "relation",
             "relation": "manyToOne",
             "target": "api::industry.industry",
-            "inversedBy": "case_studies"
+            "inversedBy": "case_studies",
+            "required": true
         },
         "client": {
             "type": "relation",

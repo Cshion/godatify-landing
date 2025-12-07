@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Maria Rodriguez",
+        "role": "Data Architect",
+        "bio": "Expert in Data Governance and Enterprise Architecture.",
+        "avatarUrl": "https://ui-avatars.com/api/?name=Maria+Rodriguez&background=random"
+    },
+    {
+        "name": "Carlos Gomez",
+        "role": "Cloud Engineer",
+        "bio": "Specialist in Cloud Migrations and Modern Data Stacks.",
+        "avatarUrl": "https://ui-avatars.com/api/?name=Carlos+Gomez&background=random"
+    }
+]
