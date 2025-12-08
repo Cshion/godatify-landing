@@ -397,19 +397,49 @@ export default {
                     const allClients = await strapi.documents('api::client.client' as any).findMany();
                     const allIndustries = await strapi.documents('api::industry.industry' as any).findMany();
 
+                    // REPAIR & SEED: Upsert all cases (ensure all exist and are up to date)
+                    console.log('[BOOTSTRAP] Running Case Study Upsert...');
                     const cases = JSON.parse(fs.readFileSync(path.join(MOCK_DATA_PATH, 'cases.json'), 'utf-8'));
-                    const preparedCases = cases.map((c: any) => {
-                        const relatedClient = allClients.find((cl: any) => cl.name === (c.client?.name || c.client));
-                        const relatedIndustry = allIndustries.find((ind: any) => ind.title.includes(c.industry) || ind.slug === c.industry.toLowerCase());
 
-                        return {
-                            ...c,
+                    for (const caseData of cases) {
+                        const existing = await strapi.documents('api::case-study.case-study' as any).findMany({
+                            filters: { slug: caseData.slug }
+                        });
+
+                        // Prepare relation IDs
+                        const relatedClient = allClients.find((cl: any) => cl.name === (caseData.client?.name || caseData.client));
+                        const relatedIndustry = allIndustries.find((ind: any) => ind.title.includes(caseData.industry) || ind.slug === caseData.industry.toLowerCase());
+
+                        const payload = {
+                            ...caseData,
                             client: relatedClient ? relatedClient.documentId : undefined,
                             industry: relatedIndustry ? relatedIndustry.documentId : undefined,
-                            testimonial: undefined, // simplify logic for now
+                            testimonial: undefined
                         };
-                    });
-                    await seedCollection('api::case-study.case-study', preparedCases);
+
+                        if (existing && existing.length > 0) {
+                            // Update
+                            const dbCase = existing[0];
+                            if (dbCase.mainImageUrl !== caseData.mainImageUrl) {
+                                console.log(`[BOOTSTRAP] Updating case: ${caseData.slug}`);
+                                await strapi.documents('api::case-study.case-study' as any).update({
+                                    documentId: dbCase.documentId,
+                                    data: { mainImageUrl: caseData.mainImageUrl },
+                                    status: dbCase.publishedAt ? 'published' : 'draft'
+                                });
+                            }
+                        } else {
+                            // Create
+                            console.log(`[BOOTSTRAP] Creating missing case: ${caseData.slug}`);
+                            const entry = await strapi.documents('api::case-study.case-study' as any).create({
+                                data: payload,
+                                status: 'draft'
+                            });
+                            if (entry && entry.documentId) {
+                                await strapi.documents('api::case-study.case-study' as any).publish({ documentId: entry.documentId });
+                            }
+                        }
+                    }
                 }
             } catch (error) {
                 console.error('[SEED] Error seeding Mock Data:', error);
