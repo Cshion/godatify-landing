@@ -15,6 +15,8 @@ import {
     FooterLinks,
     CasesPageContent
 } from '@/types';
+import { gql } from 'graphql-request';
+import { graphQLClient } from './graphql';
 
 import { SERVICES_CONTENT, SERVICES_NAV } from '@/data/services';
 import { CASES_CONTENT, CASES_PAGE_CONTENT } from '@/data/cases';
@@ -33,7 +35,49 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 export const api = {
     company: {
         getInfo: async (): Promise<CompanyInfo> => {
-            return COMPANY_INFO;
+            try {
+                const query = gql`
+                    query GetCompanyInfo {
+                        companyInfo {
+                            name
+                            description
+                            email
+                            website
+                            logo {
+                                url
+                                alternativeText
+                                width
+                                height
+                            }
+                        }
+                    }
+                `;
+                const data: any = await graphQLClient.request(query);
+                const info = data?.companyInfo;
+
+                if (!info) {
+                    console.warn('⚠️ No company info returned from GraphQL, using fallback.');
+                    return COMPANY_INFO;
+                }
+
+                console.log('✅ GraphQL Data Received:', info.name);
+
+                return {
+                    name: info.name,
+                    description: info.description,
+                    email: info.email,
+                    website: info.website,
+                    logo: {
+                        url: info.logo?.url || '/images/logo.png',
+                        alt: info.logo?.alternativeText || 'Datify Logo',
+                        width: info.logo?.width || 180,
+                        height: info.logo?.height || 60
+                    }
+                };
+            } catch (error) {
+                console.error('Failed to fetch company info from API, falling back to static data:', error);
+                return COMPANY_INFO;
+            }
         },
         getSocialLinks: async (): Promise<SocialLink[]> => {
             return SOCIAL_LINKS;

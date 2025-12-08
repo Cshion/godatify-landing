@@ -65,6 +65,43 @@ export default {
             }
         };
 
+        const seedPermissions = async () => {
+            try {
+                // Use Document Service to find the role
+                const publicRole = await strapi.documents('plugin::users-permissions.role').findFirst({
+                    filters: { type: 'public' },
+                    populate: ['permissions']
+                }) as any;
+
+                if (publicRole) {
+                    console.log('[SEED] Configuring Public Role permissions...');
+                    const roleService = strapi.plugin('users-permissions').service('role');
+
+                    const permissions = {
+                        ...publicRole.permissions,
+                        'api::company-info': { controllers: { 'company-info': { find: { enabled: true } } } },
+                        'api::service': { controllers: { service: { find: { enabled: true }, findOne: { enabled: true } } } },
+                        'api::case-study': { controllers: { 'case-study': { find: { enabled: true }, findOne: { enabled: true } } } },
+                        'api::industry': { controllers: { industry: { find: { enabled: true }, findOne: { enabled: true } } } },
+                        'api::testimonial': { controllers: { testimonial: { find: { enabled: true } } } },
+                        'api::client': { controllers: { client: { find: { enabled: true } } } },
+                        'api::social-link': { controllers: { 'social-link': { find: { enabled: true } } } },
+                        'api::blog-post': { controllers: { 'blog-post': { find: { enabled: true }, findOne: { enabled: true } } } },
+                        'api::author': { controllers: { author: { find: { enabled: true }, findOne: { enabled: true } } } },
+                        'api::home-page': { controllers: { 'home-page': { find: { enabled: true } } } },
+                        'api::about-page': { controllers: { 'about-page': { find: { enabled: true } } } },
+                        'api::contact-page': { controllers: { 'contact-page': { find: { enabled: true } } } },
+                        'api::industries-page': { controllers: { 'industries-page': { find: { enabled: true } } } },
+                    };
+
+                    await roleService.updateRole(publicRole.id, { permissions });
+                    console.log('[SEED] Public Role permissions configured successfully.');
+                }
+            } catch (error) {
+                console.error('[SEED] Error configuring permissions:', error);
+            }
+        };
+
         // 1. Seed Master Data (Always)
         try {
             if (fs.existsSync(MASTER_DATA_PATH)) {
@@ -171,5 +208,8 @@ export default {
                 console.error('[SEED] Error seeding Mock Data:', error);
             }
         }
+
+        // 3. Seed Permissions (Always, to ensure Public access)
+        await seedPermissions();
     },
 };
