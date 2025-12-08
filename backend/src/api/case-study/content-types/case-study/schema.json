@@ -64,6 +64,15 @@
             "type": "relation",
             "relation": "oneToOne",
             "target": "api::testimonial.testimonial"
+        },
+        "industryName": {
+            "type": "string"
+        },
+        "clientName": {
+            "type": "string"
+        },
+        "clientLogoUrl": {
+            "type": "string"
         }
     }
 }

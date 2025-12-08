@@ -18,7 +18,7 @@ export default function ServiceTechStack({ techStack }: ServiceTechStackProps) {
                 </div>
 
                 <div className={styles.grid}>
-                    {techStack.map((tech, idx) => (
+                    {(techStack || []).map((tech, idx) => (
                         <div key={idx} className={styles.techCard}>
                             <div className={styles.iconWrapper}>
                                 <i className={`fas fa-${tech.icon} ${styles.icon}`}></i>

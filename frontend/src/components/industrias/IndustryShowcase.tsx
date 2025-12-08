@@ -1,33 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { api } from '@/lib/api';
 import { Industry, CaseStudy } from '@/types';
 import styles from './IndustryShowcase.module.css';
 
 
 
-export default function IndustryShowcase() {
-    const [sectors, setSectors] = useState<Industry[]>([]);
-    const [cases, setCases] = useState<CaseStudy[]>([]);
-    const [activeSector, setActiveSector] = useState<Industry | null>(null);
+export default function IndustryShowcase({ sectors, cases }: { sectors: Industry[], cases: CaseStudy[] }) {
+    // Initial state set from props
+    const [activeSector, setActiveSector] = useState<Industry | null>(sectors.length > 0 ? sectors[0] : null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const [sectorsData, casesData] = await Promise.all([
-                api.industries.getAll(),
-                api.cases.getAll()
-            ]);
-            setSectors(sectorsData);
-            setCases(casesData);
-            if (sectorsData.length > 0) {
-                setActiveSector(sectorsData[0]);
-            }
-        };
-        fetchData();
-    }, []);
+    // No useEffect needed for fetching data anymore!
 
     if (!activeSector) return null;
 

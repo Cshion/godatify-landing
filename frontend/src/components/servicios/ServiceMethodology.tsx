@@ -19,7 +19,7 @@ export default function ServiceMethodology({ steps }: ServiceMethodologyProps) {
                 </div>
 
                 <div className={styles.stepsGrid}>
-                    {steps.map((step, idx) => (
+                    {(steps || []).map((step, idx) => (
                         <div key={idx} className={styles.stepCard}>
                             <div className={styles.stepNumber}>0{idx + 1}</div>
                             <h3 className={styles.stepTitle}>{step.title}</h3>

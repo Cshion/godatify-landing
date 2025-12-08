@@ -1,8 +1,5 @@
-import { api } from '@/lib/api';
-import PageHero from '@/components/common/PageHero';
-export default async function CasesHero() {
-    const { hero } = await api.cases.getPageContent();
-
+export default function CasesHero({ hero }: { hero: any }) {
+    if (!hero) return null;
     return (
         <PageHero
             title={hero.title}

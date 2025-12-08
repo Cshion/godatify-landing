@@ -10,7 +10,7 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-    const cases = await api.cases.getAll();
+    const { cases } = await api.cases.getPageData();
     return cases.map((caseStudy) => ({
         slug: caseStudy.slug,
     }));
@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { slug } = await params;
-    const caseStudy = await api.cases.getBySlug(slug);
+    const { caseStudy } = await api.cases.getDetailPageData(slug);
 
     if (!caseStudy) {
         return {
@@ -34,16 +34,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CaseDetailPage({ params }: PageProps) {
     const { slug } = await params;
-    const caseStudy = await api.cases.getBySlug(slug);
+    const { caseStudy, relatedCases } = await api.cases.getDetailPageData(slug);
 
     if (!caseStudy) {
         notFound();
     }
-
-    const allCases = await api.cases.getAll();
-    const relatedCases = allCases
-        .filter(c => c.slug !== caseStudy.slug)
-        .slice(0, 3);
 
     return (
         <main>

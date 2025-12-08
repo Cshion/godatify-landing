@@ -9,15 +9,15 @@ import { Metadata } from 'next';
 
 // Generate static params for all services
 export async function generateStaticParams() {
-    const services = await api.services.getAll();
-    return services.map((service) => ({
-        slug: service.id,
+    const { servicesNav } = await api.company.getGlobalData();
+    return servicesNav.map((service) => ({
+        slug: service.slug,
     }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
-    const service = await api.services.getById(slug);
+    const { service } = await api.services.getDetailPageData(slug);
 
     if (!service) {
         return {
@@ -33,20 +33,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const service = await api.services.getById(slug);
+    const { service, relatedCases } = await api.services.getDetailPageData(slug);
 
     if (!service) {
         notFound();
     }
-
-    // Filter cases related to this service
-    // We match cases where case.industry equals service.title
-    // Filter cases related to this service
-    // We match cases where case.industry equals service.title
-    const allCases = await api.cases.getAll();
-    const relatedCases = allCases.filter(
-        (c) => c.industry === service.title
-    );
 
     return (
         <main>

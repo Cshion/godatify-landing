@@ -28,6 +28,7 @@ export interface ServiceTech {
 export interface ServiceNav {
     id: string;
     name: string;
+    slug?: string;
 }
 
 // Service Type
@@ -38,6 +39,7 @@ export interface Service {
     description: string;
     icon: string;
     image: string;
+    slug?: string;
     phrases?: string[];
     backgroundImage?: string; // Added for hero background
     features: ServiceFeature[];

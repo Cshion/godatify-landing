@@ -92,7 +92,11 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
                 </button>
                 <div className={styles.dropdownMenu}>
                   {servicesNav.map((service) => (
-                    <Link key={service.id} href={`/servicios/${service.id}`} className={styles.dropdownItem}>
+                    <Link
+                      key={service.slug}
+                      href={`/servicios/${service.slug}`}
+                      className={styles.dropdownItem}
+                    >
                       {service.name}
                     </Link>
                   ))}

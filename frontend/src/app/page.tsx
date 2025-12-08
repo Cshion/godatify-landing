@@ -8,32 +8,24 @@ import ScrollReveal from '@/components/ui/ScrollReveal';
 import { api } from '@/lib/api';
 
 export default async function Home() {
-  const [
-    heroContent,
+  // Fetch ALL Home Page data (Dynamic + Static) in a single "View-Model" request
+  // This adheres to the GraphQL philosophy: Ask for exactly what you need for the view, once.
+  const {
+    hero,
     stats,
     videoConfig,
+    carouselConfig,
+    sectionLabels,
     clients,
     services,
     cases,
-    testimonials,
-    carouselConfig,
-    sectionLabels
-  ] = await Promise.all([
-    api.home.getHeroContent(),
-    api.home.getStats(),
-    api.home.getVideoConfig(),
-    api.home.getClients(),
-    api.services.getAll(),
-    api.cases.getAll(),
-    api.testimonials.getAll(),
-    api.home.getCarouselConfig(),
-    api.home.getSectionLabels()
-  ]);
+    testimonials
+  } = await api.home.getData();
 
   return (
     <>
       <main>
-        <Hero heroContent={heroContent} />
+        <Hero heroContent={hero} />
         <Nosotros
           stats={stats}
           videoConfig={videoConfig}

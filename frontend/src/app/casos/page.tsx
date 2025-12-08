@@ -8,12 +8,14 @@ export const metadata: Metadata = {
     description: 'Descubre cómo hemos ayudado a empresas líderes a transformar sus datos en resultados de negocio tangibles.',
 };
 
+export const revalidate = 3600; // Revalidate every hour
+
 export default async function CasosPage() {
-    const cases = await api.cases.getAll();
+    const { hero, cases } = await api.cases.getPageData();
 
     return (
         <main>
-            <CasesHero />
+            <CasesHero hero={hero} />
             <CasesGrid cases={cases} />
         </main>
     );

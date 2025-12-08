@@ -3,12 +3,95 @@ import type { Core } from '@strapi/strapi';
 import fs from 'fs';
 import path from 'path';
 
+const MEDIA_FIELDS_MAP = {
+    'api::case-study.case-study': [{ media: 'mainImage', url: 'mainImageUrl' }],
+    'api::industry.industry': [{ media: 'image', url: 'imageUrl' }],
+    'api::testimonial.testimonial': [{ media: 'authorImage', url: 'authorImageUrl' }],
+    'api::client.client': [{ media: 'logo', url: 'logoUrl' }],
+    'api::service.service': [{ media: 'bgImage', url: 'bgImageUrl' }],
+    'api::company-info.company-info': [{ media: 'logo', url: 'logoUrl' }],
+};
+
+const RELATION_FIELDS_MAP = {
+    'api::case-study.case-study': [
+        { relation: 'client', sourceField: 'logoUrl', targetField: 'clientLogoUrl' },
+        { relation: 'client', sourceField: 'name', targetField: 'clientName' },
+        { relation: 'industry', sourceField: 'title', targetField: 'industryName' }
+    ]
+};
+
 export default {
     /**
      * An asynchronous register function that runs before
      * your application is initialized.
      */
-    register({ strapi }: { strapi: Core.Strapi }) { },
+    register({ strapi }: { strapi: Core.Strapi }) {
+        // Subscribe to lifecycle events for automatic URL updates
+        strapi.db.lifecycles.subscribe(async (event) => {
+            const { model, action, params } = event;
+
+            // 1. Media URL Sync
+            const mediaConfig = MEDIA_FIELDS_MAP[model.uid as keyof typeof MEDIA_FIELDS_MAP];
+            if (mediaConfig && ['beforeCreate', 'beforeUpdate'].includes(action)) {
+                for (const field of mediaConfig) {
+                    const mediaId = params.data[field.media];
+                    if (mediaId) {
+                        try {
+                            const file = await strapi.db.query('plugin::upload.file').findOne({ where: { id: mediaId } });
+                            if (file && file.url) {
+                                params.data[field.url] = file.url;
+                            }
+                        } catch (error) {
+                            console.error(`[LIFECYCLE] Error syncing Media URL for ${model.uid}:`, error);
+                        }
+                    }
+                }
+            }
+
+            // 2. Relation Field Sync (Denormalization)
+            const relationConfig = RELATION_FIELDS_MAP[model.uid as keyof typeof RELATION_FIELDS_MAP];
+            if (relationConfig && ['beforeCreate', 'beforeUpdate'].includes(action)) {
+                for (const config of relationConfig) {
+                    // Strapi params.data[relation] might be an ID or an object depending on context.
+                    // In `beforeCreate/Update`, it's usually the ID connects.
+                    // However, we need to fetch the related entity to get the sourceField (name/logoUrl).
+                    // This is expensive in a lifecycle loop but necessary for consistency.
+                    // We only do it if the relation is being updated.
+
+                    const relationInput = params.data[config.relation];
+                    // If relationInput is null/undefined, we might want to clear the target field?
+                    // Strategy: Only update if relation is present. Backfill handles the rest.
+
+                    if (relationInput) {
+                        // relationInput could be: 5, { id: 5 }, { connect: [5] }, etc.
+                        // Simplify: We assume standard ID or simple object.
+                        // Ideally we use strapi.documents to fetch the related item.
+                        // We need to know the UID of the related item. 
+                        // We can get it from the model attributes.
+                        const schema = strapi.contentTypes[model.uid as any];
+                        const attribute = schema.attributes[config.relation];
+                        const targetUid = attribute.target;
+
+                        if (targetUid) {
+                            try {
+                                // Extract ID (simplified assumption: input is ID or { id: ID })
+                                let idToFetch = typeof relationInput === 'object' ? (relationInput.id || relationInput.connect?.[0]?.id || relationInput.connect?.[0]) : relationInput;
+
+                                if (idToFetch) {
+                                    const relatedEntity = await strapi.documents(targetUid).findOne({ documentId: idToFetch } as any);
+                                    if (relatedEntity && relatedEntity[config.sourceField]) {
+                                        params.data[config.targetField] = relatedEntity[config.sourceField];
+                                    }
+                                }
+                            } catch (error) {
+                                // console.error(`[LIFECYCLE] Error syncing Relation for ${model.uid}:`, error);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    },
 
     /**
      * An asynchronous bootstrap function that runs before
@@ -18,6 +101,67 @@ export default {
         console.log('[BOOTSTRAP] Starting bootstrap...');
         const isDev = process.env.NODE_ENV === 'development';
         console.log(`[BOOTSTRAP] Environment: ${process.env.NODE_ENV}, isDev: ${isDev} `);
+
+        // --- BACKFILL SYNC (Media) ---
+        console.log('[BOOTSTRAP] Running Media URL Sync...');
+        for (const [uid, config] of Object.entries(MEDIA_FIELDS_MAP)) {
+            const fieldsToPopulate = config.map(c => c.media);
+            const entries = await strapi.documents(uid as any).findMany({ populate: fieldsToPopulate, status: 'draft' });
+            let updatedCount = 0;
+            for (const entry of entries) {
+                let needsUpdate = false;
+                const updateData: any = {};
+                for (const field of config) {
+                    const media = entry[field.media];
+                    const currentUrl = entry[field.url];
+                    if (media && media.url && currentUrl !== media.url) {
+                        updateData[field.url] = media.url;
+                        needsUpdate = true;
+                    }
+                }
+                if (needsUpdate) {
+                    await strapi.documents(uid as any).update({ documentId: entry.documentId, data: updateData, status: entry.publishedAt ? 'published' : 'draft' });
+                    updatedCount++;
+                }
+            }
+            if (updatedCount > 0) console.log(`[SYNC] Updated ${updatedCount} Media fields for ${uid}`);
+        }
+
+        // --- BACKFILL SYNC (Relations) ---
+        console.log('[BOOTSTRAP] Running Relation Field Sync (Denormalization)...');
+        for (const [uid, config] of Object.entries(RELATION_FIELDS_MAP)) {
+            // Populate the relation to read the source field
+            const relationsToPopulate = [...new Set(config.map(c => c.relation))];
+            const entries = await strapi.documents(uid as any).findMany({ populate: relationsToPopulate, status: 'draft' });
+
+            let updatedCount = 0;
+            for (const entry of entries) {
+                let needsUpdate = false;
+                const updateData: any = {};
+
+                for (const fieldConfig of config) {
+                    const relatedEntity = entry[fieldConfig.relation];
+                    const currentVal = entry[fieldConfig.targetField];
+
+                    // Optimization: Only update if related entity exists AND value is different/missing
+                    if (relatedEntity) {
+                        const sourceVal = relatedEntity[fieldConfig.sourceField];
+                        if (sourceVal && sourceVal !== currentVal) {
+                            updateData[fieldConfig.targetField] = sourceVal;
+                            needsUpdate = true;
+                        }
+                    }
+                }
+
+                if (needsUpdate) {
+                    await strapi.documents(uid as any).update({ documentId: entry.documentId, data: updateData, status: entry.publishedAt ? 'published' : 'draft' });
+                    updatedCount++;
+                }
+            }
+            if (updatedCount > 0) console.log(`[SYNC] Updated ${updatedCount} Relation fields for ${uid}`);
+        }
+        console.log('[BOOTSTRAP] Sync complete.');
+
 
         // Seed paths
         const MOCK_DATA_PATH = path.join(process.cwd(), 'seed-data', 'mock');

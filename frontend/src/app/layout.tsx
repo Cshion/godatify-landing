@@ -21,14 +21,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [navLinks, socialLinks, servicesNav, companyInfo, footerLinks, sectionLabels] = await Promise.all([
-    api.company.getNavLinks(),
-    api.company.getSocialLinks(),
-    api.services.getNav(),
-    api.company.getInfo(),
-    api.company.getFooterLinks(),
-    api.home.getSectionLabels()
-  ]);
+  const globalData = await api.company.getGlobalData();
+
+  const { navLinks, socialLinks, companyInfo, servicesNav, footerLinks, sectionLabels } = globalData;
   return (
     <html lang="es" suppressHydrationWarning>
       <head>

@@ -14,7 +14,7 @@ export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
         <section className={styles.section}>
             <div className={styles.container}>
                 <div className={styles.grid}>
-                    {features.map((feature, idx) => (
+                    {(features || []).map((feature, idx) => (
                         <div key={idx} className={styles.card}>
                             <div className={styles.iconWrapper}>
                                 <span className={styles.number}>0{idx + 1}</span>

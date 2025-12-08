@@ -2,7 +2,7 @@
     {
         "slug": "kpis-comerciales",
         "title": "KPIs Comerciales",
-        "industry": "Business Intelligence",
+        "industry": "Industria Cervecera",
         "description": "Dashboard de KPIs comerciales para seguimiento en tiempo real...",
         "challenge": "La falta de visibilidad en tiempo real sobre las métricas comerciales...",
         "solution": "Implementación de un Dashboard interactivo en Power BI...",
@@ -23,7 +23,7 @@
     {
         "slug": "sell-in-out",
         "title": "Sell In y Sell Out",
-        "industry": "Business Analytics",
+        "industry": "Industria Logística",
         "description": "Análisis integral de canales de distribución...",
         "challenge": "Desconexión entre lo que se vendía a los distribuidores...",
         "solution": "Integración de datos de inventarios de distribuidores...",

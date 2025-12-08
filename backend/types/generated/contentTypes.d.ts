@@ -566,12 +566,15 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
   attributes: {
     challenge: Schema.Attribute.Text;
     client: Schema.Attribute.Relation<'manyToOne', 'api::client.client'>;
+    clientLogoUrl: Schema.Attribute.String;
+    clientName: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
     industry: Schema.Attribute.Relation<'manyToOne', 'api::industry.industry'> &
       Schema.Attribute.Required;
+    industryName: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -659,6 +662,7 @@ export interface ApiCompanyInfoCompanyInfo extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     logo: Schema.Attribute.Media<'images'>;
+    logoUrl: Schema.Attribute.String;
     name: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Datify'>;

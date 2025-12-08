@@ -17,6 +17,9 @@
             "required": true,
             "default": "Datify"
         },
+        "logoUrl": {
+            "type": "string"
+        },
         "description": {
             "type": "text"
         },

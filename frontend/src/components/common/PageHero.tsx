@@ -13,8 +13,9 @@ interface PageHeroProps {
 export default function PageHero({ title, subtitle, backgroundImage = '/images/hero-bg.jpg', phrases = [] }: PageHeroProps) {
     const sectionRef = useRef<HTMLElement>(null);
     // Start with the first phrase if available to avoid "Title -> Phrase -> Title" jump
-    const [currentText, setCurrentText] = useState(phrases.length > 0 ? phrases[0] : title);
-    const [isCycling, setIsCycling] = useState(phrases.length > 0);
+    const safePhrases = phrases || [];
+    const [currentText, setCurrentText] = useState(safePhrases.length > 0 ? safePhrases[0] : title);
+    const [isCycling, setIsCycling] = useState(safePhrases.length > 0);
 
     // Reveal Animation
     useEffect(() => {
