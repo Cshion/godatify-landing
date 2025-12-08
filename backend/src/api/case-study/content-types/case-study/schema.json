@@ -69,31 +69,76 @@
             "target": "api::testimonial.testimonial"
         },
         "industryName": {
-            "type": "string"
+            "type": "string",
+            "pluginOptions": {
+                "content-manager": {
+                    "visible": false
+                }
+            }
         },
         "clientName": {
-            "type": "string"
+            "type": "string",
+            "pluginOptions": {
+                "content-manager": {
+                    "visible": false
+                }
+            }
         },
         "clientLogoUrl": {
-            "type": "string"
+            "type": "string",
+            "pluginOptions": {
+                "content-manager": {
+                    "visible": false
+                }
+            }
         },
         "clientWebsite": {
-            "type": "string"
+            "type": "string",
+            "pluginOptions": {
+                "content-manager": {
+                    "visible": false
+                }
+            }
         },
         "testimonialQuote": {
-            "type": "text"
+            "type": "text",
+            "pluginOptions": {
+                "content-manager": {
+                    "visible": false
+                }
+            }
         },
         "testimonialAuthor": {
-            "type": "string"
+            "type": "string",
+            "pluginOptions": {
+                "content-manager": {
+                    "visible": false
+                }
+            }
         },
         "testimonialRole": {
-            "type": "string"
+            "type": "string",
+            "pluginOptions": {
+                "content-manager": {
+                    "visible": false
+                }
+            }
         },
         "testimonialAuthorImageUrl": {
-            "type": "string"
+            "type": "string",
+            "pluginOptions": {
+                "content-manager": {
+                    "visible": false
+                }
+            }
         },
         "testimonialLinkedIn": {
-            "type": "string"
+            "type": "string",
+            "pluginOptions": {
+                "content-manager": {
+                    "visible": false
+                }
+            }
         }
     }
 }

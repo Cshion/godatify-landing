@@ -26,6 +26,36 @@ const RELATION_FIELDS_MAP = {
     ]
 };
 
+const REVERSE_SYNC_MAP = {
+    'api::client.client': {
+        targetModel: 'api::case-study.case-study',
+        relationField: 'client',
+        fields: [
+            { source: 'name', target: 'clientName' },
+            { source: 'logoUrl', target: 'clientLogoUrl' },
+            { source: 'website', target: 'clientWebsite' }
+        ]
+    },
+    'api::industry.industry': {
+        targetModel: 'api::case-study.case-study',
+        relationField: 'industry',
+        fields: [
+            { source: 'title', target: 'industryName' }
+        ]
+    },
+    'api::testimonial.testimonial': {
+        targetModel: 'api::case-study.case-study',
+        relationField: 'testimonial',
+        fields: [
+            { source: 'quote', target: 'testimonialQuote' },
+            { source: 'author', target: 'testimonialAuthor' },
+            { source: 'role', target: 'testimonialRole' },
+            { source: 'authorImageUrl', target: 'testimonialAuthorImageUrl' },
+            { source: 'linkedIn', target: 'testimonialLinkedIn' }
+        ]
+    }
+};
+
 export default {
     /**
      * An asynchronous register function that runs before
@@ -34,7 +64,7 @@ export default {
     register({ strapi }: { strapi: Core.Strapi }) {
         // Subscribe to lifecycle events for automatic URL updates
         strapi.db.lifecycles.subscribe(async (event) => {
-            const { model, action, params } = event;
+            const { model, action, params, result } = event;
 
             // 1. Media URL Sync
             const mediaConfig = MEDIA_FIELDS_MAP[model.uid as keyof typeof MEDIA_FIELDS_MAP];
@@ -54,35 +84,19 @@ export default {
                 }
             }
 
-            // 2. Relation Field Sync (Denormalization)
+            // 2. Relation Field Sync (Denormalization - Forward)
             const relationConfig = RELATION_FIELDS_MAP[model.uid as keyof typeof RELATION_FIELDS_MAP];
             if (relationConfig && ['beforeCreate', 'beforeUpdate'].includes(action)) {
                 for (const config of relationConfig) {
-                    // Strapi params.data[relation] might be an ID or an object depending on context.
-                    // In `beforeCreate/Update`, it's usually the ID connects.
-                    // However, we need to fetch the related entity to get the sourceField (name/logoUrl).
-                    // This is expensive in a lifecycle loop but necessary for consistency.
-                    // We only do it if the relation is being updated.
-
                     const relationInput = params.data[config.relation];
-                    // If relationInput is null/undefined, we might want to clear the target field?
-                    // Strategy: Only update if relation is present. Backfill handles the rest.
-
                     if (relationInput) {
-                        // relationInput could be: 5, { id: 5 }, { connect: [5] }, etc.
-                        // Simplify: We assume standard ID or simple object.
-                        // Ideally we use strapi.documents to fetch the related item.
-                        // We need to know the UID of the related item. 
-                        // We can get it from the model attributes.
                         const schema = strapi.contentTypes[model.uid as any];
                         const attribute = schema.attributes[config.relation];
                         const targetUid = attribute.target;
 
                         if (targetUid) {
                             try {
-                                // Extract ID (simplified assumption: input is ID or { id: ID })
                                 let idToFetch = typeof relationInput === 'object' ? (relationInput.id || relationInput.connect?.[0]?.id || relationInput.connect?.[0]) : relationInput;
-
                                 if (idToFetch) {
                                     const relatedEntity = await strapi.documents(targetUid).findOne({ documentId: idToFetch } as any);
                                     if (relatedEntity && relatedEntity[config.sourceField]) {
@@ -94,6 +108,49 @@ export default {
                             }
                         }
                     }
+                }
+            }
+
+            // 3. Reverse Sync (Propagate updates to related entities)
+            // Triggered AFTER update of the source entity (Client, Industry, Testimonial)
+            const reverseConfig = REVERSE_SYNC_MAP[model.uid as keyof typeof REVERSE_SYNC_MAP];
+            if (reverseConfig && action === 'afterUpdate' && result) {
+                try {
+                    // Find all items in the target model that link to this entity
+                    // e.g. Find all CaseStudies where client.documentId == result.documentId
+                    const targetUid = reverseConfig.targetModel as any;
+
+                    // We need to use findMany with filters on the relation
+                    const affectedEntries = await strapi.documents(targetUid).findMany({
+                        filters: {
+                            [reverseConfig.relationField]: {
+                                documentId: result.documentId
+                            }
+                        }
+                    });
+
+                    if (affectedEntries.length > 0) {
+                        const updateData: any = {};
+                        // Construct the update payload based on the new data in `result`
+                        for (const fieldMap of reverseConfig.fields) {
+                            if (result[fieldMap.source] !== undefined) {
+                                updateData[fieldMap.target] = result[fieldMap.source];
+                            }
+                        }
+
+                        console.log(`[REV-SYNC] Updating ${affectedEntries.length} ${targetUid} entries linked to ${model.uid} ${result.documentId}`);
+
+                        // Update each affected entry separately to trigger its own lifecycles if needed
+                        for (const entry of affectedEntries) {
+                            await strapi.documents(targetUid).update({
+                                documentId: entry.documentId,
+                                data: updateData,
+                                status: entry.publishedAt ? 'published' : 'draft'
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error(`[LIFECYCLE] Error in Reverse Sync for ${model.uid}:`, error);
                 }
             }
         });

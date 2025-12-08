@@ -566,16 +566,36 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
   attributes: {
     challenge: Schema.Attribute.Text;
     client: Schema.Attribute.Relation<'manyToOne', 'api::client.client'>;
-    clientLogoUrl: Schema.Attribute.String;
-    clientName: Schema.Attribute.String;
-    clientWebsite: Schema.Attribute.String;
+    clientLogoUrl: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        'content-manager': {
+          visible: false;
+        };
+      }>;
+    clientName: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        'content-manager': {
+          visible: false;
+        };
+      }>;
+    clientWebsite: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        'content-manager': {
+          visible: false;
+        };
+      }>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
     industry: Schema.Attribute.Relation<'manyToOne', 'api::industry.industry'> &
       Schema.Attribute.Required;
-    industryName: Schema.Attribute.String;
+    industryName: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        'content-manager': {
+          visible: false;
+        };
+      }>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -593,11 +613,36 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
       'oneToOne',
       'api::testimonial.testimonial'
     >;
-    testimonialAuthor: Schema.Attribute.String;
-    testimonialAuthorImageUrl: Schema.Attribute.String;
-    testimonialLinkedIn: Schema.Attribute.String;
-    testimonialQuote: Schema.Attribute.Text;
-    testimonialRole: Schema.Attribute.String;
+    testimonialAuthor: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        'content-manager': {
+          visible: false;
+        };
+      }>;
+    testimonialAuthorImageUrl: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        'content-manager': {
+          visible: false;
+        };
+      }>;
+    testimonialLinkedIn: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        'content-manager': {
+          visible: false;
+        };
+      }>;
+    testimonialQuote: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        'content-manager': {
+          visible: false;
+        };
+      }>;
+    testimonialRole: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        'content-manager': {
+          visible: false;
+        };
+      }>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
