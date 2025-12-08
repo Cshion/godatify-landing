@@ -1,4 +1,8 @@
-# AGENTS.md - Protocolo de Colaboración y Arquitectura
+---
+trigger: always_on
+---
+
+# AProtocolo de Colaboración y Arquitectura
 
 ## 1. Visión General
 Este repositorio aloja la solución digital corporativa de **Datify**, compuesta por usuarios frontales y administrativos.
