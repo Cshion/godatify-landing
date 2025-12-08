@@ -9,7 +9,21 @@ interface ServiceTechStackProps {
     techStack: readonly TechItem[];
 }
 
+const BRAND_ICONS = [
+    'react', 'node-js', 'python', 'r-project', 'aws', 'microsoft',
+    'docker', 'github', 'gitlab', 'bitbucket', 'android', 'apple',
+    'linux', 'windows', 'google', 'facebook', 'twitter', 'linkedin',
+    'instagram', 'youtube', 'whatsapp', 'slack', 'figma'
+];
+
 export default function ServiceTechStack({ techStack }: ServiceTechStackProps) {
+    const getIconClass = (iconName: string) => {
+        // Special cases or manual overrides if needed
+        if (BRAND_ICONS.includes(iconName)) return 'fab';
+        // Default to solid for others (like snowflake, server, database, etc.)
+        return 'fas';
+    };
+
     return (
         <section className={styles.section}>
             <div className={styles.container}>
@@ -21,9 +35,7 @@ export default function ServiceTechStack({ techStack }: ServiceTechStackProps) {
                     {(techStack || []).map((tech, idx) => (
                         <div key={idx} className={styles.techCard}>
                             <div className={styles.iconWrapper}>
-                                <i className={`fas fa-${tech.icon} ${styles.icon}`}></i>
-                                {/* Fallback for custom icons if FontAwesome doesn't have them all, 
-                                    in real app we'd use SVGs or specific library */}
+                                <i className={`${getIconClass(tech.icon)} fa-${tech.icon} ${styles.icon}`}></i>
                             </div>
                             <span className={styles.techName}>{tech.name}</span>
                         </div>

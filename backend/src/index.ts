@@ -232,16 +232,47 @@ export default {
         console.log(`[BOOTSTRAP] Master Data Path: ${MASTER_DATA_PATH} `);
         console.log(`[BOOTSTRAP] Mock Data Path: ${MOCK_DATA_PATH} `);
 
-        const seedCollection = async (uid: string, data: any[]) => {
-            const count = await strapi.documents(uid as any).count({});
-            console.log(`[SEED] Checking ${uid}: count = ${count}, data.length = ${data.length} `);
+        const seedCollection = async (uid: string, data: any[], uniqueField: string = 'id') => {
+            console.log(`[SEED] Seeding ${uid} with upsert strategy (uniqueField: ${uniqueField})...`);
 
-            if (count === 0 && data.length > 0) {
-                console.log(`[SEED] Seeding ${uid}...`);
+            for (const item of data) {
+                // Find existing entry
+                const filters: any = {};
+                // Handle different unique fields or default to check if property exists
+                if (item[uniqueField]) {
+                    filters[uniqueField] = item[uniqueField];
+                } else if (item['slug']) {
+                    filters['slug'] = item['slug'];
+                } else if (item['name']) {
+                    filters['name'] = item['name'];
+                } else if (item['title']) {
+                    filters['title'] = item['title'];
+                } else {
+                    // Fallback: Skip if no discernible unique field
+                    continue;
+                }
+
+                const existing = await strapi.documents(uid as any).findMany({ filters });
+
                 const contentType = strapi.contentTypes[uid as any];
                 const hasDraftAndPublish = contentType.options?.draftAndPublish;
 
-                for (const item of data) {
+                if (existing && existing.length > 0) {
+                    // Update
+                    // We typically assume the JSON is source of truth.
+                    // Ideally we should deep compare, but for now we just force update to ensure new fields (like features) are synced.
+                    // console.log(`[SEED] Updating ${uid} - ${filters[Object.keys(filters)[0]]}`);
+                    await strapi.documents(uid as any).update({
+                        documentId: existing[0].documentId,
+                        data: item,
+                        status: hasDraftAndPublish ? 'published' : undefined
+                    });
+                } else {
+                    // Create
+                    console.log(`[SEED] Creating ${uid} - ${filters[Object.keys(filters)[0]]}`);
+                    const contentType = strapi.contentTypes[uid as any];
+                    const hasDraftAndPublish = contentType.options?.draftAndPublish;
+
                     const entry = await strapi.documents(uid as any).create({
                         data: item,
                         status: 'draft',
@@ -250,8 +281,8 @@ export default {
                         await strapi.documents(uid as any).publish({ documentId: entry.documentId });
                     }
                 }
-                console.log(`[SEED] ${uid} seeded ${hasDraftAndPublish ? 'and published ' : ''} successfully.`);
             }
+            console.log(`[SEED] ${uid} sync complete.`);
         };
 
         const seedSingle = async (uid: string, data: any) => {
@@ -313,18 +344,21 @@ export default {
         try {
             if (fs.existsSync(MASTER_DATA_PATH)) {
                 // Services
+                // Services
                 const services = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'services.json'), 'utf-8'));
                 // Map fields if necessary, but no image upload
                 const publishedServices = services.map((s: any) => ({
                     ...s,
-                    imageUrl: s.image,
-                    bgImageUrl: s.backgroundImage || s.bgImage,
+                    imageUrl: s.image || s.imageUrl,
+                    bgImageUrl: s.backgroundImage || s.bgImage || s.bgImageUrl,
                 }));
-                await seedCollection('api::service.service', publishedServices);
+                await seedCollection('api::service.service', publishedServices, 'slug');
 
                 // Social Links
                 const socialLinks = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'social-links.json'), 'utf-8'));
-                await seedCollection('api::social-link.social-link', socialLinks); // No images usually
+                // Social Links usually rely on 'platform' or 'url' as unique, but 'id' is default. They might not have slugs.
+                // Assuming they are simple, we can leave default or check schema. Social Link has 'platform'.
+                await seedCollection('api::social-link.social-link', socialLinks, 'platform');
 
                 // Company Info
                 const companyInfo = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'company.json'), 'utf-8'));
@@ -332,12 +366,12 @@ export default {
 
                 // Clients
                 const clientsData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'clients.json'), 'utf-8'));
-                await seedCollection('api::client.client', clientsData);
+                await seedCollection('api::client.client', clientsData, 'name');
                 const allClients = await strapi.documents('api::client.client' as any).findMany();
 
                 // Authors
                 const authorsData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'authors.json'), 'utf-8'));
-                await seedCollection('api::author.author', authorsData);
+                await seedCollection('api::author.author', authorsData, 'name');
                 const allAuthors = await strapi.documents('api::author.author' as any).findMany();
 
                 // Industries
@@ -346,7 +380,7 @@ export default {
                     await seedSingle('api::industries-page.industries-page', industriesData.page);
                 }
                 if (industriesData.industries) {
-                    await seedCollection('api::industry.industry', industriesData.industries);
+                    await seedCollection('api::industry.industry', industriesData.industries, 'slug');
                 }
                 const allIndustries = await strapi.documents('api::industry.industry' as any).findMany();
 

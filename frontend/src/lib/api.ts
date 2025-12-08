@@ -421,9 +421,6 @@ export const api = {
                             results
                             techStack
                             mainImageUrl
-                            results
-                            techStack
-                            mainImageUrl
                             videoUrl
                             industryName
                             clientName

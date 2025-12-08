@@ -47,11 +47,46 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                                 )}
                             </div>
 
+                            {/* Challenge & Solution Sections */}
+                            <div className="mb-12 space-y-12">
+                                {/* Challenge */}
+                                {caseStudy.challenge && (
+                                    <div className="bg-red-50/50 rounded-2xl p-8 border border-red-100">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+                                                <i className="fas fa-exclamation-triangle"></i>
+                                            </div>
+                                            <h2 className="text-2xl font-bold text-gray-900">El Desafío</h2>
+                                        </div>
+                                        <p className="text-gray-700 text-lg leading-relaxed">
+                                            {caseStudy.challenge}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {/* Solution */}
+                                {caseStudy.solution && (
+                                    <div className="bg-brand-green/5 rounded-2xl p-8 border border-brand-green/10">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-10 h-10 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green">
+                                                <i className="fas fa-lightbulb"></i>
+                                            </div>
+                                            <h2 className="text-2xl font-bold text-gray-900">La Solución</h2>
+                                        </div>
+                                        <p className="text-gray-700 text-lg leading-relaxed">
+                                            {caseStudy.solution}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+
                             {/* Content Body */}
-                            <div
-                                className={styles.contentBody}
-                                dangerouslySetInnerHTML={{ __html: caseStudy.content }}
-                            />
+                            {caseStudy.content && (
+                                <div
+                                    className={styles.contentBody}
+                                    dangerouslySetInnerHTML={{ __html: caseStudy.content }}
+                                />
+                            )}
 
                             {/* Tech Stack (Moved here) */}
                             <div className={styles.techStack}>
