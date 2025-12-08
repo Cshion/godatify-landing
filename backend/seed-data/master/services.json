@@ -3,35 +3,45 @@
         "slug": "big-data-management",
         "title": "Big Data Management",
         "subtitle": "Gobierno y control de datos a gran escala",
-        "description": "Transformamos el caos de datos en activos estratégicos...",
-        "icon": "server"
+        "description": "Transformamos el caos de datos en activos estratégicos.",
+        "icon": "server",
+        "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+        "bgImageUrl": "/images/services/bg-bigdata.jpg"
     },
     {
         "slug": "business-analytics",
         "title": "Business Analytics",
         "subtitle": "Predicción y ciencia de datos aplicada",
-        "description": "No solo analizamos el pasado, predecimos el futuro...",
-        "icon": "brain"
+        "description": "No solo analizamos el pasado, predecimos el futuro.",
+        "icon": "brain",
+        "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+        "bgImageUrl": "/images/services/bg-analytics.jpg"
     },
     {
         "slug": "business-intelligence",
         "title": "Business Intelligence",
         "subtitle": "Visualización que impulsa decisiones",
-        "description": "Convertimos datos complejos en historias visuales claras...",
-        "icon": "chart-line"
+        "description": "Convertimos datos complejos en historias visuales claras.",
+        "icon": "chart-line",
+        "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+        "bgImageUrl": "/images/services/bg-bi.jpg"
     },
     {
         "slug": "data-engineering",
         "title": "Data Engineering",
         "subtitle": "La ingeniería detrás de tus datos",
-        "description": "Construimos las autopistas por donde viajan tus datos...",
-        "icon": "database"
+        "description": "Construimos las autopistas por donde viajan tus datos.",
+        "icon": "database",
+        "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+        "bgImageUrl": "/images/services/bg-engineering.jpg"
     },
     {
         "slug": "digital-platform",
         "title": "Digital Platform",
         "subtitle": "Ecosistemas digitales a medida",
-        "description": "Desarrollamos plataformas web y móviles...",
-        "icon": "laptop-code"
+        "description": "Desarrollamos plataformas web y móviles.",
+        "icon": "laptop-code",
+        "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+        "bgImageUrl": "/images/services/bg-digital.jpg"
     }
 ]

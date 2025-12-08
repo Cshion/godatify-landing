@@ -3,10 +3,14 @@
         "slug": "kpis-comerciales",
         "title": "KPIs Comerciales",
         "industry": "Industria Cervecera",
-        "description": "Dashboard de KPIs comerciales para seguimiento en tiempo real...",
-        "challenge": "La falta de visibilidad en tiempo real sobre las métricas comerciales...",
-        "solution": "Implementación de un Dashboard interactivo en Power BI...",
+        "industryName": "Industria Cervecera",
+        "relatedIndustryId": "logistica",
+        "description": "Dashboard de KPIs comerciales para seguimiento en tiempo real de ventas y rendimiento.",
+        "challenge": "La falta de visibilidad en tiempo real sobre las métricas comerciales impedía la toma de decisiones ágiles. Los reportes mensuales llegaban demasiado tarde para corregir desviaciones en las ventas.",
+        "solution": "Implementación de un Dashboard interactivo en Power BI conectado directamente al ERP. Visualización de ventas por zona, vendedor, categoría y producto en tiempo real.",
         "client": "Distribuidora Nacional",
+        "clientName": "Distribuidora Nacional",
+        "clientLogoUrl": "https://placehold.co/200x80.png?text=Distribuidora&font=roboto",
         "results": [
             {
                 "label": "Visibilidad",
@@ -17,62 +21,272 @@
                 "label": "Decisiones",
                 "value": "2x",
                 "suffix": " Más Rápidas"
+            },
+            {
+                "label": "Ventas",
+                "value": "+15%",
+                "suffix": " YoY"
             }
-        ]
+        ],
+        "techStack": [
+            "Power BI",
+            "SQL Server",
+            "Azure"
+        ],
+        "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        "mainImageUrl": "/images/cases/case_kpis_comerciales_1764948784061.png",
+        "image": "/images/cases/case_kpis_comerciales_1764948784061.png"
     },
     {
         "slug": "sell-in-out",
         "title": "Sell In y Sell Out",
         "industry": "Industria Logística",
-        "description": "Análisis integral de canales de distribución...",
-        "challenge": "Desconexión entre lo que se vendía a los distribuidores...",
-        "solution": "Integración de datos de inventarios de distribuidores...",
+        "industryName": "Industria Logística",
+        "relatedIndustryId": "cervecera",
+        "description": "Análisis integral de canales de distribución para optimizar el inventario y las ventas.",
+        "challenge": "Desconexión entre lo que se vendía a los distribuidores (Sell In) y lo que estos vendían al consumidor final (Sell Out), generando quiebres de stock o sobrestock.",
+        "solution": "Integración de datos de inventarios de distribuidores para calcular el Sell Out real. Algoritmos de reabastecimiento sugerido basados en la rotación real del producto.",
         "client": "Confidencial",
+        "clientName": "Confidencial",
+        "clientLogoUrl": null,
         "results": [
             {
                 "label": "Inventario",
                 "value": "-20%",
                 "suffix": " Días Calle"
-            }
-        ]
-    },
-    {
-        "slug": "optimizacion-riego",
-        "title": "Optimización de Riego Inteligente",
-        "industry": "Industria Agrícola",
-        "description": "Sistema de gestión hídrica basado en datos satelitales y sensores IoT...",
-        "challenge": "El uso ineficiente del agua y la falta de precisión en el riego afectaban la calidad del cultivo...",
-        "solution": "Implementación de una plataforma IoT integrada con pronósticos meteorológicos...",
-        "client": "AgroExport Peru",
-        "results": [
-            {
-                "label": "Ahorro Agua",
-                "value": "30%",
-                "suffix": " Menos"
             },
             {
-                "label": "Producción",
-                "value": "+15%",
-                "suffix": " Calidad Export."
+                "label": "Quiebres",
+                "value": "-30%",
+                "suffix": " Stockouts"
+            },
+            {
+                "label": "Margen",
+                "value": "+5%",
+                "suffix": " Operativo"
+            }
+        ],
+        "techStack": [
+            "Tableau",
+            "Python",
+            "Snowflake"
+        ],
+        "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        "mainImageUrl": "/images/cases/case_sell_in_out_1764948806601.png",
+        "image": "/images/cases/case_sell_in_out_1764948806601.png"
+    },
+    {
+        "slug": "inteligencia-operativa",
+        "title": "Inteligencia Operativa Pesquera",
+        "industry": "Industria Pesquera",
+        "industryName": "Industria Pesquera",
+        "relatedIndustryId": "pesquera",
+        "description": "Sistema de gestión de flota y operaciones marítimas para maximizar la captura y eficiencia.",
+        "challenge": "La gestión de la flota pesquera se basaba en reportes manuales vía radio, con poca precisión sobre la ubicación exacta de los cardúmenes y el consumo de combustible.",
+        "solution": "Plataforma de inteligencia operativa que integra datos satelitales, oceanográficos y de telemetría de las embarcaciones para dirigir la flota a las zonas más productivas.",
+        "client": "Pesquera del Mar",
+        "clientName": "Pesquera del Mar",
+        "clientLogoUrl": "https://placehold.co/200x80.png?text=Pesquera&font=roboto",
+        "results": [
+            {
+                "label": "Captura",
+                "value": "+18%",
+                "suffix": " Toneladas"
+            },
+            {
+                "label": "Combustible",
+                "value": "-12%",
+                "suffix": " Ahorro"
+            },
+            {
+                "label": "Eficiencia",
+                "value": "+25%",
+                "suffix": " Operativa"
             }
         ],
         "techStack": [
             "Azure IoT",
-            "Python",
+            "Databricks",
             "Power BI"
         ],
+        "mainImageUrl": "/images/cases/case_inteligencia_operativa_1764948826943.png",
+        "image": "/images/cases/case_inteligencia_operativa_1764948826943.png"
+    },
+    {
+        "slug": "agricultura-precision",
+        "title": "Agricultura de Precisión",
+        "industry": "Industria Agrícola",
+        "industryName": "Industria Agrícola",
+        "relatedIndustryId": "agricola",
+        "description": "Monitoreo satelital y análisis de cultivos para optimizar el rendimiento por hectárea.",
+        "challenge": "La variabilidad en el rendimiento de los lotes de cultivo era una incógnita. No se sabía por qué ciertas zonas producían menos que otras bajo las mismas condiciones aparentes.",
+        "solution": "Uso de imágenes espectrales para analizar la salud de la vegetación (NDVI) y correlacionarlo con análisis de suelo y riego. Detección temprana de plagas y estrés hídrico.",
+        "client": "AgroExport Peru",
         "clientName": "AgroExport Peru",
-        "mainImageUrl": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=1000",
-        "image": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=1000"
+        "clientLogoUrl": "https://placehold.co/200x80.png?text=AgroExport&font=roboto",
+        "results": [
+            {
+                "label": "Rendimiento",
+                "value": "+10%",
+                "suffix": " Ton/Ha"
+            },
+            {
+                "label": "Insumos",
+                "value": "-15%",
+                "suffix": " Ahorro"
+            },
+            {
+                "label": "Calidad",
+                "value": "Top",
+                "suffix": " Exportación"
+            }
+        ],
+        "techStack": [
+            "Python",
+            "Satellite API",
+            "QGIS"
+        ],
+        "mainImageUrl": "/images/cases/case_agricultura_precision_1764948848374.png",
+        "image": "/images/cases/case_agricultura_precision_1764948848374.png"
+    },
+    {
+        "slug": "costos-irrigacion",
+        "title": "Costos de Irrigación",
+        "industry": "Industria Agrícola",
+        "industryName": "Industria Agrícola",
+        "relatedIndustryId": "agricola",
+        "description": "Optimización de recursos hídricos y energéticos para reducir el costo por metro cúbico de agua.",
+        "challenge": "El costo energético del bombeo de agua representaba el 30% del costo de producción. Las bombas operaban en horarios de tarifa punta sin control automatizado.",
+        "solution": "Sistema de gestión energética que programa el riego en horarios de tarifa baja y optimiza la presión de bombeo según la demanda real del cultivo.",
+        "client": "AgroExport Peru",
+        "clientName": "AgroExport Peru",
+        "clientLogoUrl": "https://placehold.co/200x80.png?text=AgroExport&font=roboto",
+        "results": [
+            {
+                "label": "Energía",
+                "value": "-25%",
+                "suffix": " Costo"
+            },
+            {
+                "label": "Agua",
+                "value": "-10%",
+                "suffix": " Uso"
+            },
+            {
+                "label": "Huella",
+                "value": "-20%",
+                "suffix": " Carbono"
+            }
+        ],
+        "techStack": [
+            "IoT",
+            "SCADA",
+            "Power BI"
+        ],
+        "mainImageUrl": "/images/cases/case_costos_irrigacion_1764948875476.png",
+        "image": "/images/cases/case_costos_irrigacion_1764948875476.png"
+    },
+    {
+        "slug": "kpis-npo",
+        "title": "KPIs para ONGs (NPO)",
+        "industry": "Business Analytics",
+        "industryName": "Business Analytics",
+        "description": "Métricas de impacto social y transparencia financiera para organizaciones sin fines de lucro.",
+        "challenge": "La ONG tenía dificultades para demostrar el impacto real de sus programas a los donantes debido a la dispersión de datos en múltiples hojas de cálculo.",
+        "solution": "Plataforma unificada de gestión de proyectos sociales. Dashboards de transparencia que muestran en qué se invierte cada dólar y a cuántas personas beneficia.",
+        "client": "EducaMás",
+        "clientName": "EducaMás",
+        "clientLogoUrl": "https://placehold.co/200x80.png?text=EducaMás&font=roboto",
+        "results": [
+            {
+                "label": "Fondos",
+                "value": "+40%",
+                "suffix": " Recaudación"
+            },
+            {
+                "label": "Reportes",
+                "value": "-80%",
+                "suffix": " Tiempo"
+            },
+            {
+                "label": "Confianza",
+                "value": "100%",
+                "suffix": " Stakeholders"
+            }
+        ],
+        "techStack": [
+            "Salesforce NPSP",
+            "Tableau",
+            "Power Automate"
+        ],
+        "mainImageUrl": "/images/cases/case_kpis_npo_1764948909347.png",
+        "image": "/images/cases/case_kpis_npo_1764948909347.png"
+    },
+    {
+        "slug": "optimizacion-riego",
+        "title": "Optimización de Riego Inteligente",
+        "industry": "Retail",
+        "industryName": "Retail",
+        "testimonialQuote": "Datify transformó nuestra forma de tomar decisiones. Ahora tenemos visibilidad total.",
+        "testimonialAuthor": "María González",
+        "testimonialRole": "Gerente Comercial, Retail Corp",
+        "testimonialAuthorImageUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",
+        "testimonialLinkedIn": "https://linkedin.com",
+        "techStack": [
+            "Power BI",
+            "SQL Server",
+            "Azure"
+        ],
+        "mainImageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+        "clientName": "Retail Corp",
+        "clientLogoUrl": "https://ui-avatars.com/api/?name=Retail+Corp&background=0D8ABC&color=fff"
+    },
+    {
+        "slug": "optimizacion-logistica",
+        "title": "Optimización Logística IA",
+        "industry": "Logística",
+        "client": "LogiTrans",
+        "description": "Reducción de costos de transporte mediante rutas optimizadas con IA.",
+        "challenge": "Costos logísticos elevados y rutas ineficientes.",
+        "solution": "Implementación de algoritmos de optimización de rutas.",
+        "results": [
+            {
+                "label": "Ahorro",
+                "value": "25",
+                "suffix": "%"
+            },
+            {
+                "label": "Entregas",
+                "value": "98",
+                "suffix": "%"
+            }
+        ],
+        "testimonialQuote": "La implementación de IA en nuestra logística fue un cambio de juego.",
+        "testimonialAuthor": "Carlos Rodriguez",
+        "testimonialRole": "Director de Operaciones",
+        "testimonialAuthorImageUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200",
+        "testimonialLinkedIn": "https://linkedin.com",
+        "techStack": [
+            "Python",
+            "TensorFlow",
+            "AWS"
+        ],
+        "mainImageUrl": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000",
+        "clientName": "LogiTrans",
+        "clientLogoUrl": "https://ui-avatars.com/api/?name=LogiTrans&background=0D8ABC&color=fff",
+        "industryName": "Logística"
     },
     {
         "slug": "trazabilidad-pesca",
         "title": "Trazabilidad de Pesca Sostenible",
         "industry": "Industria Pesquera",
+        "industryName": "Industria Pesquera",
         "description": "Plataforma de trazabilidad blockchain para certificar el origen sostenible...",
         "challenge": "Cumplir con las exigentes normativas internacionales de sostenibilidad era complejo y manual...",
         "solution": "Desarrollo de un sistema de registro inmutable basado en Blockchain...",
         "client": "Pesquera del Mar",
+        "clientName": "Pesquera del Mar",
+        "clientLogoUrl": "https://placehold.co/200x80.png?text=Pesquera&font=roboto",
         "results": [
             {
                 "label": "Certificación",
@@ -90,7 +304,6 @@
             "Node.js",
             "React"
         ],
-        "clientName": "Pesquera del Mar",
         "mainImageUrl": "https://images.unsplash.com/photo-1534951009808-766178b47a8e?auto=format&fit=crop&q=80&w=1000",
         "image": "https://images.unsplash.com/photo-1534951009808-766178b47a8e?auto=format&fit=crop&q=80&w=1000"
     }

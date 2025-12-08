@@ -60,6 +60,9 @@
         "mainImageUrl": {
             "type": "string"
         },
+        "videoUrl": {
+            "type": "string"
+        },
         "testimonial": {
             "type": "relation",
             "relation": "oneToOne",
@@ -72,6 +75,24 @@
             "type": "string"
         },
         "clientLogoUrl": {
+            "type": "string"
+        },
+        "clientWebsite": {
+            "type": "string"
+        },
+        "testimonialQuote": {
+            "type": "text"
+        },
+        "testimonialAuthor": {
+            "type": "string"
+        },
+        "testimonialRole": {
+            "type": "string"
+        },
+        "testimonialAuthorImageUrl": {
+            "type": "string"
+        },
+        "testimonialLinkedIn": {
             "type": "string"
         }
     }

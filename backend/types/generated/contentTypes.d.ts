@@ -568,6 +568,7 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
     client: Schema.Attribute.Relation<'manyToOne', 'api::client.client'>;
     clientLogoUrl: Schema.Attribute.String;
     clientName: Schema.Attribute.String;
+    clientWebsite: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -592,10 +593,16 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
       'oneToOne',
       'api::testimonial.testimonial'
     >;
+    testimonialAuthor: Schema.Attribute.String;
+    testimonialAuthorImageUrl: Schema.Attribute.String;
+    testimonialLinkedIn: Schema.Attribute.String;
+    testimonialQuote: Schema.Attribute.Text;
+    testimonialRole: Schema.Attribute.String;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    videoUrl: Schema.Attribute.String;
   };
 }
 
@@ -635,6 +642,7 @@ export interface ApiClientClient extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    website: Schema.Attribute.String;
   };
 }
 

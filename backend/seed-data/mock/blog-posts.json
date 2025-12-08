@@ -36,6 +36,8 @@
         "date": "2024-11-20",
         "readingTime": "10 min",
         "featured": true,
+        "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1000&auto=format&fit=crop",
         "tags": [
             "Inteligencia Artificial",
             "Estrategia",
@@ -82,6 +84,8 @@
         "date": "2024-11-15",
         "readingTime": "7 min",
         "featured": false,
+        "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000&auto=format&fit=crop",
         "tags": [
             "Cloud Computing",
             "Infraestructura",
@@ -149,6 +153,238 @@
             "Cloud Computing",
             "Arquitectura",
             "Big Query"
+        ]
+    },
+    {
+        "title": "MLOps: La Pieza Perdida en tu Estrategia de IA",
+        "slug": "mlops-estrategia-ia",
+        "excerpt": "¿Por qué el 80% de los modelos de ML nunca llegan a producción? Exploramos la necesidad crítica de DevOps para Machine Learning.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Desarrollar un modelo de Machine Learning es solo la punta del iceberg. El verdadero desafío reside en operativizarlo."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-11-12",
+        "readingTime": "8 min",
+        "featured": false,
+        "author": {
+            "name": "Carlos Mendoza"
+        },
+        "tags": [
+            "MLOps",
+            "Machine Learning",
+            "DevOps"
+        ]
+    },
+    {
+        "title": "Privacidad de Datos en Latam: Desafíos y Oportunidades",
+        "slug": "privacidad-datos-latam",
+        "excerpt": "LGPD en Brasil, LPDP en Perú... El panorama regulatorio está cambiando. ¿Está tu empresa preparada para cumplir sin frenar la innovación?",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "América Latina está viviendo un despertar regulatorio. Inspiradas por el GDPR, las nuevas leyes exigen mayor responsabilidad."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-11-05",
+        "readingTime": "6 min",
+        "featured": false,
+        "author": {
+            "name": "Ana Rodríguez"
+        },
+        "tags": [
+            "Privacidad",
+            "GDPR",
+            "Latam"
+        ]
+    },
+    {
+        "title": "Analítica en Tiempo Real: Cuando los Batchs ya no son Suficientes",
+        "slug": "analitica-tiempo-real",
+        "excerpt": "Desde detección de fraude hasta personalización de e-commerce, descubre cuándo y cómo implementar arquitecturas de streaming.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "El valor de los datos tiene una fecha de caducidad. En escenarios como la detección de fraude, saber lo que pasó ayer es irrelevante."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-10-25",
+        "readingTime": "7 min",
+        "featured": false,
+        "author": {
+            "name": "María González"
+        },
+        "tags": [
+            "Streaming",
+            "Kafka",
+            "Real-time"
+        ]
+    },
+    {
+        "title": "Modernización de Legacy: Estrategias de 'Strangler Fig'",
+        "slug": "modernizacion-legacy-strangler",
+        "excerpt": "Cómo migrar sistemas monolíticos antiguos a microservicios modernos sin detener la operación del negocio.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Los sistemas legacy son la columna vertebral de muchas grandes empresas, pero también su mayor freno para la innovación."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-10-18",
+        "readingTime": "9 min",
+        "featured": false,
+        "author": {
+            "name": "Carlos Mendoza"
+        },
+        "tags": [
+            "Legacy",
+            "Refactoring",
+            "Microservicios"
+        ]
+    },
+    {
+        "title": "Cultura de Datos: El Factor Humano",
+        "slug": "cultura-datos-factor-humano",
+        "excerpt": "Puedes tener la mejor tecnología del mundo, pero si tu equipo no toma decisiones basadas en datos, la inversión será en vano.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "La transformación digital es, en última instancia, una transformación cultural. Se trata de cambiar la mentalidad."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-10-10",
+        "readingTime": "5 min",
+        "featured": true,
+        "author": {
+            "name": "Ana Rodríguez"
+        },
+        "tags": [
+            "Cultura",
+            "Liderazgo",
+            "Data Literacy"
+        ]
+    },
+    {
+        "title": "Data Mesh vs. Data Lake: Desmitificando las Arquitecturas Modernas",
+        "slug": "data-mesh-vs-data-lake",
+        "excerpt": "¿Centralizar o descentralizar? Analizamos los pros y contras de los enfoques más populares en la ingeniería de datos actual.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "El concepto de Data Lake dominó la última década con la promesa de 'guardar todo, analizar después'. Sin embargo, muchos lagos se convirtieron en pantanos."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1558494949-ef526b0042a0?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1558494949-ef526b0042a0?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-09-15",
+        "readingTime": "6 min",
+        "featured": false,
+        "author": {
+            "name": "María González"
+        },
+        "tags": [
+            "Data Engineering",
+            "Arquitectura",
+            "Data Mesh"
+        ]
+    },
+    {
+        "title": "Ciberseguridad en la Era del Trabajo Remoto",
+        "slug": "ciberseguridad-trabajo-remoto",
+        "excerpt": "Cómo proteger los activos digitales de tu empresa cuando el perímetro de seguridad ha desaparecido.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "El perímetro de seguridad ya no son las cuatro paredes de la oficina. Hoy, el perímetro es la identidad del usuario."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-09-02",
+        "readingTime": "4 min",
+        "featured": false,
+        "author": {
+            "name": "Carlos Mendoza"
+        },
+        "tags": [
+            "Ciberseguridad",
+            "Trabajo Remoto",
+            "Zero Trust"
+        ]
+    },
+    {
+        "title": "La Importancia de la Gobernanza de Datos (Data Governance)",
+        "slug": "importancia-gobernanza-datos",
+        "excerpt": "Sin reglas claras, los datos son un pasivo, no un activo. Aprende los pilares fundamentales de una estrategia de gobernanza efectiva.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "La gobernanza de datos a menudo se ve como burocracia, pero en realidad es el habilitador de la velocidad."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-08-20",
+        "readingTime": "5 min",
+        "featured": false,
+        "author": {
+            "name": "Ana Rodríguez"
+        },
+        "tags": [
+            "Data Governance",
+            "Compliance",
+            "Gestión"
         ]
     }
 ]

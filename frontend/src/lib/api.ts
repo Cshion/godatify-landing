@@ -421,41 +421,35 @@ export const api = {
                             results
                             techStack
                             mainImageUrl
-                            industry {
-                                documentId
-                                title
-                            }
-                            client {
-                                documentId
-                                name
-                                logoUrl
-                            }
-                            testimonial {
-                                quote
-                                author
-                                role
-                                linkedIn
-                                authorImageUrl
-                            }
+                            results
+                            techStack
+                            mainImageUrl
+                            videoUrl
+                            industryName
+                            clientName
+                            clientLogoUrl
+                            clientWebsite
+                            testimonialQuote
+                            testimonialAuthor
+                            testimonialRole
+                            testimonialAuthorImageUrl
+                            testimonialLinkedIn
                         }
-                        # Fetch 3 recent cases for "Related" section
-                        recentCases: caseStudies(pagination: { limit: 3 }, sort: "publishedAt:desc", filters: { slug: { ne: $slug } }) {
+                        # Fetch 4 recent cases for "Related" section
+                        recentCases: caseStudies(pagination: { limit: 4 }, sort: "publishedAt:desc") {
                             documentId
                             slug
                             title
                             description
                             mainImageUrl
-                            industry {
-                                documentId
-                                title
-                            }
+                            industryName
                             results
                         }
                     }
                 `;
                 const data: any = await graphQLClient.request(query, { slug });
                 const items = data?.caseStudies;
-                const recent = data?.recentCases;
+                const recentAll = data?.recentCases;
 
                 if (!items || items.length === 0) return { caseStudy: undefined, relatedCases: [] };
 
@@ -463,35 +457,39 @@ export const api = {
                 const caseStudy = {
                     slug: item.slug,
                     title: item.title,
-                    industry: item.industry?.title || 'General',
-                    relatedIndustryId: item.industry?.documentId,
+                    industry: item.industryName || 'General',
                     description: item.description,
                     challenge: item.challenge,
                     solution: item.solution,
                     results: item.results || [], // Ensure array
                     techStack: item.techStack || [], // Ensure array
                     image: item.mainImageUrl || '/images/placeholder.png',
+                    videoUrl: item.videoUrl,
                     client: {
-                        name: item.client?.name || 'Anonymous',
-                        logo: item.client?.logoUrl || '/images/placeholder.png',
-                        anonymous: !item.client
+                        name: item.clientName || 'Anonymous',
+                        logo: item.clientLogoUrl || '/images/placeholder.png',
+                        website: item.clientWebsite,
+                        anonymous: !item.clientName
                     },
-                    testimonial: item.testimonial ? {
-                        quote: item.testimonial.quote,
-                        author: item.testimonial.author,
-                        role: item.testimonial.role,
-                        linkedIn: item.testimonial.linkedIn,
-                        image: item.testimonial.authorImageUrl
+                    testimonial: item.testimonialQuote ? {
+                        quote: item.testimonialQuote,
+                        author: item.testimonialAuthor,
+                        role: item.testimonialRole,
+                        linkedIn: item.testimonialLinkedIn,
+                        image: item.testimonialAuthorImageUrl
                     } : undefined,
                     content: ''
                 };
 
-                const relatedCases = (!recent) ? [] : recent.map((r: any) => ({
+                // Filter out current case and limit to 3
+                const recent = (!recentAll) ? [] : recentAll.filter((r: any) => r.slug !== slug).slice(0, 3);
+
+                const relatedCases = recent.map((r: any) => ({
                     slug: r.slug,
                     title: r.title,
                     description: r.description,
                     image: r.mainImageUrl || '/images/placeholder.png',
-                    industry: r.industry?.title || 'General',
+                    industry: r.industryName || 'General',
                     results: r.results || []
                     // Minimal fields for cards
                 }));

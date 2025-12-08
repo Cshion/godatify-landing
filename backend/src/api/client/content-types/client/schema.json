@@ -19,6 +19,9 @@
         "logoUrl": {
             "type": "string"
         },
+        "website": {
+            "type": "string"
+        },
         "logo": {
             "type": "media",
             "allowedTypes": [

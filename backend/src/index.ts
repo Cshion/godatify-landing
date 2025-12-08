@@ -16,7 +16,13 @@ const RELATION_FIELDS_MAP = {
     'api::case-study.case-study': [
         { relation: 'client', sourceField: 'logoUrl', targetField: 'clientLogoUrl' },
         { relation: 'client', sourceField: 'name', targetField: 'clientName' },
-        { relation: 'industry', sourceField: 'title', targetField: 'industryName' }
+        { relation: 'client', sourceField: 'website', targetField: 'clientWebsite' },
+        { relation: 'industry', sourceField: 'title', targetField: 'industryName' },
+        { relation: 'testimonial', sourceField: 'quote', targetField: 'testimonialQuote' },
+        { relation: 'testimonial', sourceField: 'author', targetField: 'testimonialAuthor' },
+        { relation: 'testimonial', sourceField: 'role', targetField: 'testimonialRole' },
+        { relation: 'testimonial', sourceField: 'authorImageUrl', targetField: 'testimonialAuthorImageUrl' },
+        { relation: 'testimonial', sourceField: 'linkedIn', targetField: 'testimonialLinkedIn' }
     ]
 };
 
