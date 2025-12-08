@@ -30,8 +30,7 @@ import { CONTACT_CONTENT } from '@/data/contact';
 import { BLOG_POSTS } from '@/data/blog';
 import { BlogPost } from '@/types';
 
-// Simulate API delay to ensure components handle async data correctly (optional, can be removed for production build)
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 
 export const api = {
     company: {
@@ -127,7 +126,6 @@ export const api = {
             cases: CaseStudy[];
             testimonials: Testimonial[];
         }> => {
-            const start = performance.now();
             try {
                 // Consolidated Query - Testimonials, Services, and Recent Cases
                 const query = gql`
@@ -200,8 +198,7 @@ export const api = {
                     anonymous: false
                 }));
 
-                const end = performance.now();
-                console.log(`⏱️ API:Home:getData took ${(end - start).toFixed(2)}ms`);
+
 
                 return {
                     hero: HERO_CONTENT,
@@ -216,8 +213,7 @@ export const api = {
                 };
             } catch (error) {
                 console.error('Failed to fetch Home Page Data from API, falling back to static data:', error);
-                const end = performance.now();
-                console.log(`⏱️ API:Home:getData (failed) took ${(end - start).toFixed(2)}ms`);
+
                 return {
                     hero: HERO_CONTENT,
                     stats: STATS,
@@ -235,7 +231,6 @@ export const api = {
     services: {
 
         getDetailPageData: async (slug: string): Promise<{ service: Service | undefined, relatedCases: CaseStudy[] }> => {
-            const start = performance.now();
             try {
                 // First fetch the service to get its Title (for filtering cases)
                 // We can't easily join cross-types unless there is a relation.
@@ -306,6 +301,7 @@ export const api = {
                              industry {
                                  title
                              }
+                             results
                         }
                     }
                 `;
@@ -315,11 +311,11 @@ export const api = {
                     title: c.title,
                     industry: c.industry?.title || 'General',
                     description: c.description,
-                    image: c.mainImageUrl || '/images/placeholder.png'
+                    image: c.mainImageUrl || '/images/placeholder.png',
+                    results: c.results || [] // Ensure array
                 }));
 
-                const end = performance.now();
-                console.log(`⏱️ API:Services:getDetailPageData(${slug}) took ${(end - start).toFixed(2)}ms`);
+
 
                 return { service, relatedCases };
 
@@ -359,7 +355,6 @@ export const api = {
     },
     cases: {
         getPageData: async (): Promise<{ hero: any, cases: CaseStudy[] }> => {
-            const start = performance.now();
             try {
                 const query = gql`
                     query GetCasesPageData {
@@ -372,14 +367,14 @@ export const api = {
                             industryName
                             clientName
                             clientLogoUrl
+                            results
                         }
                     }
                 `;
                 const data: any = await graphQLClient.request(query);
                 const items = data?.caseStudies;
 
-                const end = performance.now();
-                console.log(`⏱️ API:Cases:getPageData took ${(end - start).toFixed(2)}ms`);
+
 
                 const cases = (!items || items.length === 0) ? CASES_CONTENT : items.map((item: any) => ({
                     slug: item.slug,
@@ -387,6 +382,7 @@ export const api = {
                     industry: item.industryName || 'General',
                     description: item.description,
                     image: item.mainImageUrl || '/images/placeholder.png',
+                    results: item.results || [], // Ensure results is an array
                     client: {
                         name: item.clientName || 'Anonymous',
                         logo: item.clientLogoUrl || '/images/placeholder.png',
@@ -453,6 +449,7 @@ export const api = {
                                 documentId
                                 title
                             }
+                            results
                         }
                     }
                 `;
@@ -471,8 +468,8 @@ export const api = {
                     description: item.description,
                     challenge: item.challenge,
                     solution: item.solution,
-                    results: item.results,
-                    techStack: item.techStack,
+                    results: item.results || [], // Ensure array
+                    techStack: item.techStack || [], // Ensure array
                     image: item.mainImageUrl || '/images/placeholder.png',
                     client: {
                         name: item.client?.name || 'Anonymous',
@@ -495,6 +492,7 @@ export const api = {
                     description: r.description,
                     image: r.mainImageUrl || '/images/placeholder.png',
                     industry: r.industry?.title || 'General',
+                    results: r.results || []
                     // Minimal fields for cards
                 }));
 
