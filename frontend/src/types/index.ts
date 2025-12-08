@@ -27,7 +27,7 @@ export interface ServiceTech {
 
 export interface ServiceNav {
     id: string;
-    name: string;
+    title: string;
     slug?: string;
 }
 

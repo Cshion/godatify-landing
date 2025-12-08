@@ -97,7 +97,7 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
                       href={`/servicios/${service.slug}`}
                       className={styles.dropdownItem}
                     >
-                      {service.name}
+                      {service.title}
                     </Link>
                   ))}
                 </div>

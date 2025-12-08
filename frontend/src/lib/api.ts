@@ -37,7 +37,7 @@ export const api = {
     company: {
         getGlobalData: async (): Promise<{
             companyInfo: CompanyInfo;
-            servicesNav: { title: string; slug: string; description: string }[];
+            servicesNav: ServiceNav[];
             navLinks: NavLink[];
             socialLinks: SocialLink[];
             footerLinks: FooterLinks;
@@ -100,6 +100,7 @@ export const api = {
                     companyInfo: COMPANY_INFO,
                     servicesNav: Object.values(SERVICES_NAV).map(s => ({
                         title: s.name,
+                        id: s.id,
                         slug: s.id,
                         description: ''
                     })),
@@ -109,6 +110,9 @@ export const api = {
                     sectionLabels: SECTION_LABELS
                 };
             }
+        },
+        getSocialLinks: async (): Promise<SocialLink[]> => {
+            return SOCIAL_LINKS;
         }
     },
     home: {
@@ -325,6 +329,32 @@ export const api = {
                 const staticService = SERVICES_CONTENT[slug];
                 return { service: staticService, relatedCases: [] };
             }
+        },
+        getAll: async (): Promise<Service[]> => {
+            try {
+                const query = gql`
+                    query GetAllServicesSitemap {
+                        services(pagination: { limit: 100 }) {
+                            documentId
+                            title
+                            slug
+                            description
+                            updatedAt
+                        }
+                    }
+                `;
+                const data: any = await graphQLClient.request(query);
+                return (data?.services || []).map((s: any) => ({
+                    id: s.documentId,
+                    slug: s.slug,
+                    title: s.title,
+                    description: s.description,
+                    updatedAt: s.updatedAt
+                }));
+            } catch (error) {
+                console.error('Failed to getAll services:', error);
+                return Object.values(SERVICES_CONTENT);
+            }
         }
     },
     cases: {
@@ -473,6 +503,36 @@ export const api = {
             } catch (error) {
                 console.error(`Failed to fetch case detail ${slug}:`, error);
                 return { caseStudy: undefined, relatedCases: [] };
+            }
+        },
+        getAll: async (): Promise<CaseStudy[]> => {
+            try {
+                const query = gql`
+                    query GetAllCasesSitemap {
+                        caseStudies(pagination: { limit: 100 }) {
+                            slug
+                            updatedAt
+                        }
+                    }
+                `;
+                const data: any = await graphQLClient.request(query);
+                return (data?.caseStudies || []).map((c: any) => ({
+                    slug: c.slug,
+                    updatedAt: c.updatedAt,
+                    title: 'Sitemap Placeholder',
+                    industry: 'General',
+                    description: '',
+                    challenge: '',
+                    solution: '',
+                    results: [],
+                    techStack: [],
+                    image: '',
+                    client: { name: '', anonymous: false },
+                    content: ''
+                } as CaseStudy));
+            } catch (error) {
+                console.error('Failed to getAll cases:', error);
+                return CASES_CONTENT;
             }
         }
     },

@@ -1,3 +1,5 @@
+import PageHero from '@/components/common/PageHero';
+
 export default function CasesHero({ hero }: { hero: any }) {
     if (!hero) return null;
     return (
