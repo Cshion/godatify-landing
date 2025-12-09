@@ -139,7 +139,7 @@ export const api = {
                 const [testimonialsRes, servicesRes, casesRes, clientsRes] = await Promise.all([
                     fetch(`${STRAPI_URL}/api/testimonials?pagination[limit]=6&populate=*`, { cache: 'no-store' }),
                     fetch(`${STRAPI_URL}/api/services?fields[0]=title&fields[1]=slug&fields[2]=description&fields[3]=icon&fields[4]=imageUrl&pagination[limit]=10`, { cache: 'no-store' }),
-                    fetch(`${STRAPI_URL}/api/case-studies?sort[0]=publishedAt:desc&pagination[limit]=3&fields[0]=slug&fields[1]=title&fields[2]=description&fields[3]=mainImageUrl`, { cache: 'no-store' }),
+                    fetch(`${STRAPI_URL}/api/case-studies?sort[0]=publishedAt:desc&sort[1]=slug:asc&pagination[limit]=6&fields[0]=slug&fields[1]=title&fields[2]=description&fields[3]=mainImageUrl`, { cache: 'no-store' }),
                     fetch(`${STRAPI_URL}/api/clients?fields[0]=name&fields[1]=logoUrl&pagination[limit]=20`, { cache: 'no-store' })
                 ]);
 

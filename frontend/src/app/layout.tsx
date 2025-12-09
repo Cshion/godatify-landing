@@ -4,7 +4,7 @@ import { defaultMetadata } from "@/lib/seo";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { api } from "@/lib/api";
-import SmoothScroll from "@/components/common/SmoothScroll";
+
 import "./globals.css";
 
 const barlow = Barlow({
@@ -34,7 +34,7 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${barlow.variable} antialiased`}>
-        <SmoothScroll />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
