@@ -11,12 +11,13 @@ export const metadata: Metadata = {
 export const revalidate = 3600; // Revalidate every hour
 
 export default async function CasosPage() {
-    const { hero, cases } = await api.cases.getPageData();
+    const { hero } = await api.cases.getPageData();
+    const { cases, total } = await api.cases.getCases({ start: 0, limit: 6 });
 
     return (
         <main>
             <CasesHero hero={hero} />
-            <CasesGrid cases={cases} />
+            <CasesGrid cases={cases} initialTotal={total} />
         </main>
     );
 }

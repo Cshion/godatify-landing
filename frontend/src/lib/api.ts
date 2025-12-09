@@ -446,6 +446,42 @@ export const api = {
                 return { caseStudy: undefined, relatedCases: [] };
             }
         },
+        getCases: async ({ start, limit }: { start: number; limit: number }): Promise<{ cases: CaseStudy[]; total: number }> => {
+            try {
+                const queryParams = qs.stringify({
+                    sort: ['publishedAt:desc', 'slug:asc'], // Secondary sort for stability
+                    pagination: {
+                        start,
+                        limit
+                    },
+                    populate: '*', // Fetch all fields for card display
+                }, { encodeValuesOnly: true });
+
+                const res = await fetch(`${STRAPI_URL}/api/case-studies?${queryParams}`, { cache: 'no-store' });
+                const json = await res.json();
+                const items = json.data || [];
+                const total = json.meta?.pagination?.total || 0;
+
+                const cases = items.map((item: any) => ({
+                    slug: item.slug,
+                    title: item.title,
+                    industry: item.industryName || 'General',
+                    description: item.description,
+                    image: item.mainImageUrl || '/images/placeholder.png',
+                    results: item.results || [],
+                    client: {
+                        name: item.clientName || 'Anonymous',
+                        logo: item.clientLogoUrl || '/images/placeholder.png',
+                        anonymous: !item.clientName
+                    }
+                }));
+
+                return { cases, total };
+            } catch (error) {
+                console.error('Failed to fetch paginated cases:', error);
+                return { cases: [], total: 0 };
+            }
+        },
         getAll: async (): Promise<CaseStudy[]> => {
             try {
                 const queryParams = qs.stringify({
@@ -642,7 +678,7 @@ export const api = {
         getPosts: async ({ start, limit }: { start: number; limit: number }): Promise<{ posts: BlogPost[]; total: number }> => {
             try {
                 const queryParams = qs.stringify({
-                    sort: ['date:desc'],
+                    sort: ['date:desc', 'slug:asc'], // Secondary sort for stability
                     populate: ['author.avatar', 'coverImage'],
                     fields: ['title', 'slug', 'excerpt', 'date', 'readingTime', 'tags', 'featured', 'coverImageUrl'],
                     pagination: {

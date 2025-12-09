@@ -19,18 +19,20 @@ const BATCH_SIZE = 6;
 export default function BlogList({ initialPosts, totalPosts }: BlogListProps) {
     const [posts, setPosts] = useState<BlogPost[]>(initialPosts);
     const [hasMore, setHasMore] = useState(initialPosts.length < totalPosts);
-    const [isLoading, setIsLoading] = useState(false);
+    const loadingRef = useRef(false);
     const loader = useRef<HTMLDivElement>(null);
 
     const handleObserver = (entities: IntersectionObserverEntry[]) => {
         const target = entities[0];
-        if (target.isIntersecting && hasMore && !isLoading) {
+        if (target.isIntersecting && hasMore && !loadingRef.current) {
             loadMore();
         }
     };
 
     const loadMore = async () => {
-        setIsLoading(true);
+        if (loadingRef.current) return;
+        loadingRef.current = true;
+
         try {
             const offset = posts.length;
             const { posts: newPosts, total } = await getMorePosts(offset, BATCH_SIZE);
@@ -38,16 +40,27 @@ export default function BlogList({ initialPosts, totalPosts }: BlogListProps) {
             if (newPosts.length === 0) {
                 setHasMore(false);
             } else {
-                setPosts((prev) => [...prev, ...newPosts]);
-                if (posts.length + newPosts.length >= total) {
-                    setHasMore(false);
-                }
+                setPosts((prev) => {
+                    const existingIds = new Set(prev.map(p => p.id));
+                    const uniqueNewPosts = newPosts.filter(p => !existingIds.has(p.id));
+
+                    if (uniqueNewPosts.length === 0) {
+                        setHasMore(false);
+                        return prev;
+                    }
+
+                    if (prev.length + uniqueNewPosts.length >= total) {
+                        setHasMore(false);
+                    }
+
+                    return [...prev, ...uniqueNewPosts];
+                });
             }
         } catch (error) {
             console.error('Failed to load more posts:', error);
             setHasMore(false);
         } finally {
-            setIsLoading(false);
+            loadingRef.current = false;
         }
     };
 
@@ -63,7 +76,7 @@ export default function BlogList({ initialPosts, totalPosts }: BlogListProps) {
         return () => {
             if (loader.current) observer.unobserve(loader.current);
         };
-    }, [posts, hasMore, isLoading]);
+    }, [posts, hasMore]);
 
     if (posts.length === 0) return null;
 
@@ -78,7 +91,7 @@ export default function BlogList({ initialPosts, totalPosts }: BlogListProps) {
             {/* Grid */}
             <div className={styles.grid}>
                 {gridPosts.map((post) => (
-                    <BlogCard key={`${post.id}-${posts.indexOf(post)}`} post={post} />
+                    <BlogCard key={post.id} post={post} />
                 ))}
             </div>
 
