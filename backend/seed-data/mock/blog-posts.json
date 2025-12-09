@@ -1,5 +1,258 @@
 [
     {
+        "title": "Ultimate Feature Showcase",
+        "slug": "ultimate-feature-showcase",
+        "excerpt": "A complete demonstration of every styling capability available in the Strapi Blocks editor.",
+        "content": [
+            {
+                "type": "heading",
+                "level": 1,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Ultimate Formatting Test"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "This post demonstrates the full range of "
+                    },
+                    {
+                        "type": "text",
+                        "text": "rich text capabilities",
+                        "bold": true
+                    },
+                    {
+                        "type": "text",
+                        "text": " available in our "
+                    },
+                    {
+                        "type": "text",
+                        "text": "blog engine",
+                        "italic": true
+                    },
+                    {
+                        "type": "text",
+                        "text": ". We support "
+                    },
+                    {
+                        "type": "text",
+                        "text": "inline code",
+                        "code": true
+                    },
+                    {
+                        "type": "text",
+                        "text": ", "
+                    },
+                    {
+                        "type": "text",
+                        "text": "underline",
+                        "underline": true
+                    },
+                    {
+                        "type": "text",
+                        "text": ", and "
+                    },
+                    {
+                        "type": "text",
+                        "text": "strikethrough",
+                        "strikethrough": true
+                    },
+                    {
+                        "type": "text",
+                        "text": " styles."
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 2,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Headings Showcase"
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 3,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Heading Level 3"
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 4,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Heading Level 4"
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 5,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Heading Level 5"
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 6,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Heading Level 6"
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 2,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Lists Showcase"
+                    }
+                ]
+            },
+            {
+                "type": "list",
+                "format": "unordered",
+                "children": [
+                    {
+                        "type": "list-item",
+                        "children": [
+                            {
+                                "type": "text",
+                                "text": "Unordered Item 1"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "list-item",
+                        "children": [
+                            {
+                                "type": "text",
+                                "text": "Unordered Item 2 (Nested List flattened for validation)"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "list-item",
+                        "children": [
+                            {
+                                "type": "text",
+                                "text": "Ordered Sub-item 1"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "list-item",
+                        "children": [
+                            {
+                                "type": "text",
+                                "text": "Ordered Sub-item 2"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "list-item",
+                        "children": [
+                            {
+                                "type": "text",
+                                "text": "Unordered Item 3"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 2,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Media Showcase"
+                    }
+                ]
+            },
+            {
+                "type": "image",
+                "image": {
+                    "ext": ".jpg",
+                    "url": "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba",
+                    "caption": "A stunning landscape from Unsplash",
+                    "alternativeText": "Mountains under starry sky",
+                    "width": 1200,
+                    "height": 800
+                }
+            },
+            {
+                "type": "heading",
+                "level": 2,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Advanced Blocks"
+                    }
+                ]
+            },
+            {
+                "type": "quote",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle."
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "- Steve Jobs"
+                    }
+                ]
+            },
+            {
+                "type": "code",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "function createMagic() {\n  return 'Stunning Web Experiences';\n}\n\nconsole.log(createMagic());"
+                    }
+                ]
+            }
+        ],
+        "date": "2026-01-01",
+        "readingTime": "8 min",
+        "featured": true,
+        "image": "https://images.unsplash.com/photo-1621839673705-6617adf9e890?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1621839673705-6617adf9e890?q=80&w=1000&auto=format&fit=crop",
+        "tags": [
+            "Showcase",
+            "Features",
+            "Demo"
+        ],
+        "author": {
+            "name": "Datify Team"
+        }
+    },
+    {
         "title": "Rich Text Block Verification Test",
         "slug": "rich-text-test",
         "excerpt": "This is a comprehensive test of all supported rich text blocks to verify frontend rendering.",
@@ -156,25 +409,97 @@
                 ]
             },
             {
+                "type": "heading",
+                "level": 2,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Image Verification"
+                    }
+                ]
+            },
+            {
                 "type": "paragraph",
                 "children": [
                     {
                         "type": "text",
-                        "text": "Visit "
-                    },
+                        "text": "Below is an image block rendered via our custom component:"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "children": [
                     {
-                        "type": "link",
-                        "url": "https://strapi.io",
+                        "type": "text",
+                        "text": "Image example removed (requires manual upload)."
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "And here is a nested list:"
+                    }
+                ]
+            },
+            {
+                "type": "list",
+                "format": "unordered",
+                "children": [
+                    {
+                        "type": "list-item",
                         "children": [
                             {
                                 "type": "text",
-                                "text": "Strapi Website"
+                                "text": "Level 1 Item"
                             }
                         ]
                     },
                     {
+                        "type": "list-item",
+                        "children": [
+                            {
+                                "type": "text",
+                                "text": "Level 1 Item with Children"
+                            },
+                            {
+                                "type": "list",
+                                "format": "unordered",
+                                "children": [
+                                    {
+                                        "type": "list-item",
+                                        "children": [
+                                            {
+                                                "type": "text",
+                                                "text": "Level 2 Item"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 3,
+                "children": [
+                    {
                         "type": "text",
-                        "text": " for more info."
+                        "text": "Conclusion"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "End of test."
                     }
                 ]
             }

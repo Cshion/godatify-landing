@@ -10,5 +10,11 @@
         "role": "Cloud Engineer",
         "bio": "Specialist in Cloud Migrations and Modern Data Stacks.",
         "avatarUrl": "https://ui-avatars.com/api/?name=Carlos+Gomez&background=random"
+    },
+    {
+        "name": "Datify Team",
+        "role": "Editorial Team",
+        "bio": "Official updates and news from Datify.",
+        "avatarUrl": "https://ui-avatars.com/api/?name=Datify+Team&background=0D8ABC&color=fff"
     }
 ]

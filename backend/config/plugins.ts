@@ -17,12 +17,17 @@ export default ({ env }) => {
                         region: env('AWS_REGION'),
                         params: {
                             Bucket: env('AWS_BUCKET'),
+                            ACL: null, // Disable ACLs for Bucket Owner Enforced setting
                         },
                     },
                 },
                 actionOptions: {
-                    upload: {},
-                    uploadStream: {},
+                    upload: {
+                        ACL: null,
+                    },
+                    uploadStream: {
+                        ACL: null,
+                    },
                     delete: {},
                 },
             },
