@@ -164,12 +164,12 @@ export default async function BlogPostPage({ params }: Props) {
                     }}
                 />
 
+
                 <div className={`${styles.content} prose max-w-none`}>
                     <RichTextRenderer content={post.content} />
-                </div>
-
-                <div className="max-w-4xl mx-auto mt-20 flex justify-center w-full">
-                    <BlogCTA />
+                    <div className="mt-20">
+                        <BlogCTA />
+                    </div>
                 </div>
 
                 {relatedPosts.length > 0 && (

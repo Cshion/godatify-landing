@@ -8,7 +8,7 @@
     justify-content: center;
     text-align: center;
     color: #ffffff;
-    margin: 0;
+    margin: 8rem 0 4rem 0;
     /* Let parent control margin */
     width: 100%;
     position: relative;
@@ -29,18 +29,22 @@
 }
 
 .title {
-    font-size: 2.25rem;
+    font-size: 2.75rem;
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
     position: relative;
     z-index: 10;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    /* Reset prose margin */
     color: #ffffff !important;
 }
 
 .description {
-    font-size: 1.125rem;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 2rem;
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 2.5rem;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
@@ -51,12 +55,14 @@
 .button {
     display: inline-block;
     background: white;
-    color: #1C7C54;
-    padding: 0.875rem 2rem;
+    color: #1C7C54 !important;
+    /* Force color over prose a */
+    padding: 1.25rem 3.5rem;
     border-radius: 9999px;
     font-weight: 700;
-    font-size: 1rem;
-    text-decoration: none;
+    font-size: 1.25rem;
+    text-decoration: none !important;
+    /* Force no underline */
     transition: transform 0.2s, box-shadow 0.2s;
     position: relative;
     z-index: 10;
