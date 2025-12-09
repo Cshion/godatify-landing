@@ -4,13 +4,14 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { NavLink, SocialLink, ServiceNav } from '@/types';
+import { NavLink, SocialLink, ServiceNav, Sector } from '@/types';
 import styles from './Header.module.css';
 
 interface HeaderProps {
   navLinks: NavLink[];
   socialLinks: SocialLink[];
   servicesNav: ServiceNav[];
+  sectorsNav: Sector[];
   servicesLabel: string;
   logo: {
     url: string;
@@ -20,7 +21,7 @@ interface HeaderProps {
   };
 }
 
-export default function Header({ navLinks, socialLinks, servicesNav, servicesLabel, logo }: HeaderProps) {
+export default function Header({ navLinks, socialLinks, servicesNav, sectorsNav, servicesLabel, logo }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -79,7 +80,7 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
 
             {/* Desktop Navigation */}
             <nav className={styles.navMenu}>
-              {navLinks.slice(0, 3).map((link) => (
+              {navLinks.filter(l => l.href !== '/industrias').slice(0, 2).map((link) => (
                 <Link key={link.href} href={link.href} className={styles.navLink}>
                   {link.label}
                 </Link>
@@ -103,13 +104,42 @@ export default function Header({ navLinks, socialLinks, servicesNav, servicesLab
                 </div>
               </div>
 
-              {
-                navLinks.slice(3).map((link) => (
-                  <Link key={link.href} href={link.href} className={styles.navLink}>
-                    {link.label}
-                  </Link>
-                ))
-              }
+              {/* Industries: Mega Menu OR Standard Link */}
+              {sectorsNav && sectorsNav.length > 0 ? (
+                <div className={styles.dropdown}>
+                  <button className={`${styles.navLink} ${styles.dropdownToggle}`}>
+                    Industrias
+                  </button>
+                  <div className={`${styles.dropdownMenu} ${styles.megaMenu}`}>
+                    {sectorsNav.map((sector) => (
+                      <div key={sector.slug} className={styles.megaMenuColumn}>
+                        <h4 className={styles.megaMenuTitle}>{sector.title}</h4>
+                        <div className={styles.megaMenuList}>
+                          {(sector.industries || []).map((ind) => (
+                            <Link
+                              key={ind.slug}
+                              href={`/industrias/${ind.slug}`}
+                              className={styles.dropdownItem}
+                            >
+                              {ind.title}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link href="/industrias" className={styles.navLink}>
+                  Industrias
+                </Link>
+              )}
+
+              {navLinks.filter(l => l.href !== '/industrias').slice(2).map((link) => (
+                <Link key={link.href} href={link.href} className={styles.navLink}>
+                  {link.label}
+                </Link>
+              ))}
             </nav >
 
             {/* Contact CTA */}

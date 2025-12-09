@@ -3,117 +3,88 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Industry, CaseStudy } from '@/types';
+import { Sector, CaseStudy } from '@/types';
 import styles from './IndustryShowcase.module.css';
 
+interface IndustryShowcaseProps {
+    sectors: Sector[];
+    cases: CaseStudy[];
+}
 
-
-export default function IndustryShowcase({ sectors, cases }: { sectors: Industry[], cases: CaseStudy[] }) {
-    // Initial state set from props
-    const [activeSector, setActiveSector] = useState<Industry | null>(sectors.length > 0 ? sectors[0] : null);
-
-    // No useEffect needed for fetching data anymore!
+export default function IndustryShowcase({ sectors, cases }: IndustryShowcaseProps) {
+    const [activeSector, setActiveSector] = useState<Sector | null>(sectors.length > 0 ? sectors[0] : null);
 
     if (!activeSector) return null;
 
     return (
         <section className={styles.section} id="showcase">
-            <div className={styles.container}>
-                <div className={styles.layout}>
+            <div className="container mx-auto px-6">
 
-                    {/* Left Column: List */}
-                    <div className={styles.industryList}>
-                        {sectors.map((sector) => (
-                            <button
-                                key={sector.id}
-                                className={`${styles.industryButton} ${activeSector.id === sector.id ? styles.activeButton : ''}`}
-                                onMouseEnter={() => setActiveSector(sector)}
-                                onClick={() => setActiveSector(sector)}
-                            >
-                                <span className={styles.buttonTitle}>{sector.title}</span>
-                                <span className={styles.buttonDesc}>{sector.description}</span>
-                            </button>
-                        ))}
-                    </div>
+                {/* Sector Tabs - Desktop: Horizontal, Mobile: Scrollable */}
+                <div className="flex overflow-x-auto pb-4 gap-4 mb-12 border-b border-gray-200 hide-scrollbar">
+                    {sectors.map((sector) => (
+                        <button
+                            key={sector.slug}
+                            onClick={() => setActiveSector(sector)}
+                            className={`whitespace-nowrap px-6 py-3 rounded-t-lg font-semibold transition-all duration-300 relative ${activeSector.slug === sector.slug
+                                    ? 'text-primary bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] border-b-2 border-brand-green'
+                                    : 'text-gray-500 hover:text-primary hover:bg-gray-50'
+                                }`}
+                        >
+                            {sector.title}
+                            {/* Animated Underline */}
+                            {activeSector.slug === sector.slug && (
+                                <span className="absolute bottom-[-2px] left-0 w-full h-0.5 bg-brand-green" />
+                            )}
+                        </button>
+                    ))}
+                </div>
 
-                    {/* Right Column: Preview */}
-                    <div className={styles.previewArea} key={activeSector.id}>
-                        <div className={styles.imageContainer}>
-                            <Image
-                                src={activeSector.image}
-                                alt={activeSector.title}
-                                fill
-                                className={styles.previewImage}
-                                priority
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                            <div className="absolute bottom-6 left-6 text-white">
-                                <h3 className="text-3xl font-bold">{activeSector.title}</h3>
-                            </div>
+                {/* Active Sector Content */}
+                <div className="grid lg:grid-cols-12 gap-12 animate-fadeIn">
+
+                    {/* Left: Sector Info */}
+                    <div className="lg:col-span-4 space-y-8">
+                        <div>
+                            <h2 className="text-4xl font-bold text-primary mb-4">{activeSector.title}</h2>
+                            <p className="text-lg text-gray-600 leading-relaxed">{activeSector.description}</p>
                         </div>
 
-                        <div className={styles.previewContent}>
-                            {/* Stats */}
-                            <div className={styles.statsGrid}>
-                                {activeSector.stats.map((stat, idx) => (
-                                    <div key={idx}>
-                                        <span className={styles.statValue}>{stat.value}</span>
-                                        <span className={styles.statLabel}>{stat.label}</span>
+                        {/* Decorative or Info Card */}
+                        <div className="bg-brand-green/5 p-8 rounded-2xl border border-brand-green/10">
+                            <h3 className="font-bold text-primary mb-2 flex items-center gap-2">
+                                <i className="fas fa-chart-line text-brand-green"></i>
+                                Impacto Transformador
+                            </h3>
+                            <p className="text-sm text-gray-600">
+                                Nuestras soluciones en {activeSector.title} están diseñadas para maximizar eficiencia y reducir costos operativos mediante analítica avanzada.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Right: Industries Grid */}
+                    <div className="lg:col-span-8">
+                        <div className="grid md:grid-cols-2 gap-6">
+                            {(activeSector.industries || []).map((industry) => (
+                                <Link
+                                    key={industry.slug}
+                                    href={`/industrias/${industry.slug}`}
+                                    className="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden"
+                                >
+                                    <div className="absolute top-0 right-0 w-24 h-24 bg-brand-green/5 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110" />
+
+                                    <h3 className="text-xl font-bold text-primary mb-3 relative z-10 group-hover:text-brand-green transition-colors">
+                                        {industry.title}
+                                    </h3>
+                                    <p className="text-gray-500 text-sm mb-6 relative z-10 line-clamp-2">
+                                        {industry.description}
+                                    </p>
+
+                                    <div className="flex items-center text-brand-green font-semibold text-sm group-hover:translate-x-2 transition-transform">
+                                        Explorar Soluciones <i className="fas fa-arrow-right ml-2"></i>
                                     </div>
-                                ))}
-                            </div>
-
-                            {/* Projects / Cases */}
-                            <div className={styles.projectsList}>
-                                <h4 className="text-white/90 font-semibold mb-4 flex items-center gap-2">
-                                    <i className="fas fa-trophy text-brand-green"></i>
-                                    Casos de Éxito
-                                </h4>
-                                <div className="grid grid-cols-1 gap-3">
-                                    {cases.filter(c => c.relatedIndustryId === activeSector.id).map((caseStudy) => (
-                                        <Link
-                                            key={caseStudy.slug}
-                                            href={`/casos/${caseStudy.slug}`}
-                                            className="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-green/50 transition-all group"
-                                        >
-                                            <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border border-white/10">
-                                                <Image
-                                                    src={caseStudy.image}
-                                                    alt={caseStudy.title}
-                                                    fill
-                                                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                                                />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <h5 className="text-white font-medium text-sm leading-tight mb-1 truncate group-hover:text-brand-green transition-colors">
-                                                    {caseStudy.title}
-                                                </h5>
-                                                <p className="text-white/50 text-xs line-clamp-1 mb-1">
-                                                    {caseStudy.description}
-                                                </p>
-                                                <span className="text-brand-green text-xs font-semibold flex items-center gap-1 opacity-80 group-hover:opacity-100">
-                                                    Ver caso
-                                                    <i className="fas fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
-                                                </span>
-                                            </div>
-                                        </Link>
-                                    ))}
-
-                                    {/* Fallback if no cases found */}
-                                    {cases.filter(c => c.relatedIndustryId === activeSector.id).length === 0 && (
-                                        <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-                                            <ul className="space-y-2">
-                                                {activeSector.projects.map((project, idx) => (
-                                                    <li key={idx} className="text-white/70 text-sm flex items-start">
-                                                        <i className="fas fa-check text-brand-green mt-1 mr-2 text-xs"></i>
-                                                        {project}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
+                                </Link>
+                            ))}
                         </div>
                     </div>
 

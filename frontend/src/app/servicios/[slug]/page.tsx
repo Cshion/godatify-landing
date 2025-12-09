@@ -69,7 +69,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                             Descubre cómo hemos aplicado estas soluciones en empresas reales para generar valor tangible.
                         </p>
                     </div>
-                    <CasesGrid cases={relatedCases} />
+                    <CasesGrid cases={relatedCases} initialTotal={relatedCases.length} />
                 </div>
             )}
         </main>

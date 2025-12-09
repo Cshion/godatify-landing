@@ -43,6 +43,12 @@
             "relation": "oneToMany",
             "target": "api::case-study.case-study",
             "mappedBy": "industry"
+        },
+        "sector": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::sector.sector",
+            "inversedBy": "industries"
         }
     }
 }

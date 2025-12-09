@@ -23,7 +23,7 @@ export default async function RootLayout({
 }>) {
   const globalData = await api.company.getGlobalData();
 
-  const { navLinks, socialLinks, companyInfo, servicesNav, footerLinks, sectionLabels } = globalData;
+  const { navLinks, socialLinks, companyInfo, servicesNav, sectorsNav, footerLinks, sectionLabels } = globalData;
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
@@ -63,6 +63,7 @@ export default async function RootLayout({
           navLinks={navLinks}
           socialLinks={socialLinks}
           servicesNav={servicesNav as any}
+          sectorsNav={sectorsNav}
           servicesLabel={sectionLabels.header.servicesDropdown}
           logo={companyInfo.logo}
         />

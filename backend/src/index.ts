@@ -330,6 +330,7 @@ export default {
                         'api::about-page': { controllers: { 'about-page': { find: { enabled: true } } } },
                         'api::contact-page': { controllers: { 'contact-page': { find: { enabled: true } } } },
                         'api::industries-page': { controllers: { 'industries-page': { find: { enabled: true } } } },
+                        'api::sector': { controllers: { sector: { find: { enabled: true }, findOne: { enabled: true } } } },
                     };
 
                     await roleService.updateRole(publicRole.id, { permissions });
@@ -374,13 +375,29 @@ export default {
                 await seedCollection('api::author.author', authorsData, 'name');
                 const allAuthors = await strapi.documents('api::author.author' as any).findMany({ limit: 100 });
 
+                // Sectors
+                const sectorsData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'sectors.json'), 'utf-8'));
+                await seedCollection('api::sector.sector', sectorsData, 'slug');
+                const allSectors = await strapi.documents('api::sector.sector' as any).findMany({ limit: 100 });
+
                 // Industries
                 const industriesData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'industries.json'), 'utf-8'));
                 if (industriesData.page) {
                     await seedSingle('api::industries-page.industries-page', industriesData.page);
                 }
                 if (industriesData.industries) {
-                    await seedCollection('api::industry.industry', industriesData.industries, 'slug');
+                    // Enrich industries with sector ID
+                    const enrichedIndustries = industriesData.industries.map((ind: any) => {
+                        if (ind.sector) {
+                            const sector = allSectors.find((s: any) => s.slug === ind.sector);
+                            return {
+                                ...ind,
+                                sector: sector ? sector.documentId : undefined
+                            };
+                        }
+                        return ind;
+                    });
+                    await seedCollection('api::industry.industry', enrichedIndustries, 'slug');
                 }
                 const allIndustries = await strapi.documents('api::industry.industry' as any).findMany({ limit: 100 });
 

@@ -1,0 +1,33 @@
+{
+    "kind": "collectionType",
+    "collectionName": "sectors",
+    "info": {
+        "singularName": "sector",
+        "pluralName": "sectors",
+        "displayName": "Sector",
+        "description": "Broad categories for industries"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "slug": {
+            "type": "uid",
+            "targetField": "title"
+        },
+        "description": {
+            "type": "text"
+        },
+        "industries": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::industry.industry",
+            "mappedBy": "sector"
+        }
+    }
+}

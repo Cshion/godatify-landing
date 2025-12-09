@@ -142,6 +142,39 @@
     letter-spacing: 0.02em;
 }
 
+/* ... existing dropdown styles ... */
+
+.megaMenu {
+    min-width: 600px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+}
+
+.dropdown:hover .megaMenu {
+    transform: translateX(-50%) translateY(0);
+}
+
+.megaMenuTitle {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--secondary);
+    padding-bottom: 0.5rem;
+}
+
+.megaMenuList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
 .header.scrolled .contactCta {
     background-color: #1C7C54;
     border-color: #1C7C54;

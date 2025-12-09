@@ -216,7 +216,7 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                         Otros Casos de Éxito
                     </h2>
                 </div>
-                <CasesGrid cases={relatedCases} />
+                <CasesGrid cases={relatedCases} initialTotal={relatedCases.length} />
             </div>
         </>
     );

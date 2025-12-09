@@ -14,6 +14,7 @@
         {
             "slug": "cervecera",
             "title": "Industria Cervecera",
+            "sector": "consumo-masivo",
             "description": "Precisión operativa y visibilidad comercial en toda la cadena de valor.",
             "imageUrl": "https://images.unsplash.com/photo-1600256698643-1d9345bfd9ee?auto=format&fit=crop&q=80&w=1000",
             "stats": [
@@ -36,6 +37,7 @@
         {
             "slug": "logistica",
             "title": "Industria Logística",
+            "sector": "logistica-transporte",
             "description": "Optimización de rutas, gestión de flotas y monitoreo en tiempo real.",
             "imageUrl": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000",
             "stats": [
@@ -57,6 +59,7 @@
         {
             "slug": "agricola",
             "title": "Industria Agrícola",
+            "sector": "agro-pesca",
             "description": "Transformación digital para un entorno estacional y de alta variabilidad.",
             "imageUrl": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=1000",
             "stats": [
@@ -78,6 +81,7 @@
         {
             "slug": "pesquera",
             "title": "Industria Pesquera",
+            "sector": "agro-pesca",
             "description": "Digitalización y cumplimiento normativo en procesos complejos.",
             "imageUrl": "https://images.unsplash.com/photo-1534951009808-766178b47a8e?auto=format&fit=crop&q=80&w=1000",
             "stats": [

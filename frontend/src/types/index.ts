@@ -134,11 +134,21 @@ export interface IndustryStats {
 
 export interface Industry {
     id: string;
+    slug: string; // Added slug
     title: string;
     description: string;
     image: string;
+    sector?: { title: string; slug: string }; // Linked Sector
     stats: IndustryStats[];
     projects: string[];
+}
+
+export interface Sector {
+    id: string;
+    slug: string;
+    title: string;
+    description: string;
+    industries: Industry[];
 }
 
 export interface CompanyInfo {

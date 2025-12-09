@@ -1,0 +1,17 @@
+[
+    {
+        "slug": "consumo-masivo",
+        "title": "Consumo Masivo & Retail",
+        "description": "Soluciones para bienes de consumo rápido, retail y manufactura de alimentos."
+    },
+    {
+        "slug": "logistica-transporte",
+        "title": "Logística & Transporte",
+        "description": "Optimización de cadenas de suministro, flotas y distribución."
+    },
+    {
+        "slug": "agro-pesca",
+        "title": "Agroindustrial & Pesca",
+        "description": "Tecnología para el sector primario, desde el campo y mar hasta la planta."
+    }
+]

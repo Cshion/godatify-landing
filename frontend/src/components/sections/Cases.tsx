@@ -33,7 +33,7 @@ export default function Cases({ cases, title, buttonText }: CasesProps) {
             }}
           >
             {cases.map((caseStudy) => (
-              <div key={caseStudy.slug} className={`${styles.caseCard} group reveal`}>
+              <div key={caseStudy.slug} className={`${styles.caseCard} group`}>
                 {/* Image */}
                 <div className={styles.caseImageWrapper}>
                   <Image

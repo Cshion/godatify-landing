@@ -1,6 +1,4 @@
-import { Industry } from '@/types';
 
-// Industries Page Content
 import { IndustriesPageContent } from '@/types';
 
 // Industries Page Content
@@ -15,6 +13,7 @@ export const INDUSTRIES_CONTENT: IndustriesPageContent = {
     sectors: [
         {
             id: 'cervecera',
+            slug: 'cervecera',
             title: 'Industria Cervecera',
             description: 'Precisión operativa y visibilidad comercial en toda la cadena de valor.',
             image: 'https://images.unsplash.com/photo-1600256698643-1d9345bfd9ee?auto=format&fit=crop&q=80&w=1000',
@@ -31,6 +30,7 @@ export const INDUSTRIES_CONTENT: IndustriesPageContent = {
         },
         {
             id: 'logistica',
+            slug: 'logistica',
             title: 'Industria Logística',
             description: 'Optimización de rutas, gestión de flotas y monitoreo en tiempo real.',
             image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000',
@@ -46,6 +46,7 @@ export const INDUSTRIES_CONTENT: IndustriesPageContent = {
         },
         {
             id: 'agricola',
+            slug: 'agricola',
             title: 'Industria Agrícola',
             description: 'Transformación digital para un entorno estacional y de alta variabilidad.',
             image: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=1000',
@@ -61,6 +62,7 @@ export const INDUSTRIES_CONTENT: IndustriesPageContent = {
         },
         {
             id: 'pesquera',
+            slug: 'pesquera',
             title: 'Industria Pesquera',
             description: 'Digitalización y cumplimiento normativo en procesos complejos.',
             image: 'https://images.unsplash.com/photo-1534951009808-766178b47a8e?auto=format&fit=crop&q=80&w=1000',

@@ -2,6 +2,7 @@ import {
     Service,
     CaseStudy,
     Industry,
+    Sector,
     Testimonial,
     CompanyInfo,
     HeroContent,
@@ -46,6 +47,7 @@ export const api = {
         getGlobalData: async (): Promise<{
             companyInfo: CompanyInfo;
             servicesNav: ServiceNav[];
+            sectorsNav: Sector[];
             navLinks: NavLink[];
             socialLinks: SocialLink[];
             footerLinks: FooterLinks;
@@ -92,9 +94,13 @@ export const api = {
                     description: s.description || ''
                 }));
 
+                // Fetch Sectors for Header
+                const sectors = await api.industries.getSectors();
+
                 return {
                     companyInfo,
                     servicesNav,
+                    sectorsNav: sectors,
                     navLinks: NAV_LINKS,
                     socialLinks: SOCIAL_LINKS,
                     footerLinks: FOOTER_LINKS,
@@ -114,7 +120,8 @@ export const api = {
                     navLinks: NAV_LINKS,
                     socialLinks: SOCIAL_LINKS,
                     footerLinks: FOOTER_LINKS,
-                    sectionLabels: SECTION_LABELS
+                    sectionLabels: SECTION_LABELS,
+                    sectorsNav: []
                 };
             }
         },
@@ -513,30 +520,33 @@ export const api = {
         }
     },
     industries: {
-        getPageData: async (): Promise<{ hero: any, sectors: Industry[], cases: CaseStudy[] }> => {
+        getPageData: async (): Promise<{ hero: any, sectors: Sector[], cases: CaseStudy[] }> => {
             try {
-                // Parallel fetch Industries and Cases
-                const [industriesRes, casesRes] = await Promise.all([
-                    fetch(`${STRAPI_URL}/api/industries?populate=*`, { cache: 'no-store' }),
-                    fetch(`${STRAPI_URL}/api/case-studies?pagination[limit]=50&populate=*`, { cache: 'no-store' })
+                // Parallel fetch Sectors, Page Content, and Cases
+                const [sectorsRes, pageRes, casesRes] = await Promise.all([
+                    // Reuse getSectors logic or call valid endpoint
+                    api.industries.getSectors(),
+                    fetch(`${STRAPI_URL}/api/industries-page`, { cache: 'no-store' }),
+                    fetch(`${STRAPI_URL}/api/case-studies?pagination[limit]=20&populate=*`, { cache: 'no-store' })
                 ]);
 
-                const [industriesJson, casesJson] = await Promise.all([
-                    industriesRes.json(),
-                    casesRes.json()
-                ]);
+                // We await the fetch calls that return Response
+                const pageJson = await pageRes.json();
+                const casesJson = await casesRes.json();
 
-                const industriesData = industriesJson.data || [];
+                // sectorsRes is already parsed data from api.industries.getSectors()
+                const sectors = sectorsRes;
+
+                const pageData = pageJson.data || {};
                 const casesData = casesJson.data || [];
 
-                const sectors = (!industriesData.length) ? INDUSTRIES_CONTENT.sectors : industriesData.map((item: any) => ({
-                    id: item.documentId,
-                    title: item.title,
-                    description: item.description,
-                    stats: item.stats,
-                    projects: item.projects,
-                    image: item.imageUrl || '/images/placeholder.png'
-                }));
+                const hero = {
+                    title: pageData.heroTitle || 'Potencia tu Sector',
+                    subtitle: pageData.heroSubtitle || 'Soluciones especializadas.',
+                    description: pageData.heroDescription || '',
+                    phrases: pageData.heroPhrases || [],
+                    backgroundImage: pageData.heroBackgroundImageUrl || '/images/hero-industries.png'
+                };
 
                 const cases = (!casesData.length) ? [] : casesData.map((item: any) => ({
                     slug: item.slug,
@@ -547,17 +557,117 @@ export const api = {
                 }));
 
                 return {
-                    hero: INDUSTRIES_CONTENT.hero,
+                    hero,
                     sectors,
                     cases
                 };
             } catch (error) {
                 console.error('Failed to fetch industries page data:', error);
                 return {
-                    hero: INDUSTRIES_CONTENT.hero,
-                    sectors: INDUSTRIES_CONTENT.sectors,
+                    hero: { title: 'Industries', description: 'Error loading data' },
+                    sectors: [],
                     cases: []
                 };
+            }
+        },
+        getSectors: async (): Promise<Sector[]> => {
+            try {
+                const queryParams = qs.stringify({
+                    populate: {
+                        industries: {
+                            fields: ['title', 'slug', 'description']
+                        }
+                    },
+                    sort: ['title:asc']
+                }, { encodeValuesOnly: true });
+
+                const res = await fetch(`${STRAPI_URL}/api/sectors?${queryParams}`, { cache: 'no-store' });
+                const json = await res.json();
+                const items = json.data || [];
+
+                return items.map((item: any) => ({
+                    id: item.documentId,
+                    slug: item.slug,
+                    title: item.title,
+                    description: item.description,
+                    industries: (item.industries || []).map((ind: any) => ({
+                        id: ind.documentId,
+                        slug: ind.slug,
+                        title: ind.title,
+                        description: ind.description
+                    }))
+                }));
+            } catch (error) {
+                console.error('Failed to fetch sectors:', error);
+                return [];
+            }
+        },
+        getIndustryBySlug: async (slug: string): Promise<{ industry: Industry | undefined, relatedCases: CaseStudy[] }> => {
+            try {
+                const queryParams = qs.stringify({
+                    filters: { slug: { $eq: slug } },
+                    populate: {
+                        sector: { fields: ['title', 'slug'] },
+                        image: true
+                    }
+                }, { encodeValuesOnly: true });
+
+                const res = await fetch(`${STRAPI_URL}/api/industries?${queryParams}`, { cache: 'no-store' });
+                const json = await res.json();
+                const items = json.data || [];
+
+                if (items.length === 0) return { industry: undefined, relatedCases: [] };
+
+                const item = items[0];
+                const industry: Industry = {
+                    id: item.documentId,
+                    slug: item.slug,
+                    title: item.title,
+                    description: item.description,
+                    image: getStrapiMedia(item.image?.url || item.imageUrl),
+                    stats: item.stats || [],
+                    projects: item.projects || [],
+                    sector: item.sector ? {
+                        title: item.sector.title,
+                        slug: item.sector.slug
+                    } : undefined
+                };
+
+                // Fetch Related Cases
+                const casesQuery = qs.stringify({
+                    filters: { industryName: { $eq: industry.title } },
+                    populate: '*',
+                    pagination: { limit: 3 }
+                }, { encodeValuesOnly: true });
+
+                let casesRes = await fetch(`${STRAPI_URL}/api/case-studies?${casesQuery}`, { cache: 'no-store' });
+                let casesJson = await casesRes.json();
+
+                // Fallback: If no specific cases found, fetch recent cases generic
+                if (!casesJson.data || casesJson.data.length === 0) {
+                    const fallbackQuery = qs.stringify({
+                        sort: ['publishedAt:desc'],
+                        populate: '*',
+                        pagination: { limit: 3 }
+                    }, { encodeValuesOnly: true });
+                    casesRes = await fetch(`${STRAPI_URL}/api/case-studies?${fallbackQuery}`, { cache: 'no-store' });
+                    casesJson = await casesRes.json();
+                }
+
+                const relatedCases = (casesJson.data || []).map((c: any) => ({
+                    slug: c.slug,
+                    title: c.title,
+                    description: c.description,
+                    image: c.mainImageUrl || '/images/placeholder.png',
+                    industry: c.industryName || 'General',
+                    results: c.results || []
+                }));
+
+                return { industry, relatedCases };
+
+            } catch (error) {
+                console.error(`Failed to fetch industry ${slug}:`, error);
+                return { industry: undefined, relatedCases: [] };
             }
         }
     },
