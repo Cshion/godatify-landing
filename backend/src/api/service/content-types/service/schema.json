@@ -54,6 +54,12 @@
         },
         "techStack": {
             "type": "json"
+        },
+        "case_studies": {
+            "type": "relation",
+            "relation": "manyToMany",
+            "target": "api::case-study.case-study",
+            "mappedBy": "services"
         }
     }
 }

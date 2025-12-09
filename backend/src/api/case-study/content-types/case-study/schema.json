@@ -33,6 +33,12 @@
             "target": "api::client.client",
             "inversedBy": "case_studies"
         },
+        "services": {
+            "type": "relation",
+            "relation": "manyToMany",
+            "target": "api::service.service",
+            "inversedBy": "case_studies"
+        },
         "description": {
             "type": "text"
         },

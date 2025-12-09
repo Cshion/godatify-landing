@@ -28,6 +28,10 @@
                 "suffix": " YoY"
             }
         ],
+        "relatedServices": [
+            "business-analytics",
+            "data-engineering"
+        ],
         "techStack": [
             "Power BI",
             "SQL Server",
@@ -65,6 +69,10 @@
                 "value": "+5%",
                 "suffix": " Operativo"
             }
+        ],
+        "relatedServices": [
+            "business-analytics",
+            "big-data-management"
         ],
         "techStack": [
             "Tableau",
@@ -104,6 +112,10 @@
                 "suffix": " Operativa"
             }
         ],
+        "relatedServices": [
+            "big-data-management",
+            "data-engineering"
+        ],
         "techStack": [
             "Azure IoT",
             "Databricks",
@@ -140,6 +152,10 @@
                 "value": "Top",
                 "suffix": " Exportación"
             }
+        ],
+        "relatedServices": [
+            "big-data-management",
+            "artificial-intelligence"
         ],
         "techStack": [
             "Python",
@@ -178,6 +194,10 @@
                 "suffix": " Carbono"
             }
         ],
+        "relatedServices": [
+            "data-engineering",
+            "business-analytics"
+        ],
         "techStack": [
             "IoT",
             "SCADA",
@@ -215,6 +235,9 @@
                 "suffix": " Stakeholders"
             }
         ],
+        "relatedServices": [
+            "business-analytics"
+        ],
         "techStack": [
             "Salesforce NPSP",
             "Tableau",
@@ -233,6 +256,10 @@
         "testimonialRole": "Gerente Comercial, Retail Corp",
         "testimonialAuthorImageUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",
         "testimonialLinkedIn": "https://linkedin.com",
+        "relatedServices": [
+            "business-analytics",
+            "big-data-management"
+        ],
         "techStack": [
             "Power BI",
             "SQL Server",
@@ -267,6 +294,10 @@
         "testimonialRole": "Director de Operaciones",
         "testimonialAuthorImageUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200",
         "testimonialLinkedIn": "https://linkedin.com",
+        "relatedServices": [
+            "artificial-intelligence",
+            "data-engineering"
+        ],
         "techStack": [
             "Python",
             "TensorFlow",
@@ -299,6 +330,10 @@
                 "value": "-80%",
                 "suffix": " Reducción"
             }
+        ],
+        "relatedServices": [
+            "big-data-management",
+            "software-engineering"
         ],
         "techStack": [
             "Blockchain",

@@ -606,6 +606,7 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
     mainImageUrl: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     results: Schema.Attribute.JSON;
+    services: Schema.Attribute.Relation<'manyToMany', 'api::service.service'>;
     slug: Schema.Attribute.UID<'title'>;
     solution: Schema.Attribute.Text;
     techStack: Schema.Attribute.JSON;
@@ -890,6 +891,10 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
   attributes: {
     bgImage: Schema.Attribute.Media<'images'>;
     bgImageUrl: Schema.Attribute.String;
+    case_studies: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::case-study.case-study'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

@@ -169,7 +169,7 @@ export default {
         console.log('[BOOTSTRAP] Running Media URL Sync...');
         for (const [uid, config] of Object.entries(MEDIA_FIELDS_MAP)) {
             const fieldsToPopulate = config.map(c => c.media);
-            const entries = await strapi.documents(uid as any).findMany({ populate: fieldsToPopulate, status: 'draft' });
+            const entries = await strapi.documents(uid as any).findMany({ populate: fieldsToPopulate, status: 'draft', limit: 100 });
             let updatedCount = 0;
             for (const entry of entries) {
                 let needsUpdate = false;
@@ -195,7 +195,7 @@ export default {
         for (const [uid, config] of Object.entries(RELATION_FIELDS_MAP)) {
             // Populate the relation to read the source field
             const relationsToPopulate = [...new Set(config.map(c => c.relation))];
-            const entries = await strapi.documents(uid as any).findMany({ populate: relationsToPopulate, status: 'draft' });
+            const entries = await strapi.documents(uid as any).findMany({ populate: relationsToPopulate, status: 'draft', limit: 100 });
 
             let updatedCount = 0;
             for (const entry of entries) {
@@ -367,12 +367,12 @@ export default {
                 // Clients
                 const clientsData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'clients.json'), 'utf-8'));
                 await seedCollection('api::client.client', clientsData, 'name');
-                const allClients = await strapi.documents('api::client.client' as any).findMany();
+                const allClients = await strapi.documents('api::client.client' as any).findMany({ limit: 100 });
 
                 // Authors
                 const authorsData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'authors.json'), 'utf-8'));
                 await seedCollection('api::author.author', authorsData, 'name');
-                const allAuthors = await strapi.documents('api::author.author' as any).findMany();
+                const allAuthors = await strapi.documents('api::author.author' as any).findMany({ limit: 100 });
 
                 // Industries
                 const industriesData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'industries.json'), 'utf-8'));
@@ -382,12 +382,12 @@ export default {
                 if (industriesData.industries) {
                     await seedCollection('api::industry.industry', industriesData.industries, 'slug');
                 }
-                const allIndustries = await strapi.documents('api::industry.industry' as any).findMany();
+                const allIndustries = await strapi.documents('api::industry.industry' as any).findMany({ limit: 100 });
 
                 // Testimonials
                 const testimonialsData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'testimonials.json'), 'utf-8'));
                 await seedCollection('api::testimonial.testimonial', testimonialsData);
-                const allTestimonials = await strapi.documents('api::testimonial.testimonial' as any).findMany();
+                const allTestimonials = await strapi.documents('api::testimonial.testimonial' as any).findMany({ limit: 100 });
 
                 // Home Page
                 const homeData = JSON.parse(fs.readFileSync(path.join(MASTER_DATA_PATH, 'home.json'), 'utf-8'));
@@ -412,7 +412,7 @@ export default {
             try {
                 if (fs.existsSync(MOCK_DATA_PATH)) {
                     // Blog Posts
-                    const allAuthors = await strapi.documents('api::author.author' as any).findMany();
+                    const allAuthors = await strapi.documents('api::author.author' as any).findMany({ limit: 100 });
                     const blogPosts = JSON.parse(fs.readFileSync(path.join(MOCK_DATA_PATH, 'blog-posts.json'), 'utf-8'));
 
                     // Pre-process for relations
@@ -428,8 +428,8 @@ export default {
                     await seedCollection('api::blog-post.blog-post', preparedBlogPosts);
 
                     // Cases
-                    const allClients = await strapi.documents('api::client.client' as any).findMany();
-                    const allIndustries = await strapi.documents('api::industry.industry' as any).findMany();
+                    const allClients = await strapi.documents('api::client.client' as any).findMany({ limit: 100 });
+                    const allIndustries = await strapi.documents('api::industry.industry' as any).findMany({ limit: 100 });
 
                     // REPAIR & SEED: Upsert all cases (ensure all exist and are up to date)
                     console.log('[BOOTSTRAP] Running Case Study Upsert...');
@@ -444,24 +444,35 @@ export default {
                         const relatedClient = allClients.find((cl: any) => cl.name === (caseData.client?.name || caseData.client));
                         const relatedIndustry = allIndustries.find((ind: any) => ind.title.includes(caseData.industry) || ind.slug === caseData.industry.toLowerCase());
 
+                        // Resolve relatedServices (slugs) to service IDs
+                        let serviceIds: string[] = [];
+                        if (caseData.relatedServices && Array.isArray(caseData.relatedServices)) {
+                            // Fetch drafts to ensure we find the seeded services
+                            const allServices = await strapi.documents('api::service.service' as any).findMany({ status: 'draft', limit: 100 });
+                            serviceIds = caseData.relatedServices.map((slug: string) => {
+                                const svc = allServices.find((s: any) => s.slug === slug);
+                                return svc ? svc.documentId : null;
+                            }).filter(Boolean);
+                        }
+
                         const payload = {
                             ...caseData,
                             client: relatedClient ? relatedClient.documentId : undefined,
                             industry: relatedIndustry ? relatedIndustry.documentId : undefined,
+                            services: serviceIds,
                             testimonial: undefined
                         };
 
                         if (existing && existing.length > 0) {
                             // Update
+                            // Update
                             const dbCase = existing[0];
-                            if (dbCase.mainImageUrl !== caseData.mainImageUrl) {
-                                console.log(`[BOOTSTRAP] Updating case: ${caseData.slug}`);
-                                await strapi.documents('api::case-study.case-study' as any).update({
-                                    documentId: dbCase.documentId,
-                                    data: { mainImageUrl: caseData.mainImageUrl },
-                                    status: dbCase.publishedAt ? 'published' : 'draft'
-                                });
-                            }
+                            console.log(`[BOOTSTRAP] Updating case: ${caseData.slug}`);
+                            await strapi.documents('api::case-study.case-study' as any).update({
+                                documentId: dbCase.documentId,
+                                data: payload, // Use the full payload to update services and other fields
+                                status: dbCase.publishedAt ? 'published' : 'draft'
+                            });
                         } else {
                             // Create
                             console.log(`[BOOTSTRAP] Creating missing case: ${caseData.slug}`);
@@ -482,5 +493,40 @@ export default {
 
         // 3. Seed Permissions (Always, to ensure Public access)
         await seedPermissions();
+
+        // 4. Optimization: Ensure Critical Indexes
+        try {
+            const knex = strapi.db.connection;
+
+            // Index for Case Study Sorting (published_at)
+            const hasCasePublishedAtIndex = await knex.schema.hasColumn('case_studies', 'published_at');
+            if (hasCasePublishedAtIndex) {
+                // Check if index exists is dialect specific, so we just try/catch create
+                try {
+                    await knex.schema.alterTable('case_studies', table => {
+                        table.index(['published_at'], 'case_studies_published_at_idx');
+                    });
+                    console.log('[OPTIMIZATION] Added index: case_studies_published_at_idx');
+                } catch (e: any) {
+                    // Ignore if index already exists
+                }
+            }
+
+            // Index for Service Lookup (slug)
+            const hasServiceSlugIndex = await knex.schema.hasColumn('services', 'slug');
+            if (hasServiceSlugIndex) {
+                try {
+                    await knex.schema.alterTable('services', table => {
+                        table.index(['slug'], 'services_slug_idx');
+                    });
+                    console.log('[OPTIMIZATION] Added index: services_slug_idx');
+                } catch (e: any) {
+                    // Ignore if exists
+                }
+            }
+
+        } catch (error) {
+            console.error('[OPTIMIZATION] Failed to apply indexes:', error);
+        }
     },
 };

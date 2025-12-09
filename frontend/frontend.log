@@ -1,0 +1,12 @@
+
+> godatify-next@0.1.0 dev
+> next dev
+
+   ▲ Next.js 16.0.7 (Turbopack)
+   - Local:         http://localhost:3000
+   - Network:       http://192.168.100.161:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 840ms
+ GET /industrias 200 in 2.0s (compile: 1695ms, render: 314ms)
