@@ -7,6 +7,14 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 's3-godatify-assets-dev.s3.us-east-1.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 's3-godatify-assets-dev.s3.amazonaws.com', // Cover non-region specific too just in case
+      },
+      {
+        protocol: 'https',
         hostname: 'placehold.co',
       },
       {
