@@ -1,5 +1,199 @@
 [
     {
+        "title": "Rich Text Block Verification Test",
+        "slug": "rich-text-test",
+        "excerpt": "This is a comprehensive test of all supported rich text blocks to verify frontend rendering.",
+        "content": [
+            {
+                "type": "heading",
+                "level": 1,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Heading Level 1"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "This is a standard paragraph with "
+                    },
+                    {
+                        "type": "text",
+                        "text": "bold text",
+                        "bold": true
+                    },
+                    {
+                        "type": "text",
+                        "text": ", "
+                    },
+                    {
+                        "type": "text",
+                        "text": "italic text",
+                        "italic": true
+                    },
+                    {
+                        "type": "text",
+                        "text": ", "
+                    },
+                    {
+                        "type": "text",
+                        "text": "underlined text",
+                        "underline": true
+                    },
+                    {
+                        "type": "text",
+                        "text": ", and "
+                    },
+                    {
+                        "type": "text",
+                        "text": "strikethrough text",
+                        "strikethrough": true
+                    },
+                    {
+                        "type": "text",
+                        "text": "."
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 2,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Heading Level 2"
+                    }
+                ]
+            },
+            {
+                "type": "quote",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "This is a blockquote. Ideally it should be styled distinctly with a border or italics."
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 3,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Lists"
+                    }
+                ]
+            },
+            {
+                "type": "list",
+                "format": "unordered",
+                "children": [
+                    {
+                        "type": "list-item",
+                        "children": [
+                            {
+                                "type": "text",
+                                "text": "Unordered List Item 1"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "list-item",
+                        "children": [
+                            {
+                                "type": "text",
+                                "text": "Unordered List Item 2"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "list",
+                "format": "ordered",
+                "children": [
+                    {
+                        "type": "list-item",
+                        "children": [
+                            {
+                                "type": "text",
+                                "text": "Ordered List Item 1"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "list-item",
+                        "children": [
+                            {
+                                "type": "text",
+                                "text": "Ordered List Item 2"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "heading",
+                "level": 3,
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Code and Links"
+                    }
+                ]
+            },
+            {
+                "type": "code",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "console.log('Hello World');\nconst x = 10;"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Visit "
+                    },
+                    {
+                        "type": "link",
+                        "url": "https://strapi.io",
+                        "children": [
+                            {
+                                "type": "text",
+                                "text": "Strapi Website"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "text",
+                        "text": " for more info."
+                    }
+                ]
+            }
+        ],
+        "date": "2025-01-01",
+        "readingTime": "5 min",
+        "featured": true,
+        "image": "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1000&auto=format&fit=crop",
+        "tags": [
+            "Test",
+            "Rich Text",
+            "Frontend"
+        ],
+        "author": {
+            "name": "Datify Team"
+        }
+    },
+    {
         "title": "El Impacto de la IA Generativa en la Toma de Decisiones Empresariales",
         "slug": "impacto-ia-generativa-decisiones",
         "excerpt": "Descubre cómo la inteligencia artificial generativa está redefiniendo las estrategias corporativas...",

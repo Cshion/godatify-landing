@@ -293,7 +293,7 @@ export interface BlogPost {
     id: string;
     title: string;
     excerpt: string;
-    content: string; // HTML or Markdown
+    content: any; // HTML or Markdown or Strapi Blocks
     author: {
         name: string;
         role: string;

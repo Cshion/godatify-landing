@@ -14,7 +14,8 @@ import {
     NavLink,
     ServiceNav,
     FooterLinks,
-    CasesPageContent
+    CasesPageContent,
+    ContactPageContent
 } from '@/types';
 import qs from 'qs';
 
@@ -32,6 +33,13 @@ import { BlogPost } from '@/types';
 
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+
+// Helper for images
+const getStrapiMedia = (url: string | null | undefined) => {
+    if (!url) return '/images/placeholder.png';
+    if (url.startsWith('http') || url.startsWith('//')) return url;
+    return `${STRAPI_URL}${url}`;
+};
 
 export const api = {
     company: {
@@ -524,24 +532,62 @@ export const api = {
             sectionLabels: any;
         }> => {
             try {
-                // Fetch Clients for About page
-                const queryParams = qs.stringify({
+                // Parallel fetch About Page Data and Clients
+                const clientsQuery = qs.stringify({
                     fields: ['name', 'logoUrl'],
                     pagination: { limit: 50 }
                 }, { encodeValuesOnly: true });
 
-                const res = await fetch(`${STRAPI_URL}/api/clients?${queryParams}`, { cache: 'no-store' });
-                const json = await res.json();
-                const items = json.data || [];
+                const [aboutRes, clientsRes] = await Promise.all([
+                    fetch(`${STRAPI_URL}/api/about-page`, { cache: 'no-store' }),
+                    fetch(`${STRAPI_URL}/api/clients?${clientsQuery}`, { cache: 'no-store' })
+                ]);
 
-                const clients = items.map((item: any) => ({
+                const [aboutJson, clientsJson] = await Promise.all([
+                    aboutRes.json(),
+                    clientsRes.json()
+                ]);
+
+                const aboutData = aboutJson.data;
+                const clientItems = clientsJson.data || [];
+
+                const clients = clientItems.map((item: any) => ({
                     name: item.name,
                     logo: item.logoUrl || '/images/placeholder.png',
                     anonymous: false
                 }));
 
+                // Map Strapi Data to NosotrosContent
+                const content: NosotrosContent = aboutData ? {
+                    hero: {
+                        title: aboutData.heroTitle,
+                        subtitle: aboutData.heroSubtitle,
+                        description: aboutData.heroDescription,
+                        phrases: aboutData.heroPhrases || [],
+                        backgroundImage: aboutData.heroBackgroundImageUrl
+                    },
+                    mission: {
+                        title: aboutData.missionTitle,
+                        text: aboutData.missionText,
+                        image: aboutData.missionImageUrl || '/images/placeholder.png'
+                    },
+                    vision: {
+                        title: aboutData.visionTitle,
+                        text: aboutData.visionText,
+                        image: aboutData.visionImageUrl || '/images/placeholder.png'
+                    },
+                    values: aboutData.values || [], // JSON List
+                    culture: {
+                        title: aboutData.cultureTitle,
+                        description: aboutData.cultureDescription,
+                        stats: aboutData.cultureStats || [],
+                        image: aboutData.cultureImageUrl || '/images/placeholder.png'
+                    },
+                    tabs: aboutData.tabs || [] // JSON List
+                } : NOSOTROS_CONTENT;
+
                 return {
-                    ...NOSOTROS_CONTENT,
+                    ...content,
                     clients: clients.length > 0 ? clients : CLIENTS_CONTENT,
                     videoConfig: VIDEO_CONFIG,
                     sectionLabels: SECTION_LABELS
@@ -559,14 +605,111 @@ export const api = {
         }
     },
     contact: {
-        getPageContent: async () => CONTACT_CONTENT,
+        getPageContent: async (): Promise<ContactPageContent> => {
+            try {
+                // Fetch Contact Page Data
+                const res = await fetch(`${STRAPI_URL}/api/contact-page`, { cache: 'no-store' });
+                const json = await res.json();
+                const data = json.data;
+
+                if (!data) return CONTACT_CONTENT;
+
+                // Map Strapi Single Type to ContactPageContent
+                return {
+                    hero: {
+                        title: data.heroTitle,
+                        subtitle: data.heroSubtitle
+                    },
+                    officesSection: {
+                        title: data.officesTitle,
+                        subtitle: data.officesSubtitle,
+                        offices: data.offices || [] // JSON field
+                    },
+                    form: {
+                        title: data.formTitle,
+                        subtitle: data.formSubtitle,
+                        labels: data.formLabels || CONTACT_CONTENT.form.labels // JSON field or fallback
+                    }
+                };
+            } catch (error) {
+                console.error('Failed to fetch Contact page data:', error);
+                return CONTACT_CONTENT;
+            }
+        },
     },
+
     blog: {
         getAll: async (): Promise<BlogPost[]> => {
-            return BLOG_POSTS;
+            try {
+                const queryParams = qs.stringify({
+                    sort: ['date:desc'],
+                    populate: ['author.avatar', 'coverImage'], // detailed populate
+                    fields: ['title', 'slug', 'excerpt', 'date', 'readingTime', 'tags', 'featured', 'coverImageUrl']
+                }, { encodeValuesOnly: true });
+
+                const res = await fetch(`${STRAPI_URL}/api/blog-posts?${queryParams}`, { cache: 'no-store' });
+                const json = await res.json();
+                const items = json.data || [];
+
+                return items.map((item: any) => ({
+                    id: item.documentId,
+                    title: item.title,
+                    slug: item.slug,
+                    excerpt: item.excerpt,
+                    content: '', // Not needed for list
+                    date: item.date,
+                    readingTime: item.readingTime,
+                    tags: item.tags || [],
+                    featured: item.featured,
+                    image: getStrapiMedia(item.coverImage?.url || item.coverImageUrl),
+                    author: {
+                        name: item.author?.name || 'Datify Team',
+                        role: item.author?.role || 'Contributor',
+                        image: getStrapiMedia(item.author?.avatar?.url || item.author?.avatarUrl)
+                    }
+                }));
+
+            } catch (error) {
+                console.error('Failed to fetch blog posts:', error);
+                return BLOG_POSTS;
+            }
         },
         getBySlug: async (slug: string): Promise<BlogPost | undefined> => {
-            return BLOG_POSTS.find(p => p.slug === slug);
+            try {
+                const queryParams = qs.stringify({
+                    filters: { slug: { $eq: slug } },
+                    populate: ['author.avatar', 'coverImage'],
+                    fields: ['title', 'slug', 'excerpt', 'date', 'readingTime', 'tags', 'featured', 'content', 'coverImageUrl']
+                }, { encodeValuesOnly: true });
+
+                const res = await fetch(`${STRAPI_URL}/api/blog-posts?${queryParams}`, { cache: 'no-store' });
+                const json = await res.json();
+                const items = json.data || [];
+
+                if (items.length === 0) return undefined;
+
+                const item = items[0];
+                return {
+                    id: item.documentId,
+                    title: item.title,
+                    slug: item.slug,
+                    excerpt: item.excerpt,
+                    content: item.content, // Blocks JSON or text
+                    date: item.date,
+                    readingTime: item.readingTime,
+                    tags: item.tags || [],
+                    featured: item.featured,
+                    image: getStrapiMedia(item.coverImage?.url || item.coverImageUrl),
+                    author: {
+                        name: item.author?.name || 'Datify Team',
+                        role: item.author?.role || 'Contributor',
+                        image: getStrapiMedia(item.author?.avatar?.url || item.author?.avatarUrl)
+                    }
+                };
+            } catch (error) {
+                console.error(`Failed to fetch blog post ${slug}:`, error);
+                return BLOG_POSTS.find(p => p.slug === slug);
+            }
         }
     }
 };

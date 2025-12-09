@@ -1,4 +1,5 @@
 import { api } from "@/lib/api";
+import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -163,10 +164,9 @@ export default async function BlogPostPage({ params }: Props) {
                     }}
                 />
 
-                <div
-                    className={styles.content}
-                    dangerouslySetInnerHTML={{ __html: post.content }}
-                />
+                <div className={`${styles.content} prose max-w-none`}>
+                    <BlocksRenderer content={post.content} />
+                </div>
 
                 <div className="max-w-4xl mx-auto mt-20 flex justify-center w-full">
                     <BlogCTA />
