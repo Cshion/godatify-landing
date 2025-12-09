@@ -639,6 +639,47 @@ export const api = {
     },
 
     blog: {
+        getPosts: async ({ start, limit }: { start: number; limit: number }): Promise<{ posts: BlogPost[]; total: number }> => {
+            try {
+                const queryParams = qs.stringify({
+                    sort: ['date:desc'],
+                    populate: ['author.avatar', 'coverImage'],
+                    fields: ['title', 'slug', 'excerpt', 'date', 'readingTime', 'tags', 'featured', 'coverImageUrl'],
+                    pagination: {
+                        start,
+                        limit
+                    }
+                }, { encodeValuesOnly: true });
+
+                const res = await fetch(`${STRAPI_URL}/api/blog-posts?${queryParams}`, { cache: 'no-store' });
+                const json = await res.json();
+                const items = json.data || [];
+                const total = json.meta?.pagination?.total || 0;
+
+                const posts = items.map((item: any) => ({
+                    id: item.documentId,
+                    title: item.title,
+                    slug: item.slug,
+                    excerpt: item.excerpt,
+                    content: '',
+                    date: item.date,
+                    readingTime: item.readingTime,
+                    tags: item.tags || [],
+                    featured: item.featured,
+                    image: getStrapiMedia(item.coverImage?.url || item.coverImageUrl),
+                    author: {
+                        name: item.author?.name || 'Datify Team',
+                        role: item.author?.role || 'Contributor',
+                        image: getStrapiMedia(item.author?.avatar?.url || item.author?.avatarUrl)
+                    }
+                }));
+
+                return { posts, total };
+            } catch (error) {
+                console.error('Failed to fetch paginated blog posts:', error);
+                return { posts: [], total: 0 };
+            }
+        },
         getAll: async (): Promise<BlogPost[]> => {
             try {
                 const queryParams = qs.stringify({

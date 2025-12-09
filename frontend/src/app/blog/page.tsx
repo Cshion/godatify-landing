@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogPage() {
-    // Sorting happens on the server (or in api.ts)
-    const posts = await api.blog.getAll();
+    // Sort logic handled in api
+    const { posts, total } = await api.blog.getPosts({ start: 0, limit: 7 });
 
     return (
         <main className="min-h-screen bg-white">
@@ -21,7 +21,7 @@ export default async function BlogPage() {
                 subtitle={BLOG_STATIC_DATA.hero.subtitle}
                 description={BLOG_STATIC_DATA.hero.description}
             />
-            <BlogList initialPosts={posts} />
+            <BlogList initialPosts={posts} totalPosts={total} />
         </main>
     );
 }

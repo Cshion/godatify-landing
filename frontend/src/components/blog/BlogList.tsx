@@ -5,50 +5,50 @@ import { BlogPost } from '@/types';
 import FeaturedPost from './FeaturedPost';
 import BlogCard from './BlogCard';
 import styles from './BlogList.module.css';
+import { getMorePosts } from '@/app/actions/blog';
 
 import { BLOG_STATIC_DATA } from '@/data/blog-data';
 
 interface BlogListProps {
     initialPosts: BlogPost[];
+    totalPosts: number;
 }
 
-const BATCH_SIZE = 4;
+const BATCH_SIZE = 6;
 
-export default function BlogList({ initialPosts }: BlogListProps) {
-    const [posts, setPosts] = useState<BlogPost[]>([]);
-    const [hasMore, setHasMore] = useState(true);
+export default function BlogList({ initialPosts, totalPosts }: BlogListProps) {
+    const [posts, setPosts] = useState<BlogPost[]>(initialPosts);
+    const [hasMore, setHasMore] = useState(initialPosts.length < totalPosts);
+    const [isLoading, setIsLoading] = useState(false);
     const loader = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const initialCount = 1 + BATCH_SIZE;
-        setPosts(initialPosts.slice(0, initialCount));
-        if (initialPosts.length <= initialCount) {
-            setHasMore(false);
-        }
-    }, [initialPosts]);
 
     const handleObserver = (entities: IntersectionObserverEntry[]) => {
         const target = entities[0];
-        if (target.isIntersecting && hasMore) {
+        if (target.isIntersecting && hasMore && !isLoading) {
             loadMore();
         }
     };
 
-    const loadMore = () => {
-        setTimeout(() => {
-            const currentLength = posts.length;
-            const nextBatch = initialPosts.slice(currentLength, currentLength + BATCH_SIZE);
+    const loadMore = async () => {
+        setIsLoading(true);
+        try {
+            const offset = posts.length;
+            const { posts: newPosts, total } = await getMorePosts(offset, BATCH_SIZE);
 
-            if (nextBatch.length === 0) {
+            if (newPosts.length === 0) {
                 setHasMore(false);
             } else {
-                setPosts((prev) => [...prev, ...nextBatch]);
-
-                if (currentLength + nextBatch.length >= initialPosts.length) {
+                setPosts((prev) => [...prev, ...newPosts]);
+                if (posts.length + newPosts.length >= total) {
                     setHasMore(false);
                 }
             }
-        }, 800);
+        } catch (error) {
+            console.error('Failed to load more posts:', error);
+            setHasMore(false);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -63,7 +63,7 @@ export default function BlogList({ initialPosts }: BlogListProps) {
         return () => {
             if (loader.current) observer.unobserve(loader.current);
         };
-    }, [posts, hasMore]);
+    }, [posts, hasMore, isLoading]);
 
     if (posts.length === 0) return null;
 
