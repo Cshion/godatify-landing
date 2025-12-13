@@ -15,12 +15,10 @@ interface CasesProps {
 }
 
 export default function Cases({ cases, title, buttonText }: CasesProps) {
-
-
   return (
     <section className="section py-20 bg-white" id="casos">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900 reveal">
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900">
           {title}
         </h2>
 

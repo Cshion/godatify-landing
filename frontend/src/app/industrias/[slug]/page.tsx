@@ -56,15 +56,18 @@ export default async function IndustryDetailPage({ params }: IndustryPageProps) 
                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30" />
                 </div>
 
-                <div className="container relative z-10 px-6 pt-20">
-                    <div className="max-w-4xl">
-                        <span className="inline-block px-4 py-2 bg-brand-green/20 backdrop-blur-md border border-brand-green/30 text-brand-green font-semibold rounded-full mb-6 text-sm uppercase tracking-wider shadow-sm">
+                <div className="container relative z-10 px-6 pt-20 text-center flex flex-col items-center justify-center">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold rounded-full mb-6 text-sm uppercase tracking-wider shadow-sm">
                             {(industry.sector?.title || 'Sector Especializado')}
                         </span>
-                        <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight drop-shadow-lg">
+                        <h1
+                            className="text-5xl md:text-7xl font-bold mb-6 leading-tight drop-shadow-lg text-white !text-white !text-center"
+                            style={{ color: '#ffffff', textAlign: 'center' }}
+                        >
                             {industry.title}
                         </h1>
-                        <p className="text-xl md:text-2xl text-gray-200 max-w-2xl leading-relaxed drop-shadow-md">
+                        <p className="text-xl md:text-2xl text-white max-w-2xl mx-auto leading-relaxed drop-shadow-md !text-center">
                             {industry.description}
                         </p>
                     </div>
