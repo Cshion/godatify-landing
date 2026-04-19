@@ -38,7 +38,7 @@ export default function Services({ services, title, buttonText }: ServicesProps)
                 <p className={styles.serviceDescription}>
                   {service.description}
                 </p>
-                <Link href={`/servicios/${service.id}`} className={styles.btnOutline} aria-label={`Leer más sobre ${service.title}`}>{buttonText}</Link>
+                <Link href={`/servicios/${service.slug || service.id}`} className={styles.btnOutline} aria-label={`Leer más sobre ${service.title}`}>{buttonText}</Link>
               </div>
             ))}
           </Carousel>
