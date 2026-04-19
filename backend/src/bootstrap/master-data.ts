@@ -1,11 +1,48 @@
 /**
  * Master Data Seeding
  * 
- * Seeds foundational/production data from seed-data/master/.
- * This includes: services, social links, company info, clients,
- * authors, sectors, industries, testimonials, and page content.
+ * Seeds foundational/structural data from seed-data/master/.
  * 
- * RUNS IN NON-PRODUCTION ENVIRONMENTS ONLY.
+ * ============================================================================
+ * SAFE FOR PRODUCTION
+ * ============================================================================
+ * 
+ * This data can be seeded in production because it represents:
+ * - Business structure (services, sectors, industries)
+ * - Company metadata (company info, social links)
+ * - CMS page content (home, about, contact, services, industries pages)
+ * 
+ * Run via: make seed
+ * 
+ * ============================================================================
+ * WHAT IS SEEDED HERE
+ * ============================================================================
+ * 
+ * STRUCTURAL DATA:
+ * - services         → Service offerings (data analytics, BI, etc.)
+ * - social-links     → Company social media accounts
+ * - company-info     → Company metadata (name, logo, contact info)
+ * - sectors          → High-level sector taxonomy
+ * - industries       → Industry taxonomy within sectors
+ * 
+ * PAGE CONTENT:
+ * - home-page        → Homepage CMS content
+ * - about-page       → About page CMS content
+ * - contact-page     → Contact page CMS content
+ * 
+ * ============================================================================
+ * WHAT IS NOT SEEDED HERE (see mock-data.ts instead)
+ * ============================================================================
+ * 
+ * The following are in MOCK DATA because they represent relationships
+ * that must be created manually in production:
+ * - clients          → Real clients are added via Strapi admin
+ * - authors          → Real employees are added via Strapi admin
+ * - testimonials     → Real customer feedback added via Strapi admin
+ * - blog-posts       → Real blog content created by authors
+ * - case-studies     → Real case studies with real clients
+ * 
+ * ============================================================================
  */
 import type { Core } from '@strapi/strapi';
 import fs from 'fs';
@@ -16,6 +53,8 @@ const MASTER_DATA_PATH = path.join(process.cwd(), 'seed-data', 'master');
 
 /**
  * Seeds all master data from JSON files.
+ * 
+ * @param strapi - The Strapi instance
  */
 export async function seedMasterData(strapi: Core.Strapi): Promise<void> {
     console.log(`[SEED] Master Data Path: ${MASTER_DATA_PATH}`);
@@ -26,34 +65,35 @@ export async function seedMasterData(strapi: Core.Strapi): Promise<void> {
     }
 
     try {
-        // Services
+        // ════════════════════════════════════════════════════════════════════
+        // STRUCTURAL DATA — Business taxonomy and service definitions
+        // ════════════════════════════════════════════════════════════════════
+        
+        // Services — Business service offerings (data analytics, BI, etc.)
         await seedServices(strapi);
 
-        // Social Links
+        // Social Links — Company social media accounts
         await seedSocialLinks(strapi);
 
-        // Company Info
+        // Company Info — Company metadata (name, logo, contact)
         await seedCompanyInfo(strapi);
 
-        // Clients (needed before pages that reference them)
-        const allClients = await seedClients(strapi);
+        // ════════════════════════════════════════════════════════════════════
+        // TAXONOMY DATA — Industry/sector structure
+        // ════════════════════════════════════════════════════════════════════
 
-        // Authors
-        await seedAuthors(strapi);
-
-        // Sectors (needed before industries)
+        // Sectors — High-level groupings (needed before industries)
         const allSectors = await seedSectors(strapi);
 
-        // Industries (depend on sectors)
+        // Industries — Industry taxonomy within sectors
         await seedIndustries(strapi, allSectors);
 
-        // Testimonials
-        await seedTestimonials(strapi);
+        // ════════════════════════════════════════════════════════════════════
+        // PAGE CONTENT — CMS page content for single-type pages
+        // ════════════════════════════════════════════════════════════════════
+        await seedPages(strapi);
 
-        // Page Content
-        await seedPages(strapi, allClients);
-
-        console.log('[SEED] Master data seeding complete.');
+        console.log('[SEED] ✓ Master data seeding complete.');
     } catch (error) {
         console.error('[SEED] Error seeding Master Data:', error);
     }
@@ -86,24 +126,6 @@ async function seedCompanyInfo(strapi: Core.Strapi): Promise<void> {
 
     const companyInfo = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
     await seedSingle(strapi, 'api::company-info.company-info', companyInfo);
-}
-
-async function seedClients(strapi: Core.Strapi): Promise<any[]> {
-    const filePath = path.join(MASTER_DATA_PATH, 'clients.json');
-    if (!fs.existsSync(filePath)) return [];
-
-    const clientsData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    await seedCollection(strapi, 'api::client.client', clientsData, 'name');
-    return await strapi.documents('api::client.client' as any).findMany({ limit: 100 });
-}
-
-async function seedAuthors(strapi: Core.Strapi): Promise<any[]> {
-    const filePath = path.join(MASTER_DATA_PATH, 'authors.json');
-    if (!fs.existsSync(filePath)) return [];
-
-    const authorsData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    await seedCollection(strapi, 'api::author.author', authorsData, 'name');
-    return await strapi.documents('api::author.author' as any).findMany({ limit: 100 });
 }
 
 async function seedSectors(strapi: Core.Strapi): Promise<any[]> {
@@ -144,21 +166,19 @@ async function seedIndustries(strapi: Core.Strapi, allSectors: any[]): Promise<a
     return await strapi.documents('api::industry.industry' as any).findMany({ limit: 100 });
 }
 
-async function seedTestimonials(strapi: Core.Strapi): Promise<any[]> {
-    const filePath = path.join(MASTER_DATA_PATH, 'testimonials.json');
-    if (!fs.existsSync(filePath)) return [];
-
-    const testimonialsData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    await seedCollection(strapi, 'api::testimonial.testimonial', testimonialsData);
-    return await strapi.documents('api::testimonial.testimonial' as any).findMany({ limit: 100 });
-}
-
-async function seedPages(strapi: Core.Strapi, allClients: any[]): Promise<void> {
+/**
+ * Seeds page content for single-type pages.
+ * 
+ * NOTE: Home page no longer includes clients relation since clients
+ * are now part of mock data and must be added manually in production.
+ */
+async function seedPages(strapi: Core.Strapi): Promise<void> {
     // Home Page
     const homePath = path.join(MASTER_DATA_PATH, 'home.json');
     if (fs.existsSync(homePath)) {
         const homeData = JSON.parse(fs.readFileSync(homePath, 'utf-8'));
-        homeData.clients = allClients.map((c: any) => c.documentId);
+        // Don't include clients relation - they're mock data
+        delete homeData.clients;
         await seedSingle(strapi, 'api::home-page.home-page', homeData);
     }
 

@@ -366,3 +366,107 @@ if (isProduction) {
 3. **Provide recovery instructions** — Tell users how to seed if they need to: `NODE_ENV=development npm run dev`
 4. **Separate seeding from syncing** — Sync operations (Media URL, Relation Denormalization) should still run in production; only creation of new seed data should be blocked
 5. **Makefile targets for database ops** — `db-reset`, `db-seed`, `db-fresh` are essential for developer workflow
+
+---
+
+### 2026-04-19 — Seed System Deep Dive & Dual Approach
+
+**Request from Aaron:** Clarify seed data categories and provide alternative seeding approach.
+
+#### Question 1: Seed Data Categories Analysis
+
+**Aaron's clarification:** "La seed data para no-prod es tema de: clients, authors, testimonials. En produccion esta data no es compartida y debe crearse manualmente."
+
+**Data Categories:**
+
+| Category | Data Type | Seed in Dev? | Seed in Prod? | Why? |
+|----------|-----------|--------------|---------------|------|
+| **Structural** | services, social-links, company-info, sectors, industries, pages | ✅ | ❌ | Static business structure, but controlled via admin |
+| **Relationship** | clients, authors, testimonials | ✅ | ❌ | REAL data in prod — manual curation required |
+| **Mock** | blog-posts, case-studies | ✅ | ❌ | Test content only |
+
+**Why clients/authors/testimonials are NON-PRODUCTION ONLY:**
+
+1. **Clients** — In production, client logos represent REAL business relationships. Requires explicit permission from each client. Created as contracts are signed.
+2. **Authors** — In production, authors are REAL employees. Creating fake author profiles would be misleading.
+3. **Testimonials** — In production, testimonials are REAL customer feedback. Fake testimonials are fraud/misrepresentation.
+
+**Changes Made:**
+- Added comprehensive JSDoc comments to `master-data.ts` explaining data categories
+- Added function-level comments to `seedClients()`, `seedAuthors()`, `seedTestimonials()` explaining WHY they're non-production only
+- Categorized seed operations in the main function with visual section dividers
+
+#### Question 2: Bootstrap vs Make Script Analysis
+
+**Aaron's question:** "Porque el seed process esta dentro del lifecycle del bootstrap de strapi? esto debe ser asi si o si? o podria hacerse mediante un script y comando de make?"
+
+**Analysis:**
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **A) Bootstrap (current)** | Automatic, no extra steps | Less control, seeds on every restart |
+| **B) Make Script (new)** | Manual control, CI/CD friendly, selective seeding | Extra step required |
+
+**Answer:** Seeding does NOT have to be in bootstrap. It's a design choice for convenience.
+
+**Implemented Dual Approach:**
+
+**Approach A — Automatic (default):**
+- Seeding runs during Strapi bootstrap
+- No configuration needed
+- Current behavior maintained
+
+**Approach B — Manual via Make commands:**
+- Set `SKIP_SEED=true` to disable automatic seeding
+- Use standalone commands for control
+
+**New Files & Changes:**
+
+1. **`backend/scripts/seed.ts`** — Standalone seed script
+   - Can run independently of Strapi bootstrap
+   - Uses `createStrapi().load()` for DB access without starting server
+   - Supports flags: `--mock`, `--mock-only`, `--both`
+
+2. **`backend/src/bootstrap/index.ts`** — Added SKIP_SEED support
+   - New env var: `SKIP_SEED=true` skips all seeding
+   - Re-exports `seedMasterData`, `seedMockData` for standalone script
+
+3. **`backend/Makefile`** — New seed commands
+
+| Target | Description |
+|--------|-------------|
+| `make seed` | Run master data seed only |
+| `make seed-dev` | Run master + mock data seed |
+| `make seed-mock` | Run mock data only |
+| `make seed-all` | Alias for seed-dev |
+| `make dev-no-seed` | Start dev with SKIP_SEED=true |
+| `make dev-fresh` | Reset DB + start dev (auto-seeds) |
+| `make db-fresh` | Reset + seed-all (updated) |
+
+**Recommended Workflows:**
+
+**Workflow 1 — Automatic (simple dev):**
+```bash
+make dev           # Starts Strapi, auto-seeds on bootstrap
+```
+
+**Workflow 2 — Manual (CI/CD, controlled):**
+```bash
+make db-reset      # Clear database
+make seed          # Seed master data
+make seed-dev      # Or include mock data
+make dev-no-seed   # Start without re-seeding
+```
+
+**Workflow 3 — Fresh Start:**
+```bash
+make db-fresh      # Reset + seed-all in one command
+```
+
+**Key Learnings:**
+
+1. **Bootstrap seeding is optional** — Strapi doesn't require seeding in bootstrap; it's a developer convenience
+2. **SKIP_SEED pattern** — Simple env var gives control without code changes
+3. **Standalone scripts need `createStrapi().load()`** — Full Strapi instance for DB access without starting HTTP server
+4. **Dual approach is best** — Support both automatic (simple) and manual (controlled) workflows
+5. **Re-export functions** — Exporting seed functions from `bootstrap/index.ts` allows standalone script to reuse them

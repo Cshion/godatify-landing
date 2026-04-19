@@ -3,7 +3,6 @@
 import { BlocksRenderer, type BlocksContent } from '@strapi/blocks-react-renderer';
 import Image from "next/image";
 import Link from "next/link";
-import styles from './RichTextRenderer.module.css'; // Ensure this exists or use utility classes
 
 interface RichTextRendererProps {
     content: BlocksContent | string | null | undefined;

@@ -98,6 +98,58 @@
 
 4. **#12 Hero Image Preload**
    - Added `<link rel="preload" href="/images/hero-bg.jpg" as="image" fetchPriority="high">` in layout.tsx
+
+### 2026-04-19 — Alternating Section Backgrounds Fix
+
+**Problem:** Landing page sections lost their green/white alternating background pattern.
+
+**Root Cause Analysis:**
+- Services section had white gradient background instead of brand green
+- Section ORDER in page.tsx didn't match intended visual flow
+- Clients was positioned between Nosotros and Services, breaking alternation
+
+**Fixes Applied:**
+
+1. **Services Background** → Changed from white gradient to brand green
+   - Updated `Services.module.css`: `background: linear-gradient(135deg, var(--color-brand-green) 0%, var(--color-brand-green-dark) 100%)`
+   - Updated `Services.tsx`: Changed heading text color from `text-gray-900` to `text-white`
+
+2. **Section Reordering** → Moved Clients section to end of page
+   - Old: Hero → Nosotros → Clients → Services → Cases → Testimonials
+   - New: Hero → Nosotros → Services → Cases → Testimonials → Clients
+
+**Final Alternating Pattern:**
+| Section | Background |
+|---------|-----------|
+| Hero | Green ✓ |
+| Nosotros | White ✓ |
+| Services | Green ✓ |
+| Cases | White ✓ |
+| Testimonials | Green ✓ |
+| Clients | White ✓ |
+
+**Files Modified:**
+- `frontend/src/components/sections/Services.module.css`
+- `frontend/src/components/sections/Services.tsx`
+- `frontend/src/app/page.tsx`
+
+### 2026-04-19 — Landing Page Checklist Created
+
+**Created:** `.squad/reviews/landing-page-checklist.md`
+
+**Contents:**
+- 8 essential element categories for B2B consulting landing pages
+- Priority ratings (Critical/High/Medium/Low) for each element
+- Best practices for each section
+- Full audit of current Godatify implementation
+- Checklist with ✅ working, ⚠️ needs improvement, ❌ missing
+- Priority action items (High/Medium/Low)
+
+**Key Findings:**
+- Hero, Services, Cases, Testimonials sections are solid
+- Missing: Trust indicators in hero, phone number in header, ROI metrics section
+- Missing: Cookie consent banner (compliance requirement)
+- Suggested: Add persistent CTA button in header
    - Improves LCP by telling browser to fetch hero image early
 
 5. **#13 Stats Animation Fix**

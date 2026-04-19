@@ -99,6 +99,28 @@ frontend/src/components/
 
 **Pattern:** Each component folder contains `.tsx` + `.module.css` pairs
 
+---
+
+## Dead Code Cleanup — April 19, 2026
+
+**Task:** Find and remove dead code in the frontend.
+
+### Removed Items
+
+| File | Dead Code | Type | Reason |
+|------|-----------|------|--------|
+| `frontend/src/lib/schemas.ts` | `generateWebPageSchema` function | Unused Export | Function was exported but never imported anywhere in the codebase |
+| `frontend/src/components/blog/RichTextRenderer.tsx` | `import styles from './RichTextRenderer.module.css'` | Unused Import | CSS module file doesn't exist AND `styles` variable was never used |
+| `frontend/src/app/globals.css` | `.btn-primary:active`, `.btn-secondary:active` | Unused CSS | Classes only defined, never used in any component |
+| `frontend/src/app/globals.css` | `.card-interactive`, `.card-interactive:hover` | Unused CSS | Classes only defined, never used in any component |
+| `frontend/src/app/globals.css` | `.link-animated`, `.link-animated::after`, `.link-animated:hover::after` | Unused CSS | Classes only defined, never used in any component |
+
+### Verified As Used (Not Removed)
+- All FontAwesome icons in `fontawesome.ts` are used dynamically via data files
+- All components in `frontend/src/components/` are imported and used
+- All exports in `frontend/src/data/*.ts` are used by `api.ts` or components
+- All other schema functions in `schemas.ts` are imported and used by page components
+
 ### Static Data Fallback Layer
 Located at `frontend/src/data/`:
 - `home.ts` → HERO_CONTENT, STATS, VIDEO_CONFIG, CLIENTS_CONTENT, SECTION_LABELS

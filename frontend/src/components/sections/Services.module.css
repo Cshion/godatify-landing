@@ -1,5 +1,5 @@
 .servicesSection {
-    background: linear-gradient(180deg, var(--color-white) 0%, var(--color-gray-50) 100%);
+    background: linear-gradient(135deg, var(--color-brand-green) 0%, var(--color-brand-green-dark) 100%);
 }
 
 .servicesContainer {

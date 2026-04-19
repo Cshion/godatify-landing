@@ -209,28 +209,6 @@ export function generateLocalBusinessSchema() {
 }
 
 /**
- * WebPage schema
- */
-export function generateWebPageSchema(
-  path: string,
-  name: string,
-  description: string
-) {
-  const url = path === '/' ? SITE_URL : `${SITE_URL}${path}`;
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    '@id': `${url}#webpage`,
-    url,
-    name,
-    description,
-    isPartOf: { '@id': `${SITE_URL}/#website` },
-    about: { '@id': `${SITE_URL}/#organization` },
-    inLanguage: 'es',
-  };
-}
-
-/**
  * CollectionPage schema for listing pages (blog, cases, etc.)
  */
 export function generateCollectionPageSchema(

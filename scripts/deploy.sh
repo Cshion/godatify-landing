@@ -4,15 +4,21 @@
 # ==============================================================================
 # This script deploys the latest code to the EC2 server
 #
-# Usage: bash scripts/deploy.sh [--frontend] [--backend] [--full]
-#   --backend  : Deploy backend only (default)
-#   --frontend : Deploy frontend only
-#   --full     : Deploy both frontend and backend
+# Usage: bash scripts/deploy.sh [--frontend] [--backend] [--full] [--purge-cache]
+#   --backend     : Deploy backend only (default)
+#   --frontend    : Deploy frontend only
+#   --full        : Deploy both frontend and backend
+#   --purge-cache : Purge Cloudflare cache after deploy
 #
 # Requirements:
 #   - PM2 installed globally
 #   - Application at /var/www/godatify
 #   - Environment file at backend/.env
+#
+# Cloudflare Cache Purge (optional):
+#   Set these environment variables to enable cache purging:
+#   - CLOUDFLARE_ZONE_ID: Your Cloudflare Zone ID
+#   - CLOUDFLARE_API_TOKEN: API Token with Cache Purge permissions
 # ==============================================================================
 
 set -e
@@ -22,6 +28,12 @@ DEPLOY_PATH="/var/www/godatify"
 BACKEND_PATH="$DEPLOY_PATH/backend"
 FRONTEND_PATH="$DEPLOY_PATH/frontend"
 PM2_APP_NAME="strapi"
+
+# Cloudflare Configuration (set these in environment or .env file)
+# CLOUDFLARE_ZONE_ID - Your Cloudflare Zone ID
+# CLOUDFLARE_API_TOKEN - API Token with Cache Purge permissions
+CLOUDFLARE_ZONE_ID="${CLOUDFLARE_ZONE_ID:-}"
+CLOUDFLARE_API_TOKEN="${CLOUDFLARE_API_TOKEN:-}"
 
 # Colors for output
 RED='\033[0;31m'
@@ -38,6 +50,7 @@ log_step() { echo -e "${BLUE}[STEP]${NC} $1"; }
 # Parse arguments
 DEPLOY_BACKEND=true
 DEPLOY_FRONTEND=false
+PURGE_CACHE=false
 
 for arg in "$@"; do
     case $arg in
@@ -53,8 +66,12 @@ for arg in "$@"; do
             DEPLOY_BACKEND=true
             DEPLOY_FRONTEND=true
             ;;
+        --purge-cache)
+            PURGE_CACHE=true
+            ;;
         *)
             log_error "Unknown argument: $arg"
+            echo "Usage: $0 [--frontend] [--backend] [--full] [--purge-cache]"
             exit 1
             ;;
     esac
@@ -67,12 +84,39 @@ echo ""
 echo "=============================================================================="
 echo -e "${GREEN}Starting Deployment${NC}"
 echo "=============================================================================="
-echo "  Backend:  $DEPLOY_BACKEND"
-echo "  Frontend: $DEPLOY_FRONTEND"
+echo "  Backend:      $DEPLOY_BACKEND"
+echo "  Frontend:     $DEPLOY_FRONTEND"
+echo "  Purge Cache:  $PURGE_CACHE"
 echo "=============================================================================="
 echo ""
 
 START_TIME=$(date +%s)
+
+# ==============================================================================
+# Cloudflare Cache Purge Function
+# ==============================================================================
+purge_cloudflare_cache() {
+    if [ -z "$CLOUDFLARE_ZONE_ID" ] || [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+        log_warn "Cloudflare credentials not configured. Skipping cache purge."
+        log_warn "Set CLOUDFLARE_ZONE_ID and CLOUDFLARE_API_TOKEN to enable."
+        return 0
+    fi
+    
+    log_step "Purging Cloudflare cache..."
+    
+    RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache" \
+        -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+        -H "Content-Type: application/json" \
+        --data '{"purge_everything":true}')
+    
+    SUCCESS=$(echo "$RESPONSE" | grep -o '"success":true' || echo "")
+    
+    if [ -n "$SUCCESS" ]; then
+        log_info "Cloudflare cache purged successfully!"
+    else
+        log_warn "Cloudflare cache purge may have failed. Response: $RESPONSE"
+    fi
+}
 
 # ==============================================================================
 # Pull Latest Code
@@ -179,6 +223,13 @@ while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
 done
 
 # ==============================================================================
+# Cloudflare Cache Purge (Optional)
+# ==============================================================================
+if [ "$PURGE_CACHE" = true ]; then
+    purge_cloudflare_cache
+fi
+
+# ==============================================================================
 # Summary
 # ==============================================================================
 END_TIME=$(date +%s)
@@ -201,5 +252,9 @@ echo "Useful commands:"
 echo "  pm2 logs $PM2_APP_NAME     - View logs"
 echo "  pm2 monit                   - Monitor processes"
 echo "  pm2 restart $PM2_APP_NAME  - Restart app"
+echo ""
+echo "Cloudflare commands:"
+echo "  bash deploy.sh --purge-cache  - Deploy and purge CF cache"
+echo "  /opt/scripts/cloudflare-ips.sh --all  - Update CF IPs"
 echo ""
 echo "=============================================================================="

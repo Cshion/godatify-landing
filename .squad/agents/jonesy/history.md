@@ -49,6 +49,51 @@
 - Node 20 via nvm for version management
 - Health check at `/_health` endpoint
 
+### 2026-04-19: Cloudflare Proxy + EC2 Integration
+
+**Aaron's request:** Update deployment scripts to integrate Cloudflare proxy mode with EC2 backend.
+
+**Updated `scripts/setup-ec2.sh`:**
+- Added Cloudflare Origin Certificate directory setup (`/etc/ssl/cloudflare/`)
+- Created `/opt/scripts/` directory for Cloudflare maintenance scripts
+- Rewrote Nginx config template for Cloudflare proxy mode:
+  - Includes `cloudflare-ips.conf` for real IP restoration
+  - Uses `CF-Connecting-IP` header for visitor IPs
+  - SSL configured for Cloudflare Origin Certificate
+  - HTTP → HTTPS redirect
+  - Security headers added
+- Embedded Cloudflare IP update script at `/opt/scripts/cloudflare-ips.sh`
+- Updated UFW to basic mode (full Cloudflare restriction done via `make update-cf-ips`)
+- Updated summary with Cloudflare setup steps
+
+**Updated `scripts/deploy.sh`:**
+- Added `CLOUDFLARE_ZONE_ID` and `CLOUDFLARE_API_TOKEN` environment variables
+- Added `--purge-cache` flag for optional Cloudflare cache purge after deploy
+- Added `purge_cloudflare_cache()` function using Cloudflare API
+- Updated help output with Cloudflare commands
+
+**Created `scripts/cloudflare-ips.sh`:**
+- Standalone script for managing Cloudflare IP ranges
+- Commands: `list`, `ufw`, `iptables`, `nginx`, `all`, `check`, `help`
+- Supports `DRY_RUN=1` for previewing changes
+- Updates UFW firewall with Cloudflare-only rules
+- Updates iptables with CLOUDFLARE chain
+- Updates Nginx real_ip configuration
+- Includes cron job example for weekly auto-updates
+
+**Updated `backend/Makefile`:**
+- Added `setup-cloudflare` target - guides Origin Certificate installation
+- Added `update-cf-ips` target - runs cloudflare-ips.sh script
+- Added `check-cf-ips` target - verifies CF IPs are current
+- Updated help section with Cloudflare commands
+
+**Key configurations:**
+- Cloudflare Origin Certificate (15-year, trusted by CF only)
+- SSL mode: Full (Strict) for end-to-end encryption
+- Nginx uses `CF-Connecting-IP` header for real visitor IPs
+- UFW restricted to Cloudflare IP ranges only
+- Weekly cron job recommended for IP range updates
+
 **PM2 configuration highlights:**
 - `instances: 'max'` — Use all CPU cores
 - `exec_mode: 'cluster'` — Cluster mode for load distribution

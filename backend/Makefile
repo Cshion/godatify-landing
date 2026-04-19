@@ -1,18 +1,35 @@
 # ============================================================================
-# Backend Makefile — Strapi 5 Development Commands
+# Backend Makefile — Essential Commands Only
 # ============================================================================
 # Usage: make <target>
-# Run `make help` to see all available commands.
+# Run `make help` to see available commands.
 # ============================================================================
 
-.PHONY: install dev build start clean db-reset db-seed db-fresh console upgrade help
+.PHONY: help install dev build start seed seed-mock clean
 
-# Default target
 .DEFAULT_GOAL := help
 
 # ----------------------------------------------------------------------------
 # Core Commands
 # ----------------------------------------------------------------------------
+
+## help: Show available commands
+help:
+	@echo ""
+	@echo "╔════════════════════════════════════════════════════════════════╗"
+	@echo "║              Backend Make Commands                             ║"
+	@echo "╠════════════════════════════════════════════════════════════════╣"
+	@echo "║  make install    → Install dependencies                        ║"
+	@echo "║  make dev        → Start development server                    ║"
+	@echo "║  make build      → Build for production                        ║"
+	@echo "║  make start      → Start production server                     ║"
+	@echo "╠════════════════════════════════════════════════════════════════╣"
+	@echo "║  make seed       → Seed master data (safe for production)      ║"
+	@echo "║  make seed-mock  → Seed mock data (dev only)                   ║"
+	@echo "╠════════════════════════════════════════════════════════════════╣"
+	@echo "║  make clean      → Remove build artifacts                      ║"
+	@echo "╚════════════════════════════════════════════════════════════════╝"
+	@echo ""
 
 ## install: Install all dependencies
 install:
@@ -35,31 +52,29 @@ start:
 	npm run start
 
 # ----------------------------------------------------------------------------
-# Database Commands
+# Seed Commands
+# ----------------------------------------------------------------------------
+# Seeding is ONLY done via these commands. Bootstrap does NOT seed.
 # ----------------------------------------------------------------------------
 
-## db-reset: Reset the database (removes all data and tables)
-db-reset:
-	@echo "🗑️  Resetting database..."
-	@echo "⚠️  This will DELETE ALL DATA!"
-	@rm -rf .tmp
-	@rm -f data.db .tmp/data.db
-	@echo "✅ Database reset complete. Run 'make dev' to re-initialize."
+## seed: Seed master data (pages, company info, social links, services, sectors, industries)
+## Safe to run in production - creates structural content only
+seed:
+	@echo "🌱 Seeding master data..."
+	@echo "ℹ️  This seeds: services, social-links, company-info, sectors, industries, pages"
+	@echo "ℹ️  Safe for production - no mock/sample data included"
+	npx ts-node scripts/seed.ts
 
-## db-seed: Run seed data (starts server, which triggers bootstrap seeding)
-db-seed:
-	@echo "🌱 Running seed data..."
-	@echo "ℹ️  Seed runs automatically during Strapi bootstrap."
-	@echo "ℹ️  Seed ONLY runs in development (NODE_ENV !== 'production')"
-	NODE_ENV=development npm run dev
-
-## db-fresh: Reset database and re-seed (fresh start)
-db-fresh: db-reset
-	@echo "🔄 Fresh start — resetting and seeding..."
-	NODE_ENV=development npm run dev
+## seed-mock: Seed mock data (clients, authors, testimonials, blog posts, case studies)
+## Development ONLY - creates sample/demo content
+seed-mock:
+	@echo "🌱 Seeding mock data (dev only)..."
+	@echo "⚠️  This seeds: clients, authors, testimonials, blog-posts, case-studies"
+	@echo "⚠️  Do NOT run in production - this is sample/demo data"
+	npx ts-node scripts/seed.ts --mock-only
 
 # ----------------------------------------------------------------------------
-# Utility Commands
+# Cleanup
 # ----------------------------------------------------------------------------
 
 ## clean: Remove build artifacts and dependencies
@@ -71,43 +86,3 @@ clean:
 	rm -rf .cache
 	rm -f data.db
 	@echo "✅ Clean complete."
-
-## console: Open Strapi interactive console (REPL)
-console:
-	@echo "💻 Opening Strapi console..."
-	npm run console
-
-## upgrade: Upgrade Strapi to latest version
-upgrade:
-	@echo "⬆️  Upgrading Strapi..."
-	@echo "ℹ️  Run 'npx @strapi/upgrade latest --dry' first to preview changes."
-	npx @strapi/upgrade latest
-
-# ----------------------------------------------------------------------------
-# Help
-# ----------------------------------------------------------------------------
-
-## help: Show available commands
-help:
-	@echo ""
-	@echo "╔════════════════════════════════════════════════════════════════╗"
-	@echo "║           Datify Backend — Available Commands                  ║"
-	@echo "╠════════════════════════════════════════════════════════════════╣"
-	@echo "║  Core                                                          ║"
-	@echo "║    make install      Install dependencies                      ║"
-	@echo "║    make dev          Start development server                  ║"
-	@echo "║    make build        Build for production                      ║"
-	@echo "║    make start        Start production server                   ║"
-	@echo "║                                                                ║"
-	@echo "║  Database                                                      ║"
-	@echo "║    make db-reset     Reset database (⚠️  deletes all data)      ║"
-	@echo "║    make db-seed      Run seed data (dev only)                  ║"
-	@echo "║    make db-fresh     Reset + seed (fresh start)                ║"
-	@echo "║                                                                ║"
-	@echo "║  Utilities                                                     ║"
-	@echo "║    make clean        Remove node_modules, .tmp, dist           ║"
-	@echo "║    make console      Open Strapi interactive console           ║"
-	@echo "║    make upgrade      Upgrade Strapi to latest                  ║"
-	@echo "║    make help         Show this help message                    ║"
-	@echo "╚════════════════════════════════════════════════════════════════╝"
-	@echo ""

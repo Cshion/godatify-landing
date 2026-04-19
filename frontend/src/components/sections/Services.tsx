@@ -16,7 +16,7 @@ export default function Services({ services, title, buttonText }: ServicesProps)
   return (
     <section className={`section py-20 ${styles.servicesSection}`} id="servicios">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900 reveal">
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-white reveal">
           {title}
         </h2>
 

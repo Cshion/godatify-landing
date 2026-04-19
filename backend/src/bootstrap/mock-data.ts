@@ -1,10 +1,48 @@
 /**
  * Mock Data Seeding
  * 
- * Seeds test/mock data from seed-data/mock/.
- * This includes: blog posts, case studies (with full relation resolution).
+ * Seeds sample/demo data from seed-data/mock/.
  * 
- * RUNS IN DEVELOPMENT ENVIRONMENT ONLY.
+ * ============================================================================
+ * DEVELOPMENT ONLY — DO NOT RUN IN PRODUCTION
+ * ============================================================================
+ * 
+ * This data represents relationships that MUST be created manually in production:
+ * - Real clients are added via Strapi admin as contracts are signed
+ * - Real authors are employees added via Strapi admin
+ * - Real testimonials are customer feedback added via Strapi admin
+ * - Real blog posts are written by real authors
+ * - Real case studies feature real clients
+ * 
+ * Run via: make seed-mock
+ * 
+ * ============================================================================
+ * WHAT IS SEEDED HERE
+ * ============================================================================
+ * 
+ * RELATIONSHIP DATA (sample/demo content):
+ * - clients          → Sample client logos for carousel
+ * - authors          → Sample blog authors
+ * - testimonials     → Sample customer testimonials
+ * 
+ * CONTENT DATA (depends on above relationships):
+ * - blog-posts       → Sample blog posts (requires authors)
+ * - case-studies     → Sample case studies (requires clients, industries, services)
+ * 
+ * ============================================================================
+ * SEEDING ORDER
+ * ============================================================================
+ * 
+ * 1. Clients     → No dependencies
+ * 2. Authors     → No dependencies
+ * 3. Testimonials → No dependencies
+ * 4. Blog Posts  → Depends on Authors
+ * 5. Case Studies → Depends on Clients, Industries, Services
+ * 
+ * NOTE: Industries and Services come from master data (make seed).
+ * Run `make seed` before `make seed-mock` if you need those relationships.
+ * 
+ * ============================================================================
  */
 import type { Core } from '@strapi/strapi';
 import fs from 'fs';
@@ -25,24 +63,107 @@ export async function seedMockData(strapi: Core.Strapi): Promise<void> {
     }
 
     try {
+        // ════════════════════════════════════════════════════════════════════
+        // RELATIONSHIP DATA — Sample entities for development
+        // These must be seeded BEFORE content that depends on them
+        // ════════════════════════════════════════════════════════════════════
+        
+        // Clients — Sample client logos (needed for case studies & home page)
+        const allClients = await seedClients(strapi);
+
+        // Authors — Sample blog authors (needed for blog posts)
+        await seedAuthors(strapi);
+
+        // Testimonials — Sample customer testimonials
+        await seedTestimonials(strapi);
+
+        // ════════════════════════════════════════════════════════════════════
+        // CONTENT DATA — Sample content that depends on relationships above
+        // ════════════════════════════════════════════════════════════════════
+        
         // Blog Posts (depend on Authors)
         await seedBlogPosts(strapi);
 
         // Case Studies (depend on Clients, Industries, Services)
         await seedCaseStudies(strapi);
 
-        console.log('[SEED] Mock data seeding complete.');
+        // Update Home Page with clients relation
+        await updateHomePageClients(strapi, allClients);
+
+        console.log('[SEED] ✓ Mock data seeding complete.');
     } catch (error) {
         console.error('[SEED] Error seeding Mock Data:', error);
     }
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// RELATIONSHIP DATA SEEDERS
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Seeds sample client data.
+ * In production, real clients are created manually via Strapi admin.
+ */
+async function seedClients(strapi: Core.Strapi): Promise<any[]> {
+    const filePath = path.join(MOCK_DATA_PATH, 'clients.json');
+    if (!fs.existsSync(filePath)) {
+        console.log('[SEED] No clients.json found, skipping clients.');
+        return [];
+    }
+
+    const clientsData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    console.log(`[SEED] Processing ${clientsData.length} clients...`);
+    await seedCollection(strapi, 'api::client.client', clientsData, 'name');
+    return await strapi.documents('api::client.client' as any).findMany({ limit: 100 });
+}
+
+/**
+ * Seeds sample author data.
+ * In production, real authors (employees) are created manually via Strapi admin.
+ */
+async function seedAuthors(strapi: Core.Strapi): Promise<any[]> {
+    const filePath = path.join(MOCK_DATA_PATH, 'authors.json');
+    if (!fs.existsSync(filePath)) {
+        console.log('[SEED] No authors.json found, skipping authors.');
+        return [];
+    }
+
+    const authorsData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    console.log(`[SEED] Processing ${authorsData.length} authors...`);
+    await seedCollection(strapi, 'api::author.author', authorsData, 'name');
+    return await strapi.documents('api::author.author' as any).findMany({ limit: 100 });
+}
+
+/**
+ * Seeds sample testimonial data.
+ * In production, real testimonials are created manually via Strapi admin.
+ */
+async function seedTestimonials(strapi: Core.Strapi): Promise<any[]> {
+    const filePath = path.join(MOCK_DATA_PATH, 'testimonials.json');
+    if (!fs.existsSync(filePath)) {
+        console.log('[SEED] No testimonials.json found, skipping testimonials.');
+        return [];
+    }
+
+    const testimonialsData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    console.log(`[SEED] Processing ${testimonialsData.length} testimonials...`);
+    await seedCollection(strapi, 'api::testimonial.testimonial', testimonialsData);
+    return await strapi.documents('api::testimonial.testimonial' as any).findMany({ limit: 100 });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CONTENT DATA SEEDERS
+// ═══════════════════════════════════════════════════════════════════════════
 
 /**
  * Seeds blog posts with author relations and rich text image processing.
  */
 async function seedBlogPosts(strapi: Core.Strapi): Promise<void> {
     const filePath = path.join(MOCK_DATA_PATH, 'blog-posts.json');
-    if (!fs.existsSync(filePath)) return;
+    if (!fs.existsSync(filePath)) {
+        console.log('[SEED] No blog-posts.json found, skipping blog posts.');
+        return;
+    }
 
     const allAuthors = await strapi.documents('api::author.author' as any).findMany({ limit: 100 });
     const blogPosts = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
@@ -92,7 +213,10 @@ async function seedBlogPosts(strapi: Core.Strapi): Promise<void> {
  */
 async function seedCaseStudies(strapi: Core.Strapi): Promise<void> {
     const filePath = path.join(MOCK_DATA_PATH, 'cases.json');
-    if (!fs.existsSync(filePath)) return;
+    if (!fs.existsSync(filePath)) {
+        console.log('[SEED] No cases.json found, skipping case studies.');
+        return;
+    }
 
     // Fetch all related entities
     const allClients = await strapi.documents('api::client.client' as any).findMany({ limit: 100 });
@@ -101,7 +225,7 @@ async function seedCaseStudies(strapi: Core.Strapi): Promise<void> {
 
     const cases = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 
-    console.log('[SEED] Running Case Study Upsert...');
+    console.log(`[SEED] Processing ${cases.length} case studies...`);
 
     for (const caseData of cases) {
         const existing = await strapi.documents('api::case-study.case-study' as any).findMany({
@@ -146,7 +270,7 @@ async function seedCaseStudies(strapi: Core.Strapi): Promise<void> {
             });
         } else {
             // Create
-            console.log(`[SEED] Creating missing case: ${caseData.slug}`);
+            console.log(`[SEED] Creating case: ${caseData.slug}`);
             const entry = await strapi.documents('api::case-study.case-study' as any).create({
                 data: payload,
                 status: 'draft'
@@ -157,5 +281,31 @@ async function seedCaseStudies(strapi: Core.Strapi): Promise<void> {
                 });
             }
         }
+    }
+}
+
+/**
+ * Updates the Home Page to include the clients relation.
+ * This is done after seeding clients so they can be linked.
+ */
+async function updateHomePageClients(strapi: Core.Strapi, allClients: any[]): Promise<void> {
+    if (allClients.length === 0) return;
+
+    try {
+        // Find the existing home page
+        const homePage = await strapi.documents('api::home-page.home-page' as any).findFirst({});
+        
+        if (homePage) {
+            console.log('[SEED] Updating home page with clients relation...');
+            await strapi.documents('api::home-page.home-page' as any).update({
+                documentId: homePage.documentId,
+                data: {
+                    clients: allClients.map((c: any) => c.documentId)
+                },
+                status: homePage.publishedAt ? 'published' : 'draft'
+            });
+        }
+    } catch (error) {
+        console.error('[SEED] Failed to update home page clients:', error);
     }
 }
