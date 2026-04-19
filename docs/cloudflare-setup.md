@@ -15,6 +15,7 @@ Complete setup guide for Cloudflare with Vercel (frontend) and EC2 (backend).
 7. [Cache Rules](#cache-rules)
 8. [Workers (Optional)](#workers-optional)
 9. [Troubleshooting](#troubleshooting)
+10. [Cloudflare Proxy Mode with EC2](#cloudflare-proxy-mode-with-ec2)
 
 ---
 
@@ -498,3 +499,550 @@ curl -X POST "https://api.cloudflare.com/client/v4/zones/<ZONE_ID>/purge_cache" 
 - [ ] Static assets: Long cache TTL
 - [ ] API responses: Moderate cache TTL
 - [ ] Admin panel: Cache bypassed
+
+---
+
+## Cloudflare Proxy Mode with EC2
+
+This section covers how to use Cloudflare's **proxied (orange cloud)** mode with your EC2 backend to get full DDoS protection, WAF, caching, and SSL termination—without using DNS-only mode.
+
+### Why Proxy Mode?
+
+Using Cloudflare with proxy **enabled** (orange cloud ☁️) provides:
+
+| Feature | Benefit |
+|---------|---------|
+| **DDoS Protection** | Automatic mitigation of L3/L4/L7 attacks |
+| **Web Application Firewall (WAF)** | Block SQL injection, XSS, and other attacks |
+| **Edge Caching** | Serve content from 200+ PoPs worldwide |
+| **Hide Real Server IP** | Attackers can't target your EC2 directly |
+| **SSL Termination** | Cloudflare handles TLS handshakes at the edge |
+| **Bot Management** | Automatic bad bot blocking |
+| **Analytics** | Traffic insights, threat reports |
+
+### Why Cloudflare Sometimes Suggests DNS-Only
+
+Cloudflare's default onboarding may recommend DNS-only (gray cloud) because:
+1. Some apps break when client IP appears as Cloudflare IP
+2. WebSocket and non-HTTP traffic may need special handling
+3. Certificate complexities with origin servers
+
+**But these are all solvable!** Here's how to configure everything properly.
+
+---
+
+### 1. SSL Configuration
+
+Use **Full (Strict)** SSL mode for end-to-end encryption.
+
+#### Option A: Cloudflare Origin Certificate (Recommended)
+
+Cloudflare issues free 15-year certificates trusted **only by Cloudflare**. Since all traffic goes through Cloudflare, this is ideal.
+
+**Generate the certificate:**
+
+1. Go to **SSL/TLS** → **Origin Server** → **Create Certificate**
+2. Keep defaults: RSA 2048, 15 years
+3. Download both files:
+   - `origin.pem` (certificate)
+   - `origin-key.pem` (private key)
+
+**Install on EC2:**
+
+```bash
+# Create directory
+sudo mkdir -p /etc/ssl/cloudflare
+
+# Copy certificates
+sudo nano /etc/ssl/cloudflare/origin.pem
+# Paste certificate content
+
+sudo nano /etc/ssl/cloudflare/origin-key.pem
+# Paste private key content
+
+# Secure permissions
+sudo chmod 600 /etc/ssl/cloudflare/origin-key.pem
+sudo chmod 644 /etc/ssl/cloudflare/origin.pem
+```
+
+#### Option B: Let's Encrypt Certificate
+
+If you want certificates that also work for direct access (testing):
+
+```bash
+# Install certbot
+sudo apt install certbot python3-certbot-nginx -y
+
+# Get certificate (requires DNS-only temporarily, or use DNS challenge)
+sudo certbot certonly --nginx -d api.godatify.com
+
+# Auto-renewal is set up automatically
+# Certificates at: /etc/letsencrypt/live/api.godatify.com/
+```
+
+**Note:** For Let's Encrypt with proxy enabled, use DNS validation:
+```bash
+sudo certbot certonly --manual --preferred-challenges dns -d api.godatify.com
+```
+
+---
+
+### 2. Nginx Configuration for Cloudflare Proxy
+
+Configure Nginx to work properly with Cloudflare as a reverse proxy.
+
+#### Full Nginx Configuration
+
+Create/update `/etc/nginx/sites-available/api.godatify.com`:
+
+```nginx
+# Cloudflare IP ranges - auto-update these periodically
+# https://www.cloudflare.com/ips-v4
+# https://www.cloudflare.com/ips-v6
+
+# Trust Cloudflare IPs for real_ip module
+set_real_ip_from 173.245.48.0/20;
+set_real_ip_from 103.21.244.0/22;
+set_real_ip_from 103.22.200.0/22;
+set_real_ip_from 103.31.4.0/22;
+set_real_ip_from 141.101.64.0/18;
+set_real_ip_from 108.162.192.0/18;
+set_real_ip_from 190.93.240.0/20;
+set_real_ip_from 188.114.96.0/20;
+set_real_ip_from 197.234.240.0/22;
+set_real_ip_from 198.41.128.0/17;
+set_real_ip_from 162.158.0.0/15;
+set_real_ip_from 104.16.0.0/13;
+set_real_ip_from 104.24.0.0/14;
+set_real_ip_from 172.64.0.0/13;
+set_real_ip_from 131.0.72.0/22;
+
+# IPv6
+set_real_ip_from 2400:cb00::/32;
+set_real_ip_from 2606:4700::/32;
+set_real_ip_from 2803:f800::/32;
+set_real_ip_from 2405:b500::/32;
+set_real_ip_from 2405:8100::/32;
+set_real_ip_from 2a06:98c0::/29;
+set_real_ip_from 2c0f:f248::/32;
+
+# Use CF-Connecting-IP header (more reliable than X-Forwarded-For)
+real_ip_header CF-Connecting-IP;
+
+server {
+    listen 80;
+    server_name api.godatify.com;
+    
+    # Redirect HTTP to HTTPS
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name api.godatify.com;
+
+    # SSL Certificate (Cloudflare Origin Certificate)
+    ssl_certificate /etc/ssl/cloudflare/origin.pem;
+    ssl_certificate_key /etc/ssl/cloudflare/origin-key.pem;
+
+    # Modern SSL configuration
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1d;
+
+    # Verify Cloudflare is the connecting client (optional extra security)
+    # This checks the Cloudflare certificate
+    # ssl_client_certificate /etc/ssl/cloudflare/authenticated_origin_pull_ca.pem;
+    # ssl_verify_client on;
+
+    # Proxy settings
+    location / {
+        proxy_pass http://127.0.0.1:1337;
+        proxy_http_version 1.1;
+        
+        # Forward real visitor IP
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        
+        # Preserve host header
+        proxy_set_header Host $host;
+        
+        # WebSocket support (for Strapi admin)
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        
+        # Timeouts (important for file uploads)
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+        
+        # Buffer settings
+        proxy_buffering on;
+        proxy_buffer_size 4k;
+        proxy_buffers 8 16k;
+        proxy_busy_buffers_size 24k;
+        
+        # Max upload size (match Strapi config)
+        client_max_body_size 50M;
+    }
+
+    # Health check endpoint (bypass rate limits)
+    location = /_health {
+        proxy_pass http://127.0.0.1:1337/_health;
+        proxy_set_header Host $host;
+        access_log off;
+    }
+}
+```
+
+**Test and reload:**
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+#### Script to Auto-Update Cloudflare IPs
+
+Create `/opt/scripts/update-cloudflare-ips.sh`:
+
+```bash
+#!/bin/bash
+# Update Cloudflare IP ranges for Nginx
+
+CF_IPS_FILE="/etc/nginx/cloudflare-ips.conf"
+
+# Fetch latest IPs
+echo "# Auto-generated Cloudflare IPs - $(date)" > $CF_IPS_FILE
+echo "" >> $CF_IPS_FILE
+
+echo "# IPv4" >> $CF_IPS_FILE
+for ip in $(curl -s https://www.cloudflare.com/ips-v4); do
+    echo "set_real_ip_from $ip;" >> $CF_IPS_FILE
+done
+
+echo "" >> $CF_IPS_FILE
+echo "# IPv6" >> $CF_IPS_FILE
+for ip in $(curl -s https://www.cloudflare.com/ips-v6); do
+    echo "set_real_ip_from $ip;" >> $CF_IPS_FILE
+done
+
+# Reload nginx
+nginx -t && systemctl reload nginx
+
+echo "Cloudflare IPs updated at $(date)"
+```
+
+Add cron job:
+```bash
+sudo chmod +x /opt/scripts/update-cloudflare-ips.sh
+sudo crontab -e
+# Add: 0 4 * * 0 /opt/scripts/update-cloudflare-ips.sh >> /var/log/cloudflare-update.log 2>&1
+```
+
+---
+
+### 3. AWS Security Groups — Lock Down to Cloudflare Only
+
+This is **critical** for security. Restrict HTTP/HTTPS access to only Cloudflare IPs, preventing direct access to your EC2.
+
+#### Security Group Configuration
+
+**Inbound Rules:**
+
+| Type | Protocol | Port | Source | Description |
+|------|----------|------|--------|-------------|
+| SSH | TCP | 22 | Your IP / Bastion | Admin access |
+| HTTPS | TCP | 443 | *Cloudflare IPv4* | See list below |
+| HTTPS | TCP | 443 | *Cloudflare IPv6* | See list below |
+| HTTP | TCP | 80 | *Cloudflare IPv4* | Redirect to HTTPS |
+| HTTP | TCP | 80 | *Cloudflare IPv6* | Redirect to HTTPS |
+
+**Current Cloudflare IPv4 Ranges:**
+```
+173.245.48.0/20
+103.21.244.0/22
+103.22.200.0/22
+103.31.4.0/22
+141.101.64.0/18
+108.162.192.0/18
+190.93.240.0/20
+188.114.96.0/20
+197.234.240.0/22
+198.41.128.0/17
+162.158.0.0/15
+104.16.0.0/13
+104.24.0.0/14
+172.64.0.0/13
+131.0.72.0/22
+```
+
+**Current Cloudflare IPv6 Ranges:**
+```
+2400:cb00::/32
+2606:4700::/32
+2803:f800::/32
+2405:b500::/32
+2405:8100::/32
+2a06:98c0::/29
+2c0f:f248::/32
+```
+
+#### AWS CLI Script to Update Security Group
+
+Create `update-cf-security-group.sh`:
+
+```bash
+#!/bin/bash
+# Update EC2 Security Group with latest Cloudflare IPs
+
+SECURITY_GROUP_ID="sg-xxxxxxxxx"  # Your security group ID
+REGION="us-east-1"                 # Your region
+
+# Remove existing Cloudflare rules (identified by description)
+echo "Removing old Cloudflare rules..."
+aws ec2 describe-security-groups \
+    --group-ids $SECURITY_GROUP_ID \
+    --region $REGION \
+    --query 'SecurityGroups[0].IpPermissions[?contains(IpRanges[].Description, `Cloudflare`) || contains(Ipv6Ranges[].Description, `Cloudflare`)]' \
+    --output json | jq -c '.[]' | while read rule; do
+        aws ec2 revoke-security-group-ingress \
+            --group-id $SECURITY_GROUP_ID \
+            --region $REGION \
+            --ip-permissions "$rule" 2>/dev/null
+done
+
+# Add new Cloudflare IPv4 rules
+echo "Adding Cloudflare IPv4 rules..."
+for ip in $(curl -s https://www.cloudflare.com/ips-v4); do
+    aws ec2 authorize-security-group-ingress \
+        --group-id $SECURITY_GROUP_ID \
+        --region $REGION \
+        --protocol tcp \
+        --port 443 \
+        --cidr $ip \
+        --tag-specifications "ResourceType=security-group-rule,Tags=[{Key=Description,Value=Cloudflare-IPv4}]" 2>/dev/null
+    
+    aws ec2 authorize-security-group-ingress \
+        --group-id $SECURITY_GROUP_ID \
+        --region $REGION \
+        --protocol tcp \
+        --port 80 \
+        --cidr $ip \
+        --tag-specifications "ResourceType=security-group-rule,Tags=[{Key=Description,Value=Cloudflare-IPv4}]" 2>/dev/null
+done
+
+# Add new Cloudflare IPv6 rules
+echo "Adding Cloudflare IPv6 rules..."
+for ip in $(curl -s https://www.cloudflare.com/ips-v6); do
+    aws ec2 authorize-security-group-ingress \
+        --group-id $SECURITY_GROUP_ID \
+        --region $REGION \
+        --ip-permissions "IpProtocol=tcp,FromPort=443,ToPort=443,Ipv6Ranges=[{CidrIpv6=$ip,Description=Cloudflare-IPv6}]" 2>/dev/null
+    
+    aws ec2 authorize-security-group-ingress \
+        --group-id $SECURITY_GROUP_ID \
+        --region $REGION \
+        --ip-permissions "IpProtocol=tcp,FromPort=80,ToPort=80,Ipv6Ranges=[{CidrIpv6=$ip,Description=Cloudflare-IPv6}]" 2>/dev/null
+done
+
+echo "Security group updated!"
+```
+
+---
+
+### 4. Strapi Configuration for Cloudflare Proxy
+
+Configure Strapi to trust the proxy and work correctly with Cloudflare.
+
+#### Update `backend/config/server.ts`
+
+```typescript
+export default ({ env }) => ({
+  host: env('HOST', '0.0.0.0'),
+  port: env.int('PORT', 1337),
+  url: env('PUBLIC_URL', 'https://api.godatify.com'),
+  
+  proxy: {
+    enabled: true,
+    // Trust proxy headers from nginx/cloudflare
+    global: true,
+    // Strapi 5 automatically trusts X-Forwarded-* headers when proxy is enabled
+  },
+
+  app: {
+    keys: env.array('APP_KEYS'),
+  },
+});
+```
+
+#### Update `backend/config/middlewares.ts`
+
+```typescript
+export default [
+  'strapi::logger',
+  'strapi::errors',
+  {
+    name: 'strapi::security',
+    config: {
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          'connect-src': ["'self'", 'https:'],
+          'img-src': ["'self'", 'data:', 'blob:', 'https://res.cloudinary.com', 's3.amazonaws.com', '*.amazonaws.com'],
+          'media-src': ["'self'", 'data:', 'blob:', 's3.amazonaws.com', '*.amazonaws.com'],
+          upgradeInsecureRequests: null,
+        },
+      },
+      // Trust Cloudflare's forwarded headers
+      frameguard: {
+        action: 'sameorigin',
+      },
+    },
+  },
+  {
+    name: 'strapi::cors',
+    config: {
+      enabled: true,
+      headers: '*',
+      origin: [
+        'https://godatify.com',
+        'https://www.godatify.com',
+        'https://api.godatify.com',
+        // Vercel preview deployments
+        /\.vercel\.app$/,
+      ],
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+      credentials: true,
+    },
+  },
+  'strapi::poweredBy',
+  'strapi::query',
+  {
+    name: 'strapi::body',
+    config: {
+      formLimit: '50mb',
+      jsonLimit: '50mb',
+      textLimit: '50mb',
+    },
+  },
+  'strapi::session',
+  'strapi::favicon',
+  'strapi::public',
+];
+```
+
+#### Rate Limiting Considerations
+
+Cloudflare's rate limiting is applied at the edge, but you may want additional protection:
+
+1. **Cloudflare Rate Limiting Rules** (recommended):
+   - **Security** → **WAF** → **Rate limiting rules**
+   - Example: 100 requests/minute per IP on `/api/` paths
+
+2. **Strapi-level rate limiting** (optional second layer):
+   ```bash
+   npm install @strapi/plugin-users-permissions
+   # Configure in admin panel → Settings → Users & Permissions → Rate limiting
+   ```
+
+---
+
+### 5. DNS Records Configuration
+
+Set up DNS records with proxy enabled.
+
+#### Required Records
+
+| Type | Name | Content | Proxy Status | TTL |
+|------|------|---------|--------------|-----|
+| A | `api` | `<EC2-ELASTIC-IP>` | ✅ Proxied (Orange) | Auto |
+
+**Verification:**
+```bash
+# Should return Cloudflare IPs, NOT your EC2 IP
+dig api.godatify.com +short
+
+# Example output (Cloudflare IPs):
+# 104.21.xxx.xxx
+# 172.67.xxx.xxx
+```
+
+If you see your EC2 IP, proxy mode is **not** enabled.
+
+---
+
+### 6. Testing the Setup
+
+#### Verify Cloudflare is Active
+
+```bash
+# Check for Cloudflare headers
+curl -sI https://api.godatify.com | grep -i "cf-\|server:"
+
+# Expected output:
+# server: cloudflare
+# cf-ray: xxxxxxx-IAD
+# cf-cache-status: DYNAMIC
+```
+
+#### Test Real IP Forwarding
+
+Create a test endpoint in Strapi or check logs:
+
+```bash
+# In nginx access log, you should see real visitor IPs, not Cloudflare IPs
+sudo tail -f /var/log/nginx/access.log
+```
+
+#### Security Verification
+
+```bash
+# Try direct access to EC2 - should timeout if security groups are correct
+curl --connect-timeout 5 https://<YOUR-EC2-IP>
+# Expected: Connection timed out
+
+# Access via Cloudflare - should work
+curl https://api.godatify.com/_health
+# Expected: {"status":"ok"}
+```
+
+---
+
+### 7. Advanced: Authenticated Origin Pulls
+
+For additional security, configure Cloudflare's Authenticated Origin Pulls. This ensures only Cloudflare can connect to your origin.
+
+**Enable in Cloudflare:**
+1. **SSL/TLS** → **Origin Server** → **Authenticated Origin Pulls** → Enable
+
+**Download Cloudflare CA Certificate:**
+```bash
+sudo curl -o /etc/ssl/cloudflare/authenticated_origin_pull_ca.pem \
+  https://developers.cloudflare.com/ssl/static/authenticated_origin_pull_ca.pem
+```
+
+**Update Nginx (uncomment these lines):**
+```nginx
+ssl_client_certificate /etc/ssl/cloudflare/authenticated_origin_pull_ca.pem;
+ssl_verify_client on;
+```
+
+Now Nginx will reject any connection not from Cloudflare, even if someone discovers your EC2 IP.
+
+---
+
+### Quick Checklist
+
+- [ ] SSL Mode: **Full (Strict)** in Cloudflare
+- [ ] Origin Certificate installed on EC2 (or Let's Encrypt)
+- [ ] Nginx configured with `real_ip_header CF-Connecting-IP`
+- [ ] Security Group allows ONLY Cloudflare IPs on 80/443
+- [ ] DNS A record for `api` with proxy **ON** (orange cloud)
+- [ ] Strapi `proxy.enabled: true` in server config
+- [ ] CORS configured for your domains
+- [ ] Direct EC2 access blocked (test with curl to raw IP)
+- [ ] (Optional) Authenticated Origin Pulls enabled

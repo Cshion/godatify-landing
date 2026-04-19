@@ -208,3 +208,22 @@ linkedin-in, facebook-f, instagram, youtube, react, node-js, python, r-project, 
 - Run `make` or `make help` to see all available commands
 - Color-coded output for better terminal UX
 - Key targets: `install`, `dev`, `build`, `start`, `lint`, `clean`
+
+### 2026-04-19 — FontAwesome Icons Not Loading Fix
+
+**Problem:** Console showed `[FontAwesomeIcon] Could not find icon` errors for all icons despite them being imported in `fontawesome.ts`.
+
+**Root Cause:** Server Component / Client Component mismatch in Next.js App Router:
+- `fontawesome.ts` was imported in `layout.tsx` (Server Component)
+- `library.add()` executed on the server, but the library state doesn't transfer to the client
+- `Icon.tsx` (Client Component) tried to use icons on the client where the library was empty
+
+**Fix:**
+1. Added `'use client'` directive to `fontawesome.ts` to mark it as a client module
+2. Imported `@/lib/fontawesome` directly in `Icon.tsx` BEFORE `FontAwesomeIcon`
+3. This ensures the library is initialized on the client side before any icons are rendered
+
+**Key Learning:** In Next.js App Router:
+- Side-effect imports in Server Components run only on the server
+- For client-side singleton libraries (like FontAwesome's `library`), the initialization must be imported in a Client Component
+- Pattern: Import config modules in the component that needs them, not in a parent Server Component

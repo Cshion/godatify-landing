@@ -174,7 +174,35 @@ ENCRYPTION_KEY=
 - `blog-posts.json` - Sample blog articles
 - `cases.json` - Sample case studies
 
-### Custom Logic (`src/index.ts`)
+**Custom Logic (`src/index.ts` → `src/bootstrap/`):**
+
+**REFACTORED 2026-04-19:** Seed logic extracted into modular bootstrap system.
+
+**Module Structure:**
+```
+backend/src/bootstrap/
+├── index.ts           # Orchestrator - runs all bootstrap steps
+├── config.ts          # Shared configuration maps (MEDIA_FIELDS_MAP, etc.)
+├── utils.ts           # seedCollection, seedSingle utilities
+├── lifecycle-hooks.ts # Media URL sync, relation denormalization, reverse sync
+├── permissions.ts     # Public role permissions (ALWAYS)
+├── master-data.ts     # Foundational seed data (NON-PRODUCTION)
+├── mock-data.ts       # Test/demo content (DEVELOPMENT ONLY)
+├── sync.ts            # Backfill sync operations (ALWAYS)
+├── indexes.ts         # Database index optimization (ALWAYS)
+└── repairs.ts         # Data corruption fixes (ALWAYS)
+```
+
+**Environment Behavior:**
+| Module | Production | Staging | Development |
+|--------|------------|---------|-------------|
+| Lifecycle hooks | ✅ | ✅ | ✅ |
+| Backfill sync | ✅ | ✅ | ✅ |
+| Permissions | ✅ | ✅ | ✅ |
+| Indexes | ✅ | ✅ | ✅ |
+| Repairs | ✅ | ✅ | ✅ |
+| Master data | ❌ | ✅ | ✅ |
+| Mock data | ❌ | ❌ | ✅ |
 
 **1. Media URL Auto-Sync (Lifecycle Hook):**
 - Automatically populates `*Url` fields from uploaded media

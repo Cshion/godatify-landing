@@ -1,5 +1,9 @@
 'use client';
 
+// Initialize FontAwesome library BEFORE using FontAwesomeIcon
+// This ensures the library is populated on the client side
+import '@/lib/fontawesome';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp, SizeProp } from '@fortawesome/fontawesome-svg-core';
 

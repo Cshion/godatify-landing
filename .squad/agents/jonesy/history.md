@@ -132,3 +132,46 @@
 - Vercel CLI deployment is more reliable than GitHub integration for complex setups
 - Cache invalidation: Use prefixes for surgical purges, not full cache purge
 - CORS: Must include `*.vercel.app` for preview deployments
+
+### 2026-04-19: Cloudflare Proxy Mode with EC2 Documentation
+
+**Aaron's request:** Document how to use Cloudflare's full proxy mode (orange cloud) with EC2 backend, not DNS-only mode.
+
+**Why proxy mode matters:**
+- DDoS protection at Cloudflare edge
+- WAF protection for SQL injection, XSS, etc.
+- Edge caching reduces EC2 load
+- Hides real server IP from attackers
+- Free SSL termination at edge
+
+**Key configurations documented:**
+
+1. **SSL: Cloudflare Origin Certificates**
+   - Free 15-year certs trusted only by Cloudflare
+   - Simpler than Let's Encrypt renewal
+   - Perfect since all traffic goes through CF anyway
+
+2. **Nginx Real IP Restoration**
+   - Must use `real_ip_header CF-Connecting-IP` (not X-Forwarded-For)
+   - Must whitelist all Cloudflare IP ranges
+   - Script provided to auto-update CF IPs weekly
+
+3. **AWS Security Groups — Critical**
+   - Restrict 80/443 to ONLY Cloudflare IPv4/IPv6 ranges
+   - This is the key to forcing all traffic through CF
+   - Script provided to auto-update security group rules
+
+4. **Strapi Proxy Trust**
+   - Set `proxy.enabled: true` in server.ts
+   - Strapi 5 auto-trusts X-Forwarded-* headers when enabled
+   - CORS must include production domains + Vercel preview patterns
+
+5. **Authenticated Origin Pulls (Advanced)**
+   - Extra layer: Nginx verifies Cloudflare client cert
+   - Even if someone finds EC2 IP, they can't connect
+
+**Key learnings:**
+- CF-Connecting-IP header is more reliable than X-Forwarded-For (which can be spoofed)
+- Security groups are the real enforcement — UFW/iptables alone isn't enough
+- Cloudflare Origin Certificates eliminate Let's Encrypt renewal complexity
+- Authenticated Origin Pulls provides defense-in-depth even if IP leaks
