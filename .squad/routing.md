@@ -6,13 +6,16 @@ How to decide who handles what.
 
 | Work Type | Route To | Examples |
 |-----------|----------|----------|
-| {domain 1} | {Name} | {example tasks} |
-| {domain 2} | {Name} | {example tasks} |
-| {domain 3} | {Name} | {example tasks} |
-| Code review | {Name} | Review PRs, check quality, suggest improvements |
-| Testing | {Name} | Write tests, find edge cases, verify fixes |
-| Scope & priorities | {Name} | What to build next, trade-offs, decisions |
+| Frontend / UI | Dallas | Components, pages, Next.js, React, TailwindCSS |
+| Backend / API | Parker | Strapi, GraphQL, PostgreSQL, content types, S3 |
+| Testing / QA | Lambert | Unit tests, integration tests, edge cases |
+| SEO / Content | Kane | Meta tags, sitemap, structured data, copywriting |
+| Design / UI/UX | Brett | Visual design, accessibility, design system |
+| Security | Ash | Auth, validation, CORS, rate limiting, audits |
+| Code review | Ripley | Review PRs, check quality, suggest improvements |
+| Architecture | Ripley | System design, tech decisions, scope management |
 | Session logging | Scribe | Automatic — never needs routing |
+| Work monitoring | Ralph | Backlog, issues, PR status |
 
 ## Issue Routing
 

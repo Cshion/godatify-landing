@@ -1,0 +1,24 @@
+{
+  "universe_usage_history": [
+    {
+      "universe": "Alien",
+      "assignment_id": "godatify-landing-2026-04-18",
+      "used_at": "2026-04-18T00:00:00Z"
+    }
+  ],
+  "assignment_cast_snapshots": {
+    "godatify-landing-2026-04-18": {
+      "universe": "Alien",
+      "agents": {
+        "lead": "Ripley",
+        "frontend-dev": "Dallas",
+        "backend-dev": "Parker",
+        "tester": "Lambert",
+        "content-seo": "Kane",
+        "designer-ui": "Brett",
+        "security": "Ash"
+      },
+      "created_at": "2026-04-18T00:00:00Z"
+    }
+  }
+}

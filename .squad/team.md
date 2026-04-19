@@ -12,7 +12,15 @@
 
 | Name | Role | Charter | Status |
 |------|------|---------|--------|
-
+| Ripley | Lead | [charter](.squad/agents/ripley/charter.md) | 🏗️ Active |
+| Dallas | Frontend Dev | [charter](.squad/agents/dallas/charter.md) | ⚛️ Active |
+| Parker | Backend Dev | [charter](.squad/agents/parker/charter.md) | 🔧 Active |
+| Lambert | Tester | [charter](.squad/agents/lambert/charter.md) | 🧪 Active |
+| Kane | Content/SEO | [charter](.squad/agents/kane/charter.md) | 📝 Active |
+| Brett | Designer/UI | [charter](.squad/agents/brett/charter.md) | 🎨 Active |
+| Ash | Security | [charter](.squad/agents/ash/charter.md) | 🔒 Active |
+| Scribe | Session Logger | [charter](.squad/agents/scribe/charter.md) | 📋 Active |
+| Ralph | Work Monitor | [charter](.squad/agents/ralph/charter.md) | 🔄 Active |
 
 ## Coding Agent
 
@@ -50,4 +58,31 @@
 ## Project Context
 
 - **Project:** godatify-landing
-- **Created:** 2026-04-19
+- **Created:** 2026-04-18
+- **User:** Aaron
+- **Universe:** Alien (7/8 slots used)
+
+### Tech Stack
+
+**Frontend:**
+- Next.js 16.0.7
+- React 19.2
+- TailwindCSS 4
+- TypeScript 5
+
+**Backend:**
+- Strapi 5.31.3
+- GraphQL
+- PostgreSQL
+- AWS S3
+
+### Structure
+
+```
+frontend/     Next.js app (pages, components, data fetching)
+backend/      Strapi CMS (content types, APIs, seed data)
+```
+
+### Language
+
+Spanish (es-MX) — landing page corporativa
