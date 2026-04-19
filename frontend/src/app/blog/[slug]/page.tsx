@@ -5,9 +5,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import BlogCTA from "@/components/blog/BlogCTA";
 import BlogCard from "@/components/blog/BlogCard";
+import Icon from "@/components/ui/Icon";
 import styles from "./page.module.css";
 import { Metadata } from "next";
 import { formatDate } from "@/lib/formatDate";
+import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/schemas";
 
 import { BLOG_STATIC_DATA } from "@/data/blog-data";
 
@@ -35,7 +37,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
         title: `${post.title}${BLOG_STATIC_DATA.metadata.titleSuffix}`,
         description: post.excerpt,
+        alternates: {
+            canonical: `/blog/${slug}`,
+        },
         openGraph: {
+            title: post.title,
+            description: post.excerpt,
+            type: 'article',
+            publishedTime: post.date,
+            authors: [post.author.name],
+            images: [post.image],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: post.title,
+            description: post.excerpt,
             images: [post.image],
         },
     };
@@ -58,7 +74,7 @@ export default async function BlogPostPage({ params }: Props) {
         <article className={styles.articleContainer}>
             <div className="container mx-auto px-6">
                 <Link href="/blog" className={styles.backLink}>
-                    <i className="fas fa-arrow-left" /> {BLOG_STATIC_DATA.detail.back}
+                    <Icon name="arrow-left" /> {BLOG_STATIC_DATA.detail.back}
                 </Link>
 
                 <header className={styles.hero}>
@@ -106,61 +122,23 @@ export default async function BlogPostPage({ params }: Props) {
                     />
                 </div>
 
+                {/* Article Schema */}
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
-                        __html: JSON.stringify({
-                            "@context": "https://schema.org",
-                            "@type": "BlogPosting",
-                            headline: post.title,
-                            description: post.excerpt,
-                            image: post.image,
-                            datePublished: post.date,
-                            author: {
-                                "@type": "Person",
-                                name: post.author.name,
-                                image: post.author.image,
-                                jobTitle: post.author.role
-                            },
-                            publisher: {
-                                "@type": "Organization",
-                                name: "Datify",
-                                logo: {
-                                    "@type": "ImageObject",
-                                    url: "https://godatify.com/images/logo.png"
-                                }
-                            },
-                            mainEntityOfPage: {
-                                "@type": "WebPage",
-                                "@id": `https://godatify.com/blog/${slug}`
-                            },
-                            keywords: post.tags.join(", ")
-                        })
+                        __html: JSON.stringify(generateArticleSchema(post, slug))
                     }}
                 />
 
+                {/* Breadcrumb Schema */}
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
-                        __html: JSON.stringify({
-                            "@context": "https://schema.org",
-                            "@type": "BreadcrumbList",
-                            "itemListElement": [{
-                                "@type": "ListItem",
-                                "position": 1,
-                                "name": "Inicio",
-                                "item": "https://godatify.com/"
-                            }, {
-                                "@type": "ListItem",
-                                "position": 2,
-                                "name": "Blog",
-                                "item": "https://godatify.com/blog"
-                            }, {
-                                "@type": "ListItem",
-                                "position": 3,
-                                "name": post.title
-                            }]
-                        })
+                        __html: JSON.stringify(generateBreadcrumbSchema([
+                            { name: 'Inicio', url: 'https://godatify.com/' },
+                            { name: 'Blog', url: 'https://godatify.com/blog' },
+                            { name: post.title }
+                        ]))
                     }}
                 />
 

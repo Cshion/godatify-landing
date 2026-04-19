@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { CaseStudy } from '@/types';
 import CasesGrid from './CasesGrid';
+import Icon from '@/components/ui/Icon';
 import styles from './CaseDetail.module.css';
 
 interface CaseDetailProps {
@@ -54,7 +55,7 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                                     <div className="bg-red-50/50 rounded-2xl p-8 border border-red-100">
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-500">
-                                                <i className="fas fa-exclamation-triangle"></i>
+                                                <Icon name="exclamation-triangle" />
                                             </div>
                                             <h2 className="text-2xl font-bold text-gray-900">El Desafío</h2>
                                         </div>
@@ -69,7 +70,7 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                                     <div className="bg-brand-green/5 rounded-2xl p-8 border border-brand-green/10">
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="w-10 h-10 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green">
-                                                <i className="fas fa-lightbulb"></i>
+                                                <Icon name="lightbulb" />
                                             </div>
                                             <h2 className="text-2xl font-bold text-gray-900">La Solución</h2>
                                         </div>
@@ -110,7 +111,7 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                                             {caseStudy.client.anonymous ? (
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
-                                                        <i className="fas fa-user-secret"></i>
+                                                        <Icon name="user-secret" />
                                                     </div>
                                                     <span className="font-bold text-gray-900 block">Confidencial</span>
                                                 </div>
@@ -126,7 +127,7 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                                             ) : (
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
-                                                        <i className="fas fa-building"></i>
+                                                        <Icon name="building" />
                                                     </div>
                                                     <span className="font-bold text-gray-900 block">{caseStudy.client.name}</span>
                                                 </div>
@@ -140,7 +141,7 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                                                     className="text-xs text-gray-500 hover:text-brand-green transition-colors flex items-center gap-1 mt-1"
                                                 >
                                                     Visitar sitio web
-                                                    <i className="fas fa-external-link-alt text-[10px]"></i>
+                                                    <Icon name="external-link-alt" className="text-[10px]" />
                                                 </a>
                                             )}
                                             <span className="text-xs text-gray-400 block mt-1">
@@ -171,7 +172,7 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                             {caseStudy.testimonial && (
                                 <div className="bg-gradient-to-br from-brand-green/5 to-transparent p-8 rounded-2xl border border-brand-green/10 mt-8 relative overflow-hidden group hover:border-brand-green/20 transition-colors">
                                     <div className="absolute top-0 right-0 p-6 opacity-10 text-brand-green transform translate-x-1/4 -translate-y-1/4">
-                                        <i className="fas fa-quote-right text-8xl"></i>
+                                        <Icon name="quote-right" className="text-8xl" />
                                     </div>
 
                                     <div className="relative z-10">
@@ -197,7 +198,7 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                                                     className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-[#0077b5] shadow-sm hover:shadow-md hover:scale-110 transition-all"
                                                     aria-label={`Ver perfil de LinkedIn de ${caseStudy.testimonial.author}`}
                                                 >
-                                                    <i className="fab fa-linkedin-in"></i>
+                                                <Icon name="linkedin-in" prefix="fab" />
                                                 </a>
                                             )}
                                         </div>

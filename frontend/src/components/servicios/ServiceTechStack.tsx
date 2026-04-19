@@ -1,3 +1,4 @@
+import Icon from '@/components/ui/Icon';
 import styles from './ServiceTechStack.module.css';
 
 interface TechItem {
@@ -9,21 +10,7 @@ interface ServiceTechStackProps {
     techStack: readonly TechItem[];
 }
 
-const BRAND_ICONS = [
-    'react', 'node-js', 'python', 'r-project', 'aws', 'microsoft',
-    'docker', 'github', 'gitlab', 'bitbucket', 'android', 'apple',
-    'linux', 'windows', 'google', 'facebook', 'twitter', 'linkedin',
-    'instagram', 'youtube', 'whatsapp', 'slack', 'figma'
-];
-
 export default function ServiceTechStack({ techStack }: ServiceTechStackProps) {
-    const getIconClass = (iconName: string) => {
-        // Special cases or manual overrides if needed
-        if (BRAND_ICONS.includes(iconName)) return 'fab';
-        // Default to solid for others (like snowflake, server, database, etc.)
-        return 'fas';
-    };
-
     return (
         <section className={styles.section}>
             <div className={styles.container}>
@@ -35,7 +22,7 @@ export default function ServiceTechStack({ techStack }: ServiceTechStackProps) {
                     {(techStack || []).map((tech, idx) => (
                         <div key={idx} className={styles.techCard}>
                             <div className={styles.iconWrapper}>
-                                <i className={`${getIconClass(tech.icon)} fa-${tech.icon} ${styles.icon}`}></i>
+                                <Icon name={tech.icon} className={styles.icon} />
                             </div>
                             <span className={styles.techName}>{tech.name}</span>
                         </div>

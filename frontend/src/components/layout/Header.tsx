@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -24,6 +24,7 @@ interface HeaderProps {
 export default function Header({ navLinks, socialLinks, servicesNav, sectorsNav, servicesLabel, logo }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
   const pathname = usePathname();
 
   // Check if we are on a case detail page or blog detail page
@@ -165,22 +166,112 @@ export default function Header({ navLinks, socialLinks, servicesNav, sectorsNav,
         </div>
 
         {/* Mobile Menu */}
-        {
-          isMobileMenuOpen && (
-            <nav
-              id="mobile-navigation"
-              className={styles.mobileMenu}
-              aria-label="Navegación móvil"
+        {isMobileMenuOpen && (
+          <nav
+            id="mobile-navigation"
+            className={styles.mobileMenu}
+            aria-label="Navegación móvil"
+          >
+            {/* Regular links before dropdowns */}
+            {navLinks.filter(l => l.href !== '/industrias').slice(0, 2).map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={styles.mobileLink}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            {/* Services Accordion */}
+            <div className={styles.mobileDropdown}>
+              <button
+                className={styles.mobileDropdownToggle}
+                onClick={() => setOpenMobileDropdown(openMobileDropdown === 'services' ? null : 'services')}
+                aria-expanded={openMobileDropdown === 'services'}
+              >
+                {servicesLabel}
+                <i
+                  className={`fas fa-chevron-down ${styles.mobileDropdownIcon} ${openMobileDropdown === 'services' ? styles.open : ''}`}
+                  aria-hidden="true"
+                />
+              </button>
+              {openMobileDropdown === 'services' && (
+                <div className={styles.mobileSubmenu}>
+                  {servicesNav.map((service) => (
+                    <Link
+                      key={service.slug}
+                      href={`/servicios/${service.slug}`}
+                      className={styles.mobileSubmenuLink}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {service.title}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Industries Accordion */}
+            {sectorsNav && sectorsNav.length > 0 && (
+              <div className={styles.mobileDropdown}>
+                <button
+                  className={styles.mobileDropdownToggle}
+                  onClick={() => setOpenMobileDropdown(openMobileDropdown === 'industries' ? null : 'industries')}
+                  aria-expanded={openMobileDropdown === 'industries'}
+                >
+                  Industrias
+                  <i
+                    className={`fas fa-chevron-down ${styles.mobileDropdownIcon} ${openMobileDropdown === 'industries' ? styles.open : ''}`}
+                    aria-hidden="true"
+                  />
+                </button>
+                {openMobileDropdown === 'industries' && (
+                  <div className={styles.mobileSubmenu}>
+                    {sectorsNav.map((sector) => (
+                      <Fragment key={sector.slug}>
+                        <span className={styles.mobileSubmenuHeader}>{sector.title}</span>
+                        {(sector.industries || []).map((ind) => (
+                          <Link
+                            key={ind.slug}
+                            href={`/industrias/${ind.slug}`}
+                            className={styles.mobileSubmenuLink}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            {ind.title}
+                          </Link>
+                        ))}
+                      </Fragment>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Regular links after dropdowns */}
+            {navLinks.filter(l => l.href !== '/industrias').slice(2).map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={styles.mobileLink}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            {/* Mobile CTA */}
+            <Link
+              href="/contacto"
+              className={styles.mobileCta}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
-              {navLinks.map((link) => (
-                <Link key={link.href} href={link.href} className={styles.mobileLink}>
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          )
-        }
-      </header >
+              Contáctanos
+            </Link>
+          </nav>
+        )}
+      </header>
     </>
   );
 }

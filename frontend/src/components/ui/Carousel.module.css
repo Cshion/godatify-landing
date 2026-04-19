@@ -99,4 +99,16 @@
     border-radius: 0.5rem;
 }
 
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .carouselTrack {
+        transition: none;
+    }
+    
+    .controlBtn,
+    .dot {
+        transition: none;
+    }
+}
+
 /* Responsive adjustments if needed, though container relative % widths usually handle it */

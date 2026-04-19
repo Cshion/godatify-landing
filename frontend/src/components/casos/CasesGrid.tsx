@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { CaseStudy } from '@/types';
+import Icon from '@/components/ui/Icon';
 import styles from './CasesGrid.module.css';
 import { getMoreCases } from '@/app/actions/cases';
 
@@ -102,7 +103,7 @@ export default function CasesGrid({ cases: initialCases, initialTotal }: CasesGr
                                         <div className="flex items-center">
                                             {caseStudy.client.anonymous ? (
                                                 <span className="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded">
-                                                    <i className="fas fa-user-secret mr-1"></i>
+                                                    <Icon name="user-secret" className="mr-1" />
                                                     Confidencial
                                                 </span>
                                             ) : caseStudy.client.logo ? (

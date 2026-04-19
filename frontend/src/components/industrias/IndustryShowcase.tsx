@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Sector, CaseStudy } from '@/types';
+import Icon from '@/components/ui/Icon';
 import styles from './IndustryShowcase.module.css';
 
 interface IndustryShowcaseProps {
@@ -53,7 +54,7 @@ export default function IndustryShowcase({ sectors, cases }: IndustryShowcasePro
                         {/* Decorative or Info Card */}
                         <div className="bg-brand-green/5 p-8 rounded-2xl border border-brand-green/10">
                             <h3 className="font-bold text-primary mb-2 flex items-center gap-2">
-                                <i className="fas fa-chart-line text-brand-green"></i>
+                                <Icon name="chart-line" className="text-brand-green" />
                                 Impacto Transformador
                             </h3>
                             <p className="text-sm text-gray-600">
@@ -81,7 +82,7 @@ export default function IndustryShowcase({ sectors, cases }: IndustryShowcasePro
                                     </p>
 
                                     <div className="flex items-center text-brand-green font-semibold text-sm group-hover:translate-x-2 transition-transform">
-                                        Explorar Soluciones <i className="fas fa-arrow-right ml-2"></i>
+                                        Explorar Soluciones <Icon name="arrow-right" className="ml-2" />
                                     </div>
                                 </Link>
                             ))}

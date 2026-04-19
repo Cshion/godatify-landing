@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Testimonial, CarouselConfig } from '@/types';
+import Icon from '@/components/ui/Icon';
 import styles from './Testimonials.module.css';
 import Image from 'next/image';
 
@@ -121,7 +122,7 @@ export default function Testimonials({ testimonials, carouselConfig, title, subt
             className={styles.carouselBtn}
             aria-label="Testimonio anterior"
           >
-            <i className="fas fa-chevron-left" aria-hidden="true" />
+            <Icon name="chevron-left" />
           </button>
 
           <div className={styles.dots}>
@@ -141,7 +142,7 @@ export default function Testimonials({ testimonials, carouselConfig, title, subt
             className={styles.carouselBtn}
             aria-label="Siguiente testimonio"
           >
-            <i className="fas fa-chevron-right" aria-hidden="true" />
+            <Icon name="chevron-right" />
           </button>
         </div>
       </div>

@@ -1,46 +1,122 @@
 # ==============================================================================
-# GitHub Actions - Deploy Backend to EC2
+# GitHub Actions - Deploy Frontend to Vercel + Backend to EC2
 # ==============================================================================
-# This workflow deploys the Strapi backend to an AWS EC2 instance using PM2
+# Handles deployments for both:
+#   - Frontend (Next.js) → Vercel
+#   - Backend (Strapi) → EC2 with PM2
 # 
 # Required GitHub Secrets:
-#   - EC2_HOST: EC2 instance public IP or domain
-#   - EC2_USER: SSH username (usually 'ubuntu')
-#   - EC2_SSH_KEY: Private SSH key for EC2 access
-#   - ENV_FILE: Base64 encoded .env file contents
+#   Frontend (Vercel):
+#     - VERCEL_TOKEN: Vercel API token
+#     - VERCEL_ORG_ID: Vercel organization ID
+#     - VERCEL_PROJECT_ID: Vercel project ID
+#   Backend (EC2):
+#     - EC2_HOST: EC2 instance public IP or domain
+#     - EC2_USER: SSH username (usually 'ubuntu')
+#     - EC2_SSH_KEY: Private SSH key for EC2 access
+#     - ENV_FILE: Base64 encoded .env file contents
+#   Optional (Cloudflare cache purge):
+#     - CLOUDFLARE_API_TOKEN: Cloudflare API token
+#     - CLOUDFLARE_ZONE_ID: Cloudflare zone ID
 # ==============================================================================
 
-name: Deploy Backend
+name: Deploy
 
 on:
   push:
     branches:
       - main
-    paths:
-      - 'backend/**'
-      - '.github/workflows/deploy.yml'
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Deployment environment'
-        required: true
-        default: 'production'
-        type: choice
-        options:
-          - production
-          - staging
+      deploy_frontend:
+        description: 'Deploy frontend to Vercel'
+        required: false
+        default: true
+        type: boolean
+      deploy_backend:
+        description: 'Deploy backend to EC2'
+        required: false
+        default: true
+        type: boolean
 
 env:
   NODE_VERSION: '20'
   DEPLOY_PATH: /var/www/godatify
 
+# ==============================================================================
+# Frontend Deployment (Vercel)
+# ==============================================================================
 jobs:
-  # ============================================================================
-  # Build and Test
-  # ============================================================================
-  build:
-    name: Build & Test
+  frontend-deploy:
+    name: Frontend → Vercel
     runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'push' && contains(join(github.event.commits.*.modified, ','), 'frontend/')) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy_frontend == 'true')
+    
+    environment:
+      name: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Pull Vercel Environment
+        working-directory: frontend
+        run: vercel pull --yes --environment=${{ github.event_name == 'pull_request' && 'preview' || 'production' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project
+        working-directory: frontend
+        run: vercel build ${{ github.event_name != 'pull_request' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        id: deploy
+        working-directory: frontend
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          else
+            url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          fi
+          echo "url=$url" >> $GITHUB_OUTPUT
+          echo "🚀 Deployed to: $url"
+
+      - name: Comment Preview URL on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '## 🚀 Preview Deployment Ready!\n\n**URL:** ${{ steps.deploy.outputs.url }}\n\n_Deployed via Vercel_'
+            })
+
+# ==============================================================================
+# Backend Deployment (EC2 + PM2)
+# ==============================================================================
+  backend-build:
+    name: Backend Build
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'push' && contains(join(github.event.commits.*.modified, ','), 'backend/')) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy_backend == 'true')
     
     steps:
       - name: Checkout code
@@ -72,13 +148,10 @@ jobs:
             backend/build
           retention-days: 1
 
-  # ============================================================================
-  # Deploy to EC2 with PM2
-  # ============================================================================
-  deploy:
-    name: Deploy to EC2
+  backend-deploy:
+    name: Backend → EC2
     runs-on: ubuntu-latest
-    needs: build
+    needs: backend-build
     if: github.ref == 'refs/heads/main'
     environment:
       name: production
@@ -103,28 +176,27 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          # Create deployment script
           cat << 'DEPLOY_SCRIPT' > deploy.sh
           #!/bin/bash
           set -e
           
           cd ${{ env.DEPLOY_PATH }}
           
-          # Pull latest code
+          echo "📥 Pulling latest code..."
           git fetch origin main
           git reset --hard origin/main
           
-          # Install dependencies
+          echo "📦 Installing dependencies..."
           cd backend
           npm ci --only=production
           
-          # Write environment file
+          echo "🔐 Writing environment file..."
           echo "$ENV_CONTENT" | base64 -d > .env
           
-          # Build Strapi
+          echo "🔨 Building Strapi..."
           NODE_ENV=production npm run build
           
-          # Restart with PM2 (use ecosystem config if available)
+          echo "🔄 Restarting PM2..."
           if [ -f "ecosystem.config.js" ]; then
             pm2 reload ecosystem.config.js --env production || pm2 start ecosystem.config.js --env production
           else
@@ -132,53 +204,67 @@ jobs:
           fi
           pm2 save
           
-          echo "✅ Deployment completed successfully"
+          echo "✅ Backend deployment completed!"
           DEPLOY_SCRIPT
           
           chmod +x deploy.sh
-          
-          # Copy and execute deployment script
           scp -i ~/.ssh/deploy_key deploy.sh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/tmp/deploy.sh
           ssh -i ~/.ssh/deploy_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "ENV_CONTENT='${{ secrets.ENV_FILE }}' bash /tmp/deploy.sh"
 
       - name: Health Check
         run: |
+          echo "⏳ Waiting for server to start..."
           sleep 30
           response=$(curl -s -o /dev/null -w "%{http_code}" https://api.godatify.com/_health || echo "000")
           if [ "$response" = "200" ] || [ "$response" = "204" ]; then
-            echo "✅ Health check passed"
+            echo "✅ Health check passed (HTTP $response)"
           else
-            echo "❌ Health check failed with status: $response"
+            echo "⚠️ Health check returned HTTP $response"
             exit 1
           fi
 
-      - name: Notify on failure
-        if: failure()
+      - name: Purge Cloudflare Cache (API)
+        if: always()
+        continue-on-error: true
         run: |
-          echo "::error::Deployment failed! Check the logs above for details."
+          if [ -n "${{ secrets.CLOUDFLARE_API_TOKEN }}" ] && [ -n "${{ secrets.CLOUDFLARE_ZONE_ID }}" ]; then
+            curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+              -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              --data '{"prefixes":["api.godatify.com/api/"]}' || true
+            echo "🧹 Cloudflare API cache purged"
+          fi
 
-  # ============================================================================
-  # Rollback (Manual Trigger)
-  # ============================================================================
-  rollback:
-    name: Rollback Deployment
+# ==============================================================================
+# Deployment Summary
+# ==============================================================================
+  notify-success:
+    name: Summary
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' && failure()
+    needs: [frontend-deploy, backend-deploy]
+    if: always()
     
     steps:
-      - name: Rollback to previous version
+      - name: Deployment Summary
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-          
-          ssh -i ~/.ssh/deploy_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            cd ${{ env.DEPLOY_PATH }}
-            git checkout HEAD~1
-            cd backend
-            npm ci --only=production
-            NODE_ENV=production npm run build
-            pm2 reload ecosystem.config.js --env production || pm2 restart strapi
-            pm2 save
-          EOF
+          echo "## 🎉 Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.frontend-deploy.result }}" == "success" ]; then
+            echo "- ✅ **Frontend:** Deployed to Vercel" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.frontend-deploy.result }}" == "skipped" ]; then
+            echo "- ⏭️ **Frontend:** Skipped (no changes)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ **Frontend:** Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ needs.backend-deploy.result }}" == "success" ]; then
+            echo "- ✅ **Backend:** Deployed to EC2" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.backend-deploy.result }}" == "skipped" ]; then
+            echo "- ⏭️ **Backend:** Skipped (no changes)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ **Backend:** Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Component | URL |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|-----|" >> $GITHUB_STEP_SUMMARY
+          echo "| Frontend | https://godatify.com |" >> $GITHUB_STEP_SUMMARY
+          echo "| Backend | https://api.godatify.com |" >> $GITHUB_STEP_SUMMARY

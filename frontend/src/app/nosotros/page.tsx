@@ -4,14 +4,18 @@ import ScrollReveal from '@/components/ui/ScrollReveal';
 import NosotrosHero from '@/components/nosotros/NosotrosHero';
 import NosotrosTabs from '@/components/nosotros/NosotrosTabs';
 import Clients from '@/components/sections/Clients';
+import { generateBreadcrumbSchema } from '@/lib/schemas';
 
 import { api } from '@/lib/api';
 
 export async function generateMetadata(): Promise<Metadata> {
     const content = await api.about.getContent();
     return {
-        title: 'Nosotros | Datify',
-        description: 'Conoce a Datify, tu aliado estratégico en la transformación de datos. Descubre nuestra misión, visión y los valores que nos impulsan.',
+        title: 'Nosotros - Expertos en Data Analytics | Datify',
+        description: 'Conoce al equipo de Datify, tu aliado estratégico en transformación de datos. Descubre nuestra misión, visión y valores. →',
+        alternates: {
+            canonical: '/nosotros',
+        },
     };
 }
 
@@ -22,6 +26,17 @@ export default async function NosotrosPage() {
     return (
         <>
             <main>
+                {/* Breadcrumb Schema */}
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(generateBreadcrumbSchema([
+                            { name: 'Inicio', url: 'https://godatify.com/' },
+                            { name: 'Nosotros' }
+                        ]))
+                    }}
+                />
+                
                 <NosotrosHero hero={content.hero} />
                 <NosotrosTabs content={content} videoConfig={videoConfig} />
                 <Clients clients={content.clients} title={sectionLabels.clients.title} />

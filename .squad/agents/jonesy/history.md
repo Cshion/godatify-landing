@@ -73,3 +73,62 @@
 - Never expose ports 1337 or 5432 externally
 - Use Nginx as reverse proxy with SSL termination
 - Generate all secrets with `openssl rand -base64 32`
+
+### 2026-04-19: Migration to Cloudflare + Vercel Stack
+
+**Aaron's request:** Update deployment for Cloudflare + Vercel architecture (not EC2 for frontend).
+
+**Stack changes:**
+- Frontend: Next.js on **Vercel** (was EC2)
+- CDN/DNS: **Cloudflare** (DDoS, caching, WAF)
+- Backend: Remains on **EC2 with PM2** (Strapi + PostgreSQL)
+
+**Files updated:**
+- `DEPLOYMENT.md` — Complete rewrite for Vercel + Cloudflare + EC2 architecture
+- `frontend/vercel.json` — Added security headers, caching, rewrites, regions
+- `.github/workflows/deploy.yml` — Dual deployment to Vercel (frontend) + EC2 (backend)
+- `docs/cloudflare-setup.md` — New comprehensive Cloudflare configuration guide
+
+**Architecture decisions:**
+1. **Why Vercel for frontend:**
+   - Zero-config Next.js deployment
+   - Automatic preview deployments on PRs
+   - Global edge network for fast TTFB
+   - Built-in analytics and logs
+
+2. **Why Cloudflare in front of both:**
+   - DDoS protection (free tier sufficient)
+   - Edge caching reduces Vercel/EC2 load
+   - WAF for security
+   - SSL/TLS termination with Full (Strict) mode
+   - Analytics and traffic insights
+
+3. **Why EC2 for backend:**
+   - Strapi needs persistent database
+   - Full control over PostgreSQL
+   - Cost-effective for CMS backend
+   - PM2 cluster mode for performance
+
+**Cloudflare configuration highlights:**
+- DNS: CNAME to `cname.vercel-dns.com` for frontend, A record for API
+- SSL mode: Full (Strict) — requires valid certs on both origins
+- Cache rules: Static assets (1 year), API GETs (4 hours), Admin bypass
+- Security: Bot Fight Mode, HSTS, TLS 1.2 minimum
+
+**vercel.json key settings:**
+- Regions: `iad1` (US East), `sfo1` (US West) for latency
+- Security headers: X-Frame-Options, X-Content-Type-Options, XSS protection
+- Cache: Static assets 1 year, images 1 day with stale-while-revalidate
+- Rewrites: `/api/cms/*` proxies to Strapi backend
+
+**GitHub Actions workflow:**
+- Frontend job: Uses Vercel CLI, posts preview URLs on PRs
+- Backend job: SSH deployment to EC2, PM2 reload
+- Conditional triggers: Only deploys changed components
+- Optional Cloudflare cache purge after backend deploy
+
+**Key learnings:**
+- Cloudflare proxied DNS works well with Vercel's CNAME flattening
+- Vercel CLI deployment is more reliable than GitHub integration for complex setups
+- Cache invalidation: Use prefixes for surgical purges, not full cache purge
+- CORS: Must include `*.vercel.app` for preview deployments

@@ -32,6 +32,8 @@
 - **CMS Integration:** `@strapi/blocks-react-renderer@1.0.2` (for rendering Strapi rich text)
 - **Query Building:** `qs@6.14.0` (for building Strapi REST API query strings)
 - **Styling:** `tailwindcss@4`, `@tailwindcss/postcss@4`
+- **Analytics:** `@vercel/analytics`, `@vercel/speed-insights`
+- **Icons:** `@fortawesome/fontawesome-svg-core`, `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-brands-svg-icons`, `@fortawesome/react-fontawesome`
 
 ### Environment Variables
 ```env
@@ -115,7 +117,7 @@ Located at `frontend/src/data/`:
 - **Brand colors:** `--color-brand-green: #1C7C54`, light/dark variants
 - **Font:** Barlow (Google Fonts) loaded via `next/font/google`
 - **CSS Modules** for component-specific styles (e.g., `Header.module.css`)
-- **Icons:** Font Awesome 6.4.0 loaded via CDN
+- **Icons:** FontAwesome via npm packages (tree-shaked), configured in `frontend/src/lib/fontawesome.ts`
 
 ### Image Handling
 `next.config.ts` allows remote images from:
@@ -140,6 +142,7 @@ All TypeScript interfaces defined in `frontend/src/types/index.ts`:
 - **Platform:** Vercel (configured via `vercel.json`)
 - **Build:** `npm run build`
 - **Output:** `.next/` directory
+- **Analytics:** Vercel Analytics + Speed Insights
 
 ### Key Patterns
 1. **Server Components by default** - pages are async Server Components
@@ -148,6 +151,57 @@ All TypeScript interfaces defined in `frontend/src/types/index.ts`:
 4. **Parallel fetching** - `Promise.all()` for multiple API calls
 5. **Graceful degradation** - API calls have try/catch with static fallbacks
 6. **Path alias** - `@/*` maps to `./src/*`
+
+---
+
+## Session Log
+
+### 2026-04-19 — Vercel Analytics + FontAwesome Migration
+
+**Task:** Add Vercel Analytics and migrate FontAwesome from CDN to npm packages
+
+**Changes:**
+
+#### Part 1: Vercel Analytics
+- Installed `@vercel/analytics` and `@vercel/speed-insights`
+- Updated `layout.tsx` to include `<Analytics />` and `<SpeedInsights />` components
+
+#### Part 2: FontAwesome Migration
+- **Removed:** External CDN link from `layout.tsx`
+- **Installed:** `@fortawesome/fontawesome-svg-core`, `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-brands-svg-icons`, `@fortawesome/react-fontawesome`
+- **Created:** `frontend/src/lib/fontawesome.ts` — Library initialization with all needed icons
+- **Created:** `frontend/src/components/ui/Icon.tsx` — Reusable Icon component with auto-detection of brand vs solid icons
+
+**Migrated Components (17 files):**
+- `app/blog/[slug]/page.tsx`
+- `app/industrias/[slug]/page.tsx`
+- `components/blog/BlogCard.tsx`
+- `components/blog/FeaturedPost.tsx`
+- `components/casos/CaseDetail.tsx`
+- `components/casos/CasesGrid.tsx`
+- `components/contact/ContactHero.tsx`
+- `components/contact/Offices.tsx`
+- `components/industrias/IndustryShowcase.tsx`
+- `components/layout/Footer.tsx`
+- `components/nosotros/NosotrosTabs.tsx`
+- `components/sections/Hero.tsx`
+- `components/sections/Nosotros.tsx`
+- `components/sections/Services.tsx`
+- `components/sections/Testimonials.tsx`
+- `components/servicios/ServiceTechStack.tsx`
+- `components/ui/Carousel.tsx`
+
+**Icons Included (Solid):**
+arrow-left, arrow-right, chart-line, chart-bar, chart-pie, chevron-left, chevron-right, exclamation-triangle, lightbulb, user-secret, building, external-link-alt, quote-right, map-marker-alt, phone, envelope, server, brain, database, laptop-code, snowflake, search, wind, cube, bolt, stream, mobile-alt, cloud, handshake, check-circle, users
+
+**Icons Included (Brands):**
+linkedin-in, facebook-f, instagram, youtube, react, node-js, python, r-project, aws, microsoft
+
+**Benefits:**
+- Tree-shaking: Only imports used icons instead of full library
+- No FOUC (Flash of Unstyled Content) from CDN loading
+- Better bundle control and caching
+- Consistent accessibility via Icon component
 
 ### Developer Experience
 - **Makefile** at `frontend/Makefile` wraps npm scripts for faster CLI workflow

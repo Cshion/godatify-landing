@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Stat, VideoConfig } from '@/types';
+import Icon from '@/components/ui/Icon';
 import styles from './Nosotros.module.css';
 
 interface AnimatedStat extends Stat {
@@ -20,11 +21,65 @@ export default function Nosotros({ stats: initialStats, videoConfig, title, butt
   const [stats, setStats] = useState<AnimatedStat[]>(initialStats.map(s => ({ ...s, current: 0 })));
   const sectionRef = useRef<HTMLElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const animationIdRef = useRef<number>(0);
+  const timersRef = useRef<NodeJS.Timeout[]>([]);
+
+  // Clear all running timers
+  const clearTimers = useCallback(() => {
+    timersRef.current.forEach(timer => clearInterval(timer));
+    timersRef.current = [];
+  }, []);
 
   useEffect(() => {
-    // Reset stats if initialStats changes (optional, but good for HMR)
+    // Reset stats and animation state if initialStats changes (HMR, navigation)
+    clearTimers();
     setStats(initialStats.map(s => ({ ...s, current: 0 })));
-  }, [initialStats]);
+    setHasAnimated(false);
+  }, [initialStats, clearTimers]);
+
+  const animateCounters = useCallback(() => {
+    // Increment animation ID to invalidate previous animations
+    const currentAnimationId = ++animationIdRef.current;
+    clearTimers();
+
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      // Skip animation, show final values immediately
+      setStats(initialStats.map(s => ({ ...s, current: s.target })));
+      return;
+    }
+
+    initialStats.forEach((stat, index) => {
+      const duration = 2000;
+      const steps = 60;
+      const increment = stat.target / steps;
+      let current = 0;
+
+      const timer = setInterval(() => {
+        // Check if this animation is still valid
+        if (animationIdRef.current !== currentAnimationId) {
+          clearInterval(timer);
+          return;
+        }
+
+        current += increment;
+        if (current >= stat.target) {
+          current = stat.target;
+          clearInterval(timer);
+        }
+
+        setStats((prev) => {
+          const newStats = [...prev];
+          newStats[index] = { ...newStats[index], current: Math.floor(current) };
+          return newStats;
+        });
+      }, duration / steps);
+
+      timersRef.current.push(timer);
+    });
+  }, [initialStats, clearTimers]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -41,31 +96,11 @@ export default function Nosotros({ stats: initialStats, videoConfig, title, butt
       observer.observe(sectionRef.current);
     }
 
-    return () => observer.disconnect();
-  }, [hasAnimated]);
-
-  const animateCounters = () => {
-    stats.forEach((stat, index) => {
-      const duration = 2000;
-      const steps = 60;
-      const increment = stat.target / steps;
-      let current = 0;
-
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= stat.target) {
-          current = stat.target;
-          clearInterval(timer);
-        }
-
-        setStats((prev) => {
-          const newStats = [...prev];
-          newStats[index] = { ...newStats[index], current: Math.floor(current) };
-          return newStats;
-        });
-      }, duration / steps);
-    });
-  };
+    return () => {
+      observer.disconnect();
+      clearTimers();
+    };
+  }, [hasAnimated, animateCounters, clearTimers]);
 
   return (
     <section className="section py-20 bg-white" id="nosotros" ref={sectionRef}>
@@ -110,7 +145,7 @@ export default function Nosotros({ stats: initialStats, videoConfig, title, butt
         <div className={`${styles.ctaContainer} reveal`}>
           <Link href="/nosotros" className={styles.ctaButton}>
             {buttonText}
-            <i className="fas fa-arrow-right"></i>
+            <Icon name="arrow-right" />
           </Link>
         </div>
       </div>

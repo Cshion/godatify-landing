@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
 import { Barlow } from "next/font/google";
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { defaultMetadata } from "@/lib/seo";
+import { generateOrganizationSchema, generateWebSiteSchema } from "@/lib/schemas";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { api } from "@/lib/api";
+
+// Initialize FontAwesome library
+import "@/lib/fontawesome";
 
 import "./globals.css";
 
@@ -28,9 +34,12 @@ export default async function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/images/favicon.png" type="image/png" />
+        {/* Preload hero background image for better LCP */}
         <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          rel="preload"
+          href="/images/hero-bg.jpg"
+          as="image"
+          fetchPriority="high"
         />
       </head>
       <body className={`${barlow.variable} antialiased`}>
@@ -42,28 +51,19 @@ export default async function RootLayout({
           Ir al contenido principal
         </a>
 
+        {/* WebSite Schema with SearchAction */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "Datify",
-              "url": "https://godatify.com",
-              "logo": "https://godatify.com/images/logo.png",
-              "sameAs": [
-                "https://www.linkedin.com/company/godatify/",
-                "https://www.facebook.com/godatify",
-                "https://www.instagram.com/godatify/"
-              ],
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+51999999999",
-                "contactType": "customer service",
-                "areaServed": ["PE", "LATAM"],
-                "availableLanguage": ["Spanish", "English"]
-              }
-            })
+            __html: JSON.stringify(generateWebSiteSchema())
+          }}
+        />
+        
+        {/* Organization Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateOrganizationSchema())
           }}
         />
         <Header
@@ -81,6 +81,8 @@ export default async function RootLayout({
           socialLinks={socialLinks}
           labels={sectionLabels.footer}
         />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

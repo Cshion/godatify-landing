@@ -70,3 +70,70 @@
 - FontAwesome loaded as full library from CDN (~60KB)
 - Multiple auto-playing carousels compete for attention
 - Hero background image has no preload hint
+
+### 2026-04-19 — UI/UX Improvements Implementation
+
+**Improvements Fixed (5/8):**
+
+1. **#9 Mobile Navigation Nested Dropdowns**
+   - Added accordion-style dropdowns for Services and Industries in mobile menu
+   - Services shows all service links with expand/collapse
+   - Industries shows sector headers with industry links underneath
+   - Proper ARIA attributes (aria-expanded, chevron rotation)
+   - Added mobile CTA button at bottom
+   - New CSS classes: .mobileDropdown, .mobileDropdownToggle, .mobileSubmenu, .mobileSubmenuHeader, .mobileCta
+
+2. **#10 Auto-Playing Carousels**
+   - Added `prefers-reduced-motion` check — disables auto-play entirely when enabled
+   - Added IntersectionObserver to only auto-play when carousel is visible (30% threshold)
+   - Added CSS reduced motion support in Carousel.module.css
+   - Uses useRef for containerRef to track visibility
+
+3. **#11 ScrollReveal Performance**
+   - Replaced scroll event listener with IntersectionObserver
+   - 15% threshold with -50px rootMargin for early detection
+   - Unobserves elements after reveal (one-time animation)
+   - Respects prefers-reduced-motion by adding .no-animation class
+   - No layout thrashing, much better scroll performance
+
+4. **#12 Hero Image Preload**
+   - Added `<link rel="preload" href="/images/hero-bg.jpg" as="image" fetchPriority="high">` in layout.tsx
+   - Improves LCP by telling browser to fetch hero image early
+
+5. **#13 Stats Animation Fix**
+   - Added animationIdRef to track/invalidate in-flight animations
+   - Added timersRef array to track running intervals
+   - clearTimers callback properly cleans up all intervals
+   - Animation cancels properly when props change (HMR, navigation)
+   - Respects prefers-reduced-motion — shows final values immediately
+
+**Recommendations Implemented (2/6):**
+
+1. **#17 Dark Mode CSS Variables Prep**
+   - Added `@media (prefers-color-scheme: dark)` block in globals.css
+   - Variables: --color-bg-primary/secondary/tertiary, --color-text-primary/secondary/muted
+   - Adjusted brand green for dark backgrounds (#26a86f light instead of #1C7C54)
+   - Added border and surface color variables
+   - Foundation for full dark mode implementation
+
+2. **#19 Micro-Interactions Enhancement**
+   - Added `.btn-primary:active` etc. — scale(0.98) on press
+   - Added `.card-interactive` — translateY hover + box-shadow enhancement
+   - Added `.link-animated` — underline grows from left on hover
+   - Utility classes ready to be applied to components
+
+**Global Accessibility:**
+- Added global reduced motion support in globals.css
+- Disables all animations/transitions when `prefers-reduced-motion: reduce`
+- Scroll-behavior reverts to auto
+- .reveal elements show immediately without animation
+
+**Files Modified:**
+- frontend/src/components/layout/Header.tsx — mobile dropdown state + accordion JSX
+- frontend/src/components/layout/Header.module.css — mobile dropdown styles
+- frontend/src/components/ui/Carousel.tsx — viewport visibility + reduced motion
+- frontend/src/components/ui/Carousel.module.css — reduced motion CSS
+- frontend/src/components/ui/ScrollReveal.tsx — IntersectionObserver refactor
+- frontend/src/components/sections/Nosotros.tsx — animation lifecycle fix
+- frontend/src/app/layout.tsx — hero preload link
+- frontend/src/app/globals.css — reduced motion, dark mode vars, micro-interactions

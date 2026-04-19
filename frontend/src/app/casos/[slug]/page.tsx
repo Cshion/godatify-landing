@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import CaseDetail from '@/components/casos/CaseDetail';
 import { api } from '@/lib/api';
+import { generateBreadcrumbSchema } from '@/lib/schemas';
 
 interface PageProps {
     params: Promise<{
@@ -29,6 +30,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
         title: `${caseStudy.title} | Casos de Éxito Datify`,
         description: caseStudy.description,
+        alternates: {
+            canonical: `/casos/${slug}`,
+        },
+        openGraph: {
+            title: `${caseStudy.title} | Casos de Éxito Datify`,
+            description: caseStudy.description,
+            images: [caseStudy.image],
+        },
     };
 }
 
@@ -42,6 +51,18 @@ export default async function CaseDetailPage({ params }: PageProps) {
 
     return (
         <main>
+            {/* Breadcrumb Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(generateBreadcrumbSchema([
+                        { name: 'Inicio', url: 'https://godatify.com/' },
+                        { name: 'Casos de Éxito', url: 'https://godatify.com/casos' },
+                        { name: caseStudy.title }
+                    ]))
+                }}
+            />
+            
             <CaseDetail caseStudy={caseStudy} relatedCases={relatedCases} />
         </main>
     );

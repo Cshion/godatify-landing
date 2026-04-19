@@ -118,7 +118,7 @@
 
 ## Improvements (Should Fix)
 
-### 9. Mobile Navigation Missing Nested Dropdowns
+### 9. ✅ Mobile Navigation Missing Nested Dropdowns — FIXED
 
 **What:** Mobile menu shows flat links but desktop has Services/Industries submenus.
 
@@ -126,7 +126,9 @@
 
 **Why:** Mobile users cannot access service or industry subpages directly.
 
-**Fix:** Add accordion-style nested navigation:
+**Status:** Fixed — Added accordion-style nested navigation with Services and Industries dropdowns in mobile menu. Includes proper ARIA attributes, expand/collapse state, and submenu headers for sectors.
+
+**Implementation:**
 ```tsx
 {isMobileMenuOpen && (
   <nav className={styles.mobileMenu}>
@@ -148,7 +150,7 @@
 
 ---
 
-### 10. Multiple Auto-Playing Carousels
+### 10. ✅ Multiple Auto-Playing Carousels — FIXED
 
 **What:** Services and Cases carousels both auto-play simultaneously on home page.
 
@@ -161,21 +163,14 @@
 - Battery drain on mobile
 - Users with vestibular disorders may be affected
 
-**Fix:** 
-- Only auto-play when visible in viewport
-- Add `prefers-reduced-motion` media query
-- Consider disabling auto-play except Testimonials
-```css
-@media (prefers-reduced-motion: reduce) {
-  .carouselTrack {
-    transition: none;
-  }
-}
-```
+**Status:** Fixed — Carousel component now:
+1. Uses IntersectionObserver to only auto-play when visible in viewport (30% threshold)
+2. Respects `prefers-reduced-motion` media query (disables auto-play entirely)
+3. Added CSS reduced motion support in Carousel.module.css
 
 ---
 
-### 11. ScrollReveal Performance
+### 11. ✅ ScrollReveal Performance — FIXED
 
 **What:** Uses `getBoundingClientRect()` in scroll handler without throttling.
 
@@ -183,19 +178,23 @@
 
 **Why:** Triggers layout thrashing on every scroll event.
 
-**Fix:** Use IntersectionObserver instead:
+**Status:** Fixed — Replaced scroll event listener with IntersectionObserver:
+- 15% threshold for triggering
+- Uses rootMargin for early detection
+- Unobserves elements after reveal (one-time animation)
+- Respects prefers-reduced-motion by skipping animation
+
 ```tsx
-useEffect(() => {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target); // Stop watching once visible
-        }
-      });
-    },
-    { threshold: 0.15 }
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.15 }
   );
   
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
@@ -205,7 +204,7 @@ useEffect(() => {
 
 ---
 
-### 12. Hero Section Missing `loading="eager"` Hint
+### 12. ✅ Hero Section Missing `loading="eager"` Hint — FIXED
 
 **What:** Hero background image loaded via CSS, no preload hint.
 
@@ -213,20 +212,19 @@ useEffect(() => {
 
 **Why:** LCP (Largest Contentful Paint) suffers; browser discovers image late.
 
-**Fix:** Add preload in layout or hero:
+**Status:** Fixed — Added preload link in layout.tsx:
 ```tsx
-// In layout.tsx <head>
-<link 
-  rel="preload" 
-  href={heroContent.backgroundImage} 
-  as="image" 
-  fetchPriority="high" 
+<link
+  rel="preload"
+  href="/images/hero-bg.jpg"
+  as="image"
+  fetchPriority="high"
 />
 ```
 
 ---
 
-### 13. Stats Animation Runs Multiple Times
+### 13. ✅ Stats Animation Runs Multiple Times — FIXED
 
 **What:** Counter animation logic doesn't properly handle component updates.
 
@@ -234,19 +232,12 @@ useEffect(() => {
 
 **Why:** If `initialStats` changes (HMR, navigation), counters reset and re-animate.
 
-**Fix:** Add stable keys or animation lock:
-```tsx
-const animationId = useRef<number>(0);
-
-const animateCounters = useCallback(() => {
-  const id = ++animationId.current;
-  // ...in interval callback:
-  if (animationId.current !== id) {
-    clearInterval(timer);
-    return;
-  }
-}, []);
-```
+**Status:** Fixed — Implemented proper animation lifecycle:
+1. Added `animationIdRef` to track/invalidate in-flight animations
+2. Added `timersRef` to track and clear running intervals
+3. Added `clearTimers` callback for cleanup
+4. Respects `prefers-reduced-motion` by showing final values immediately
+5. Proper cleanup on unmount and re-render
 
 ---
 
@@ -316,22 +307,19 @@ aria-label={`Ir al grupo ${idx + 1}: ${getSlideNames(idx)}`}
 
 ## Recommendations (Nice to Have)
 
-### 17. Add Dark Mode Support
+### 17. ✅ Add Dark Mode Support — PREP IMPLEMENTED
 
 **What:** Site only has light theme; no dark mode toggle or system preference detection.
 
 **Why:** User preference, eye strain reduction, modern expectation.
 
-**Approach:**
-```css
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0f172a;
-    --color-text: #f1f5f9;
-    /* ... */
-  }
-}
-```
+**Status:** Implemented CSS variables prep in globals.css. Added `prefers-color-scheme: dark` media query with:
+- Background colors (primary, secondary, tertiary)
+- Text colors (primary, secondary, muted)
+- Adjusted brand green for dark backgrounds
+- Border and surface colors
+
+**Note:** Full dark mode requires component updates to use these variables. This provides the foundation.
 
 ---
 
@@ -355,15 +343,16 @@ useEffect(() => {
 
 ---
 
-### 19. Micro-Interactions Enhancement
+### 19. ✅ Micro-Interactions Enhancement — PARTIALLY IMPLEMENTED
 
 **What:** Current interactions are functional but basic.
 
-**Recommendations:**
-- **CTA buttons:** Subtle scale + shadow on press (not just hover)
-- **Cards:** Slight tilt/parallax on hover (subtle, 2-3deg max)
-- **Logo:** Subtle heartbeat or glow animation
-- **Scroll indicator:** Fade out after first section passes
+**Status:** Added utility classes in globals.css:
+- `.btn-primary:active, .btn-secondary:active` — Subtle scale on press (0.98)
+- `.card-interactive` — Lift + shadow on hover with transform
+- `.link-animated` — Underline grow animation from left
+
+**Usage:** Add classes to components for enhanced interactions. Full implementation requires adding classes to existing components.
 
 ---
 
@@ -430,18 +419,51 @@ useEffect(() => {
 
 ## Summary
 
-| Category | Count | Priority |
-|----------|-------|----------|
-| Critical | 8 | 🔴 Must fix before launch |
-| Improvements | 8 | 🟡 Should fix soon |
-| Recommendations | 6 | 🟢 Nice to have |
+| Category | Total | Fixed | Remaining | Priority |
+|----------|-------|-------|-----------|----------|
+| Critical | 8 | 7 | 1 (deferred) | 🔴 Must fix before launch |
+| Improvements | 8 | 5 | 3 | 🟡 Should fix soon |
+| Recommendations | 6 | 2 | 4 | 🟢 Nice to have |
 
-### Top 3 Priorities
+### Fixed Items (2026-04-19)
 
-1. **Accessibility fundamentals** — Skip link, ARIA attributes, keyboard nav
-2. **Focus states** — Visible focus indicators across all interactive elements  
-3. **FontAwesome migration** — Remove external dependency, improve performance
+**Critical (7/8):**
+1. ✅ Skip-to-content link
+2. ✅ FontAwesome ARIA labels  
+3. ✅ Mobile menu ARIA attributes
+4. ✅ Dropdown keyboard accessibility
+5. ✅ Carousel keyboard navigation
+6. ✅ Testimonials color contrast
+7. ✅ Focus states
+
+**Improvements (5/8):**
+9. ✅ Mobile navigation nested dropdowns
+10. ✅ Auto-playing carousel fixes (reduced motion + viewport visibility)
+11. ✅ ScrollReveal performance (IntersectionObserver)
+12. ✅ Hero image preload
+13. ✅ Stats animation fix
+
+**Recommendations (2/6):**
+17. ✅ Dark mode CSS variables prep
+19. ✅ Micro-interactions utility classes
+
+### Remaining Work
+
+**Deferred:**
+- FontAwesome migration (requires npm install + component rewrites)
+
+**Improvements:**
+- #14: Vertical spacing standardization
+- #15: Contact form error states
+- #16: Carousel dots descriptions
+
+**Recommendations:**
+- #18: Loading states for page transitions
+- #20: Image optimization improvements
+- #21: Design token documentation
+- #22: Logo positioning refactor
 
 ---
 
 *Reviewed by Brett — Designer/UI*
+*Last updated: 2026-04-19*

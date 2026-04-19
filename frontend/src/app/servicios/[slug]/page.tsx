@@ -6,6 +6,7 @@ import ServiceMethodology from '@/components/servicios/ServiceMethodology';
 import ServiceTechStack from '@/components/servicios/ServiceTechStack';
 import CasesGrid from '@/components/casos/CasesGrid';
 import { Metadata } from 'next';
+import { generateServiceSchema, generateBreadcrumbSchema } from '@/lib/schemas';
 
 // Generate static params for all services
 export async function generateStaticParams() {
@@ -28,6 +29,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
         title: `${service.title} | Datify`,
         description: service.description,
+        alternates: {
+            canonical: `/servicios/${slug}`,
+        },
+        openGraph: {
+            title: `${service.title} | Datify`,
+            description: service.description,
+            url: `https://godatify.com/servicios/${slug}`,
+        },
     };
 }
 
@@ -41,6 +50,26 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
     return (
         <main>
+            {/* Service Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(generateServiceSchema(service, slug))
+                }}
+            />
+            
+            {/* Breadcrumb Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(generateBreadcrumbSchema([
+                        { name: 'Inicio', url: 'https://godatify.com/' },
+                        { name: 'Servicios', url: 'https://godatify.com/servicios' },
+                        { name: service.title }
+                    ]))
+                }}
+            />
+            
             <ServiceHero
                 title={service.title}
                 description={service.description}

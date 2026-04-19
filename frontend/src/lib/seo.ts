@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 
+const siteConfig = {
+    name: "Datify",
+    url: "https://godatify.com",
+    description: "Transformamos datos en decisiones de negocio. Consultoría especializada en Data Analytics, BI y AI para empresas en LATAM. →",
+    locale: "es_PE",
+};
+
 export const defaultMetadata: Metadata = {
-    metadataBase: new URL('https://godatify.com'),
+    metadataBase: new URL(siteConfig.url),
     robots: {
         index: true,
         follow: true,
@@ -14,14 +21,27 @@ export const defaultMetadata: Metadata = {
         },
     },
     title: {
-        default: "Datify – Datificando las organizaciones",
-        template: "%s | Datify"
+        default: `${siteConfig.name} – Datificando las Organizaciones`,
+        template: `%s | ${siteConfig.name}`,
     },
-    description: "En Datify acompañamos a las organizaciones a descubrir el verdadero poder de sus datos, transformando la forma en que las organizaciones piensan, operan y deciden.",
-    keywords: ["data analytics", "business intelligence", "big data", "data engineering", "digital platform", "datify", "consultoría de datos", "transformación digital"],
-    authors: [{ name: "Datify", url: "https://godatify.com" }],
-    creator: "Datify",
-    publisher: "Datify",
+    description: siteConfig.description,
+    keywords: [
+        "consultoría de datos",
+        "data analytics",
+        "business intelligence",
+        "big data",
+        "data engineering",
+        "inteligencia artificial",
+        "machine learning",
+        "transformación digital",
+        "análisis de datos Perú",
+        "consultora de datos LATAM",
+        "BI empresarial",
+        "datify",
+    ],
+    authors: [{ name: siteConfig.name, url: siteConfig.url }],
+    creator: siteConfig.name,
+    publisher: siteConfig.name,
     formatDetection: {
         email: false,
         address: false,
@@ -30,7 +50,8 @@ export const defaultMetadata: Metadata = {
     alternates: {
         canonical: '/',
         languages: {
-            'es-ES': '/es',
+            'es-PE': '/',
+            'es-ES': '/',
         },
     },
     verification: {
@@ -40,31 +61,65 @@ export const defaultMetadata: Metadata = {
     classification: 'Data Consultancy',
     icons: {
         icon: [
-            { url: '/images/favicon.png', type: 'image/png' },
+            { url: '/images/favicon.png', type: 'image/png', sizes: '32x32' },
             { url: '/favicon.ico', sizes: 'any' },
         ],
-        apple: '/images/favicon.png',
+        apple: { url: '/images/favicon.png', sizes: '180x180' },
     },
     openGraph: {
-        title: "Datify – Datificando las organizaciones",
-        description: "Te acompañamos en cada paso para transformar tus datos en decisiones que impulsen el crecimiento de tu organización.",
-        url: "https://godatify.com",
-        siteName: "Datify",
-        locale: "es_ES",
         type: "website",
+        locale: siteConfig.locale,
+        url: siteConfig.url,
+        siteName: siteConfig.name,
+        title: `${siteConfig.name} – Datificando las Organizaciones`,
+        description: siteConfig.description,
         images: [
             {
-                url: '/images/logo.png',
+                url: `${siteConfig.url}/images/og-image.png`,
                 width: 1200,
                 height: 630,
-                alt: 'Datify Logo',
+                alt: `${siteConfig.name} - Consultoría de Datos`,
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Datify – Datificando las organizaciones",
-        description: "Te acompañamos en cada paso para transformar tus datos en decisiones que impulsen el crecimiento de tu organización.",
-        images: ['/images/logo.png'],
+        site: "@godatify",
+        creator: "@godatify",
+        title: `${siteConfig.name} – Datificando las Organizaciones`,
+        description: siteConfig.description,
+        images: [`${siteConfig.url}/images/og-image.png`],
     },
 };
+
+/**
+ * Helper for generating page-specific metadata with canonical URL
+ */
+export function generatePageMetadata(
+    title: string,
+    description: string,
+    path: string,
+    image?: string
+): Metadata {
+    const url = `${siteConfig.url}${path}`;
+    const ogImage = image || `${siteConfig.url}/images/og-image.png`;
+
+    return {
+        title,
+        description,
+        alternates: {
+            canonical: path,
+        },
+        openGraph: {
+            title: `${title} | ${siteConfig.name}`,
+            description,
+            url,
+            images: [{ url: ogImage, width: 1200, height: 630 }],
+        },
+        twitter: {
+            title: `${title} | ${siteConfig.name}`,
+            description,
+            images: [ogImage],
+        },
+    };
+}

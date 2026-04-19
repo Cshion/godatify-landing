@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Service } from '@/types';
 import Carousel from '@/components/ui/Carousel';
+import Icon from '@/components/ui/Icon';
 import styles from './Services.module.css';
 
 interface ServicesProps {
@@ -31,7 +32,7 @@ export default function Services({ services, title, buttonText }: ServicesProps)
               <div key={service.id} className={`${styles.serviceCard} group`} id={service.id}>
                 <div className={styles.serviceIconWrapper}>
                   <div className={styles.serviceIcon}>
-                    <i className={`fas fa-${service.icon}`}></i>
+                    <Icon name={service.icon} />
                   </div>
                 </div>
                 <h3 className={styles.serviceTitle}>{service.title}</h3>

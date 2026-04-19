@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { NosotrosContent, VideoConfig } from '@/types';
+import Icon from '@/components/ui/Icon';
 import styles from './NosotrosTabs.module.css';
 
 type Tab = 'quienes' | 'mision' | 'valores' | 'cultura';
@@ -88,7 +89,7 @@ export default function NosotrosTabs({ content, videoConfig }: NosotrosTabsProps
                             {values.map((value) => (
                                 <div key={value.id} className={styles.valueCard}>
                                     <div className={styles.valueIcon}>
-                                        <i className={`fas fa-${value.icon}`}></i>
+                                        <Icon name={value.icon} />
                                     </div>
                                     <h4 className={styles.valueTitle}>{value.title}</h4>
                                     <p className="text-gray-600 text-sm">{value.description}</p>

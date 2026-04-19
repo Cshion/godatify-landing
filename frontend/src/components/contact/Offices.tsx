@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Office } from '@/types';
+import Icon from '@/components/ui/Icon';
 import styles from './Offices.module.css';
 
 interface OfficesProps {
@@ -21,15 +22,15 @@ export default function Offices({ title, subtitle, offices }: OfficesProps) {
                     <div key={office.country} className={styles.card}>
                         <div className={styles.details}>
                             <div className={styles.infoRow}>
-                                <i className="fas fa-map-marker-alt text-primary mt-1"></i>
+                                <Icon name="map-marker-alt" className="text-primary mt-1" />
                                 <p>{office.address}</p>
                             </div>
                             <div className={styles.infoRow}>
-                                <i className="fas fa-phone text-primary mt-1"></i>
+                                <Icon name="phone" className="text-primary mt-1" />
                                 <p>{office.phone}</p>
                             </div>
                             <div className={styles.infoRow}>
-                                <i className="fas fa-envelope text-primary mt-1"></i>
+                                <Icon name="envelope" className="text-primary mt-1" />
                                 <a href={`mailto:${office.email}`} className="hover:text-primary transition-colors">
                                     {office.email}
                                 </a>

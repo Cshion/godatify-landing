@@ -3,9 +3,11 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { api } from '@/lib/api';
+import Icon from '@/components/ui/Icon';
 import Cases from '@/components/sections/Cases';
 import Clients from '@/components/sections/Clients';
 import BlogCTA from '@/components/blog/BlogCTA';
+import { generateBreadcrumbSchema } from '@/lib/schemas';
 
 interface IndustryPageProps {
     params: Promise<{
@@ -24,8 +26,16 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
     }
 
     return {
-        title: `${industry.title} | Datify`,
+        title: `${industry.title} - Data Analytics | Datify`,
         description: industry.description,
+        alternates: {
+            canonical: `/industrias/${slug}`,
+        },
+        openGraph: {
+            title: `${industry.title} | Datify`,
+            description: industry.description,
+            images: [industry.image],
+        },
     };
 }
 
@@ -42,6 +52,18 @@ export default async function IndustryDetailPage({ params }: IndustryPageProps) 
 
     return (
         <main className="bg-white min-h-screen">
+            {/* Breadcrumb Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(generateBreadcrumbSchema([
+                        { name: 'Inicio', url: 'https://godatify.com/' },
+                        { name: 'Industrias', url: 'https://godatify.com/industrias' },
+                        { name: industry.title }
+                    ]))
+                }}
+            />
+            
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center justify-center text-white overflow-hidden">
                 <div className="absolute inset-0 z-0 select-none">
@@ -133,7 +155,7 @@ export default async function IndustryDetailPage({ params }: IndustryPageProps) 
                                                     </p>
                                                 </div>
                                                 <span className="opacity-0 group-hover:opacity-100 transition-opacity text-brand-green text-2xl transform translate-x-[-10px] group-hover:translate-x-0 duration-300">
-                                                    <i className="fas fa-arrow-right"></i>
+                                                    <Icon name="arrow-right" />
                                                 </span>
                                             </div>
                                         </div>

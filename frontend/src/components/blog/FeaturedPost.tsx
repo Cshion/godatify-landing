@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { BlogPost } from '@/types';
 import { formatDate } from '@/lib/formatDate';
+import Icon from '@/components/ui/Icon';
 import styles from './FeaturedPost.module.css';
 
 import { BLOG_STATIC_DATA } from '@/data/blog-data';
@@ -37,7 +38,7 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
                             {formatDate(post.date)} &nbsp;&nbsp;·&nbsp;&nbsp; {post.readingTime}
                         </div>
                         <Link href={`/blog/${post.slug}`} className={styles.readMore}>
-                            {BLOG_STATIC_DATA.featured.readMore} <i className="fas fa-arrow-right" />
+                            {BLOG_STATIC_DATA.featured.readMore} <Icon name="arrow-right" />
                         </Link>
                     </div>
                 </div>

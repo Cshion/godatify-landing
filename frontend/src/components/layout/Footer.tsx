@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { CompanyInfo, FooterLinks, SocialLink } from '@/types';
+import Icon from '@/components/ui/Icon';
 import styles from './Footer.module.css';
 
 interface FooterLabels {
@@ -50,7 +51,7 @@ export default function Footer({ companyInfo, footerLinks, socialLinks, labels }
                   className={styles.socialLink}
                   aria-label={`Síguenos en ${social.label}`}
                 >
-                  <i className={`fab fa-${social.icon}`} aria-hidden="true"></i>
+                  <Icon name={social.icon} prefix="fab" />
                   <span className="sr-only">{social.label}</span>
                 </a>
               ))}

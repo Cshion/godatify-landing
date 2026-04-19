@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect, ReactNode, Children, useCallback } from 'react';
-import styles from './Carousel.module.css';
+import { useState, useEffect, ReactNode, Children, useCallback, useRef } from 'react';import Icon from '@/components/ui/Icon';import styles from './Carousel.module.css';
 
 interface CarouselConfig {
     autoPlay?: boolean;
@@ -24,6 +23,9 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
     const [itemsPerView, setItemsPerView] = useState(1);
     const [touchStart, setTouchStart] = useState<number | null>(null);
     const [touchEnd, setTouchEnd] = useState<number | null>(null);
+    const [isInViewport, setIsInViewport] = useState(false);
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const items = Children.toArray(children);
     const totalItems = items.length;
@@ -32,6 +34,37 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
     const autoPlay = config.autoPlay ?? true;
     const intervalTime = config.autoPlayInterval || 5000;
     const viewConfig = config.itemsPerView || { mobile: 1, tablet: 2, desktop: 3 };
+
+    // Check for reduced motion preference
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        setPrefersReducedMotion(mediaQuery.matches);
+
+        const handleChange = (e: MediaQueryListEvent) => {
+            setPrefersReducedMotion(e.matches);
+        };
+
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
+    }, []);
+
+    // Track viewport visibility with IntersectionObserver
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    setIsInViewport(entry.isIntersecting);
+                });
+            },
+            { threshold: 0.3 } // Trigger when 30% visible
+        );
+
+        if (containerRef.current) {
+            observer.observe(containerRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, []);
 
     // Responsive items per view
     useEffect(() => {
@@ -52,18 +85,11 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
     }, [viewConfig]);
 
     const maxIndex = Math.max(0, totalItems - itemsPerView);
-    const totalPages = Math.ceil(totalItems / itemsPerView); // For dots we might want pages, but here we slide by 1 or view? Let's slide by view for simplicity like Testimonials
-
-    // Slide logic - slide by "itemsPerView" to match Testimonials "page" like behavior, 
-    // OR slide by 1 for smoother carousel? 
-    // Testimonials `nextSlide` did `prev + cardsPerView`. Let's stick to that for block pagination, 
-    // but often sliding by 1 is smoother. Let's do sliding by itemsPerView for major sections to avoid "lost" items in partial views.
+    const totalPages = Math.ceil(totalItems / itemsPerView);
 
     const nextSlide = useCallback(() => {
         setCurrentIndex((prev) => {
-            // If we are already at the end, loop back to 0
             if (prev >= maxIndex) return 0;
-            // Otherwise, move forward, but don't overshoot maxIndex
             return Math.min(prev + itemsPerView, maxIndex);
         });
     }, [itemsPerView, maxIndex]);
@@ -76,16 +102,19 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
         setCurrentIndex(index);
     };
 
-    // Auto-play
+    // Auto-play only when:
+    // 1. autoPlay is enabled
+    // 2. User doesn't prefer reduced motion
+    // 3. Carousel is in viewport
     useEffect(() => {
-        if (!autoPlay) return;
+        if (!autoPlay || prefersReducedMotion || !isInViewport) return;
 
         const interval = setInterval(() => {
             nextSlide();
         }, intervalTime);
 
         return () => clearInterval(interval);
-    }, [autoPlay, intervalTime, nextSlide]);
+    }, [autoPlay, intervalTime, nextSlide, prefersReducedMotion, isInViewport]);
 
     // Touch handlers for swipe
     const minSwipeDistance = 50;
@@ -115,6 +144,7 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
 
     return (
         <div
+            ref={containerRef}
             className={`${styles.carouselContainer} ${className}`}
             tabIndex={0}
             role="region"
@@ -184,7 +214,7 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
                     className={styles.controlBtn}
                     aria-label="Diapositiva anterior"
                 >
-                    <i className="fas fa-chevron-left" aria-hidden="true" />
+                    <Icon name="chevron-left" />
                 </button>
 
                 <div className={styles.dots}>
@@ -224,7 +254,7 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
                     className={styles.controlBtn}
                     aria-label="Siguiente diapositiva"
                 >
-                    <i className="fas fa-chevron-right" aria-hidden="true" />
+                    <Icon name="chevron-right" />
                 </button>
             </div>
         </div>

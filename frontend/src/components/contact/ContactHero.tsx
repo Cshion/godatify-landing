@@ -2,6 +2,7 @@ import { ContactPageContent, ContactFormLabels, Office, SocialLink } from '@/typ
 import ContactForm from './ContactForm';
 import Offices from './Offices';
 import PageHero from '@/components/common/PageHero';
+import Icon from '@/components/ui/Icon';
 import styles from './ContactHero.module.css';
 
 interface ContactHeroProps {
@@ -47,7 +48,7 @@ export default function ContactHero({ hero, offices, formLabels, formTitle, form
                                             className={styles.socialLink}
                                             aria-label={social.label}
                                         >
-                                            <i className={`fab fa-${social.icon}`}></i>
+                                            <Icon name={social.icon} prefix="fab" />
                                         </a>
                                     ))}
                                 </div>

@@ -1,4 +1,5 @@
 import { HeroContent } from '@/types';
+import Icon from '@/components/ui/Icon';
 import styles from './Hero.module.css';
 
 interface HeroProps {
@@ -35,7 +36,7 @@ export default function Hero({ heroContent }: HeroProps) {
           </p>
           <a href={heroContent.ctaHref} className={`${styles.heroCta} reveal`}>
             {heroContent.ctaText}
-            <i className="fas fa-arrow-right" aria-hidden="true"></i>
+            <Icon name="arrow-right" />
           </a>
         </div>
       </div>
