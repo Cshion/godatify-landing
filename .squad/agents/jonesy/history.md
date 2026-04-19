@@ -18,28 +18,46 @@
 
 ## Deployment Targets
 
-- **Backend:** EC2 instance with PM2 or Docker
-- **Frontend:** EC2 or Vercel
-- **Database:** RDS PostgreSQL or EC2-hosted PostgreSQL
+- **Backend:** EC2 instance with PM2 (no Docker)
+- **Frontend:** Vercel (recommended) or EC2
+- **Database:** EC2-hosted PostgreSQL
 
 ## Learnings
 
-### 2026-04-18: Production Deployment Setup
+### 2026-04-18: Migration from Docker to PM2
 
-**Created deployment infrastructure:**
-- `backend/Dockerfile` — Multi-stage build (deps → builder → production)
-- `backend/.dockerignore` — Excludes dev files from Docker context
-- `docker-compose.yml` — Local testing with PostgreSQL
-- `docker-compose.prod.yml` — Production overrides
-- `DEPLOYMENT.md` — Comprehensive deployment guide
-- `.github/workflows/deploy.yml` — CI/CD pipeline
+**Aaron's request:** Remove Docker overhead for better server performance.
+
+**Deleted Docker files:**
+- `backend/Dockerfile`
+- `backend/.dockerignore`
+- `docker-compose.yml`
+- `docker-compose.prod.yml`
+
+**Created PM2-based deployment:**
+- `backend/ecosystem.config.js` — PM2 cluster mode config
+- `scripts/setup-ec2.sh` — Server setup automation (Node, PM2, Nginx, PostgreSQL, Certbot, UFW)
+- `scripts/deploy.sh` — Zero-downtime deployment script
+- Updated `DEPLOYMENT.md` — Full PM2 deployment guide
+- Updated `.github/workflows/deploy.yml` — Removed Docker job
 
 **Key decisions:**
-- Node 20 Alpine base image (smaller, faster)
-- Non-root user in container for security
-- Health check endpoint at `/_health`
-- PM2 recommended for non-Docker setups
-- Let's Encrypt for SSL with Certbot
+- PM2 cluster mode for multi-core CPU utilization
+- Nginx reverse proxy with SSL termination
+- Let's Encrypt via Certbot for free SSL
+- UFW firewall (only ports 22, 80, 443 exposed)
+- Node 20 via nvm for version management
+- Health check at `/_health` endpoint
+
+**PM2 configuration highlights:**
+- `instances: 'max'` — Use all CPU cores
+- `exec_mode: 'cluster'` — Cluster mode for load distribution
+- `max_memory_restart: '1G'` — Auto-restart on memory limit
+- Logs at `/var/log/pm2/strapi-*.log`
+
+### 2026-04-18: Production Deployment Setup (Initial)
+
+**Created initial deployment infrastructure (now superseded by PM2).**
 
 **Strapi 5 specifics:**
 - Build output goes to `dist/` and `build/`

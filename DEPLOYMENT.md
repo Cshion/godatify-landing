@@ -1,6 +1,6 @@
 # Deployment Guide — godatify-landing
 
-Production deployment guide for AWS EC2.
+Production deployment guide using PM2 and Node.js directly (no Docker).
 
 ---
 
@@ -8,44 +8,41 @@ Production deployment guide for AWS EC2.
 
 1. [Prerequisites](#prerequisites)
 2. [Architecture Overview](#architecture-overview)
-3. [EC2 Instance Setup](#ec2-instance-setup)
-4. [Security Groups](#security-groups)
-5. [Environment Variables](#environment-variables)
-6. [Backend Deployment (Strapi)](#backend-deployment-strapi)
-7. [Frontend Deployment](#frontend-deployment)
-8. [SSL/HTTPS Setup](#sslhttps-setup)
-9. [PM2 Process Management](#pm2-process-management)
-10. [Database Backup Strategy](#database-backup-strategy)
-11. [Monitoring & Logging](#monitoring--logging)
-12. [Troubleshooting](#troubleshooting)
+3. [Quick Start](#quick-start)
+4. [EC2 Instance Setup](#ec2-instance-setup)
+5. [PostgreSQL Setup](#postgresql-setup)
+6. [Environment Variables](#environment-variables)
+7. [Backend Deployment](#backend-deployment)
+8. [Nginx Configuration](#nginx-configuration)
+9. [SSL Setup](#ssl-setup)
+10. [PM2 Process Management](#pm2-process-management)
+11. [GitHub Actions CI/CD](#github-actions-cicd)
+12. [Monitoring & Logging](#monitoring--logging)
+13. [Troubleshooting](#troubleshooting)
 
 ---
 
 ## Prerequisites
 
-### AWS Requirements
-- AWS Account with appropriate IAM permissions
-- SSH key pair for EC2 access
-- (Optional) Domain name pointed to your server
-
-### EC2 Instance Recommendations
+### EC2 Instance Requirements
 
 | Component | Minimum | Recommended |
 |-----------|---------|-------------|
-| Instance Type | t3.small | t3.medium or larger |
+| Instance Type | t3.small | t3.medium |
 | vCPUs | 2 | 2+ |
 | RAM | 2 GB | 4+ GB |
 | Storage | 20 GB SSD | 50+ GB SSD |
 | OS | Ubuntu 22.04 LTS | Ubuntu 22.04 LTS |
 
-### Software Requirements
-- Node.js 20.x
-- npm 10.x
-- PostgreSQL 16
-- Docker & Docker Compose (if using containers)
-- PM2 (if not using Docker)
-- Nginx (reverse proxy)
-- Certbot (SSL)
+### AWS Security Groups
+
+| Type | Port | Source | Description |
+|------|------|--------|-------------|
+| SSH | 22 | Your IP | SSH access |
+| HTTP | 80 | 0.0.0.0/0 | Web traffic |
+| HTTPS | 443 | 0.0.0.0/0 | Secure traffic |
+
+**Note:** Ports 1337 (Strapi) and 5432 (PostgreSQL) should NOT be exposed to the internet.
 
 ---
 
@@ -62,50 +59,60 @@ Production deployment guide for AWS EC2.
 │  ┌───────────────────────────────────────────────────────┐  │
 │  │                    Nginx (443/80)                     │  │
 │  │              SSL Termination + Reverse Proxy          │  │
-│  └───────────────┬───────────────────────┬───────────────┘  │
-│                  │                       │                  │
-│                  ▼                       ▼                  │
-│  ┌─────────────────────┐   ┌─────────────────────────────┐  │
-│  │   Strapi Backend    │   │     Frontend (Optional)     │  │
-│  │   (Port 1337)       │   │     or Vercel               │  │
-│  └──────────┬──────────┘   └─────────────────────────────┘  │
-│             │                                               │
-│             ▼                                               │
-│  ┌─────────────────────┐                                    │
-│  │   PostgreSQL        │                                    │
-│  │   (Port 5432)       │                                    │
-│  └─────────────────────┘                                    │
+│  └───────────────────────┬───────────────────────────────┘  │
+│                          │                                  │
+│                          ▼                                  │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                   PM2 Process Manager                 │  │
+│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐     │  │
+│  │  │  Strapi #1  │ │  Strapi #2  │ │  Strapi #N  │     │  │
+│  │  │  (Cluster)  │ │  (Cluster)  │ │  (Cluster)  │     │  │
+│  │  └─────────────┘ └─────────────┘ └─────────────┘     │  │
+│  └───────────────────────┬───────────────────────────────┘  │
+│                          │                                  │
+│                          ▼                                  │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                PostgreSQL (Port 5432)                 │  │
+│  └───────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Quick Start
+
+### Automated Setup (Recommended)
+
+```bash
+# 1. SSH into your EC2 instance
+ssh -i your-key.pem ubuntu@<EC2-PUBLIC-IP>
+
+# 2. Clone repository
+git clone <your-repo-url> /var/www/godatify
+cd /var/www/godatify
+
+# 3. Run setup script
+bash scripts/setup-ec2.sh
+
+# 4. Create database
+sudo -u postgres psql -c "CREATE USER strapi WITH PASSWORD 'your_secure_password';"
+sudo -u postgres psql -c "CREATE DATABASE strapi OWNER strapi;"
+
+# 5. Configure environment
+cp backend/.env.example backend/.env
+nano backend/.env  # Edit with your values
+
+# 6. Deploy
+bash scripts/deploy.sh
 ```
 
 ---
 
 ## EC2 Instance Setup
 
-### 1. Launch EC2 Instance
+### Manual Setup (Alternative)
 
-```bash
-# Via AWS Console:
-# 1. EC2 > Launch Instance
-# 2. Select Ubuntu 22.04 LTS (64-bit x86)
-# 3. Choose instance type (t3.medium recommended)
-# 4. Configure storage (50 GB gp3)
-# 5. Select/create security group (see next section)
-# 6. Select/create key pair
-# 7. Launch
-```
-
-### 2. Connect to Instance
-
-```bash
-# Update SSH key permissions
-chmod 400 your-key.pem
-
-# Connect
-ssh -i your-key.pem ubuntu@<EC2-PUBLIC-IP>
-```
-
-### 3. Initial Server Setup
+If you prefer manual setup over the automated script:
 
 ```bash
 # Update system
@@ -114,31 +121,45 @@ sudo apt update && sudo apt upgrade -y
 # Install essential packages
 sudo apt install -y curl git build-essential
 
-# Install Node.js 20
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs
+# Install Node.js 20 via nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+nvm install 20
+nvm use 20
+nvm alias default 20
 
-# Verify installation
+# Verify Node.js installation
 node --version  # Should show v20.x.x
 npm --version   # Should show 10.x.x
 
 # Install PM2 globally
-sudo npm install -g pm2
+npm install -g pm2
+
+# Setup PM2 startup script
+pm2 startup systemd -u $USER --hp $HOME
+sudo mkdir -p /var/log/pm2
+sudo chown -R $USER:$USER /var/log/pm2
 
 # Install Nginx
 sudo apt install -y nginx
+sudo systemctl enable nginx
 
 # Install Certbot for SSL
 sudo apt install -y certbot python3-certbot-nginx
 ```
 
-### 4. Install PostgreSQL
+---
+
+## PostgreSQL Setup
 
 ```bash
 # Install PostgreSQL 16
-sudo apt install -y postgresql postgresql-contrib
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt update
+sudo apt install -y postgresql-16 postgresql-contrib-16
 
-# Start and enable PostgreSQL
+# Start PostgreSQL
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
 
@@ -147,47 +168,16 @@ sudo -u postgres psql <<EOF
 CREATE USER strapi WITH PASSWORD 'your_secure_password';
 CREATE DATABASE strapi OWNER strapi;
 GRANT ALL PRIVILEGES ON DATABASE strapi TO strapi;
+\q
 EOF
+
+# Test connection
+psql -h localhost -U strapi -d strapi -c "SELECT version();"
 ```
-
-### 5. (Alternative) Install Docker
-
-```bash
-# Install Docker
-curl -fsSL https://get.docker.com | sudo sh
-
-# Add user to docker group
-sudo usermod -aG docker ubuntu
-
-# Install Docker Compose
-sudo apt install -y docker-compose-plugin
-
-# Verify installation
-docker --version
-docker compose version
-```
-
----
-
-## Security Groups
-
-Configure the following inbound rules:
-
-| Type | Protocol | Port Range | Source | Description |
-|------|----------|------------|--------|-------------|
-| SSH | TCP | 22 | Your IP | SSH access |
-| HTTP | TCP | 80 | 0.0.0.0/0 | Web traffic (redirects to HTTPS) |
-| HTTPS | TCP | 443 | 0.0.0.0/0 | Secure web traffic |
-| Custom TCP | TCP | 1337 | 127.0.0.1 | Strapi (internal only) |
-| PostgreSQL | TCP | 5432 | 127.0.0.1 | Database (internal only) |
-
-**Important:** Never expose ports 1337 or 5432 to the public internet.
 
 ---
 
 ## Environment Variables
-
-### Backend Environment Variables
 
 Create `/var/www/godatify/backend/.env`:
 
@@ -206,22 +196,22 @@ DATABASE_USERNAME=strapi
 DATABASE_PASSWORD=your_secure_db_password
 DATABASE_SSL=false
 
-# Strapi Secrets (generate with: openssl rand -base64 32)
-APP_KEYS=key1_base64,key2_base64,key3_base64,key4_base64
-API_TOKEN_SALT=generate_random_base64_string
-ADMIN_JWT_SECRET=generate_random_base64_string
-TRANSFER_TOKEN_SALT=generate_random_base64_string
-JWT_SECRET=generate_random_base64_string
-ENCRYPTION_KEY=generate_random_base64_string
+# Strapi Secrets (generate with commands below)
+APP_KEYS=key1,key2,key3,key4
+API_TOKEN_SALT=generate_random_string
+ADMIN_JWT_SECRET=generate_random_string
+TRANSFER_TOKEN_SALT=generate_random_string
+JWT_SECRET=generate_random_string
+ENCRYPTION_KEY=generate_random_string
 
-# AWS S3 (for media uploads)
+# AWS S3 (optional - for media uploads)
 AWS_ACCESS_KEY_ID=your_access_key
 AWS_ACCESS_SECRET=your_secret_key
 AWS_REGION=us-east-1
 AWS_BUCKET=godatify-uploads
 ```
 
-### Generate Secure Keys
+### Generate Secure Secrets
 
 ```bash
 # Generate all secrets at once
@@ -235,64 +225,59 @@ echo "ENCRYPTION_KEY=$(openssl rand -base64 32)"
 
 ---
 
-## Backend Deployment (Strapi)
+## Backend Deployment
 
-### Option A: Direct Deployment (with PM2)
+### Using the Deploy Script
 
 ```bash
-# Create application directory
-sudo mkdir -p /var/www/godatify
-sudo chown -R ubuntu:ubuntu /var/www/godatify
-
-# Clone repository
 cd /var/www/godatify
-git clone <your-repo-url> .
+bash scripts/deploy.sh
+```
 
-# Install backend dependencies
-cd backend
-npm ci
+The script will:
+1. Pull latest code from git
+2. Install production dependencies
+3. Build Strapi
+4. Start/restart PM2 processes
+5. Run health checks
 
-# Create .env file (see Environment Variables section)
-nano .env
+### Manual Deployment
+
+```bash
+cd /var/www/godatify/backend
+
+# Install dependencies (production only)
+npm ci --only=production
 
 # Build Strapi
 NODE_ENV=production npm run build
 
 # Start with PM2
-pm2 start npm --name "strapi" -- run start
+pm2 start ecosystem.config.js --env production
+
+# Save PM2 process list
 pm2 save
-pm2 startup
 ```
 
-### Option B: Docker Deployment
+---
+
+## Nginx Configuration
+
+### Create Site Configuration
 
 ```bash
-# Clone repository
-cd /var/www/godatify
-git clone <your-repo-url> .
-
-# Create .env file at project root
-nano .env
-
-# Build and start containers
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-
-# Check status
-docker compose ps
-docker compose logs -f backend
+sudo nano /etc/nginx/sites-available/godatify
 ```
 
-### Nginx Configuration for Backend
-
-Create `/etc/nginx/sites-available/api.godatify.com`:
-
 ```nginx
+# Main API Server
 server {
     listen 80;
-    server_name api.godatify.com;
+    server_name api.godatify.com;  # Change to your domain
 
+    # Proxy to Strapi
     location / {
-        proxy_pass http://localhost:1337;
+        proxy_pass http://127.0.0.1:1337;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -301,422 +286,302 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_cache_bypass $http_upgrade;
-        
-        # Increase timeouts for large uploads
+
+        # Timeouts
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
-        
-        # Increase body size for uploads
-        client_max_body_size 100M;
+
+        # Buffer settings
+        proxy_buffer_size 128k;
+        proxy_buffers 4 256k;
+        proxy_busy_buffers_size 256k;
+    }
+
+    # Health check
+    location /_health {
+        proxy_pass http://127.0.0.1:1337/_health;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
     }
 }
 ```
 
-Enable the site:
+### Enable Site
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/api.godatify.com /etc/nginx/sites-enabled/
+# Create symlink
+sudo ln -sf /etc/nginx/sites-available/godatify /etc/nginx/sites-enabled/
+
+# Test configuration
 sudo nginx -t
+
+# Reload Nginx
 sudo systemctl reload nginx
 ```
 
 ---
 
-## Frontend Deployment
+## SSL Setup
 
-### Option A: Vercel (Recommended)
-
-The frontend is already configured for Vercel deployment:
-
-1. Connect your GitHub repo to Vercel
-2. Set environment variables:
-   - `NEXT_PUBLIC_STRAPI_URL=https://api.godatify.com`
-3. Deploy
-
-### Option B: EC2 (Same Instance)
+### Using Let's Encrypt (Certbot)
 
 ```bash
-# Install frontend dependencies
-cd /var/www/godatify/frontend
-npm ci
+# Request certificate
+sudo certbot --nginx -d api.godatify.com
 
-# Build Next.js
-npm run build
-
-# Start with PM2
-pm2 start npm --name "frontend" -- run start
-pm2 save
-```
-
-Nginx config for frontend (`/etc/nginx/sites-available/godatify.com`):
-
-```nginx
-server {
-    listen 80;
-    server_name godatify.com www.godatify.com;
-
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
-
----
-
-## SSL/HTTPS Setup
-
-### Using Let's Encrypt with Certbot
-
-```bash
-# Obtain SSL certificate
-sudo certbot --nginx -d api.godatify.com -d godatify.com -d www.godatify.com
-
-# Certbot will automatically:
-# 1. Obtain certificates
-# 2. Configure Nginx for HTTPS
-# 3. Set up auto-renewal
-
-# Verify auto-renewal
+# Test auto-renewal
 sudo certbot renew --dry-run
-
-# Check renewal timer
-sudo systemctl status certbot.timer
 ```
 
-### Force HTTPS Redirect
-
-Certbot adds this automatically, but verify your Nginx config includes:
-
-```nginx
-server {
-    listen 80;
-    server_name api.godatify.com;
-    return 301 https://$server_name$request_uri;
-}
-```
+Certbot will automatically:
+- Obtain SSL certificate
+- Modify Nginx configuration for HTTPS
+- Set up auto-renewal via cron/systemd timer
 
 ---
 
 ## PM2 Process Management
 
-### Useful Commands
+### Essential Commands
 
 ```bash
-# List all processes
-pm2 list
+# Status
+pm2 status               # List all processes
+pm2 list                 # Same as above
+pm2 show strapi         # Detailed info for strapi
 
-# View logs
-pm2 logs strapi
-pm2 logs --lines 100
+# Logs
+pm2 logs                 # All logs (tail)
+pm2 logs strapi         # Strapi logs only
+pm2 logs --lines 100    # Last 100 lines
 
-# Restart application
-pm2 restart strapi
+# Control
+pm2 start ecosystem.config.js   # Start from config
+pm2 restart strapi              # Restart process
+pm2 reload strapi               # Zero-downtime reload
+pm2 stop strapi                 # Stop process
+pm2 delete strapi               # Remove from PM2
 
-# Reload without downtime
-pm2 reload strapi
+# Monitoring
+pm2 monit                # Real-time monitor
+pm2 plus                 # PM2.io dashboard (optional)
 
-# Stop application
-pm2 stop strapi
-
-# Delete from PM2
-pm2 delete strapi
-
-# Monitor CPU/Memory
-pm2 monit
-
-# Save process list
-pm2 save
-
-# Set up startup script
-pm2 startup
+# Maintenance
+pm2 save                 # Save current process list
+pm2 resurrect           # Restore saved processes
+pm2 flush               # Clear all logs
+pm2 update              # Update PM2
 ```
 
-### PM2 Ecosystem File
+### Ecosystem Configuration
 
-Create `/var/www/godatify/ecosystem.config.js`:
+The PM2 configuration is in `backend/ecosystem.config.js`:
 
 ```javascript
-module.exports = {
-  apps: [
-    {
-      name: 'strapi',
-      cwd: '/var/www/godatify/backend',
-      script: 'npm',
-      args: 'run start',
-      env: {
-        NODE_ENV: 'production',
-      },
-      instances: 1,
-      autorestart: true,
-      watch: false,
-      max_memory_restart: '1G',
-      log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
-      error_file: '/var/log/godatify/strapi-error.log',
-      out_file: '/var/log/godatify/strapi-out.log',
-    },
-    {
-      name: 'frontend',
-      cwd: '/var/www/godatify/frontend',
-      script: 'npm',
-      args: 'run start',
-      env: {
-        NODE_ENV: 'production',
-        PORT: 3000,
-      },
-      instances: 1,
-      autorestart: true,
-      watch: false,
-      max_memory_restart: '1G',
-      log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
-      error_file: '/var/log/godatify/frontend-error.log',
-      out_file: '/var/log/godatify/frontend-out.log',
-    },
-  ],
-};
+{
+  name: 'strapi',
+  instances: 'max',      // Use all CPU cores
+  exec_mode: 'cluster',  // Enable cluster mode
+  max_memory_restart: '1G',  // Restart if >1GB RAM
+  // ... see full config in file
+}
 ```
 
-Start with ecosystem file:
+### Enable Auto-Start on Boot
 
 ```bash
-pm2 start ecosystem.config.js
+# Generate startup script (run once)
+pm2 startup systemd -u ubuntu --hp /home/ubuntu
+
+# Save current processes
 pm2 save
 ```
 
 ---
 
-## Database Backup Strategy
+## GitHub Actions CI/CD
 
-### Automated Daily Backups
+The deployment is automated via `.github/workflows/deploy.yml`.
 
-Create backup script `/var/www/godatify/scripts/backup-db.sh`:
+### Required GitHub Secrets
 
-```bash
-#!/bin/bash
+| Secret | Description |
+|--------|-------------|
+| `EC2_HOST` | EC2 public IP or domain |
+| `EC2_USER` | SSH username (usually `ubuntu`) |
+| `EC2_SSH_KEY` | Private SSH key for EC2 access |
+| `ENV_FILE` | Base64 encoded .env file |
 
-# Configuration
-BACKUP_DIR="/var/backups/godatify/postgres"
-RETENTION_DAYS=7
-DATE=$(date +%Y%m%d_%H%M%S)
-DB_NAME="strapi"
-DB_USER="strapi"
-
-# Create backup directory if it doesn't exist
-mkdir -p $BACKUP_DIR
-
-# Create backup
-PGPASSWORD="${DATABASE_PASSWORD}" pg_dump -U $DB_USER -h localhost $DB_NAME | gzip > "$BACKUP_DIR/backup_$DATE.sql.gz"
-
-# Remove backups older than retention period
-find $BACKUP_DIR -name "*.sql.gz" -mtime +$RETENTION_DAYS -delete
-
-# Optional: Upload to S3
-# aws s3 cp "$BACKUP_DIR/backup_$DATE.sql.gz" s3://your-bucket/backups/postgres/
-
-echo "Backup completed: backup_$DATE.sql.gz"
-```
-
-Set up cron job:
+### Encode .env File
 
 ```bash
-# Make script executable
-chmod +x /var/www/godatify/scripts/backup-db.sh
-
-# Edit crontab
-crontab -e
-
-# Add daily backup at 3 AM
-0 3 * * * /var/www/godatify/scripts/backup-db.sh >> /var/log/godatify/backup.log 2>&1
+# On your local machine
+base64 -i backend/.env | tr -d '\n'
 ```
 
-### Restore from Backup
+Copy the output to `ENV_FILE` secret.
 
-```bash
-# Restore from backup
-gunzip -c /var/backups/godatify/postgres/backup_YYYYMMDD_HHMMSS.sql.gz | PGPASSWORD="${DATABASE_PASSWORD}" psql -U strapi -h localhost strapi
-```
+### Trigger Deployment
+
+- **Automatic:** Push to `main` branch with changes in `backend/`
+- **Manual:** Go to Actions → Deploy Backend → Run workflow
 
 ---
 
 ## Monitoring & Logging
 
-### Log Locations
-
-| Component | Log Location |
-|-----------|--------------|
-| Nginx Access | `/var/log/nginx/access.log` |
-| Nginx Errors | `/var/log/nginx/error.log` |
-| PM2 Logs | `pm2 logs` or `/var/log/godatify/` |
-| PostgreSQL | `/var/log/postgresql/` |
-| System | `journalctl -f` |
-
-### Recommended Monitoring Tools
-
-1. **CloudWatch** (AWS native)
-   - Install CloudWatch agent
-   - Monitor CPU, memory, disk
-
-2. **Uptime Robot** (free tier available)
-   - HTTP monitoring
-   - SSL expiry alerts
-
-3. **PM2 Plus** (optional)
-   - Process monitoring dashboard
-
-### Basic Health Check Script
-
-Create `/var/www/godatify/scripts/health-check.sh`:
+### PM2 Logs
 
 ```bash
-#!/bin/bash
+# Live logs
+pm2 logs strapi
 
-# Check if Strapi is responding
-if curl -s http://localhost:1337/_health | grep -q "ok"; then
-    echo "✅ Strapi: OK"
-else
-    echo "❌ Strapi: FAILED"
-    pm2 restart strapi
-fi
+# Log files location
+/var/log/pm2/strapi-out.log   # Standard output
+/var/log/pm2/strapi-error.log # Errors
+```
 
-# Check if PostgreSQL is running
-if systemctl is-active --quiet postgresql; then
-    echo "✅ PostgreSQL: OK"
-else
-    echo "❌ PostgreSQL: FAILED"
-fi
+### System Monitoring
 
-# Check disk space
-DISK_USAGE=$(df / | awk 'NR==2 {print $5}' | tr -d '%')
-if [ $DISK_USAGE -gt 90 ]; then
-    echo "⚠️  Disk usage: ${DISK_USAGE}% (WARNING)"
-else
-    echo "✅ Disk usage: ${DISK_USAGE}%"
-fi
+```bash
+# PM2 built-in monitor
+pm2 monit
+
+# System resources
+htop
+
+# Disk usage
+df -h
+
+# Memory
+free -m
+```
+
+### Health Check
+
+```bash
+# Check Strapi health
+curl http://localhost:1337/_health
+
+# Check Nginx status
+sudo systemctl status nginx
+
+# Check PostgreSQL status
+sudo systemctl status postgresql
 ```
 
 ---
 
 ## Troubleshooting
 
-### Common Issues
-
-#### Strapi won't start
+### Strapi Won't Start
 
 ```bash
-# Check logs
+# Check PM2 logs
 pm2 logs strapi --lines 50
 
-# Common fixes:
-# 1. Check .env file exists and has correct values
-# 2. Verify database connection
-# 3. Ensure build was successful: npm run build
+# Check environment variables
+cat backend/.env
+
+# Verify Node version
+node --version  # Should be v20.x
+
+# Check port availability
+sudo lsof -i :1337
 ```
 
-#### Database connection errors
+### Database Connection Issues
 
 ```bash
 # Test PostgreSQL connection
-psql -U strapi -h localhost -d strapi
+psql -h localhost -U strapi -d strapi
 
 # Check PostgreSQL status
 sudo systemctl status postgresql
 
-# View PostgreSQL logs
-sudo tail -f /var/log/postgresql/postgresql-*-main.log
+# Check PostgreSQL logs
+sudo tail -f /var/log/postgresql/postgresql-16-main.log
 ```
 
-#### Nginx 502 Bad Gateway
+### Nginx Issues
 
 ```bash
-# Check if backend is running
-pm2 status
+# Test configuration
+sudo nginx -t
 
-# Check Nginx error log
+# Check error logs
 sudo tail -f /var/log/nginx/error.log
 
-# Verify proxy_pass port matches Strapi port
+# Reload configuration
+sudo systemctl reload nginx
 ```
 
-#### Permission errors
+### PM2 Memory Issues
 
 ```bash
-# Fix ownership
-sudo chown -R ubuntu:ubuntu /var/www/godatify
+# Check memory usage
+pm2 monit
 
-# Fix upload directory permissions
-chmod 755 /var/www/godatify/backend/public/uploads
+# If processes keep restarting due to memory:
+# Increase max_memory_restart in ecosystem.config.js
+# Or reduce instances from 'max' to a specific number
 ```
 
-### Useful Diagnostic Commands
+### SSL Certificate Issues
 
 ```bash
-# System resources
-htop
-free -h
-df -h
+# Check certificate status
+sudo certbot certificates
 
-# Network
-netstat -tlpn
-ss -tlpn
+# Force renewal
+sudo certbot renew --force-renewal
 
-# Process status
-pm2 status
-docker compose ps
-
-# Logs
-journalctl -u nginx -f
-pm2 logs --lines 100
+# Check Nginx SSL configuration
+sudo nginx -t
 ```
 
 ---
 
-## Quick Reference
-
-### Deploy Update
+## Useful Commands Reference
 
 ```bash
+# === PM2 ===
+pm2 status                    # Process status
+pm2 logs strapi              # View logs
+pm2 restart strapi           # Restart
+pm2 reload strapi            # Zero-downtime reload
+pm2 monit                    # Monitor
+
+# === Nginx ===
+sudo systemctl status nginx   # Status
+sudo systemctl reload nginx   # Reload config
+sudo nginx -t                 # Test config
+
+# === PostgreSQL ===
+sudo systemctl status postgresql
+sudo -u postgres psql         # Connect as postgres
+psql -h localhost -U strapi   # Connect as strapi
+
+# === System ===
+htop                         # Process monitor
+df -h                        # Disk space
+free -m                      # Memory usage
+
+# === Deployment ===
 cd /var/www/godatify
-git pull origin main
-
-# Backend
-cd backend
-npm ci
-npm run build
-pm2 restart strapi
-
-# Frontend (if on EC2)
-cd ../frontend
-npm ci
-npm run build
-pm2 restart frontend
-```
-
-### Emergency Restart
-
-```bash
-# Restart everything
-pm2 restart all
-sudo systemctl restart nginx
-sudo systemctl restart postgresql
+bash scripts/deploy.sh       # Deploy latest changes
 ```
 
 ---
 
-## Support
+## Security Checklist
 
-- **AWS Documentation:** https://docs.aws.amazon.com/ec2/
-- **Strapi Documentation:** https://docs.strapi.io/
-- **Next.js Documentation:** https://nextjs.org/docs
-- **PM2 Documentation:** https://pm2.keymetrics.io/docs/
-
----
-
-*Last updated: 2026-04-18 by Jonesy (DevOps)*
+- [ ] SSH uses key-based authentication only
+- [ ] UFW firewall enabled (only 22, 80, 443 open)
+- [ ] PostgreSQL only accessible from localhost
+- [ ] Strapi only accessible via Nginx proxy
+- [ ] SSL/HTTPS enabled with valid certificate
+- [ ] Strong database password
+- [ ] Unique Strapi secrets generated
+- [ ] Regular system updates scheduled

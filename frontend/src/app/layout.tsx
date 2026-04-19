@@ -34,6 +34,13 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${barlow.variable} antialiased`}>
+        {/* Skip to main content link for accessibility (WCAG 2.4.1) */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[9999] focus:bg-white focus:px-4 focus:py-2 focus:rounded focus:text-[#1C7C54] focus:font-semibold focus:shadow-lg"
+        >
+          Ir al contenido principal
+        </a>
 
         <script
           type="application/ld+json"

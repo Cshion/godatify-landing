@@ -114,7 +114,23 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
     };
 
     return (
-        <div className={`${styles.carouselContainer} ${className}`}>
+        <div
+            className={`${styles.carouselContainer} ${className}`}
+            tabIndex={0}
+            role="region"
+            aria-label="Carrusel de contenido"
+            aria-roledescription="carousel"
+            onKeyDown={(e) => {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                    e.preventDefault();
+                }
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                    e.preventDefault();
+                }
+            }}
+        >
             <div
                 className={styles.carouselTrackWrapper}
                 onTouchStart={onTouchStart}
@@ -166,9 +182,9 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
                     onClick={prevSlide}
                     disabled={currentIndex === 0}
                     className={styles.controlBtn}
-                    aria-label="Previous slide"
+                    aria-label="Diapositiva anterior"
                 >
-                    <i className="fas fa-chevron-left" />
+                    <i className="fas fa-chevron-left" aria-hidden="true" />
                 </button>
 
                 <div className={styles.dots}>
@@ -197,7 +213,7 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
                                 key={idx}
                                 onClick={() => goToIndex(Math.min(idx * itemsPerView, maxIndex))}
                                 className={`${styles.dot} ${isActive ? styles.active : ''}`}
-                                aria-label={`Go to slide group ${idx + 1}`}
+                                aria-label={`Ir al grupo de diapositivas ${idx + 1}`}
                             />
                         );
                     })}
@@ -206,9 +222,9 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
                 <button
                     onClick={nextSlide}
                     className={styles.controlBtn}
-                    aria-label="Next slide"
+                    aria-label="Siguiente diapositiva"
                 >
-                    <i className="fas fa-chevron-right" />
+                    <i className="fas fa-chevron-right" aria-hidden="true" />
                 </button>
             </div>
         </div>

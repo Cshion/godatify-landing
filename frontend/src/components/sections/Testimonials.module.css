@@ -35,11 +35,12 @@
 }
 
 .description {
-    color: #d1d5db;
+    color: #ffffff; /* Fixed: WCAG AA compliant contrast on green background */
     max-width: 600px;
     margin: 0 auto;
     font-size: 1rem;
     line-height: 1.6;
+    opacity: 0.95;
 }
 
 .testimonialsContainer {
@@ -225,6 +226,13 @@
 
 .dot:hover:not(.active) {
     background: rgba(255, 255, 255, 0.6);
+}
+
+/* Focus states for keyboard navigation */
+.carouselBtn:focus-visible,
+.dot:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
 }
 
 @media (max-width: 1024px) {

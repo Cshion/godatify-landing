@@ -25,6 +25,19 @@
 
 ## Learnings
 
+### 2026-04-18 — Critical SEO Fixes Applied ✅
+
+**Requested by:** Aaron
+
+**Fixed Critical Issues:**
+1. ✅ **robots.ts** — Changed from `disallow: '/'` to `allow: '/'`, now only blocking `/api/`, `/admin/`, `/_next/`, `/actions/`
+2. ✅ **seo.ts** — Changed `index: false` to `index: true`, added googleBot settings with max-video-preview, max-image-preview, max-snippet
+3. ✅ **sitemap.ts** — Replaced hash URLs (`/#nosotros`) with real page routes (`/nosotros`), added `/industrias` page
+
+**Result:** Site is now crawlable and indexable by search engines.
+
+---
+
 ### 2026-04-18 — Comprehensive SEO Review
 
 **Critical Issues Found:**

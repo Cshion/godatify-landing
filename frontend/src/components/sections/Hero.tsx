@@ -35,7 +35,7 @@ export default function Hero({ heroContent }: HeroProps) {
           </p>
           <a href={heroContent.ctaHref} className={`${styles.heroCta} reveal`}>
             {heroContent.ctaText}
-            <i className="fas fa-arrow-right"></i>
+            <i className="fas fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>

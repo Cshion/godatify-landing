@@ -48,9 +48,10 @@ export default function Footer({ companyInfo, footerLinks, socialLinks, labels }
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.socialLink}
-                  aria-label={social.label}
+                  aria-label={`Síguenos en ${social.label}`}
                 >
-                  <i className={`fab fa-${social.icon}`}></i>
+                  <i className={`fab fa-${social.icon}`} aria-hidden="true"></i>
+                  <span className="sr-only">{social.label}</span>
                 </a>
               ))}
             </div>

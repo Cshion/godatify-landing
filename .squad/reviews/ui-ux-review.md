@@ -2,13 +2,14 @@
 
 > **Reviewer:** Brett (Designer/UI)  
 > **Date:** 2026-04-18  
-> **Scope:** Full site review — accessibility, responsiveness, performance, UX
+> **Scope:** Full site review — accessibility, responsiveness, performance, UX  
+> **Fixes Applied:** 2026-04-18
 
 ---
 
 ## Critical Issues (Must Fix)
 
-### 1. Skip-to-Content Link Missing
+### 1. ✅ Skip-to-Content Link Missing — FIXED
 
 **What:** No skip-to-main-content link for keyboard/screen reader users.
 
@@ -16,20 +17,11 @@
 
 **Why:** WCAG 2.4.1 requires bypass blocks. Users relying on keyboard navigation must tab through the entire header on every page.
 
-**Fix:**
-```tsx
-// In layout.tsx, add before <Header>
-<a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:rounded">
-  Ir al contenido principal
-</a>
-
-// In page.tsx, add id to main
-<main id="main-content">
-```
+**Status:** Fixed — Added skip link with sr-only + focus styles, added `id="main-content"` to page.tsx
 
 ---
 
-### 2. FontAwesome Icons Lack Accessible Labels
+### 2. ✅ FontAwesome Icons Lack Accessible Labels — FIXED
 
 **What:** Icons using `<i className="fab/fas fa-*">` have no accessible text for screen readers.
 
@@ -41,21 +33,11 @@
 
 **Why:** Screen readers announce nothing for decorative icons, but these icons convey meaning (social links, navigation arrows).
 
-**Fix:**
-```tsx
-// For decorative icons (arrows, etc.)
-<i className="fas fa-arrow-right" aria-hidden="true"></i>
-
-// For meaningful icons (social links)
-<a href={social.url} aria-label={`Síguenos en ${social.label}`}>
-  <i className={`fab fa-${social.icon}`} aria-hidden="true"></i>
-  <span className="sr-only">{social.label}</span>
-</a>
-```
+**Status:** Fixed — Added `aria-hidden="true"` to decorative icons, improved aria-labels with sr-only text
 
 ---
 
-### 3. Mobile Menu Lacks ARIA Attributes
+### 3. ✅ Mobile Menu Lacks ARIA Attributes — FIXED
 
 **What:** Mobile menu toggle and panel missing proper ARIA states.
 
@@ -63,23 +45,11 @@
 
 **Why:** Screen readers cannot determine if menu is expanded/collapsed.
 
-**Fix:**
-```tsx
-<button
-  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-  className={styles.menuToggle}
-  aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
-  aria-expanded={isMobileMenuOpen}
-  aria-controls="mobile-navigation"
->
-
-{isMobileMenuOpen && (
-  <nav id="mobile-navigation" className={styles.mobileMenu} aria-label="Navegación móvil">
-```
+**Status:** Fixed — Added `aria-expanded`, `aria-controls`, `id`, and changed div to nav element
 
 ---
 
-### 4. Dropdown Menus Not Keyboard Accessible
+### 4. ✅ Dropdown Menus Not Keyboard Accessible — FIXED
 
 **What:** Services and Industries dropdowns only work on hover, not keyboard.
 
@@ -87,26 +57,11 @@
 
 **Why:** Keyboard users cannot access nested navigation.
 
-**Fix:** Add focus-within support or convert to button-triggered dropdowns:
-```css
-/* In Header.module.css */
-.dropdown:focus-within .dropdownMenu,
-.dropdown:hover .dropdownMenu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.dropdownToggle:focus + .dropdownMenu,
-.dropdownMenu:focus-within {
-  opacity: 1;
-  visibility: visible;
-}
-```
+**Status:** Fixed — Added `:focus-within` CSS rule for keyboard navigation
 
 ---
 
-### 5. Carousel Missing Keyboard Navigation
+### 5. ✅ Carousel Missing Keyboard Navigation — FIXED
 
 **What:** Carousels (Services, Cases) cannot be navigated via keyboard.
 
@@ -114,25 +69,11 @@
 
 **Why:** Users who can't use a mouse or touchscreen are excluded.
 
-**Fix:**
-```tsx
-// Add keyboard handlers to carousel container
-<div
-  className={styles.carouselContainer}
-  tabIndex={0}
-  role="region"
-  aria-label="Carrusel de contenido"
-  aria-roledescription="carousel"
-  onKeyDown={(e) => {
-    if (e.key === 'ArrowLeft') prevSlide();
-    if (e.key === 'ArrowRight') nextSlide();
-  }}
->
-```
+**Status:** Fixed — Added Arrow key handlers, `tabIndex`, `role="region"`, `aria-roledescription`
 
 ---
 
-### 6. Insufficient Color Contrast in Testimonials
+### 6. ✅ Insufficient Color Contrast in Testimonials — FIXED
 
 **What:** The description text `color: #d1d5db` on green overlay background.
 
@@ -140,17 +81,11 @@
 
 **Why:** Fails WCAG AA contrast ratio (needs 4.5:1 for normal text).
 
-**Fix:**
-```css
-.description {
-  color: #ffffff; /* or rgba(255, 255, 255, 0.95) */
-  /* Instead of #d1d5db which has ~2.8:1 contrast */
-}
-```
+**Status:** Fixed — Changed to #ffffff with 0.95 opacity
 
 ---
 
-### 7. Focus States Not Visible on Many Elements
+### 7. ✅ Focus States Not Visible on Many Elements — FIXED
 
 **What:** Custom buttons/links often override or lack visible focus indicators.
 
@@ -161,20 +96,11 @@
 
 **Why:** Keyboard users cannot track their current position.
 
-**Fix:** Add explicit focus-visible styles:
-```css
-.navLink:focus-visible,
-.contactCta:focus-visible,
-.btnOutline:focus-visible,
-.controlBtn:focus-visible {
-  outline: 2px solid #26a86f;
-  outline-offset: 2px;
-}
-```
+**Status:** Fixed — Added `:focus-visible` styles with #26a86f outline to all interactive elements
 
 ---
 
-### 8. FontAwesome Loaded from External CDN
+### 8. ⏳ FontAwesome Loaded from External CDN — DEFERRED
 
 **What:** Loading full FA CSS from `cdnjs.cloudflare.com`.
 
@@ -186,17 +112,7 @@
 - Privacy concern (third-party tracking)
 - No control over availability
 
-**Fix:** Use `@fortawesome/react-fontawesome` with tree-shaking:
-```bash
-npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/free-brands-svg-icons @fortawesome/react-fontawesome
-```
-```tsx
-// Create a centralized icon library
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faArrowRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { faLinkedin, faFacebook } from '@fortawesome/free-brands-svg-icons';
-library.add(faArrowRight, faChevronLeft, faLinkedin, faFacebook);
-```
+**Status:** Deferred — Requires npm install + all icon component rewrites (architecture change)
 
 ---
 

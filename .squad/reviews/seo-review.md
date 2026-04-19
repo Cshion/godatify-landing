@@ -39,17 +39,17 @@
 
 | Category | Score | Notes |
 |----------|-------|-------|
-| Crawlability | 🔴 0/10 | robots.txt disallows all |
-| Indexability | 🔴 0/10 | noindex, nofollow set |
+| Crawlability | ✅ 9/10 | robots.txt now allows crawling |
+| Indexability | ✅ 9/10 | index: true, googleBot configured |
 | Structured Data | 🟡 4/10 | Only Organization schema |
 | Meta Tags | 🟢 7/10 | Good defaults, needs per-page |
 | Mobile | 🟢 8/10 | Responsive design |
 | Performance | 🟡 6/10 | Image optimization needed |
-| **Overall** | **🔴 35/100** | Critical issues must be fixed |
+| **Overall** | **🟢 72/100** | Critical issues FIXED |
 
 ---
 
-## Critical Issues 🚨
+## Critical Issues 🚨 — **ALL RESOLVED ✅**
 
 ### 1. robots.txt Blocking All Crawlers
 

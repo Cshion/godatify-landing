@@ -48,6 +48,21 @@
 
 **Mobile Patterns:**
 - Mobile menu is flat (no nested dropdowns unlike desktop)
+
+### 2026-04-18 — Critical Accessibility Fixes
+
+**Fixed Issues:**
+
+1. **Skip-to-Content Link** — Added in layout.tsx with proper sr-only + focus styles
+2. **FontAwesome Icons** — Added `aria-hidden="true"` to decorative icons, improved aria-labels on social links with screen reader text
+3. **Mobile Menu ARIA** — Added `aria-expanded`, `aria-controls`, and `aria-label` states; changed div to nav element
+4. **Dropdown Keyboard Access** — Added `:focus-within` CSS rule for keyboard navigation
+5. **Carousel Keyboard Navigation** — Added Arrow key handlers, `tabIndex`, `role="region"`, `aria-roledescription`
+6. **Testimonials Color Contrast** — Changed description color from #d1d5db to #ffffff for WCAG AA compliance
+7. **Focus States** — Added `:focus-visible` outlines to Header, Carousel, Services, Testimonials controls
+
+**Not Fixed (Architecture Change Required):**
+- FontAwesome CDN → tree-shaken package (requires npm install + all icon component rewrites)
 - Breakpoints: 768px (tablet), 1024px (desktop)
 - Stats grid: 3col → 1col (could use 2col on tablet)
 

@@ -86,4 +86,17 @@
     background: #9ca3af;
 }
 
+/* Focus states for keyboard navigation */
+.controlBtn:focus-visible,
+.dot:focus-visible {
+    outline: 2px solid #26a86f;
+    outline-offset: 2px;
+}
+
+.carouselContainer:focus-visible {
+    outline: 2px solid #26a86f;
+    outline-offset: 4px;
+    border-radius: 0.5rem;
+}
+
 /* Responsive adjustments if needed, though container relative % widths usually handle it */

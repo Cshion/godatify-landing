@@ -119,9 +119,9 @@ export default function Testimonials({ testimonials, carouselConfig, title, subt
           <button
             onClick={prevSlide}
             className={styles.carouselBtn}
-            aria-label="Previous slide"
+            aria-label="Testimonio anterior"
           >
-            <i className="fas fa-chevron-left" />
+            <i className="fas fa-chevron-left" aria-hidden="true" />
           </button>
 
           <div className={styles.dots}>
@@ -131,7 +131,7 @@ export default function Testimonials({ testimonials, carouselConfig, title, subt
                 onClick={() => goToPage(idx)}
                 className={`${styles.dot} ${currentPage === idx ? styles.active : ''
                   }`}
-                aria-label={`Go to page ${idx + 1}`}
+                aria-label={`Ir a página ${idx + 1}`}
               />
             ))}
           </div>
@@ -139,9 +139,9 @@ export default function Testimonials({ testimonials, carouselConfig, title, subt
           <button
             onClick={nextSlide}
             className={styles.carouselBtn}
-            aria-label="Next slide"
+            aria-label="Siguiente testimonio"
           >
-            <i className="fas fa-chevron-right" />
+            <i className="fas fa-chevron-right" aria-hidden="true" />
           </button>
         </div>
       </div>

@@ -24,7 +24,7 @@ export default async function Home() {
 
   return (
     <>
-      <main>
+      <main id="main-content">
         <Hero heroContent={hero} />
         <Nosotros
           stats={stats}

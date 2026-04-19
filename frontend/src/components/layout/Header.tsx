@@ -153,7 +153,9 @@ export default function Header({ navLinks, socialLinks, servicesNav, sectorsNav,
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={styles.menuToggle}
-              aria-label="Toggle menu"
+              aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               <span></span>
               <span></span>
@@ -165,13 +167,17 @@ export default function Header({ navLinks, socialLinks, servicesNav, sectorsNav,
         {/* Mobile Menu */}
         {
           isMobileMenuOpen && (
-            <div className={styles.mobileMenu}>
+            <nav
+              id="mobile-navigation"
+              className={styles.mobileMenu}
+              aria-label="Navegación móvil"
+            >
               {navLinks.map((link) => (
                 <Link key={link.href} href={link.href} className={styles.mobileLink}>
                   {link.label}
                 </Link>
               ))}
-            </div>
+            </nav>
           )
         }
       </header >
