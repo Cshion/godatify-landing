@@ -17,4 +17,41 @@
 
 ## Learnings
 
+### 2026-04-18 — Exploración de Arquitectura
+
+**Hallazgos clave:**
+
+1. **Arquitectura Headless CMS** — Frontend desacoplado de backend via REST/GraphQL. Strapi sirve contenido, Next.js lo renderiza.
+
+2. **Fallback Data Pattern** — El frontend tiene datos estáticos en `src/data/` que sirven como fallback si Strapi no responde. Útil para desarrollo independiente.
+
+3. **Content Type Structure:**
+   - **Collection Types:** service, case-study, blog-post, industry, sector, client, testimonial, author, social-link
+   - **Single Types:** company-info, home-page, about-page, contact-page, industries-page
+   - **Relaciones:** Sector → Industry → Case Study ← Client; Author → Blog Post
+
+4. **Database Strategy:**
+   - Desarrollo: SQLite (zero config)
+   - Producción: PostgreSQL
+   - Configuración automática via `DATABASE_CLIENT` env var
+
+5. **Media Storage:**
+   - Desarrollo: local (`public/uploads/`)
+   - Producción: AWS S3 (configurado en `config/plugins.ts`)
+   - Toggle via `DISABLE_S3=true` en desarrollo
+
+6. **API Library Pattern** (`frontend/src/lib/api.ts`)
+   - Centraliza todas las llamadas a Strapi
+   - Parallel fetching con `Promise.all()` para performance
+   - Fallback a datos estáticos en caso de error
+
+7. **Sin Docker** — El proyecto no usa Docker. Setup manual con Node.js >= 20.
+
+8. **Seed Data** — Datos de prueba disponibles en `backend/seed-data/` pero sin script automatizado de importación.
+
+**Áreas de mejora identificadas:**
+- [ ] Implementar ISR o cache tags para producción (actualmente `cache: 'no-store'`)
+- [ ] Crear script de seed automatizado para desarrollo
+- [ ] Documentar proceso de migración de base de datos
+
 <!-- Append new learnings here -->
