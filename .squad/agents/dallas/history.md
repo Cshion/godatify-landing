@@ -148,3 +148,9 @@ All TypeScript interfaces defined in `frontend/src/types/index.ts`:
 4. **Parallel fetching** - `Promise.all()` for multiple API calls
 5. **Graceful degradation** - API calls have try/catch with static fallbacks
 6. **Path alias** - `@/*` maps to `./src/*`
+
+### Developer Experience
+- **Makefile** at `frontend/Makefile` wraps npm scripts for faster CLI workflow
+- Run `make` or `make help` to see all available commands
+- Color-coded output for better terminal UX
+- Key targets: `install`, `dev`, `build`, `start`, `lint`, `clean`

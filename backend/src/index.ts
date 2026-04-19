@@ -225,12 +225,23 @@ export default {
         }
         console.log('[BOOTSTRAP] Sync complete.');
 
+        // ===================================================================
+        // SEEDING — ONLY IN NON-PRODUCTION ENVIRONMENTS
+        // ===================================================================
+        const isProduction = process.env.NODE_ENV === 'production';
+        
+        if (isProduction) {
+            console.warn('[SEED] ⚠️  SKIPPING ALL SEED OPERATIONS — Production environment detected');
+            console.warn('[SEED] NODE_ENV is "production". Seeding is disabled for safety.');
+            console.warn('[SEED] To seed data, run in development: NODE_ENV=development npm run dev');
+        } else {
+            console.log('[SEED] ✓ Non-production environment — seeding enabled');
 
-        // Seed paths
-        const MOCK_DATA_PATH = path.join(process.cwd(), 'seed-data', 'mock');
-        const MASTER_DATA_PATH = path.join(process.cwd(), 'seed-data', 'master');
-        console.log(`[BOOTSTRAP] Master Data Path: ${MASTER_DATA_PATH} `);
-        console.log(`[BOOTSTRAP] Mock Data Path: ${MOCK_DATA_PATH} `);
+            // Seed paths
+            const MOCK_DATA_PATH = path.join(process.cwd(), 'seed-data', 'mock');
+            const MASTER_DATA_PATH = path.join(process.cwd(), 'seed-data', 'master');
+            console.log(`[BOOTSTRAP] Master Data Path: ${MASTER_DATA_PATH} `);
+            console.log(`[BOOTSTRAP] Mock Data Path: ${MOCK_DATA_PATH} `);
 
         const seedCollection = async (uid: string, data: any[], uniqueField: string = 'id') => {
             console.log(`[SEED] Seeding ${uid} with upsert strategy (uniqueField: ${uniqueField})...`);
@@ -546,6 +557,7 @@ export default {
                 console.error('[SEED] Error seeding Mock Data:', error);
             }
         }
+        } // End of non-production seeding block
 
         // 3. Seed Permissions (Always, to ensure Public access)
         await seedPermissions();

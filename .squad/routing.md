@@ -12,6 +12,7 @@ How to decide who handles what.
 | SEO / Content | Kane | Meta tags, sitemap, structured data, copywriting |
 | Design / UI/UX | Brett | Visual design, accessibility, design system |
 | Security | Ash | Auth, validation, CORS, rate limiting, audits |
+| DevOps / Infra | Jonesy | AWS EC2, Docker, CI/CD, deployments, monitoring |
 | Code review | Ripley | Review PRs, check quality, suggest improvements |
 | Architecture | Ripley | System design, tech decisions, scope management |
 | Session logging | Scribe | Automatic — never needs routing |

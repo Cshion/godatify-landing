@@ -19,6 +19,7 @@
 | Kane | Content/SEO | [charter](.squad/agents/kane/charter.md) | 📝 Active |
 | Brett | Designer/UI | [charter](.squad/agents/brett/charter.md) | 🎨 Active |
 | Ash | Security | [charter](.squad/agents/ash/charter.md) | 🔒 Active |
+| Jonesy | DevOps | [charter](.squad/agents/jonesy/charter.md) | ⚙️ Active |
 | Scribe | Session Logger | [charter](.squad/agents/scribe/charter.md) | 📋 Active |
 | Ralph | Work Monitor | [charter](.squad/agents/ralph/charter.md) | 🔄 Active |
 

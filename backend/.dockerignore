@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Build outputs (will be rebuilt in container)
+.cache/
+build/
+dist/
+
+# Environment files (use Docker secrets or env vars)
+.env
+.env.*
+!.env.example
+
+# Development files
+.tmp/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+!README.md
+
+# Test files
+__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# Development database
+*.db
+
+# OS files
+.DS_Store
+Thumbs.db

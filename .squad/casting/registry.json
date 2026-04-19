@@ -48,6 +48,13 @@
       "created_at": "2026-04-18T00:00:00Z",
       "legacy_named": false,
       "status": "active"
+    },
+    "devops": {
+      "persistent_name": "Jonesy",
+      "universe": "Alien",
+      "created_at": "2026-04-18T00:00:00Z",
+      "legacy_named": false,
+      "status": "active"
     }
   }
 }

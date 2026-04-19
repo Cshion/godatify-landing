@@ -231,3 +231,110 @@ Required: `>=20.0.0 <=24.x.x`
 
 ---
 *Last updated: 2026-04-18 by Parker (Backend Dev)*
+
+### 2026-04-18 — Seed Data Validation Fix
+
+**Issue:** `YupValidationError: 3 errors occurred` when seeding mock data.
+
+**Root Cause:** Case studies in `seed-data/mock/cases.json` had **invalid industry values** that didn't match any industry in `seed-data/master/industries.json`.
+
+**Valid Industry Values:**
+| Slug | Title |
+|------|-------|
+| `cervecera` | Industria Cervecera |
+| `logistica` | Industria Logística |
+| `agricola` | Industria Agrícola |
+| `pesquera` | Industria Pesquera |
+
+**Cases Fixed:**
+
+1. **`kpis-npo`**: Changed `industry: "Business Analytics"` → `"Industria Cervecera"`
+2. **`optimizacion-riego`**: Changed `industry: "Retail"` → `"Industria Agrícola"` + added missing `description`, `challenge`, `solution` fields
+3. **`optimizacion-logistica`**: Changed `industry: "Logística"` → `"Industria Logística"` for consistency
+
+**Why Validation Failed:**
+
+The `case-study` schema has `industry` marked as **required: true**:
+```json
+"industry": {
+    "type": "relation",
+    "relation": "manyToOne",
+    "target": "api::industry.industry",
+    "required": true
+}
+```
+
+The seed logic in `src/index.ts` matches industries using:
+```javascript
+const relatedIndustry = allIndustries.find((ind: any) => 
+    ind.title.includes(caseData.industry) || 
+    ind.slug === caseData.industry.toLowerCase()
+);
+```
+
+When no industry matches, `industry: undefined` fails Yup validation.
+
+**Key Learnings:**
+
+1. **Always validate mock data against master data** — Ensure relation field values in mock data match valid entries in master data
+2. **Required relations cause validation failures** — If a relation is `required: true`, the referenced entity must exist
+3. **Industry matching is by title with `.includes()`** — Partial matches work, but exact industry titles are safer for clarity
+4. **Test seed data locally** — Run `npm run dev` and check bootstrap logs before committing mock data changes
+
+---
+
+### 2026-04-18 — Makefile & Production-Safe Seeding
+
+**Task:** Create Makefile for backend and ensure seed data only runs in non-production environments.
+
+**Changes Made:**
+
+#### 1. Created `backend/Makefile`
+
+| Target | Command | Description |
+|--------|---------|-------------|
+| `install` | `npm install` | Install dependencies |
+| `dev` | `npm run dev` | Start development server |
+| `build` | `npm run build` | Build for production |
+| `start` | `npm run start` | Start production server |
+| `clean` | `rm -rf node_modules .tmp dist` | Remove build artifacts |
+| `db-reset` | `rm -rf .tmp data.db` | Reset database (deletes all data) |
+| `db-seed` | `NODE_ENV=development npm run dev` | Run seed (forces dev mode) |
+| `db-fresh` | `db-reset` + `db-seed` | Fresh start |
+| `console` | `npm run console` | Strapi interactive REPL |
+| `upgrade` | `npx @strapi/upgrade latest` | Upgrade Strapi |
+| `help` | — | Show available commands |
+
+**Usage:** `cd backend && make help`
+
+#### 2. Updated `backend/src/index.ts` — Production-Safe Seeding
+
+**Previous behavior:**
+- Master data seeded **always** on bootstrap
+- Mock data seeded only when `NODE_ENV=development`
+
+**New behavior:**
+- **ALL seeding** (master + mock) is blocked when `NODE_ENV === 'production'`
+- Logs a warning if seeding is skipped due to production
+- Permissions, optimization indexes, and repair operations still run in all environments
+
+**Code structure:**
+```typescript
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction) {
+    console.warn('[SEED] ⚠️ SKIPPING ALL SEED OPERATIONS — Production environment detected');
+    console.warn('[SEED] To seed data, run: NODE_ENV=development npm run dev');
+} else {
+    console.log('[SEED] ✓ Non-production environment — seeding enabled');
+    // ... all seeding operations
+}
+```
+
+**Key Learnings:**
+
+1. **Explicit production check** — Use `NODE_ENV === 'production'` for critical safeguards, not just `!== 'development'` (handles edge cases like `test`, undefined, etc.)
+2. **Log when skipping** — Always log why an operation is skipped so operators understand the behavior
+3. **Provide recovery instructions** — Tell users how to seed if they need to: `NODE_ENV=development npm run dev`
+4. **Separate seeding from syncing** — Sync operations (Media URL, Relation Denormalization) should still run in production; only creation of new seed data should be blocked
+5. **Makefile targets for database ops** — `db-reset`, `db-seed`, `db-fresh` are essential for developer workflow

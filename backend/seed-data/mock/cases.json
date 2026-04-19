@@ -210,8 +210,8 @@
     {
         "slug": "kpis-npo",
         "title": "KPIs para ONGs (NPO)",
-        "industry": "Business Analytics",
-        "industryName": "Business Analytics",
+        "industry": "Industria Cervecera",
+        "industryName": "Industria Cervecera",
         "description": "Métricas de impacto social y transparencia financiera para organizaciones sin fines de lucro.",
         "challenge": "La ONG tenía dificultades para demostrar el impacto real de sus programas a los donantes debido a la dispersión de datos en múltiples hojas de cálculo.",
         "solution": "Plataforma unificada de gestión de proyectos sociales. Dashboards de transparencia que muestran en qué se invierte cada dólar y a cuántas personas beneficia.",
@@ -249,11 +249,14 @@
     {
         "slug": "optimizacion-riego",
         "title": "Optimización de Riego Inteligente",
-        "industry": "Retail",
-        "industryName": "Retail",
+        "industry": "Industria Agrícola",
+        "industryName": "Industria Agrícola",
+        "description": "Sistema inteligente de gestión de riego para optimizar el uso del agua y reducir costos operativos.",
+        "challenge": "Alto consumo de agua y falta de visibilidad sobre la eficiencia del riego en diferentes zonas del cultivo.",
+        "solution": "Implementación de sensores IoT y dashboards de Power BI para monitorear humedad del suelo y programar riego automático según necesidades reales.",
         "testimonialQuote": "Datify transformó nuestra forma de tomar decisiones. Ahora tenemos visibilidad total.",
         "testimonialAuthor": "María González",
-        "testimonialRole": "Gerente Comercial, Retail Corp",
+        "testimonialRole": "Gerente de Operaciones, AgroExport Peru",
         "testimonialAuthorImageUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",
         "testimonialLinkedIn": "https://linkedin.com",
         "relatedServices": [
@@ -262,17 +265,36 @@
         ],
         "techStack": [
             "Power BI",
-            "SQL Server",
+            "IoT Sensors",
             "Azure"
         ],
         "mainImageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
-        "clientName": "Retail Corp",
-        "clientLogoUrl": "https://ui-avatars.com/api/?name=Retail+Corp&background=0D8ABC&color=fff"
+        "client": "AgroExport Peru",
+        "clientName": "AgroExport Peru",
+        "clientLogoUrl": "https://placehold.co/200x80.png?text=AgroExport&font=roboto",
+        "results": [
+            {
+                "label": "Agua",
+                "value": "-30%",
+                "suffix": " Consumo"
+            },
+            {
+                "label": "Costos",
+                "value": "-20%",
+                "suffix": " Operativos"
+            },
+            {
+                "label": "Rendimiento",
+                "value": "+15%",
+                "suffix": " Cultivo"
+            }
+        ]
     },
     {
         "slug": "optimizacion-logistica",
         "title": "Optimización Logística IA",
-        "industry": "Logística",
+        "industry": "Industria Logística",
+        "industryName": "Industria Logística",
         "client": "LogiTrans",
         "description": "Reducción de costos de transporte mediante rutas optimizadas con IA.",
         "challenge": "Costos logísticos elevados y rutas ineficientes.",
