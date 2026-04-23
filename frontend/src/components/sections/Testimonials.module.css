@@ -89,7 +89,7 @@
     transform: translateY(0);
 
     /* Masking technique - Stacking multiple layers to boost alpha/opacity of the source image */
-    background-color: #2C4B31 !important;
+    background-color: var(--color-brand-green-dark) !important;
     mask-image: url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png');
     -webkit-mask-image: url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png');
     mask-size: contain;
@@ -189,8 +189,8 @@
 }
 
 .carouselBtn:hover:not(:disabled) {
-    background: #135c51;
-    border-color: #135c51;
+    background-color: var(--color-brand-green);
+    border-color: var(--color-brand-green);
     transform: scale(1.1);
 }
 

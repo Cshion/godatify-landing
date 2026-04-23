@@ -23,7 +23,7 @@
 .tag {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #135c51;
+    color: var(--color-brand-green);
     background: rgba(19, 92, 81, 0.1);
     padding: 0.35rem 1rem;
     border-radius: 9999px;
@@ -117,7 +117,7 @@
 .content h3 {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #135c51;
+    color: var(--color-brand-green);
     /* Green accent for h3 */
     margin-top: 2.5rem;
     margin-bottom: 1rem;
@@ -176,20 +176,20 @@
 
 /* Links inside content */
 .content a {
-    color: #135c51;
+    color: var(--color-brand-green);
     text-decoration: underline;
     font-weight: 500;
 }
 
 .content a:hover {
-    color: #135c51;
+    color: var(--color-brand-green-dark);
 }
 
 .backLink {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: #135c51;
+    color: var(--color-brand-green);
     font-weight: 600;
     margin-bottom: 2rem;
     transition: transform 0.2s;

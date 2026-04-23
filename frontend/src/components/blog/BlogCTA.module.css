@@ -1,5 +1,5 @@
 .cta {
-    background: linear-gradient(135deg, #135c51 0%, #135c51 100%);
+    background-color: var(--color-brand-green);
     border-radius: 1.5rem;
     padding: 4rem 2rem;
     display: flex;
@@ -55,7 +55,7 @@
 .button {
     display: inline-block;
     background: var(--color-white);
-    color: #135c51 !important;
+    color: var(--color-brand-green) !important;
     /* Force color over prose a */
     padding: 1.25rem 3.5rem;
     border-radius: 9999px;

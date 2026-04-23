@@ -16,7 +16,6 @@
     content: '';
     position: absolute;
     inset: 0;
-    /* Default to variable or fallback */
     background-image: var(--hero-bg-image, url('/images/hero-bg.jpg'));
     background-size: cover;
     background-position: center;
