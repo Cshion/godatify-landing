@@ -36,8 +36,8 @@
     height: 48px;
     border-radius: 50%;
     background: transparent;
-    border: 2px solid #1C7C54;
-    color: #1C7C54;
+    border: 2px solid #135c51;
+    color: #135c51;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -47,8 +47,8 @@
 }
 
 .controlBtn:hover:not(:disabled) {
-    background: #1C7C54;
-    color: white;
+    background: #135c51;
+    color: var(--color-white);
     transform: scale(1.1);
 }
 
@@ -75,10 +75,23 @@
     cursor: pointer;
     transition: all 0.3s ease;
     padding: 0;
+    position: relative;
+}
+
+/* Accessible touch target - 44px minimum */
+.dot::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
 }
 
 .dot.active {
-    background: #1C7C54;
+    background: #135c51;
     transform: scale(1.2);
 }
 
@@ -89,12 +102,12 @@
 /* Focus states for keyboard navigation */
 .controlBtn:focus-visible,
 .dot:focus-visible {
-    outline: 2px solid #26a86f;
+    outline: 2px solid #1C7C54;
     outline-offset: 2px;
 }
 
 .carouselContainer:focus-visible {
-    outline: 2px solid #26a86f;
+    outline: 2px solid #1C7C54;
     outline-offset: 4px;
     border-radius: 0.5rem;
 }

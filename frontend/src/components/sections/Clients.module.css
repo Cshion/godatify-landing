@@ -1,5 +1,5 @@
 .clientsSection {
-    background-color: white;
+    background-color: var(--color-white);
     padding: var(--space-20) 0;
     border-top: 1px solid var(--color-gray-100);
     overflow: hidden;

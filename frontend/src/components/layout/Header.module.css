@@ -54,7 +54,7 @@
 .navLink {
     font-size: 1.2rem;
     font-weight: 600;
-    color: white;
+    color: var(--color-white);
     transition: color 0.3s ease;
     text-decoration: none;
     display: flex;
@@ -66,7 +66,7 @@
 }
 
 .navLink:hover {
-    color: #26a86f;
+    color: #1C7C54;
 }
 
 .dropdown {
@@ -85,7 +85,7 @@
     left: 0;
     margin-top: 0.5rem;
     min-width: 16rem;
-    background: white;
+    background: var(--color-white);
     border-radius: 0.75rem;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     opacity: 0;
@@ -119,7 +119,7 @@
 
 .dropdownItem:hover {
     background: #f9fafb;
-    color: #1C7C54;
+    color: #135c51;
 }
 
 .ctaWrapper {
@@ -139,7 +139,7 @@
     justify-content: center;
     background-color: transparent;
     border: 1px solid white;
-    color: white;
+    color: var(--color-white);
     padding: 0.75rem 2rem;
     border-radius: 9999px;
     font-weight: 600;
@@ -184,21 +184,21 @@
 }
 
 .header.scrolled .contactCta {
-    background-color: #1C7C54;
-    border-color: #1C7C54;
-    color: white;
+    background-color: #135c51;
+    border-color: #135c51;
+    color: var(--color-white);
 }
 
 .contactCta:hover {
-    background-color: white;
-    color: #1C7C54;
+    background-color: var(--color-white);
+    color: #135c51;
     transform: translateY(-2px);
 }
 
 .header.scrolled .contactCta:hover {
-    background-color: #0f4a41;
-    border-color: #0f4a41;
-    color: white;
+    background-color: #0e4a42;
+    border-color: #0e4a42;
+    color: var(--color-white);
 }
 
 .menuToggle {
@@ -220,7 +220,7 @@
 .menuToggle span {
     width: 2rem;
     height: 2px;
-    background: white;
+    background: var(--color-white);
     transition: background 0.3s ease;
 }
 
@@ -230,7 +230,7 @@
 
 .mobileMenu {
     display: block;
-    background: white;
+    background: var(--color-white);
     border-top: 1px solid #e5e7eb;
     padding: 1rem 0;
 }
@@ -250,7 +250,7 @@
 }
 
 .mobileLink:hover {
-    color: #1C7C54;
+    color: #135c51;
     background: #f9fafb;
 }
 
@@ -260,12 +260,12 @@
 .dropdownToggle:focus-visible,
 .dropdownItem:focus-visible,
 .mobileLink:focus-visible {
-    outline: 2px solid #26a86f;
+    outline: 2px solid #1C7C54;
     outline-offset: 2px;
 }
 
 .menuToggle:focus-visible {
-    outline: 2px solid #26a86f;
+    outline: 2px solid #1C7C54;
     outline-offset: 2px;
     border-radius: 4px;
 }
@@ -292,12 +292,12 @@
 }
 
 .mobileDropdownToggle:hover {
-    color: #1C7C54;
+    color: #135c51;
     background: #f9fafb;
 }
 
 .mobileDropdownToggle:focus-visible {
-    outline: 2px solid #26a86f;
+    outline: 2px solid #1C7C54;
     outline-offset: -2px;
 }
 
@@ -320,7 +320,7 @@
     padding: 0.5rem 2rem;
     font-size: 0.75rem;
     font-weight: 700;
-    color: #1C7C54;
+    color: #135c51;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -335,12 +335,12 @@
 }
 
 .mobileSubmenuLink:hover {
-    color: #1C7C54;
+    color: #135c51;
     background: #e5e7eb;
 }
 
 .mobileSubmenuLink:focus-visible {
-    outline: 2px solid #26a86f;
+    outline: 2px solid #1C7C54;
     outline-offset: -2px;
 }
 
@@ -348,8 +348,8 @@
     display: block;
     margin: 1rem 1.5rem;
     padding: 0.75rem 1.5rem;
-    background: #1C7C54;
-    color: white;
+    background: #135c51;
+    color: var(--color-white);
     text-align: center;
     border-radius: 9999px;
     font-weight: 600;
@@ -362,6 +362,6 @@
 }
 
 .mobileCta:focus-visible {
-    outline: 2px solid #26a86f;
+    outline: 2px solid #1C7C54;
     outline-offset: 2px;
 }

@@ -75,15 +75,6 @@ export default function PageHero({ title, subtitle, backgroundImage = '/images/h
                 '--hero-bg-image': `url('${backgroundImage}')`
             } as React.CSSProperties}
         >
-            {/* Animated Particles */}
-            <div className={styles.particles}>
-                <div className={styles.particle}></div>
-                <div className={styles.particle}></div>
-                <div className={styles.particle}></div>
-                <div className={styles.particle}></div>
-                <div className={styles.particle}></div>
-            </div>
-
             {/* Background Effects */}
             <div className={styles.gridOverlay}></div>
 

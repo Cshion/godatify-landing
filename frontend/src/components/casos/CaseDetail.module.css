@@ -1,6 +1,6 @@
 .detailSection {
     padding: var(--space-24) 0;
-    background-color: white;
+    background-color: var(--color-white);
 }
 
 .container {
@@ -80,7 +80,7 @@
 }
 
 .resultsCard {
-    background: white;
+    background: var(--color-white);
     padding: var(--space-8);
     border-radius: var(--space-4);
     border: 1px solid var(--color-gray-200);
@@ -170,7 +170,7 @@
 
 .techTag {
     padding: var(--space-2) var(--space-4);
-    background: white;
+    background: var(--color-white);
     border: 1px solid var(--color-gray-200);
     border-radius: var(--space-2);
     font-size: var(--font-size-sm);

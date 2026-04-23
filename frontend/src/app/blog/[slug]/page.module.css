@@ -2,7 +2,7 @@
     padding-top: 8rem;
     /* Header clearance */
     padding-bottom: 6rem;
-    background: #ffffff;
+    background: var(--color-white);
 }
 
 .hero {
@@ -23,8 +23,8 @@
 .tag {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #1C7C54;
-    background: rgba(28, 124, 84, 0.1);
+    color: #135c51;
+    background: rgba(19, 92, 81, 0.1);
     padding: 0.35rem 1rem;
     border-radius: 9999px;
     text-transform: uppercase;
@@ -117,7 +117,7 @@
 .content h3 {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #1C7C54;
+    color: #135c51;
     /* Green accent for h3 */
     margin-top: 2.5rem;
     margin-bottom: 1rem;
@@ -134,17 +134,27 @@
 }
 
 .content blockquote {
-    border-left: 4px solid #1C7C54;
-    padding-left: 1.5rem;
+    position: relative;
     margin: 2rem 0;
     font-style: italic;
-    color: #374151;
+    color: var(--color-gray-700);
     font-size: 1.25rem;
-    /* Adjusted for better flow */
-    background: #f0fdf4;
-    /* Very light green bg */
-    padding: 2rem;
-    border-radius: 0 1rem 1rem 0;
+    background: oklch(97% 0.02 160);
+    padding: 2rem 2rem 2rem 3rem;
+    border-radius: 1rem;
+}
+
+.content blockquote::before {
+    content: '"';
+    position: absolute;
+    left: 0.75rem;
+    top: 0.5rem;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-brand-green);
+    opacity: 0.4;
+    line-height: 1;
+    font-family: Georgia, serif;
 }
 
 .content ul {
@@ -166,20 +176,20 @@
 
 /* Links inside content */
 .content a {
-    color: #1C7C54;
+    color: #135c51;
     text-decoration: underline;
     font-weight: 500;
 }
 
 .content a:hover {
-    color: #0f4a41;
+    color: #135c51;
 }
 
 .backLink {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: #1C7C54;
+    color: #135c51;
     font-weight: 600;
     margin-bottom: 2rem;
     transition: transform 0.2s;

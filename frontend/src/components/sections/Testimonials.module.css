@@ -13,12 +13,12 @@
     right: 0;
     bottom: 0;
     /* Adding a gradient overlay for depth, staying in the green family */
-    background: linear-gradient(135deg, rgba(19, 92, 81, 0.9) 0%, rgba(28, 124, 84, 0.8) 100%);
+    background: linear-gradient(135deg, rgba(19, 92, 81, 0.9) 0%, rgba(19, 92, 81, 0.8) 100%);
     z-index: 0;
 }
 
 .subtitle {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 0.875rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -28,14 +28,14 @@
 }
 
 .title {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 3rem;
     font-weight: 800;
     margin-bottom: 1rem;
 }
 
 .description {
-    color: #ffffff; /* Fixed: WCAG AA compliant contrast on green background */
+    color: var(--color-white); /* Fixed: WCAG AA compliant contrast on green background */
     max-width: 600px;
     margin: 0 auto;
     font-size: 1rem;
@@ -69,7 +69,7 @@
     /* Adjust for gap */
     width: 100%;
     /* Ensure width fills flex basis */
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--color-white);
     border-radius: 1rem;
     padding: 2rem 1.5rem;
     /* Reduced padding from 3rem 2rem */
@@ -78,7 +78,7 @@
     display: flex;
     flex-direction: column;
     /* height: 100%; removed to allow flex stretch to control height */
-    backdrop-filter: blur(10px);
+    border: 1px solid rgba(19, 92, 81, 0.08);
 }
 
 .quoteIcon {
@@ -178,7 +178,7 @@
     height: 48px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
-    color: white;
+    color: var(--color-white);
     border: 2px solid rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
@@ -189,8 +189,8 @@
 }
 
 .carouselBtn:hover:not(:disabled) {
-    background: #1C7C54;
-    border-color: #1C7C54;
+    background: #135c51;
+    border-color: #135c51;
     transform: scale(1.1);
 }
 
@@ -217,10 +217,23 @@
     cursor: pointer;
     transition: all 0.3s ease;
     padding: 0;
+    position: relative;
+}
+
+/* Accessible touch target - 44px minimum */
+.dot::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
 }
 
 .dot.active {
-    background: #ffffff;
+    background: var(--color-white);
     transform: scale(1.2);
 }
 
@@ -231,7 +244,7 @@
 /* Focus states for keyboard navigation */
 .carouselBtn:focus-visible,
 .dot:focus-visible {
-    outline: 2px solid #ffffff;
+    outline: 2px solid var(--color-white);
     outline-offset: 2px;
 }
 

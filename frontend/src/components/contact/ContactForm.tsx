@@ -12,16 +12,35 @@ interface ContactFormProps {
 
 export default function ContactForm({ title, subtitle, labels }: ContactFormProps) {
     const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus('submitting');
+        setErrorMessage('');
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        try {
+            // Simulate API call
+            await new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    // Simulate occasional error for demo (remove in production)
+                    if (Math.random() < 0.1) {
+                        reject(new Error('Network error'));
+                    }
+                    resolve(true);
+                }, 1500);
+            });
 
-        setStatus('success');
-        // Reset form or redirect logic here
+            setStatus('success');
+        } catch {
+            setStatus('error');
+            setErrorMessage('Hubo un problema al enviar tu mensaje. Por favor, intenta de nuevo.');
+        }
+    };
+
+    const handleRetry = () => {
+        setStatus('idle');
+        setErrorMessage('');
     };
 
     return (
@@ -58,14 +77,28 @@ export default function ContactForm({ title, subtitle, labels }: ContactFormProp
 
                 <div className={styles.submitWrapper}>
                     <button
-                        type="submit"
-                        className={`${styles.submitButton} ${status === 'submitting' ? styles.loading : ''} ${status === 'success' ? styles.success : ''}`}
-                        disabled={status !== 'idle'}
+                        type={status === 'error' ? 'button' : 'submit'}
+                        onClick={status === 'error' ? handleRetry : undefined}
+                        className={`${styles.submitButton} ${status === 'submitting' ? styles.loading : ''} ${status === 'success' ? styles.success : ''} ${status === 'error' ? styles.error : ''}`}
+                        disabled={status === 'submitting'}
                     >
                         {status === 'idle' && labels.submit}
                         {status === 'submitting' && 'Enviando...'}
                         {status === 'success' && '¡Mensaje Enviado!'}
+                        {status === 'error' && 'Reintentar'}
                     </button>
+                    
+                    {/* Error message */}
+                    {status === 'error' && errorMessage && (
+                        <p className={styles.errorMessage}>{errorMessage}</p>
+                    )}
+                    
+                    {/* Reassurance copy */}
+                    {status === 'idle' && (
+                        <p className={styles.reassurance}>
+                            Respondemos en menos de 24 horas. Sin spam, sin compromiso.
+                        </p>
+                    )}
                 </div>
             </form>
         </div>

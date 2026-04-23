@@ -44,3 +44,51 @@ If you make a decision that affects other team members, write it to:
 .squad/decisions/inbox/copilot-{brief-slug}.md
 ```
 The Scribe will merge it into the shared decisions file.
+
+---
+
+## Design Context
+
+### Users
+
+**Primary audience:** Decision-makers at Latin American enterprises — CTOs, CDOs, data managers, and operations directors in brewing, logistics, agriculture, and fishing industries.
+
+**Context of use:** Evaluating potential partners for data transformation projects. Usually during work hours, on desktop, comparing multiple vendors. They need to quickly understand capabilities, see evidence of results, and feel confident this team handles enterprise complexity.
+
+**Job to be done:** "I need to modernize our data infrastructure and analytics capabilities. Is Datify the right strategic partner? Can they handle our scale and industry-specific challenges?"
+
+### Brand Personality
+
+**Three words:** Estratégico, Premium, Experto
+
+**Voice:** Authoritative but approachable. Speaks as a trusted advisor, not a vendor. Confident expertise without arrogance. Uses clear language that respects the intelligence of business leaders.
+
+**Tone:** Professional gravitas with warmth. Not cold or corporate-speak, but not startup-casual either. Think: experienced consultant who has seen it all and knows exactly how to help.
+
+**Emotional goal:** Visitors should feel **Confianza y Seguridad** — "These are serious professionals who understand enterprise complexity and will deliver results."
+
+### Aesthetic Direction
+
+**Visual tone:** Premium consultancy — refined, purposeful, confident. Every element should feel deliberate and polished, not decorated.
+
+**Reference:** [DataArt](https://www.dataart.com/es) — Clean hierarchy, enterprise credibility through testimonials and case studies, partner showcases, awards. Professional photography. Clear service articulation.
+
+**Anti-references:**
+- NOT a "typical tech startup" — no gradients-everywhere, no playful illustrations, no "we're disrupting X" energy
+- NOT a "boring consultancy" — no stock photos of handshakes, no walls of text, no generic corporate blue
+
+**Theme:** Light mode. The teal brand color (#135c51) should feel grounded and trustworthy, not trendy.
+
+**Color guidance:** The deep teal (#135c51) conveys calm expertise and stability. Use it for emphasis, not saturation. Let generous whitespace breathe. Neutrals should be warm-tinted toward the brand hue.
+
+### Design Principles
+
+1. **Evidence over claims.** Show results (metrics, case studies, client logos) rather than making abstract promises. Enterprise buyers need proof.
+
+2. **Hierarchy through restraint.** Create visual importance through strategic use of space and typography weights, not through decoration or color saturation.
+
+3. **Industry fluency.** The design should signal deep sector knowledge — brewing, logistics, agriculture, fishing. These buyers need to see their world reflected.
+
+4. **Premium without pretension.** Confidence, not showing off. The work speaks for itself.
+
+5. **Accessible by default.** WCAG AA compliance. Enterprise clients often have accessibility mandates.

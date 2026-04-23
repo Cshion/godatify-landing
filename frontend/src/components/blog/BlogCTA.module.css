@@ -1,5 +1,5 @@
 .cta {
-    background: linear-gradient(135deg, #1C7C54 0%, #115e3e 100%);
+    background: linear-gradient(135deg, #135c51 0%, #135c51 100%);
     border-radius: 1.5rem;
     padding: 4rem 2rem;
     display: flex;
@@ -7,13 +7,13 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: #ffffff;
+    color: var(--color-white);
     margin: 8rem 0 4rem 0;
     /* Let parent control margin */
     width: 100%;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(28, 124, 84, 0.2);
+    box-shadow: 0 20px 40px rgba(19, 92, 81, 0.2);
 }
 
 .cta::before {
@@ -38,7 +38,7 @@
     padding-bottom: 0 !important;
     margin-top: 0 !important;
     /* Reset prose margin */
-    color: #ffffff !important;
+    color: var(--color-white) !important;
 }
 
 .description {
@@ -54,8 +54,8 @@
 
 .button {
     display: inline-block;
-    background: white;
-    color: #1C7C54 !important;
+    background: var(--color-white);
+    color: #135c51 !important;
     /* Force color over prose a */
     padding: 1.25rem 3.5rem;
     border-radius: 9999px;

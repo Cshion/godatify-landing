@@ -16,7 +16,7 @@
 }
 
 .card {
-    background: white;
+    background: var(--color-white);
     border-radius: var(--space-4);
     overflow: hidden;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -64,7 +64,7 @@
 }
 
 .viewButton {
-    background: white;
+    background: var(--color-white);
     color: var(--color-gray-900);
     padding: var(--space-3) var(--space-6);
     border-radius: 9999px;

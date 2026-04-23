@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Godatify Brand Colors */
-  --color-brand-green: #1C7C54;
-  --color-brand-green-light: #26a86f;
-  --color-brand-green-dark: #135c51;
+  /* Godatify Brand Colors - Primary: #135c51 */
+  --color-brand-green: #135c51;
+  --color-brand-green-light: #1C7C54;
+  --color-brand-green-dark: #0e4a42;
 
   /* Neutral Colors */
   --color-white: #ffffff;
@@ -252,10 +252,10 @@ img {
     --color-text-secondary: #cbd5e1;
     --color-text-muted: #94a3b8;
     
-    /* Brand colors remain the same for consistency */
-    --color-brand-green: #26a86f;
-    --color-brand-green-light: #34d399;
-    --color-brand-green-dark: #1C7C54;
+    /* Brand colors - slightly brighter for dark mode visibility */
+    --color-brand-green: #1C7C54;
+    --color-brand-green-light: #26a86f;
+    --color-brand-green-dark: #135c51;
     
     /* Borders */
     --color-border: #334155;

@@ -1,5 +1,5 @@
 .container {
-    background: #ffffff;
+    background: var(--color-white);
     border-radius: 1.5rem;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -61,7 +61,7 @@
 
 .label {
     display: inline-block;
-    color: #1C7C54;
+    color: #135c51;
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -112,8 +112,8 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: #ffffff;
-    background: #1C7C54;
+    color: var(--color-white);
+    background: #135c51;
     padding: 0.75rem 1.5rem;
     border-radius: 9999px;
     font-weight: 600;
@@ -122,6 +122,6 @@
 }
 
 .readMore:hover {
-    background: #0f4a41;
+    background: #135c51;
     transform: translateX(5px);
 }

@@ -72,8 +72,8 @@
 .submitButton {
     background-color: var(--color-brand-green);
     /* Fallback */
-    background-color: #1C7C54;
-    color: white;
+    background-color: #135c51;
+    color: var(--color-white);
     padding: 1rem 3rem;
     border-radius: 9999px;
     font-weight: 600;
@@ -83,7 +83,7 @@
 }
 
 .submitButton:hover {
-    background-color: #0f4a41;
+    background-color: #135c51;
     /* Darker primary */
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(19, 92, 81, 0.3);
@@ -98,4 +98,28 @@
     background-color: #10b981;
     /* Green */
     pointer-events: none;
+}
+
+.error {
+    background-color: #dc2626;
+    /* Red */
+}
+
+.error:hover {
+    background-color: #b91c1c;
+}
+
+.errorMessage {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.75rem;
+    text-align: center;
+}
+
+.reassurance {
+    color: var(--color-gray-500);
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    text-align: center;
+    font-style: italic;
 }
