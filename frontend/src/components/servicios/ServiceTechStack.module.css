@@ -1,8 +1,7 @@
 .section {
     padding: 80px 0;
-    background-color: var(--color-brand-green-dark);
-    /* Brand Dark Green */
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--color-gray-50);
+    border-top: 1px solid var(--color-gray-200);
 }
 
 .container {
@@ -20,7 +19,7 @@
     font-family: var(--font-heading);
     font-size: 2rem;
     font-weight: 700;
-    color: var(--color-white);
+    color: var(--color-gray-900);
 }
 
 .grid {
@@ -36,27 +35,29 @@
     align-items: center;
     gap: 1rem;
     padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
     border-radius: 1rem;
     min-width: 140px;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .techCard:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--color-white);
     transform: translateY(-5px);
-    border-color: var(--color-brand-green-light);
+    border-color: var(--color-brand-green);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .iconWrapper {
     font-size: 2.5rem;
-    color: var(--color-brand-green-light);
+    color: var(--color-brand-green);
 }
 
 .techName {
     font-family: var(--font-primary);
-    color: var(--color-gray-100);
+    color: var(--color-gray-700);
     font-weight: 500;
     font-size: 1rem;
 }
