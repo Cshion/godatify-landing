@@ -7,6 +7,7 @@ import ServiceTechStack from '@/components/servicios/ServiceTechStack';
 import CasesGrid from '@/components/casos/CasesGrid';
 import { Metadata } from 'next';
 import { generateServiceSchema, generateBreadcrumbSchema } from '@/lib/schemas';
+import styles from './page.module.css';
 
 // Generate static params for all services
 export async function generateStaticParams() {
@@ -76,7 +77,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                 phrases={service.phrases}
                 backgroundImage={service.backgroundImage}
             />
-            <div className="container mx-auto px-6 py-16">
+            <div className={styles.container}>
 
                 <ServiceFeatures features={service.features} />
 
@@ -86,20 +87,20 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             </div>
 
             {relatedCases.length > 0 && (
-                <div className="bg-gray-50 py-20 border-t border-gray-200">
-                    <div className="container mx-auto px-6 mb-12 text-center">
-                        <span className="text-brand-green font-semibold tracking-wider uppercase text-sm mb-2 block">
+                <section className={styles.relatedSection}>
+                    <div className={styles.relatedHeader}>
+                        <span className={styles.relatedLabel}>
                             Resultados Reales
                         </span>
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                        <h2 className={styles.relatedTitle}>
                             Casos de Éxito Relacionados
                         </h2>
-                        <p className="text-gray-600 max-w-2xl mx-auto">
+                        <p className={styles.relatedDescription}>
                             Descubre cómo hemos aplicado estas soluciones en empresas reales para generar valor tangible.
                         </p>
                     </div>
-                    <CasesGrid cases={relatedCases} initialTotal={relatedCases.length} />
-                </div>
+                    <CasesGrid cases={relatedCases} initialTotal={relatedCases.length} standalone={false} />
+                </section>
             )}
         </main>
     );

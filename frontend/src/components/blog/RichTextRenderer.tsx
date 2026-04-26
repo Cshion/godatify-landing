@@ -13,7 +13,7 @@ export default function RichTextRenderer({ content }: RichTextRendererProps) {
 
     // Fallback for string content
     if (typeof content === 'string') {
-        return <div dangerouslySetInnerHTML={{ __html: content }} className="prose max-w-none text-gray-700" />;
+        return <div dangerouslySetInnerHTML={{ __html: content }} />;
     }
 
     // Ensure array for BlocksRenderer
@@ -22,7 +22,7 @@ export default function RichTextRenderer({ content }: RichTextRendererProps) {
     }
 
     return (
-        <div className="prose max-w-none text-gray-700">
+        <div>
             <BlocksRenderer
                 content={content}
                 blocks={{
@@ -34,24 +34,45 @@ export default function RichTextRenderer({ content }: RichTextRendererProps) {
                             : `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}${image.url}`;
 
                         return (
-                            <div className="my-8 relative w-full h-[400px] rounded-lg overflow-hidden">
-                                <Image
-                                    src={imageUrl}
-                                    alt={image.alternativeText || ''}
-                                    fill
-                                    className="object-cover"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                />
+                            <figure style={{ margin: 'var(--space-10) 0' }}>
+                                <div style={{ 
+                                    position: 'relative', 
+                                    width: '100%', 
+                                    aspectRatio: '16/10',
+                                    borderRadius: 'var(--space-3)',
+                                    overflow: 'hidden'
+                                }}>
+                                    <Image
+                                        src={imageUrl}
+                                        alt={image.alternativeText || ''}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        sizes="(max-width: 768px) 100vw, 720px"
+                                    />
+                                </div>
                                 {image.caption && (
-                                    <div className="absolute bottom-0 left-0 w-full bg-black/50 p-2 text-white text-sm text-center">
+                                    <figcaption style={{
+                                        marginTop: 'var(--space-3)',
+                                        fontSize: 'var(--font-size-sm)',
+                                        color: 'var(--color-gray-500)',
+                                        textAlign: 'center'
+                                    }}>
                                         {image.caption}
-                                    </div>
+                                    </figcaption>
                                 )}
-                            </div>
+                            </figure>
                         );
                     },
                     link: ({ children, url }) => (
-                        <Link href={url} className="text-brand-green hover:underline font-medium">
+                        <Link 
+                            href={url} 
+                            style={{
+                                color: 'var(--color-brand-green)',
+                                textDecoration: 'underline',
+                                textUnderlineOffset: '2px',
+                                fontWeight: 500
+                            }}
+                        >
                             {children}
                         </Link>
                     ),

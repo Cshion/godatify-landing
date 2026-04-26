@@ -97,17 +97,17 @@ export default async function BlogPostPage({ params }: Props) {
                                     className={styles.authorImage}
                                 />
                             ) : (
-                                <div className="w-12 h-12 rounded-full bg-gray-200" />
+                                <div className={styles.authorPlaceholder} />
                             )}
                             <div>
                                 <span className={styles.authorName}>{post.author.name}</span>
                                 <span className={styles.authorRole}>{post.author.role}</span>
                             </div>
                         </div>
-                        <div className="hidden md:block w-px h-8 bg-gray-200"></div>
-                        <div>
-                            <span className="block font-semibold text-gray-900">{BLOG_STATIC_DATA.detail.published}</span>
-                            <span>{formatDate(post.date)} &nbsp;&nbsp;·&nbsp;&nbsp; {post.readingTime} {BLOG_STATIC_DATA.detail.readingTime}</span>
+                        <div className={styles.metaDivider}></div>
+                        <div className={styles.dateInfo}>
+                            <span className={styles.dateLabel}>{BLOG_STATIC_DATA.detail.published}</span>
+                            <span className={styles.dateValue}>{formatDate(post.date)} · {post.readingTime} {BLOG_STATIC_DATA.detail.readingTime}</span>
                         </div>
                     </div>
                 </header>
@@ -143,19 +143,19 @@ export default async function BlogPostPage({ params }: Props) {
                 />
 
 
-                <div className={`${styles.content} prose max-w-none`}>
+                <div className={styles.content}>
                     <RichTextRenderer content={post.content} />
-                    <div className="mt-20">
+                    <div className={styles.ctaWrapper}>
                         <BlogCTA />
                     </div>
                 </div>
 
                 {relatedPosts.length > 0 && (
-                    <div className="mt-20 pt-10 border-t border-gray-100">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-8">{BLOG_STATIC_DATA.related.title}</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className={styles.relatedSection}>
+                        <h2 className={styles.relatedTitle}>{BLOG_STATIC_DATA.related.title}</h2>
+                        <div className={styles.relatedGrid}>
                             {relatedPosts.map((relatedPost) => (
-                                <div key={relatedPost.id} className="h-full">
+                                <div key={relatedPost.id} className={styles.relatedCardWrapper}>
                                     <BlogCard post={relatedPost} />
                                 </div>
                             ))}

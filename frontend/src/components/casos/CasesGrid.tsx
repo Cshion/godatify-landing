@@ -11,11 +11,12 @@ import { getMoreCases } from '@/app/actions/cases';
 interface CasesGridProps {
     cases: CaseStudy[];
     initialTotal: number;
+    standalone?: boolean; // When true, adds padding/background; false for embedded use
 }
 
 const BATCH_SIZE = 6;
 
-export default function CasesGrid({ cases: initialCases, initialTotal }: CasesGridProps) {
+export default function CasesGrid({ cases: initialCases, initialTotal, standalone = true }: CasesGridProps) {
     const [items, setItems] = useState<CaseStudy[]>(initialCases);
     const [hasMore, setHasMore] = useState(initialCases.length < initialTotal);
     const loadingRef = useRef(false);
@@ -78,7 +79,7 @@ export default function CasesGrid({ cases: initialCases, initialTotal }: CasesGr
     }, [items, hasMore]);
 
     return (
-        <section className={styles.gridSection}>
+        <section className={standalone ? styles.gridSectionStandalone : styles.gridSection}>
             <div className={styles.container}>
                 <div className={styles.grid}>
                     {items.map((caseStudy) => (

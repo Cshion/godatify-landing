@@ -1,0 +1,76 @@
+/* Services Detail Page - CSS Module */
+
+.container {
+    width: 100%;
+    max-width: var(--container-max-width, 1200px);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+/* Related Cases Section */
+.relatedSection {
+    background-color: var(--color-gray-50);
+    padding: var(--space-16) 0;
+    border-top: 1px solid var(--color-gray-200);
+}
+
+.relatedHeader {
+    width: 100%;
+    max-width: var(--container-max-width, 1200px);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    margin-bottom: var(--space-12);
+    text-align: center;
+}
+
+.relatedLabel {
+    display: block;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-brand-green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+}
+
+.relatedTitle {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin-bottom: var(--space-4);
+}
+
+.relatedDescription {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    color: var(--color-gray-600);
+    max-width: 42rem;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 var(--space-4);
+    }
+
+    .relatedSection {
+        padding: var(--space-16) 0;
+    }
+
+    .relatedHeader {
+        padding: 0 var(--space-4);
+        margin-bottom: var(--space-8);
+    }
+
+    .relatedTitle {
+        font-size: var(--font-size-2xl);
+    }
+
+    .relatedDescription {
+        font-size: var(--font-size-sm);
+    }
+}

@@ -1,7 +1,6 @@
 .section {
-    padding: var(--space-20) 0;
+    padding: var(--space-12) 0 var(--space-16) 0;
     background-color: var(--color-gray-50);
-    border-top: 1px solid var(--color-gray-200);
 }
 
 .container {
@@ -12,12 +11,12 @@
 
 .header {
     text-align: center;
-    margin-bottom: var(--space-16);
+    margin-bottom: var(--space-10);
 }
 
 .title {
     font-family: var(--font-heading);
-    font-size: 2rem;
+    font-size: var(--font-size-2xl);
     font-weight: 700;
     color: var(--color-gray-900);
 }
@@ -25,7 +24,7 @@
 .grid {
     display: flex;
     justify-content: center;
-    gap: 3rem;
+    gap: var(--space-12);
     flex-wrap: wrap;
 }
 
@@ -33,8 +32,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    padding: 1.5rem;
+    gap: var(--space-4);
+    padding: var(--space-6);
     background: var(--color-white);
     border: 1px solid var(--color-gray-200);
     border-radius: 1rem;
@@ -51,13 +50,13 @@
 }
 
 .iconWrapper {
-    font-size: 2.5rem;
+    font-size: var(--font-size-4xl);
     color: var(--color-brand-green);
 }
 
 .techName {
     font-family: var(--font-primary);
-    color: var(--color-gray-700);
-    font-weight: 500;
-    font-size: 1rem;
+    color: var(--color-gray-800);
+    font-weight: 600;
+    font-size: var(--font-size-base);
 }
