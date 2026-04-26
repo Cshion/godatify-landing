@@ -270,10 +270,10 @@ img {
     --color-text-secondary: #cbd5e1;
     --color-text-muted: #94a3b8;
     
-    /* Brand colors - slightly brighter for dark mode visibility */
-    --color-brand-green: #1C7C54;
-    --color-brand-green-light: #26a86f;
-    --color-brand-green-dark: #135c51;
+    /* Brand colors - keep primary consistent across modes */
+    --color-brand-green: #135c51;
+    --color-brand-green-light: #1C7C54;
+    --color-brand-green-dark: #0e4a42;
     
     /* Borders */
     --color-border: #334155;

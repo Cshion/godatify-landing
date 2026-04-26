@@ -17,7 +17,9 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                 <div className={styles.container}>
                     {/* Header */}
                     <header className={styles.header}>
-                        <span className={styles.industryTag}>{caseStudy.industry}</span>
+                        {caseStudy.industry && (
+                            <span className={styles.industryTag}>{caseStudy.industry}</span>
+                        )}
                         <h1 className={styles.title}>{caseStudy.title}</h1>
                         <p className={styles.description}>{caseStudy.description}</p>
                     </header>
@@ -49,17 +51,17 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                             </div>
 
                             {/* Challenge & Solution Sections */}
-                            <div className="mb-12 space-y-12">
+                            <div className={styles.challengeSolutionWrapper}>
                                 {/* Challenge */}
                                 {caseStudy.challenge && (
-                                    <div className="bg-red-50/50 rounded-2xl p-8 border border-red-100">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+                                    <div className={styles.challengeCard}>
+                                        <div className={styles.cardHeader}>
+                                            <div className={`${styles.cardIconWrapper} ${styles.cardIconWrapperChallenge}`}>
                                                 <Icon name="exclamation-triangle" />
                                             </div>
-                                            <h2 className="text-2xl font-bold text-gray-900">El Desafío</h2>
+                                            <h2 className={styles.cardTitle}>El Desafío</h2>
                                         </div>
-                                        <p className="text-gray-700 text-lg leading-relaxed">
+                                        <p className={styles.cardContent}>
                                             {caseStudy.challenge}
                                         </p>
                                     </div>
@@ -67,14 +69,14 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
 
                                 {/* Solution */}
                                 {caseStudy.solution && (
-                                    <div className="bg-brand-green/5 rounded-2xl p-8 border border-brand-green/10">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <div className="w-10 h-10 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green">
+                                    <div className={styles.solutionCard}>
+                                        <div className={styles.cardHeader}>
+                                            <div className={`${styles.cardIconWrapper} ${styles.cardIconWrapperSolution}`}>
                                                 <Icon name="lightbulb" />
                                             </div>
-                                            <h2 className="text-2xl font-bold text-gray-900">La Solución</h2>
+                                            <h2 className={styles.cardTitle}>La Solución</h2>
                                         </div>
-                                        <p className="text-gray-700 text-lg leading-relaxed">
+                                        <p className={styles.cardContent}>
                                             {caseStudy.solution}
                                         </p>
                                     </div>
@@ -104,8 +106,8 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                         <aside className={styles.sidebar}>
                             {/* Client Info */}
                             {caseStudy.client && (
-                                <div className="mb-8 p-6 bg-white rounded-2xl border border-gray-200 shadow-sm">
-                                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Cliente</h3>
+                                <div className={styles.sidebarCard}>
+                                    <h3 className={styles.sidebarCardTitle}>Cliente</h3>
                                     <div className="flex items-center gap-3">
                                         <div className="flex-1">
                                             {caseStudy.client.anonymous ? (
@@ -138,7 +140,7 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                                                     href={caseStudy.client.website}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-xs text-gray-500 hover:text-brand-green transition-colors flex items-center gap-1 mt-1"
+                                                    className="text-xs text-gray-500 hover:text-brand-green transition-colors flex items-center gap-1 mt-2"
                                                 >
                                                     Visitar sitio web
                                                     <Icon name="external-link-alt" className="text-[10px]" />
@@ -154,7 +156,7 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
 
                             {/* Results (Impact Visualizer) */}
                             <div className={styles.resultsCard}>
-                                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-6">Impacto Generado</h3>
+                                <h3 className={styles.sidebarCardTitle}>Impacto Generado</h3>
                                 <div className={styles.resultsList}>
                                     {caseStudy.results.map((result, idx) => (
                                         <div key={idx} className={styles.resultItem}>
@@ -170,22 +172,22 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
 
                             {/* Testimonial (Sidebar - Enhanced) */}
                             {caseStudy.testimonial && (
-                                <div className="bg-gradient-to-br from-brand-green/5 to-transparent p-8 rounded-2xl border border-brand-green/10 mt-8 relative overflow-hidden group hover:border-brand-green/20 transition-colors">
-                                    <div className="absolute top-0 right-0 p-6 opacity-10 text-brand-green transform translate-x-1/4 -translate-y-1/4">
-                                        <Icon name="quote-right" className="text-8xl" />
+                                <div className={styles.testimonialCard}>
+                                    <div className={styles.testimonialQuoteIcon}>
+                                        <Icon name="quote-right" />
                                     </div>
 
                                     <div className="relative z-10">
-                                        <blockquote className="text-gray-800 font-medium text-lg leading-relaxed mb-6">
-                                            "{caseStudy.testimonial.quote}"
+                                        <blockquote className={styles.testimonialQuote}>
+                                            &ldquo;{caseStudy.testimonial.quote}&rdquo;
                                         </blockquote>
 
-                                        <div className="flex items-center justify-between border-t border-brand-green/10 pt-6">
+                                        <div className={styles.testimonialFooter}>
                                             <div className="flex flex-col">
-                                                <cite className="not-italic font-bold text-gray-900">
+                                                <cite className={styles.testimonialAuthor}>
                                                     {caseStudy.testimonial.author}
                                                 </cite>
-                                                <span className="text-brand-green text-xs font-semibold mt-1">
+                                                <span className={styles.testimonialRole}>
                                                     {caseStudy.testimonial.role}
                                                 </span>
                                             </div>
@@ -195,7 +197,7 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
                                                     href={caseStudy.testimonial.linkedIn}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-[#0077b5] shadow-sm hover:shadow-md hover:scale-110 transition-all"
+                                                    className={styles.linkedInButton}
                                                     aria-label={`Ver perfil de LinkedIn de ${caseStudy.testimonial.author}`}
                                                 >
                                                 <Icon name="linkedin-in" prefix="fab" />
@@ -211,9 +213,9 @@ export default function CaseDetail({ caseStudy, relatedCases }: CaseDetailProps)
             </article>
 
             {/* Related Cases Section */}
-            <div className="bg-gray-50 border-t border-gray-200">
-                <div className="container mx-auto px-6 pt-16">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+            <div className={styles.relatedCasesSection}>
+                <div className={styles.relatedCasesHeader}>
+                    <h2 className={styles.relatedCasesTitle}>
                         Otros Casos de Éxito
                     </h2>
                 </div>

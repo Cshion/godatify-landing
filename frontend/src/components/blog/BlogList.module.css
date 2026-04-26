@@ -1,10 +1,19 @@
+/* Blog List Section */
+.section {
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6) var(--space-20);
+    position: relative;
+    z-index: 20;
+    margin-top: var(--space-24);
+}
+
 .grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
-    margin-bottom: 4rem;
-    padding-top: 1rem;
-    /* Added spacing */
+    gap: var(--space-8);
+    margin-bottom: var(--space-16);
+    padding-top: var(--space-4);
 }
 
 @media (min-width: 768px) {
@@ -22,7 +31,7 @@
 .loader {
     display: flex;
     justify-content: center;
-    padding: 2rem 0;
+    padding: var(--space-8) 0;
 }
 
 .spinner {
@@ -46,7 +55,7 @@
 
 .endMessage {
     text-align: center;
-    color: #9ca3af;
-    padding: 2rem 0;
-    font-size: 0.9rem;
+    color: var(--color-gray-400);
+    padding: var(--space-8) 0;
+    font-size: var(--font-size-sm);
 }

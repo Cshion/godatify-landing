@@ -1,17 +1,17 @@
 .section {
-    padding: 100px 0;
+    padding: var(--space-24) 0;
     background-color: var(--color-gray-50);
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 var(--space-6);
 }
 
 .header {
     text-align: center;
-    margin-bottom: 80px;
+    margin-bottom: var(--space-20);
 }
 
 .title {

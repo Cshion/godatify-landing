@@ -1,5 +1,5 @@
 .heroSection {
-    background: linear-gradient(135deg, var(--color-brand-green) 0%, var(--color-brand-green-dark) 100%);
+    background: var(--color-brand-green);
     color: var(--color-white);
     position: relative;
     min-height: 100vh;
@@ -7,7 +7,6 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    padding-top: 5;
 }
 
 .heroContainer {

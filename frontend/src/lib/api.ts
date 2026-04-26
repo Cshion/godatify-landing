@@ -353,7 +353,7 @@ export const api = {
                 const cases = items.length === 0 ? CASES_CONTENT : items.map((item: any) => ({
                     slug: item.slug,
                     title: item.title,
-                    industry: item.industryName || 'General',
+                    industry: item.industry?.title || item.industryName || 'General',
                     description: item.description,
                     image: item.mainImageUrl || '/images/placeholder.png',
                     results: item.results || [],
@@ -388,7 +388,8 @@ export const api = {
                 const recentQuery = qs.stringify({
                     sort: ['publishedAt:desc'],
                     pagination: { limit: 4 },
-                    fields: ['slug', 'title', 'description', 'mainImageUrl', 'industryName', 'results']
+                    fields: ['slug', 'title', 'description', 'mainImageUrl', 'industryName', 'results'],
+                    populate: ['industry']
                 }, { encodeValuesOnly: true });
 
                 const [caseRes, recentRes] = await Promise.all([
@@ -410,7 +411,7 @@ export const api = {
                 const caseStudy = {
                     slug: item.slug,
                     title: item.title,
-                    industry: item.industryName || 'General',
+                    industry: item.industry?.title || item.industryName || 'General',
                     description: item.description,
                     challenge: item.challenge,
                     solution: item.solution,
@@ -442,7 +443,7 @@ export const api = {
                     title: r.title,
                     description: r.description,
                     image: r.mainImageUrl || '/images/placeholder.png',
-                    industry: r.industryName || 'General',
+                    industry: r.industry?.title || r.industryName || 'General',
                     results: r.results || []
                 }));
 
@@ -472,7 +473,7 @@ export const api = {
                 const cases = items.map((item: any) => ({
                     slug: item.slug,
                     title: item.title,
-                    industry: item.industryName || 'General',
+                    industry: item.industry?.title || item.industryName || 'General',
                     description: item.description,
                     image: item.mainImageUrl || '/images/placeholder.png',
                     results: item.results || [],
