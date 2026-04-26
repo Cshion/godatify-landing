@@ -41,14 +41,14 @@ export default ({ env }) => {
         schema: env('DATABASE_SCHEMA', 'public'),
       },
       pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 50) },
-      debug: true,
+      debug: env.bool('DATABASE_DEBUG', false),
     },
     sqlite: {
       connection: {
         filename: path.join(__dirname, '..', '..', env('DATABASE_FILENAME', '.tmp/data.db')),
       },
       useNullAsDefault: true,
-      debug: true,
+      debug: env.bool('DATABASE_DEBUG', false),
     },
   };
 

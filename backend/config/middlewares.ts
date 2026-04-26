@@ -1,5 +1,10 @@
 export default ({ env }) => [
-  'strapi::logger',
+  {
+    name: 'strapi::logger',
+    config: {
+      level: env('LOG_LEVEL', 'info'),
+    },
+  },
   'strapi::errors',
   {
     name: 'strapi::security',
@@ -33,7 +38,20 @@ export default ({ env }) => [
       },
     },
   },
-  'strapi::cors',
+  {
+    name: 'strapi::cors',
+    config: {
+      origin: env.array('CORS_ORIGINS', [
+        'http://localhost:3000',
+        'https://godatify.com',
+        'https://www.godatify.com',
+        'https://godatify-landing.vercel.app',
+      ]),
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      headers: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+      keepHeaderOnError: true,
+    },
+  },
   'strapi::poweredBy',
   'strapi::query',
   'strapi::body',
