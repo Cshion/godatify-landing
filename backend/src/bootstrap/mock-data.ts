@@ -91,8 +91,15 @@ export async function seedMockData(strapi: Core.Strapi): Promise<void> {
         await updateHomePageClients(strapi, allClients);
 
         console.log('[SEED] ✓ Mock data seeding complete.');
-    } catch (error) {
+    } catch (error: any) {
         console.error('[SEED] Error seeding Mock Data:', error);
+        // Show validation details
+        if (error?.details?.errors) {
+            console.error('[SEED] Validation errors:');
+            error.details.errors.forEach((e: any, i: number) => {
+                console.error(`  Error ${i + 1}:`, JSON.stringify(e, null, 2));
+            });
+        }
     }
 }
 
@@ -156,6 +163,30 @@ async function seedTestimonials(strapi: Core.Strapi): Promise<any[]> {
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
+ * Sanitize rich text content blocks for Strapi Blocks validation.
+ * Removes nested lists from list-item children (not supported in inline context).
+ */
+function sanitizeBlocksContent(content: any[]): any[] {
+    if (!Array.isArray(content)) return content;
+    
+    return content.map(block => {
+        if (block.type === 'list' && Array.isArray(block.children)) {
+            // For each list-item, keep only text and link nodes as children
+            block.children = block.children.map((listItem: any) => {
+                if (listItem.type === 'list-item' && Array.isArray(listItem.children)) {
+                    // Filter out any non-inline children (like nested lists)
+                    listItem.children = listItem.children.filter((child: any) => 
+                        child.type === 'text' || child.type === 'link'
+                    );
+                }
+                return listItem;
+            });
+        }
+        return block;
+    });
+}
+
+/**
  * Seeds blog posts with author relations and rich text image processing.
  */
 async function seedBlogPosts(strapi: Core.Strapi): Promise<void> {
@@ -176,31 +207,43 @@ async function seedBlogPosts(strapi: Core.Strapi): Promise<void> {
 
         // Process Rich Text Images - ensure all required fields are present
         if (p.content && Array.isArray(p.content)) {
-            for (const block of p.content) {
-                if (block.type === 'image' && block.image && block.image.url && !block.image.id) {
-                    try {
-                        // Add required fields for Strapi Blocks validation
-                        Object.assign(block.image, {
-                            name: 'seeded-image.jpg',
-                            hash: 'seeded_image_' + Date.now(),
-                            ext: '.jpg',
-                            mime: 'image/jpeg',
-                            size: 100,
-                            provider: 'local',
-                            formats: {},
-                            width: block.image.width || 1200,
-                            height: block.image.height || 800,
-                        });
-                    } catch (err) {
-                        console.error('[SEED] Failed to process inline image:', err);
+            for (let i = 0; i < p.content.length; i++) {
+                const block = p.content[i];
+                if (block.type === 'image' && block.image) {
+                    const now = new Date().toISOString();
+                    // Add required fields for Strapi Blocks validation
+                    Object.assign(block.image, {
+                        name: block.image.name || 'seeded-image.jpg',
+                        hash: block.image.hash || 'seeded_image_' + Date.now() + '_' + i,
+                        ext: block.image.ext || '.jpg',
+                        mime: block.image.mime || 'image/jpeg',
+                        size: block.image.size || 100,
+                        provider: block.image.provider || 'local',
+                        formats: block.image.formats || {},
+                        width: block.image.width || 1200,
+                        height: block.image.height || 800,
+                        createdAt: block.image.createdAt || now,
+                        updatedAt: block.image.updatedAt || now,
+                    });
+                    // Image blocks also need children array (empty)
+                    if (!block.children) {
+                        block.children = [];
                     }
                 }
             }
         }
 
+        // Map 'image' to 'coverImageUrl' (schema uses coverImageUrl)
+        const { image, ...restProps } = p;
+        
+        // Sanitize content blocks (fix nested lists, etc.)
+        const sanitizedContent = p.content ? sanitizeBlocksContent(p.content) : p.content;
+        
         return {
-            ...p,
+            ...restProps,
             id: undefined,
+            content: sanitizedContent,
+            coverImageUrl: image || p.coverImageUrl,
             author: relatedAuthor ? relatedAuthor.documentId : undefined,
         };
     }));
@@ -301,7 +344,7 @@ async function updateHomePageClients(strapi: Core.Strapi, allClients: any[]): Pr
                 documentId: homePage.documentId,
                 data: {
                     clients: allClients.map((c: any) => c.documentId)
-                },
+                } as any,
                 status: homePage.publishedAt ? 'published' : 'draft'
             });
         }

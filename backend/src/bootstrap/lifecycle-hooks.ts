@@ -78,7 +78,7 @@ async function handleRelationFieldSync(
         if (!relationInput) continue;
 
         const schema = strapi.contentTypes[model.uid as any];
-        const attribute = schema.attributes[config.relation];
+        const attribute = schema.attributes[config.relation] as { type: string; target?: string };
         const targetUid = attribute.target;
 
         if (!targetUid) continue;
@@ -89,7 +89,7 @@ async function handleRelationFieldSync(
                 : relationInput;
 
             if (idToFetch) {
-                const relatedEntity = await strapi.documents(targetUid).findOne({ documentId: idToFetch } as any);
+                const relatedEntity = await strapi.documents(targetUid as any).findOne({ documentId: idToFetch } as any);
                 if (relatedEntity && relatedEntity[config.sourceField]) {
                     params.data[config.targetField] = relatedEntity[config.sourceField];
                 }

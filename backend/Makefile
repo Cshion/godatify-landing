@@ -5,7 +5,7 @@
 # Run `make help` to see available commands.
 # ============================================================================
 
-.PHONY: help install dev build start seed seed-mock clean
+.PHONY: help install dev build start seed seed-mock clean reset-db reset-db-no-mock
 
 .DEFAULT_GOAL := help
 
@@ -24,8 +24,10 @@ help:
 	@echo "║  make build      → Build for production                        ║"
 	@echo "║  make start      → Start production server                     ║"
 	@echo "╠════════════════════════════════════════════════════════════════╣"
-	@echo "║  make seed       → Seed master data (safe for production)      ║"
-	@echo "║  make seed-mock  → Seed mock data (dev only)                   ║"
+	@echo "║  make seed            → Seed master data (safe for production) ║"
+	@echo "║  make seed-mock       → Seed mock data (dev only)              ║"
+	@echo "║  make reset-db        → Reset DB + seed all (DESTRUCTIVE)      ║"
+	@echo "║  make reset-db-no-mock→ Reset DB + master only (DESTRUCTIVE)   ║"
 	@echo "╠════════════════════════════════════════════════════════════════╣"
 	@echo "║  make clean      → Remove build artifacts                      ║"
 	@echo "╚════════════════════════════════════════════════════════════════╝"
@@ -72,6 +74,19 @@ seed-mock:
 	@echo "⚠️  This seeds: clients, authors, testimonials, blog-posts, case-studies"
 	@echo "⚠️  Do NOT run in production - this is sample/demo data"
 	npx ts-node scripts/seed.ts --mock-only
+
+## reset-db: Truncate all tables, sync schema, seed all data
+## Development ONLY - destroys all data!
+reset-db:
+	@pkill -f "strapi develop" 2>/dev/null || true
+	@sleep 1
+	npx ts-node scripts/reset.ts
+
+## reset-db-no-mock: Same as reset-db but skip mock data
+reset-db-no-mock:
+	@pkill -f "strapi develop" 2>/dev/null || true
+	@sleep 1
+	npx ts-node scripts/reset.ts --skip-mock
 
 # ----------------------------------------------------------------------------
 # Cleanup

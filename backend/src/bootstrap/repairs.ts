@@ -92,7 +92,7 @@ async function repairCorruptedImageBlocks(strapi: Core.Strapi): Promise<void> {
                 console.log(`[REPAIR] Saving fixes for ${post.slug}`);
                 await strapi.documents('api::blog-post.blog-post').update({
                     documentId: (post as any).documentId,
-                    data: { content: newContent },
+                    data: { content: newContent } as any,
                     status: post.publishedAt ? 'published' : 'draft'
                 });
             }

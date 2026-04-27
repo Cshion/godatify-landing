@@ -48,9 +48,9 @@
 }
 
 .footerTitle {
-    font-family: var(--font-barlow);
-    font-size: 1.875rem;
-    font-weight: 800;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-extrabold);
     color: var(--color-brand-green-dark);
     margin-bottom: var(--space-4);
     letter-spacing: 0.05em;
@@ -59,14 +59,14 @@
 .footerDescription {
     font-family: var(--font-primary);
     color: var(--color-gray-600);
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-    font-size: 0.95rem;
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-6);
+    font-size: var(--font-size-base);
 }
 
 .socialLinks {
     display: flex;
-    gap: 0.75rem;
+    gap: var(--space-3);
 }
 
 .socialLink {
@@ -88,9 +88,9 @@
 }
 
 .footerHeading {
-    font-family: var(--font-barlow);
-    font-size: 1.125rem;
-    font-weight: 700;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
     color: var(--color-gray-900);
     margin-bottom: var(--space-4);
 }
@@ -102,7 +102,7 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--space-3);
 }
 
 .footerLinks li {
@@ -112,8 +112,8 @@
 .footerLinks a {
     color: var(--color-gray-600);
     text-decoration: none;
-    transition: color 0.3s ease;
-    font-size: 0.95rem;
+    transition: color 0.2s ease;
+    font-size: var(--font-size-base);
 }
 
 .footerLinks a:hover {
@@ -122,7 +122,7 @@
 
 .footerBottom {
     border-top: 1px solid var(--color-gray-200);
-    padding-top: 2rem;
+    padding-top: var(--space-8);
     position: relative;
     z-index: 1;
     display: flex;
@@ -135,6 +135,6 @@
 .footerCopyright {
     font-family: var(--font-primary);
     color: var(--color-gray-500);
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     text-align: center;
 }

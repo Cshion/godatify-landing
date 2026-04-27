@@ -91,3 +91,25 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
+
+/* Mobile Breakpoints */
+@media (max-width: 768px) {
+    .clientsSection {
+        padding: var(--space-12) 0;
+    }
+    
+    .title {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--space-8);
+    }
+    
+    .marqueeTrack {
+        gap: var(--space-8);
+        animation-duration: 25s;
+    }
+    
+    .clientCard {
+        width: 120px;
+        height: 60px;
+    }
+}

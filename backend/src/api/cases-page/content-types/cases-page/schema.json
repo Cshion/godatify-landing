@@ -1,0 +1,28 @@
+{
+    "kind": "singleType",
+    "collectionName": "cases_pages",
+    "info": {
+        "singularName": "cases-page",
+        "pluralName": "cases-pages",
+        "displayName": "Cases Page",
+        "description": "Content for the Cases/Portfolio Landing Page"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "heroTitle": {
+            "type": "string"
+        },
+        "heroSubtitle": {
+            "type": "text"
+        },
+        "heroPhrases": {
+            "type": "json"
+        },
+        "heroBackgroundImageUrl": {
+            "type": "string"
+        }
+    }
+}

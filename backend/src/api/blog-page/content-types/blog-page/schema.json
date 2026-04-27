@@ -1,0 +1,25 @@
+{
+    "kind": "singleType",
+    "collectionName": "blog_pages",
+    "info": {
+        "singularName": "blog-page",
+        "pluralName": "blog-pages",
+        "displayName": "Blog Page",
+        "description": "Content for the Blog Landing Page"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "heroTitle": {
+            "type": "string"
+        },
+        "heroSubtitle": {
+            "type": "string"
+        },
+        "heroDescription": {
+            "type": "text"
+        }
+    }
+}

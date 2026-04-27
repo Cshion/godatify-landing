@@ -195,4 +195,18 @@ async function seedPages(strapi: Core.Strapi): Promise<void> {
         const contactData = JSON.parse(fs.readFileSync(contactPath, 'utf-8'));
         await seedSingle(strapi, 'api::contact-page.contact-page', contactData);
     }
+
+    // Cases Page
+    const casesPath = path.join(MASTER_DATA_PATH, 'cases-page.json');
+    if (fs.existsSync(casesPath)) {
+        const casesData = JSON.parse(fs.readFileSync(casesPath, 'utf-8'));
+        await seedSingle(strapi, 'api::cases-page.cases-page', casesData);
+    }
+
+    // Blog Page
+    const blogPath = path.join(MASTER_DATA_PATH, 'blog-page.json');
+    if (fs.existsSync(blogPath)) {
+        const blogData = JSON.parse(fs.readFileSync(blogPath, 'utf-8'));
+        await seedSingle(strapi, 'api::blog-page.blog-page', blogData);
+    }
 }

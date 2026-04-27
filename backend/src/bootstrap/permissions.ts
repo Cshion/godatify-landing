@@ -40,6 +40,8 @@ export async function seedPermissions(strapi: Core.Strapi): Promise<void> {
             'api::about-page': { controllers: { 'about-page': { find: { enabled: true } } } },
             'api::contact-page': { controllers: { 'contact-page': { find: { enabled: true } } } },
             'api::industries-page': { controllers: { 'industries-page': { find: { enabled: true } } } },
+            'api::cases-page': { controllers: { 'cases-page': { find: { enabled: true } } } },
+            'api::blog-page': { controllers: { 'blog-page': { find: { enabled: true } } } },
             'api::sector': { controllers: { sector: { find: { enabled: true }, findOne: { enabled: true } } } },
         };
 

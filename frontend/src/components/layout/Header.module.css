@@ -160,12 +160,12 @@
     background-color: transparent;
     border: 1px solid white;
     color: var(--color-white);
-    padding: 0.75rem 2rem;
+    padding: var(--space-3) var(--space-8);
     border-radius: 9999px;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    font-weight: var(--font-weight-semibold);
+    transition: all 0.2s ease;
     text-decoration: none;
-    font-family: var(--font-barlow);
+    font-family: var(--font-primary);
     font-size: var(--font-size-lg);
     letter-spacing: 0.02em;
 }

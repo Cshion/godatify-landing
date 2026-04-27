@@ -29,6 +29,7 @@ import { HERO_CONTENT, STATS, VIDEO_CONFIG, CLIENTS_CONTENT, CAROUSEL_CONFIG, SE
 import { NOSOTROS_CONTENT } from '@/data/about';
 import { CONTACT_CONTENT } from '@/data/contact';
 import { BLOG_POSTS } from '@/data/blog';
+import { BLOG_STATIC_DATA } from '@/data/blog-data';
 import { BlogPost } from '@/types';
 
 
@@ -339,16 +340,29 @@ export const api = {
     cases: {
         getPageData: async (): Promise<{ hero: any, cases: CaseStudy[] }> => {
             try {
-                // REST: Get all cases sorted by date
-                const queryParams = qs.stringify({
-                    sort: ['publishedAt:desc'],
-                    pagination: { limit: 50 },
-                    populate: '*', // Fetch all fields for card display
-                }, { encodeValuesOnly: true });
+                // Fetch cases-page hero data from Strapi
+                const [pageRes, casesRes] = await Promise.all([
+                    fetch(`${STRAPI_URL}/api/cases-page`, { cache: 'no-store' }),
+                    fetch(`${STRAPI_URL}/api/case-studies?${qs.stringify({
+                        sort: ['publishedAt:desc'],
+                        pagination: { limit: 50 },
+                        populate: '*',
+                    }, { encodeValuesOnly: true })}`, { cache: 'no-store' })
+                ]);
 
-                const res = await fetch(`${STRAPI_URL}/api/case-studies?${queryParams}`, { cache: 'no-store' });
-                const json = await res.json();
-                const items = json.data || [];
+                const pageJson = await pageRes.json();
+                const casesJson = await casesRes.json();
+                
+                const pageData = pageJson.data;
+                const items = casesJson.data || [];
+
+                // Build hero from CMS or fallback
+                const hero = pageData ? {
+                    title: pageData.heroTitle,
+                    subtitle: pageData.heroSubtitle,
+                    backgroundImage: pageData.heroBackgroundImageUrl || '/images/hero-cases.png',
+                    phrases: pageData.heroPhrases || []
+                } : CASES_PAGE_CONTENT.hero;
 
                 const cases = items.length === 0 ? CASES_CONTENT : items.map((item: any) => ({
                     slug: item.slug,
@@ -365,7 +379,7 @@ export const api = {
                 }));
 
                 return {
-                    hero: CASES_PAGE_CONTENT.hero,
+                    hero,
                     cases
                 };
 
@@ -756,6 +770,12 @@ export const api = {
             try {
                 // Fetch Contact Page Data
                 const res = await fetch(`${STRAPI_URL}/api/contact-page`, { cache: 'no-store' });
+                
+                // Handle 404 gracefully - no data in Strapi yet
+                if (!res.ok) {
+                    return CONTACT_CONTENT;
+                }
+                
                 const json = await res.json();
                 const data = json.data;
 
@@ -786,6 +806,30 @@ export const api = {
     },
 
     blog: {
+        getPageData: async (): Promise<{ hero: { title: string; subtitle: string; description: string } }> => {
+            try {
+                const res = await fetch(`${STRAPI_URL}/api/blog-page`, { cache: 'no-store' });
+                
+                if (!res.ok) {
+                    console.warn('Blog page API returned non-ok status:', res.status);
+                    return { hero: BLOG_STATIC_DATA.hero };
+                }
+                
+                const json = await res.json();
+                const pageData = json.data;
+                
+                const hero = pageData ? {
+                    title: pageData.heroTitle || BLOG_STATIC_DATA.hero.title,
+                    subtitle: pageData.heroSubtitle || BLOG_STATIC_DATA.hero.subtitle,
+                    description: pageData.heroDescription || BLOG_STATIC_DATA.hero.description
+                } : BLOG_STATIC_DATA.hero;
+                
+                return { hero };
+            } catch (error) {
+                console.error('Failed to fetch blog page data:', error);
+                return { hero: BLOG_STATIC_DATA.hero };
+            }
+        },
         getPosts: async ({ start, limit }: { start: number; limit: number }): Promise<{ posts: BlogPost[]; total: number }> => {
             try {
                 const queryParams = qs.stringify({

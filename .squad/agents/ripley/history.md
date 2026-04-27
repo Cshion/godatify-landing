@@ -49,6 +49,16 @@
 
 8. **Seed Data** — Datos de prueba disponibles en `backend/seed-data/` pero sin script automatizado de importación.
 
+### 2026-04-26 — Single Types Architecture Review
+
+**Pattern Confirmed:** `{page}-page` (Single Type) + `{entity}` (Collection Type) is the correct CMS pattern for listing pages. Example: `industries-page` holds hero content, `industry` holds data entries.
+
+**Hardcoded Content Found:**
+- `/casos` hero: `frontend/src/data/cases.ts` → `CASES_PAGE_CONTENT.hero`
+- `/blog` hero: `frontend/src/data/blog-data.ts` → `BLOG_STATIC_DATA.hero`
+
+**Recommendation:** Add `cases-page` and `blog-page` Single Types to make this content CMS-editable. No `services-page` needed (no listing page exists).
+
 **Áreas de mejora identificadas:**
 - [ ] Implementar ISR o cache tags para producción (actualmente `cache: 'no-store'`)
 - [ ] Crear script de seed automatizado para desarrollo

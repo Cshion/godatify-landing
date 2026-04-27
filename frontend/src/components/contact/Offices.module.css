@@ -7,29 +7,29 @@
 }
 
 .sidebarTitle {
-    font-family: var(--font-barlow);
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
     color: var(--color-gray-900);
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--space-2);
 }
 
 .sidebarSubtitle {
-    font-family: var(--font-outfit);
-    font-size: 1rem;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
     color: var(--color-gray-600);
-    line-height: 1.5;
+    line-height: var(--line-height-normal);
 }
 
 .list {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-8);
 }
 
 .card {
     background: var(--color-white);
-    border-radius: 0.5rem;
+    border-radius: var(--space-2);
     overflow: hidden;
     border: 1px solid var(--color-gray-200);
     transition: border-color 0.2s ease;
@@ -40,27 +40,27 @@
 }
 
 .details {
-    padding: 1.5rem;
+    padding: var(--space-6);
 }
 
 .city {
-    font-family: var(--font-barlow);
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
     color: var(--color-gray-900);
-    margin-bottom: 0.25rem;
+    margin-bottom: var(--space-1);
 }
 
 .hubLabel {
     display: inline-block;
     background-color: var(--color-gray-100);
     color: var(--color-gray-600);
-    padding: 0.25rem 0.5rem;
+    padding: var(--space-1) var(--space-2);
     border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    font-family: var(--font-outfit);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-4);
+    font-family: var(--font-primary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -68,13 +68,13 @@
 .infoRow {
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
 }
 
 .infoIcon {
     color: var(--color-brand-green);
-    margin-top: 0.25rem;
+    margin-top: var(--space-1);
     flex-shrink: 0;
 }
 

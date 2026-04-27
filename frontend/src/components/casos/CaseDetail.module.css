@@ -234,8 +234,8 @@
 }
 
 .cardIconWrapperChallenge {
-    background-color: rgb(254, 226, 226);
-    color: #ef4444;
+    background-color: var(--color-error-light);
+    color: var(--color-error);
 }
 
 .cardIconWrapperSolution {
@@ -333,21 +333,20 @@
 }
 
 .linkedInButton {
-    width: 2rem;
-    height: 2rem;
+    width: var(--space-8);
+    height: var(--space-8);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
     background: var(--color-white);
-    color: #0077b5;
+    color: var(--color-linkedin);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: all 0.2s ease;
 }
 
 .linkedInButton:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transform: scale(1.1);
 }
 
 /* Related Cases Section */

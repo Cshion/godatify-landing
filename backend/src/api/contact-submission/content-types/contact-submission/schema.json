@@ -1,0 +1,57 @@
+{
+    "kind": "collectionType",
+    "collectionName": "contact_submissions",
+    "info": {
+        "singularName": "contact-submission",
+        "pluralName": "contact-submissions",
+        "displayName": "Contact Submission",
+        "description": "Formulario de contacto enviados por visitantes"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "name": {
+            "type": "string",
+            "required": true,
+            "maxLength": 100
+        },
+        "email": {
+            "type": "email",
+            "required": true
+        },
+        "company": {
+            "type": "string",
+            "maxLength": 100
+        },
+        "role": {
+            "type": "string",
+            "maxLength": 100
+        },
+        "message": {
+            "type": "text",
+            "required": true,
+            "maxLength": 2000
+        },
+        "status": {
+            "type": "enumeration",
+            "enum": ["nuevo", "leido", "respondido", "spam"],
+            "default": "nuevo"
+        },
+        "ipAddress": {
+            "type": "string",
+            "private": true
+        },
+        "userAgent": {
+            "type": "string",
+            "private": true
+        },
+        "submittedAt": {
+            "type": "datetime"
+        },
+        "notes": {
+            "type": "text"
+        }
+    }
+}

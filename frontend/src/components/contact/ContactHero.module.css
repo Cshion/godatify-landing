@@ -27,18 +27,18 @@
 }
 
 .socialLabel {
-    font-family: var(--font-outfit);
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
     color: var(--color-gray-600);
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
 .socialLinks {
     display: flex;
-    gap: 1rem;
+    gap: var(--space-4);
 }
 
 .socialLink {

@@ -6,6 +6,13 @@
   --color-brand-green-light: #1C7C54;
   --color-brand-green-dark: #0e4a42;
 
+  /* Semantic Colors */
+  --color-error: #dc2626;
+  --color-error-dark: #b91c1c;
+  --color-error-light: #fef2f2;
+  --color-success: #16a34a;
+  --color-linkedin: #0077b5;
+
   /* Neutral Colors */
   --color-white: #ffffff;
   --color-gray-50: #f9fafb;
