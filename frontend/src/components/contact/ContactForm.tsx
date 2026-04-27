@@ -54,25 +54,25 @@ export default function ContactForm({ title, subtitle, labels }: ContactFormProp
                 <div className={styles.grid}>
                     <div className={styles.field}>
                         <label htmlFor="name" className={styles.label}>{labels.name}</label>
-                        <input type="text" id="name" required className={styles.input} />
+                        <input type="text" id="name" required placeholder=" " className={styles.input} />
                     </div>
                     <div className={styles.field}>
                         <label htmlFor="email" className={styles.label}>{labels.email}</label>
-                        <input type="email" id="email" required className={styles.input} />
+                        <input type="email" id="email" required placeholder=" " className={styles.input} />
                     </div>
                     <div className={styles.field}>
                         <label htmlFor="company" className={styles.label}>{labels.company}</label>
-                        <input type="text" id="company" className={styles.input} />
+                        <input type="text" id="company" placeholder=" " className={styles.input} />
                     </div>
                     <div className={styles.field}>
                         <label htmlFor="role" className={styles.label}>{labels.role}</label>
-                        <input type="text" id="role" className={styles.input} />
+                        <input type="text" id="role" placeholder=" " className={styles.input} />
                     </div>
                 </div>
 
                 <div className={styles.field}>
                     <label htmlFor="message" className={styles.label}>{labels.message}</label>
-                    <textarea id="message" required rows={4} className={styles.textarea}></textarea>
+                    <textarea id="message" required rows={4} placeholder=" " className={styles.textarea}></textarea>
                 </div>
 
                 <div className={styles.submitWrapper}>

@@ -16,7 +16,7 @@ export default async function ContactPage() {
     const socialLinks = await api.company.getSocialLinks();
 
     return (
-        <main>
+        <main id="main-content">
             {/* ContactPage Schema */}
             <script
                 type="application/ld+json"

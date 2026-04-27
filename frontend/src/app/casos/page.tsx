@@ -19,7 +19,7 @@ export default async function CasosPage() {
     const { cases, total } = await api.cases.getCases({ start: 0, limit: 6 });
 
     return (
-        <main>
+        <main id="main-content">
             {/* CollectionPage Schema */}
             <script
                 type="application/ld+json"

@@ -23,7 +23,7 @@
 .socialWrapper {
     /* Styles for social links container */
     padding-bottom: 2rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--color-gray-200);
 }
 
 .socialLabel {
@@ -48,7 +48,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f3f4f6;
+    background-color: var(--color-gray-100);
     color: var(--color-gray-600);
     transition: all 0.3s ease;
     text-decoration: none;

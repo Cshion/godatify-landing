@@ -50,7 +50,7 @@ export default async function CaseDetailPage({ params }: PageProps) {
     }
 
     return (
-        <main>
+        <main id="main-content">
             {/* Breadcrumb Schema */}
             <script
                 type="application/ld+json"

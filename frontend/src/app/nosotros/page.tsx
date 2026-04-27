@@ -25,7 +25,7 @@ export default async function NosotrosPage() {
 
     return (
         <>
-            <main>
+            <main id="main-content">
                 {/* Breadcrumb Schema */}
                 <script
                     type="application/ld+json"

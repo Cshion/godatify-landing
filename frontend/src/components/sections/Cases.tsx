@@ -1,11 +1,8 @@
 'use client';
 
-
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { CaseStudy } from '@/types';
-import Carousel from '@/components/ui/Carousel';
 import styles from './Cases.module.css';
 
 interface CasesProps {
@@ -15,52 +12,71 @@ interface CasesProps {
 }
 
 export default function Cases({ cases, title, buttonText }: CasesProps) {
+  // Featured case is the first one, supporting cases are the rest
+  const [featured, ...supporting] = cases;
+  const displayedSupporting = supporting.slice(0, 3);
+
+  if (!featured) return null;
+
   return (
-    <section className="section py-20 bg-white" id="casos">
+    <section className={styles.casesSection} id="casos">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900">
+        <h2 className={styles.sectionTitle}>
           {title}
         </h2>
 
-        <div className={styles.casesContainer}>
-          <Carousel
-            config={{
-              autoPlay: true,
-              autoPlayInterval: 6000,
-              itemsPerView: { mobile: 1, tablet: 2, desktop: 3 }
-            }}
-          >
-            {cases.map((caseStudy) => (
-              <div key={caseStudy.slug} className={`${styles.caseCard} group`}>
-                {/* Image */}
-                <div className={styles.caseImageWrapper}>
+        <div className={styles.casesLayout}>
+          {/* Featured Case - Large spotlight */}
+          <Link href={`/casos/${featured.slug}`} className={styles.featuredCase}>
+            <div className={styles.featuredImageWrapper}>
+              <Image
+                src={featured.image}
+                alt={featured.title}
+                fill
+                className={styles.featuredImage}
+                sizes="(max-width: 768px) 100vw, 60vw"
+              />
+              <div className={styles.featuredOverlay} />
+            </div>
+            <div className={styles.featuredContent}>
+              <span className={styles.featuredIndustry}>{featured.industry}</span>
+              <h3 className={styles.featuredTitle}>{featured.title}</h3>
+              <p className={styles.featuredDescription}>{featured.description}</p>
+              <span className={styles.featuredLink}>
+                {buttonText} →
+              </span>
+            </div>
+          </Link>
+
+          {/* Supporting Cases - Compact list */}
+          <div className={styles.supportingCases}>
+            {displayedSupporting.map((caseStudy) => (
+              <Link 
+                key={caseStudy.slug} 
+                href={`/casos/${caseStudy.slug}`}
+                className={styles.supportingCase}
+              >
+                <div className={styles.supportingImageWrapper}>
                   <Image
                     src={caseStudy.image}
                     alt={caseStudy.title}
-                    width={400}
-                    height={300}
-                    className={styles.caseImage}
+                    fill
+                    className={styles.supportingImage}
+                    sizes="120px"
                   />
-
-                  {/* Overlay */}
-                  <div className={styles.caseOverlay}>
-                    <Link href={`/casos/${caseStudy.slug}`} className={styles.caseLink}>
-                      {buttonText}
-                    </Link>
-                  </div>
                 </div>
-
-                {/* Content */}
-                <div className={styles.caseContent}>
-                  <span className={styles.caseCategory}>
-                    {caseStudy.industry}
-                  </span>
-                  <h3 className={styles.caseTitle}>{caseStudy.title}</h3>
-                  <p className={styles.caseDescription}>{caseStudy.description}</p>
+                <div className={styles.supportingContent}>
+                  <span className={styles.supportingIndustry}>{caseStudy.industry}</span>
+                  <h4 className={styles.supportingTitle}>{caseStudy.title}</h4>
                 </div>
-              </div>
+              </Link>
             ))}
-          </Carousel>
+            
+            {/* View all link */}
+            <Link href="/casos" className={styles.viewAllLink}>
+              Ver todos los casos →
+            </Link>
+          </div>
         </div>
       </div>
     </section>

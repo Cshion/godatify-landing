@@ -19,7 +19,7 @@ export default async function IndustriasPage() {
     const { hero, sectors, cases } = await api.industries.getPageData();
 
     return (
-        <main>
+        <main id="main-content">
             {/* Breadcrumb Schema */}
             <script
                 type="application/ld+json"

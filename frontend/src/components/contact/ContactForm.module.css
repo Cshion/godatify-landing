@@ -42,7 +42,7 @@
 .label {
     font-family: var(--font-barlow);
     font-weight: 600;
-    color: #374151;
+    color: var(--color-gray-700);
     font-size: 0.95rem;
 }
 
@@ -50,7 +50,7 @@
 .textarea {
     padding: 0.75rem 0;
     border: none;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--color-gray-200);
     border-radius: 0;
     font-family: var(--font-outfit);
     transition: all 0.2s;
@@ -63,6 +63,18 @@
     border-color: var(--color-brand-green);
     box-shadow: none;
     background-color: transparent;
+}
+
+/* Inline validation - shows red when invalid AND user has typed something */
+.input:invalid:not(:placeholder-shown),
+.textarea:invalid:not(:placeholder-shown) {
+    border-color: #dc2626;
+}
+
+/* Valid state - subtle green confirmation */
+.input:valid:not(:placeholder-shown),
+.textarea:valid:not(:placeholder-shown) {
+    border-color: var(--color-brand-green);
 }
 
 .submitWrapper {
@@ -92,14 +104,14 @@
 }
 
 .success {
-    background-color: #10b981;
+    background-color: var(--color-brand-green);
     /* Green */
     pointer-events: none;
 }
 
 .error {
     background-color: #dc2626;
-    /* Red */
+    /* Red - semantic color kept as-is */
 }
 
 .error:hover {

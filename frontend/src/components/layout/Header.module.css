@@ -20,8 +20,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 2rem 0;
-    /* Further increased */
+    padding: var(--space-8) 0;
 }
 
 .logo {
@@ -52,7 +51,7 @@
 }
 
 .navLink {
-    font-size: 1.2rem;
+    font-size: var(--font-size-xl);
     font-weight: 600;
     color: var(--color-white);
     transition: color 0.3s ease;
@@ -62,11 +61,32 @@
 }
 
 .header.scrolled .navLink {
-    color: #374151;
+    color: var(--color-gray-700);
 }
 
 .navLink:hover {
     color: var(--color-brand-green-light);
+}
+
+/* Active page indicator */
+.navLinkActive {
+    position: relative;
+}
+
+.navLinkActive::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: currentColor;
+    border-radius: 1px;
+}
+
+/* When scrolled, active link gets brand green */
+.header.scrolled .navLinkActive {
+    color: var(--color-brand-green);
 }
 
 .dropdown {
@@ -112,13 +132,13 @@
 .dropdownItem {
     display: block;
     padding: 0.75rem 1rem;
-    color: #374151;
+    color: var(--color-gray-700);
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
 .dropdownItem:hover {
-    background: #f9fafb;
+    background: var(--color-gray-50);
     color: var(--color-brand-green);
 }
 
@@ -146,7 +166,7 @@
     transition: all 0.3s ease;
     text-decoration: none;
     font-family: var(--font-barlow);
-    font-size: 1.1rem;
+    font-size: var(--font-size-lg);
     letter-spacing: 0.02em;
 }
 
@@ -156,8 +176,8 @@
     min-width: 600px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    padding: 2rem;
+    gap: var(--space-8);
+    padding: var(--space-8);
     left: 50%;
     transform: translateX(-50%) translateY(10px);
 }
@@ -167,14 +187,14 @@
 }
 
 .megaMenuTitle {
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
     font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 1rem;
+    color: var(--color-brand-green);
+    margin-bottom: var(--space-4);
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-bottom: 2px solid var(--secondary);
-    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-brand-green-light);
+    padding-bottom: var(--space-2);
 }
 
 .megaMenuList {
@@ -225,13 +245,13 @@
 }
 
 .header.scrolled .menuToggle span {
-    background: #374151;
+    background: var(--color-gray-700);
 }
 
 .mobileMenu {
     display: block;
     background: var(--color-white);
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--color-gray-200);
     padding: 1rem 0;
 }
 
@@ -244,14 +264,21 @@
 .mobileLink {
     display: block;
     padding: 0.75rem 1.5rem;
-    color: #374151;
+    color: var(--color-gray-700);
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
 .mobileLink:hover {
     color: var(--color-brand-green);
-    background: #f9fafb;
+    background: var(--color-gray-50);
+}
+
+/* Active mobile link */
+.mobileLinkActive {
+    color: var(--color-brand-green);
+    font-weight: 600;
+    background: var(--color-gray-50);
 }
 
 /* Focus states for keyboard navigation */
@@ -272,7 +299,7 @@
 
 /* Mobile Dropdown Accordion Styles */
 .mobileDropdown {
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--color-gray-200);
 }
 
 .mobileDropdownToggle {
@@ -283,8 +310,8 @@
     padding: 0.75rem 1.5rem;
     background: none;
     border: none;
-    color: #374151;
-    font-size: 1rem;
+    color: var(--color-gray-700);
+    font-size: var(--font-size-base);
     font-family: inherit;
     font-weight: 500;
     cursor: pointer;
@@ -293,7 +320,7 @@
 
 .mobileDropdownToggle:hover {
     color: var(--color-brand-green);
-    background: #f9fafb;
+    background: var(--color-gray-50);
 }
 
 .mobileDropdownToggle:focus-visible {
@@ -302,7 +329,7 @@
 }
 
 .mobileDropdownIcon {
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     transition: transform 0.3s ease;
 }
 
@@ -311,14 +338,14 @@
 }
 
 .mobileSubmenu {
-    background: #f9fafb;
+    background: var(--color-gray-50);
     padding: 0.5rem 0;
 }
 
 .mobileSubmenuHeader {
     display: block;
     padding: 0.5rem 2rem;
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     font-weight: 700;
     color: var(--color-brand-green);
     text-transform: uppercase;
@@ -328,15 +355,15 @@
 .mobileSubmenuLink {
     display: block;
     padding: 0.5rem 2.5rem;
-    color: #4b5563;
-    font-size: 0.9rem;
+    color: var(--color-gray-600);
+    font-size: var(--font-size-sm);
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
 .mobileSubmenuLink:hover {
     color: var(--color-brand-green);
-    background: #e5e7eb;
+    background: var(--color-gray-200);
 }
 
 .mobileSubmenuLink:focus-visible {

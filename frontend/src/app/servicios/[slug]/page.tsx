@@ -50,7 +50,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     }
 
     return (
-        <main>
+        <main id="main-content">
             {/* Service Schema */}
             <script
                 type="application/ld+json"

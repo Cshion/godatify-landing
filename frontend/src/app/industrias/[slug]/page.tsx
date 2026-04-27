@@ -48,7 +48,7 @@ export default async function IndustryDetailPage({ params }: IndustryPageProps) 
     }
 
     return (
-        <main className="bg-white min-h-screen">
+        <main id="main-content" className="bg-white min-h-screen">
             {/* Breadcrumb Schema */}
             <script
                 type="application/ld+json"

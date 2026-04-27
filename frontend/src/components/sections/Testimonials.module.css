@@ -1,217 +1,158 @@
+/* Testimonials Section - Three quotes carousel with white background */
 .testimonialsSection {
-    position: relative;
-    padding: 5rem 0;
-    overflow: hidden;
-    background: var(--color-gray-50);
+    padding: var(--space-24) 0;
+    background: var(--color-white);
+    color: var(--color-gray-900);
 }
 
-.overlay {
-    display: none;
+.header {
+    margin-bottom: var(--space-12);
 }
 
 .subtitle {
-    color: var(--color-brand-green);
-    font-size: 0.875rem;
-    font-weight: 700;
+    display: block;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.15em;
+    color: var(--color-brand-green);
+    margin-bottom: var(--space-2);
 }
 
 .title {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
     color: var(--color-gray-900);
-    font-size: 3rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
+    line-height: var(--line-height-tight);
 }
 
-.description {
-    color: var(--color-gray-600);
-    max-width: 600px;
-    margin: 0 auto;
-    font-size: 1rem;
-    line-height: 1.6;
+/* Quotes Grid - Three columns */
+.quotesGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    animation: fadeIn 0.6s ease-out;
 }
 
-.testimonialsContainer {
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.testimonialsWrapper {
-    overflow: hidden;
-    padding: 2rem 2rem;
-    /* Increased horizontal padding to prevent shadow clipping */
-}
-
-.testimonialsTrack {
-    display: flex;
-    gap: 2rem;
-    transition: transform 0.5s ease;
-    align-items: stretch;
-    /* Ensure all items stretch to max height */
-}
-
-.testimonialCard {
-    flex: 0 0 calc(33.333% - 1.333rem);
-    /* Adjust for gap */
-    width: 100%;
-    /* Ensure width fills flex basis */
-    background: var(--color-white);
-    border-radius: 1rem;
-    padding: 2rem 1.5rem;
-    /* Reduced padding from 3rem 2rem */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    position: relative;
+/* Individual Quote Card */
+.quoteCard {
+    background: var(--color-gray-50);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--space-4);
+    padding: var(--space-6);
     display: flex;
     flex-direction: column;
-    /* height: 100%; removed to allow flex stretch to control height */
-    border: 1px solid rgba(19, 92, 81, 0.08);
+    justify-content: space-between;
+    min-height: 260px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.quoteIcon {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 1rem;
-    display: block;
-    transform: translateY(0);
-
-    /* Masking technique - Stacking multiple layers to boost alpha/opacity of the source image */
-    background-color: var(--color-brand-green-dark) !important;
-    mask-image: url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png');
-    -webkit-mask-image: url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png'), url('/images/quote-icon.png');
-    mask-size: contain;
-    -webkit-mask-size: contain;
-    mask-repeat: no-repeat;
-    -webkit-mask-repeat: no-repeat;
-    mask-position: center;
-    -webkit-mask-position: center;
+.quoteCard:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
 }
 
-/* .quoteImg removed as we use CSS mask on the container */
-
-.testimonialContent {
+.quote {
+    margin-bottom: var(--space-6);
     flex-grow: 1;
-    margin-bottom: 1.5rem;
-    /* Reduced margin */
-    display: flex;
-    /* align-items: center; removed to allow text to flow naturally */
 }
 
-.testimonialText {
-    color: #374151;
-    /* Gray-700 for better readability */
-    line-height: 1.6;
-    /* Slightly tighter line height */
-    font-size: 1.125rem;
-    /* Increased size for better visibility */
-    font-weight: 500;
-    /* Bolder */
-    font-family: var(--font-primary);
-    /* Theme font */
+.quoteText {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-gray-700);
+    font-style: italic;
 }
 
-.testimonialAuthor {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding-top: 1rem;
-    /* Reduced padding */
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    /* Visual separation */
-    margin-top: auto;
-    /* Push to bottom */
-}
-
-.authorImageWrapper {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.authorImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+/* Author */
+.author {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-gray-200);
 }
 
 .authorInfo {
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .authorName {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #111827;
-    margin-bottom: 0.125rem;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
 }
 
 .authorRole {
-    font-size: 0.875rem;
-    color: #6b7280;
+    font-size: var(--font-size-xs);
+    color: var(--color-gray-500);
 }
 
-.carouselControls {
+/* Navigation */
+.navigation {
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 1rem;
-    margin-top: 2rem;
+    justify-content: center;
+    gap: var(--space-6);
+    margin-top: var(--space-10);
 }
 
-.carouselBtn {
-    width: 48px;
-    height: 48px;
+.navButton {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--color-gray-300);
     border-radius: 50%;
-    background: var(--color-white);
-    color: var(--color-brand-green);
-    border: 2px solid var(--color-gray-300);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: var(--color-gray-600);
+    font-size: var(--font-size-lg);
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1.25rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
 }
 
-.carouselBtn:hover:not(:disabled) {
-    background-color: var(--color-brand-green);
+.navButton:hover {
+    background: var(--color-gray-100);
     border-color: var(--color-brand-green);
-    color: var(--color-white);
-    transform: scale(1.1);
+    color: var(--color-brand-green);
 }
 
-.carouselBtn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
+.navButton:focus-visible {
+    outline: 2px solid var(--color-brand-green);
+    outline-offset: 2px;
 }
 
 .dots {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin: 0 1.5rem;
-    /* Add spacing around dots */
+    gap: var(--space-3);
 }
 
 .dot {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: var(--color-gray-300);
     border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
     padding: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
     position: relative;
 }
 
-/* Accessible touch target - 44px minimum */
+/* Accessible touch target */
 .dot::before {
     content: '';
     position: absolute;
@@ -220,42 +161,54 @@
     transform: translate(-50%, -50%);
     width: 44px;
     height: 44px;
-    cursor: pointer;
 }
 
-.dot.active {
+.dotActive {
     background: var(--color-brand-green);
-    transform: scale(1.2);
+    transform: scale(1.25);
 }
 
-.dot:hover:not(.active) {
+.dot:hover:not(.dotActive) {
     background: var(--color-gray-400);
 }
 
-/* Focus states for keyboard navigation */
-.carouselBtn:focus-visible,
 .dot:focus-visible {
     outline: 2px solid var(--color-brand-green);
-    outline-offset: 2px;
+    outline-offset: 4px;
 }
 
 @media (max-width: 1024px) {
-    .testimonialCard {
-        flex: 0 0 calc(50% - 1rem);
+    .quotesGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-5);
+    }
+    
+    .quoteCard {
+        padding: var(--space-5);
+        min-height: 240px;
     }
 }
 
 @media (max-width: 768px) {
-    .testimonialCard {
-        flex: 0 0 100%;
-    }
-
     .title {
-        font-size: 2.25rem;
+        font-size: var(--font-size-3xl);
     }
+    
+    .quotesGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .quoteCard {
+        min-height: auto;
+    }
+    
+    .navigation {
+        gap: var(--space-4);
+    }
+}
 
-    .carouselBtn {
-        width: 40px;
-        height: 40px;
+@media (prefers-reduced-motion: reduce) {
+    .quotesGrid {
+        animation: none;
     }
 }

@@ -60,10 +60,10 @@
     padding: var(--space-5) var(--space-10);
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-semibold);
-    background-color: var(--color-brand-green);
-    color: var(--color-white);
+    background-color: var(--color-white);
+    color: var(--color-brand-green);
     border-radius: var(--radius-full);
-    box-shadow: 0 20px 40px rgba(19, 92, 81, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
     text-decoration: none;
     opacity: 0;
@@ -71,9 +71,9 @@
 }
 
 .heroCta:hover {
-    background-color: var(--color-brand-green-dark);
+    background-color: var(--color-gray-100);
     transform: translateY(-4px);
-    box-shadow: 0 25px 50px rgba(19, 92, 81, 0.4);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
 }
 
 .scrollIndicator {

@@ -25,6 +25,7 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
     const [touchEnd, setTouchEnd] = useState<number | null>(null);
     const [isInViewport, setIsInViewport] = useState(false);
     const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const items = Children.toArray(children);
@@ -106,15 +107,16 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
     // 1. autoPlay is enabled
     // 2. User doesn't prefer reduced motion
     // 3. Carousel is in viewport
+    // 4. Not paused (hover or focus)
     useEffect(() => {
-        if (!autoPlay || prefersReducedMotion || !isInViewport) return;
+        if (!autoPlay || prefersReducedMotion || !isInViewport || isPaused) return;
 
         const interval = setInterval(() => {
             nextSlide();
         }, intervalTime);
 
         return () => clearInterval(interval);
-    }, [autoPlay, intervalTime, nextSlide, prefersReducedMotion, isInViewport]);
+    }, [autoPlay, intervalTime, nextSlide, prefersReducedMotion, isInViewport, isPaused]);
 
     // Touch handlers for swipe
     const minSwipeDistance = 50;
@@ -150,6 +152,10 @@ export default function Carousel({ children, config = {}, className = '' }: Caro
             role="region"
             aria-label="Carrusel de contenido"
             aria-roledescription="carousel"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onFocus={() => setIsPaused(true)}
+            onBlur={() => setIsPaused(false)}
             onKeyDown={(e) => {
                 if (e.key === 'ArrowLeft') {
                     prevSlide();

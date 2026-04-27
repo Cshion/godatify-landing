@@ -4,7 +4,8 @@
     color: var(--color-gray-800);
     position: relative;
     overflow: hidden;
-    margin-top: 5rem;
+    margin-top: var(--space-24);
+    padding-top: var(--space-16);
     border-top: 1px solid var(--color-gray-200);
     /* Add border for separation */
 }
@@ -17,8 +18,8 @@
 .footerGrid {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 4rem;
-    margin-bottom: 4rem;
+    gap: var(--space-16);
+    margin-bottom: var(--space-16);
     position: relative;
     z-index: 1;
 }
@@ -47,11 +48,11 @@
 }
 
 .footerTitle {
-    font-family: var(--font-heading);
+    font-family: var(--font-barlow);
     font-size: 1.875rem;
     font-weight: 800;
     color: var(--color-brand-green-dark);
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
     letter-spacing: 0.05em;
 }
 
@@ -77,22 +78,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     text-decoration: none;
 }
 
 .socialLink:hover {
     background: var(--color-brand-green);
     color: var(--color-white);
-    transform: translateY(-3px);
 }
 
 .footerHeading {
-    font-family: var(--font-heading);
+    font-family: var(--font-barlow);
     font-size: 1.125rem;
     font-weight: 700;
     color: var(--color-gray-900);
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
 }
 
 .footerLinks {

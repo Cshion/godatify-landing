@@ -32,6 +32,17 @@ export default function Header({ navLinks, socialLinks, servicesNav, sectorsNav,
   const isBlogDetail = pathname.startsWith('/blog/') && pathname !== '/blog';
   const shouldForceScrolled = isCaseDetail || isBlogDetail;
 
+  // Helper to check if a nav link is active
+  const isLinkActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    return pathname.startsWith(href);
+  };
+
+  // Check if we're on any services page
+  const isServicesActive = pathname.startsWith('/servicios');
+  // Check if we're on any industries page
+  const isIndustriasActive = pathname.startsWith('/industrias');
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -82,14 +93,19 @@ export default function Header({ navLinks, socialLinks, servicesNav, sectorsNav,
             {/* Desktop Navigation */}
             <nav className={styles.navMenu}>
               {navLinks.filter(l => l.href !== '/industrias').slice(0, 2).map((link) => (
-                <Link key={link.href} href={link.href} className={styles.navLink}>
+                <Link 
+                  key={link.href} 
+                  href={link.href} 
+                  className={`${styles.navLink} ${isLinkActive(link.href) ? styles.navLinkActive : ''}`}
+                  aria-current={isLinkActive(link.href) ? 'page' : undefined}
+                >
                   {link.label}
                 </Link>
               ))}
 
               {/* Services Dropdown */}
               <div className={styles.dropdown}>
-                <button className={`${styles.navLink} ${styles.dropdownToggle}`}>
+                <button className={`${styles.navLink} ${styles.dropdownToggle} ${isServicesActive ? styles.navLinkActive : ''}`}>
                   {servicesLabel}
                 </button>
                 <div className={styles.dropdownMenu}>
@@ -108,7 +124,7 @@ export default function Header({ navLinks, socialLinks, servicesNav, sectorsNav,
               {/* Industries: Mega Menu OR Standard Link */}
               {sectorsNav && sectorsNav.length > 0 ? (
                 <div className={styles.dropdown}>
-                  <button className={`${styles.navLink} ${styles.dropdownToggle}`}>
+                  <button className={`${styles.navLink} ${styles.dropdownToggle} ${isIndustriasActive ? styles.navLinkActive : ''}`}>
                     Industrias
                   </button>
                   <div className={`${styles.dropdownMenu} ${styles.megaMenu}`}>
@@ -131,13 +147,22 @@ export default function Header({ navLinks, socialLinks, servicesNav, sectorsNav,
                   </div>
                 </div>
               ) : (
-                <Link href="/industrias" className={styles.navLink}>
+                <Link 
+                  href="/industrias" 
+                  className={`${styles.navLink} ${isIndustriasActive ? styles.navLinkActive : ''}`}
+                  aria-current={isIndustriasActive ? 'page' : undefined}
+                >
                   Industrias
                 </Link>
               )}
 
               {navLinks.filter(l => l.href !== '/industrias').slice(2).map((link) => (
-                <Link key={link.href} href={link.href} className={styles.navLink}>
+                <Link 
+                  key={link.href} 
+                  href={link.href} 
+                  className={`${styles.navLink} ${isLinkActive(link.href) ? styles.navLinkActive : ''}`}
+                  aria-current={isLinkActive(link.href) ? 'page' : undefined}
+                >
                   {link.label}
                 </Link>
               ))}
@@ -177,8 +202,9 @@ export default function Header({ navLinks, socialLinks, servicesNav, sectorsNav,
               <Link
                 key={link.href}
                 href={link.href}
-                className={styles.mobileLink}
+                className={`${styles.mobileLink} ${isLinkActive(link.href) ? styles.mobileLinkActive : ''}`}
                 onClick={() => setIsMobileMenuOpen(false)}
+                aria-current={isLinkActive(link.href) ? 'page' : undefined}
               >
                 {link.label}
               </Link>
@@ -254,8 +280,9 @@ export default function Header({ navLinks, socialLinks, servicesNav, sectorsNav,
               <Link
                 key={link.href}
                 href={link.href}
-                className={styles.mobileLink}
+                className={`${styles.mobileLink} ${isLinkActive(link.href) ? styles.mobileLinkActive : ''}`}
                 onClick={() => setIsMobileMenuOpen(false)}
+                aria-current={isLinkActive(link.href) ? 'page' : undefined}
               >
                 {link.label}
               </Link>

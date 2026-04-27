@@ -55,8 +55,8 @@
 .controlBtn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
-    border-color: #9ca3af;
-    color: #9ca3af;
+    border-color: var(--color-gray-400);
+    color: var(--color-gray-400);
 }
 
 .dots {
@@ -70,7 +70,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #d1d5db;
+    background: var(--color-gray-300);
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;

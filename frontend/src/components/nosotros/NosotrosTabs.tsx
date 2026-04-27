@@ -21,10 +21,13 @@ export default function NosotrosTabs({ content, videoConfig }: NosotrosTabsProps
         <section className={styles.tabsSection}>
             <div className={styles.container}>
                 {/* Navigation */}
-                <div className={styles.tabsNav}>
+                <div className={styles.tabsNav} role="tablist" aria-label="Secciones sobre nosotros">
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
+                            role="tab"
+                            aria-selected={activeTab === tab.id}
+                            aria-controls={`tabpanel-${tab.id}`}
                             className={`${styles.tabButton} ${activeTab === tab.id ? styles.activeTab : ''}`}
                             onClick={() => setActiveTab(tab.id as Tab)}
                         >
@@ -33,8 +36,14 @@ export default function NosotrosTabs({ content, videoConfig }: NosotrosTabsProps
                     ))}
                 </div>
 
-                {/* Content */}
-                <div className={styles.tabContent}>
+                {/* Content - key forces re-render and animation on tab change */}
+                <div 
+                    className={styles.tabContent} 
+                    key={activeTab}
+                    role="tabpanel"
+                    id={`tabpanel-${activeTab}`}
+                    aria-labelledby={`tab-${activeTab}`}
+                >
 
                     {/* Quiénes Somos */}
                     {activeTab === 'quienes' && (

@@ -19,7 +19,7 @@ export default async function BlogPage() {
     const { posts, total } = await api.blog.getPosts({ start: 0, limit: 7 });
 
     return (
-        <main className="min-h-screen bg-white">
+        <main id="main-content" className="min-h-screen bg-white">
             {/* CollectionPage Schema */}
             <script
                 type="application/ld+json"

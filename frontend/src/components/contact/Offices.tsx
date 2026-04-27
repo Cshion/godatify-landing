@@ -13,7 +13,7 @@ interface OfficesProps {
 export default function Offices({ title, subtitle, offices }: OfficesProps) {
     return (
         <div className={styles.wrapper}>
-            <div className="mb-8">
+            <div className={styles.header}>
                 <h2 className={styles.sidebarTitle}>{title}</h2>
                 <p className={styles.sidebarSubtitle}>{subtitle}</p>
             </div>
@@ -22,16 +22,16 @@ export default function Offices({ title, subtitle, offices }: OfficesProps) {
                     <div key={office.country} className={styles.card}>
                         <div className={styles.details}>
                             <div className={styles.infoRow}>
-                                <Icon name="map-marker-alt" className="text-primary mt-1" />
+                                <Icon name="map-marker-alt" className={styles.infoIcon} />
                                 <p>{office.address}</p>
                             </div>
                             <div className={styles.infoRow}>
-                                <Icon name="phone" className="text-primary mt-1" />
+                                <Icon name="phone" className={styles.infoIcon} />
                                 <p>{office.phone}</p>
                             </div>
                             <div className={styles.infoRow}>
-                                <Icon name="envelope" className="text-primary mt-1" />
-                                <a href={`mailto:${office.email}`} className="hover:text-primary transition-colors">
+                                <Icon name="envelope" className={styles.infoIcon} />
+                                <a href={`mailto:${office.email}`} className={styles.emailLink}>
                                     {office.email}
                                 </a>
                             </div>
