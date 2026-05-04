@@ -11,36 +11,203 @@
     line-height: var(--line-height-tight);
 }
 
-/* Featured + Compact Layout */
+/* ================================================================
+   TIMELINE LAYOUT (OPP 1) - 5-Phase Horizontal Flow
+   ================================================================ */
+
 .servicesLayout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-10);
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-8);
     align-items: start;
+    margin-bottom: var(--space-12);
 }
 
-/* Featured Service - Large emphasis */
-.featuredService {
+/* Timeline Phase Card */
+.timelinePhase {
     background: var(--color-white);
-    border-radius: var(--space-4);
-    padding: var(--space-10);
+    border-radius: var(--space-3);
+    padding: var(--space-6);
     border: 1px solid var(--color-gray-200);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    outline: none;
 }
 
-.featuredIcon {
-    width: 56px;
-    height: 56px;
+.timelinePhase:hover,
+.timelinePhase:focus {
+    border: 2px solid var(--color-brand-green);
+    box-shadow: 0 8px 20px rgba(19, 92, 81, 0.1);
+    padding: var(--space-6);
+}
+
+.timelinePhase:focus {
+    outline: 2px solid var(--color-brand-green);
+    outline-offset: 2px;
+}
+
+/* Timeline Phase Icon - Elevated styling (OPP 2 inspired) */
+.timelineIcon {
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     color: var(--color-brand-green);
+    background: rgba(19, 92, 81, 0.08);
+    border-radius: 50%;
+    margin-bottom: var(--space-4);
+    transition: all 0.3s ease;
+}
+
+.timelinePhase:hover .timelineIcon,
+.timelinePhase:focus .timelineIcon {
+    background: rgba(19, 92, 81, 0.12);
+    transform: scale(1.1);
+}
+
+/* Timeline Phase Title */
+.timelineTitle {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin-bottom: var(--space-3);
+}
+
+/* Timeline Phase Description */
+.timelineDescription {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+    line-height: var(--line-height-snug);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Connector Arrow Between Phases (Desktop) */
+.timelinePhase::after {
+    content: '→';
+    position: absolute;
+    right: -28px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-brand-green-light, rgba(19, 92, 81, 0.3));
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+/* Remove connector from last phase */
+.timelinePhase:last-child::after {
+    display: none;
+}
+
+/* ================================================================
+   RESPONSIVE BREAKPOINTS
+   ================================================================ */
+
+/* Tablet: 768px - 1023px */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .servicesLayout {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-6);
+    }
+
+    /* Remove connectors on tablet/mobile for 3-column layout */
+    .timelinePhase::after {
+        display: none;
+    }
+}
+
+/* Mobile: < 768px - Vertical Timeline */
+@media (max-width: 767px) {
+    .servicesLayout {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+    }
+
+    .timelinePhase {
+        text-align: left;
+        align-items: flex-start;
+        padding-left: var(--space-10);
+        position: relative;
+        border-left: 3px solid var(--color-brand-green);
+    }
+
+    .timelinePhase::before {
+        content: '';
+        position: absolute;
+        left: -7px;
+        top: var(--space-6);
+        width: 12px;
+        height: 12px;
+        background: var(--color-brand-green);
+        border-radius: 50%;
+        border: 3px solid var(--color-gray-50);
+    }
+
+    /* Remove right connector on mobile */
+    .timelinePhase::after {
+        display: none;
+    }
+
+    .timelineIcon {
+        margin-bottom: var(--space-3);
+        width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+    }
+
+    .timelineTitle {
+        font-size: var(--font-size-base);
+    }
+
+    .timelineDescription {
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* ================================================================
+   FEATURED SERVICE STYLE (Legacy - for compatibility)
+   ================================================================ */
+
+.featuredService {
+    background: linear-gradient(135deg, #ffffff 0%, rgba(19, 92, 81, 0.04) 100%);
+    border-radius: var(--space-4);
+    padding: var(--space-10);
+    border: 2px solid var(--color-brand-green);
+    box-shadow: 0 8px 24px rgba(19, 92, 81, 0.1);
+    display: none;
+}
+
+.featuredService:hover {
+    box-shadow: 0 12px 32px rgba(19, 92, 81, 0.12);
+}
+
+.featuredIcon {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.25rem;
+    color: var(--color-brand-green);
+    background: rgba(19, 92, 81, 0.08);
+    border-radius: 50%;
     margin-bottom: var(--space-6);
 }
 
 .featuredTitle {
     font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
+    font-weight: 800;
     color: var(--color-gray-900);
     margin-bottom: var(--space-4);
 }
@@ -71,11 +238,9 @@
     transform: translateY(-2px);
 }
 
-/* Compact Services - List style */
+/* Compact Services - Hidden in new layout */
 .compactServices {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
+    display: none;
 }
 
 .compactService {
@@ -156,26 +321,4 @@
 
 .viewAllLink:hover {
     text-decoration: underline;
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-    .servicesLayout {
-        grid-template-columns: 1fr;
-        gap: var(--space-8);
-    }
-    
-    .featuredService {
-        padding: var(--space-8);
-    }
-}
-
-@media (max-width: 768px) {
-    .sectionTitle {
-        font-size: var(--font-size-3xl);
-    }
-    
-    .featuredTitle {
-        font-size: var(--font-size-xl);
-    }
 }

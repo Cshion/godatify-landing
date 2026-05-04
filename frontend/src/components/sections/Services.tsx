@@ -12,11 +12,10 @@ interface ServicesProps {
 }
 
 export default function Services({ services, title, buttonText }: ServicesProps) {
-  // First service is featured, rest are compact
-  const [featured, ...rest] = services;
-  const compactServices = rest.slice(0, 5); // Show up to 5 compact
+  // Display all 5 services as timeline phases (OPP 1)
+  const phases = services.slice(0, 5);
 
-  if (!featured) return null;
+  if (!phases.length) return null;
 
   return (
     <section className={styles.servicesSection} id="servicios">
@@ -25,47 +24,34 @@ export default function Services({ services, title, buttonText }: ServicesProps)
           {title}
         </h2>
 
-        <div className={styles.servicesLayout}>
-          {/* Featured Service - Large */}
-          <div className={styles.featuredService}>
-            <div className={styles.featuredIcon}>
-              <Icon name={featured.icon} />
-            </div>
-            <h3 className={styles.featuredTitle}>{featured.title}</h3>
-            <p className={styles.featuredDescription}>
-              {featured.description}
-            </p>
-            <Link 
-              href={`/servicios/${featured.slug || featured.id}`} 
-              className={styles.featuredCta}
-              aria-label={`Leer más sobre ${featured.title}`}
+        {/* Timeline Layout - 5 Phases */}
+        <div 
+          className={styles.servicesLayout}
+          role="tablist"
+          aria-label="Fases de transformación de datos"
+        >
+          {phases.map((service, index) => (
+            <Link
+              key={service.id}
+              href={`/servicios/${service.slug || service.id}`}
+              className={styles.timelinePhase}
+              role="tab"
+              tabIndex={index === 0 ? 0 : -1}
+              aria-label={`Fase ${index + 1}: ${service.title}`}
+              aria-selected={index === 0}
             >
-              {buttonText}
-              <Icon name="arrow-right" />
+              <div className={styles.timelineIcon}>
+                <Icon name={service.icon} />
+              </div>
+              <h3 className={styles.timelineTitle}>{service.title}</h3>
+              <p className={styles.timelineDescription}>
+                {service.description}
+              </p>
             </Link>
-          </div>
-
-          {/* Compact Services - List */}
-          <div className={styles.compactServices}>
-            {compactServices.map((service) => (
-              <Link 
-                key={service.id} 
-                href={`/servicios/${service.slug || service.id}`}
-                className={styles.compactService}
-              >
-                <div className={styles.compactIcon}>
-                  <Icon name={service.icon} />
-                </div>
-                <div className={styles.compactContent}>
-                  <h4 className={styles.compactTitle}>{service.title}</h4>
-                  <p className={styles.compactDescription}>{service.description}</p>
-                </div>
-                <span className={styles.compactArrow}>→</span>
-              </Link>
-            ))}
-          </div>
+          ))}
         </div>
 
+        {/* View All Services */}
         <div className={styles.viewAllWrapper}>
           <Link href="/servicios" className={styles.viewAllLink}>
             Ver todos los servicios →
