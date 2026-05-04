@@ -20,9 +20,9 @@ help:
 	@echo "║              Backend Make Commands                             ║"
 	@echo "╠════════════════════════════════════════════════════════════════╣"
 	@echo "║  make install    → Install dependencies                        ║"
-	@echo "║  make dev        → Start development server                    ║"
+	@echo "║  make dev        → Start development server (PORT=1337)        ║"
 	@echo "║  make build      → Build for production                        ║"
-	@echo "║  make start      → Start production server                     ║"
+	@echo "║  make start      → Start production server (PORT=1337)         ║"
 	@echo "╠════════════════════════════════════════════════════════════════╣"
 	@echo "║  make seed            → Seed master data (safe for production) ║"
 	@echo "║  make seed-mock       → Seed mock data (dev only)              ║"
@@ -39,9 +39,10 @@ install:
 	npm install
 
 ## dev: Start development server with hot-reload
+## Usage: make dev [PORT=3333]
 dev:
-	@echo "🚀 Starting development server..."
-	npm run dev
+	@echo "🚀 Starting development server$(if $(PORT), on port $(PORT),)..."
+	$(if $(PORT),PORT=$(PORT)) npm run dev
 
 ## build: Build for production (compiles admin panel)
 build:
@@ -49,9 +50,10 @@ build:
 	npm run build
 
 ## start: Start production server (requires build first)
+## Usage: make start [PORT=3333]
 start:
-	@echo "⚡ Starting production server..."
-	npm run start
+	@echo "⚡ Starting production server$(if $(PORT), on port $(PORT),)..."
+	$(if $(PORT),PORT=$(PORT)) npm run start
 
 # ----------------------------------------------------------------------------
 # Seed Commands

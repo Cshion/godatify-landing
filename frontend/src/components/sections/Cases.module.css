@@ -47,7 +47,8 @@
 .featuredOverlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.85) 35%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.15) 100%);
+    backdrop-filter: blur(2px);
 }
 
 .featuredContent {
@@ -67,6 +68,7 @@
     letter-spacing: 0.1em;
     color: var(--color-brand-green-light);
     margin-bottom: var(--space-3);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .featuredTitle {
@@ -74,14 +76,17 @@
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-tight);
     margin-bottom: var(--space-3);
+    color: var(--color-white);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .featuredDescription {
     font-size: var(--font-size-base);
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.95);
     line-height: var(--line-height-relaxed);
     margin-bottom: var(--space-4);
     max-width: 500px;
+    text-shadow: 0 3px 8px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .featuredLink {
@@ -147,8 +152,8 @@
 
 .supportingTitle {
     font-size: var(--font-size-base);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-gray-900);
+    font-weight: var(--font-weight-bold);
+    color: #000;
     line-height: var(--line-height-tight);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -170,10 +175,12 @@
     transition: all 0.2s ease;
 }
 
-.viewAllLink:hover {
+.viewAllLink:hover,
+.viewAllLink:focus {
     background: var(--color-brand-green);
     color: var(--color-white);
     border-color: var(--color-brand-green);
+    outline: none;
 }
 
 @media (max-width: 768px) {

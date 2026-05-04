@@ -37,9 +37,10 @@ install:
 	@echo "$(GREEN)✓ Dependencies installed$(RESET)"
 
 ## dev: Start the Next.js development server
+## Usage: make dev [PORT=3001]
 dev:
-	@echo "$(CYAN)🚀 Starting development server...$(RESET)"
-	@npm run dev
+	@echo "$(CYAN)🚀 Starting development server$(if $(PORT), on port $(PORT),)...$(RESET)"
+	@npm run dev $(if $(PORT),-- -p $(PORT))
 
 ## build: Build the application for production
 build:
@@ -48,9 +49,10 @@ build:
 	@echo "$(GREEN)✓ Build complete$(RESET)"
 
 ## start: Start the production server (requires build first)
+## Usage: make start [PORT=3001]
 start:
-	@echo "$(CYAN)🌐 Starting production server...$(RESET)"
-	@npm run start
+	@echo "$(CYAN)🌐 Starting production server$(if $(PORT), on port $(PORT),)...$(RESET)"
+	@npm run start $(if $(PORT),-- -p $(PORT))
 
 ## lint: Run ESLint to check code quality
 lint:
@@ -80,7 +82,8 @@ help:
 	@echo "  $(GREEN)make clean$(RESET)    — Remove node_modules and .next"
 	@echo "  $(GREEN)make help$(RESET)     — Show this help message"
 	@echo ""
-	@echo "$(BOLD)Quick start:$(RESET)"
-	@echo "  $$ make install   # First time setup"
+	@echo "$(BOLD)Quick start:$   # First time setup"
+	@echo "  $$ make dev          # Start coding (port 3000)"
+	@echo "  $$ make dev PORT=3001  # Start on custom porttup"
 	@echo "  $$ make dev       # Start coding!"
 	@echo ""

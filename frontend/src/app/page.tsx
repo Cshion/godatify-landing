@@ -37,6 +37,10 @@ export default async function Home() {
           title={sectionLabels.services.title}
           buttonText={sectionLabels.services.button}
         />
+        <Clients
+          clients={clients}
+          title={sectionLabels.clients.title}
+        />
         <Cases
           cases={cases}
           title={sectionLabels.cases.title}
@@ -48,10 +52,6 @@ export default async function Home() {
           title={sectionLabels.testimonials.title}
           subtitle={sectionLabels.testimonials.subtitle}
           description={sectionLabels.testimonials.description}
-        />
-        <Clients
-          clients={clients}
-          title={sectionLabels.clients.title}
         />
       </main>
       <ScrollReveal />
