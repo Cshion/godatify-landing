@@ -58,7 +58,7 @@
 
 .footerDescription {
     font-family: var(--font-primary);
-    color: var(--color-gray-600);
+    color: var(--color-gray-900);
     line-height: var(--line-height-relaxed);
     margin-bottom: var(--space-6);
     font-size: var(--font-size-base);
@@ -110,7 +110,7 @@
 }
 
 .footerLinks a {
-    color: var(--color-gray-600);
+    color: var(--color-gray-900);
     text-decoration: none;
     transition: color 0.2s ease;
     font-size: var(--font-size-base);
@@ -134,7 +134,7 @@
 
 .footerCopyright {
     font-family: var(--font-primary);
-    color: var(--color-gray-500);
+    color: var(--color-gray-900);
     font-size: var(--font-size-sm);
     text-align: center;
 }

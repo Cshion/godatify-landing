@@ -72,7 +72,7 @@
 
 .excerpt {
     font-size: var(--font-size-base);
-    color: var(--color-gray-500);
+    color: var(--color-gray-900);
     line-height: var(--line-height-normal);
     margin-bottom: var(--space-6);
     display: -webkit-box;
@@ -98,7 +98,7 @@
 
 .date {
     font-size: var(--font-size-sm);
-    color: var(--color-gray-400);
+    color: var(--color-gray-900);
     font-weight: 500;
 }
 

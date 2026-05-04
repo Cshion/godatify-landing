@@ -58,7 +58,7 @@
     align-items: center;
     justify-content: center;
     gap: var(--space-8);
-    color: var(--color-gray-500);
+    color: var(--color-gray-900);
     font-size: var(--font-size-sm);
 }
 
@@ -97,7 +97,7 @@
 
 .authorRole {
     font-size: var(--font-size-sm);
-    color: var(--color-gray-500);
+    color: var(--color-gray-900);
     display: block;
 }
 
@@ -113,7 +113,7 @@
 }
 
 .dateValue {
-    color: var(--color-gray-500);
+    color: var(--color-gray-900);
 }
 
 .featuredImageWrapper {
@@ -137,7 +137,7 @@
     margin: 0 auto;
     font-size: var(--font-size-lg);
     line-height: 1.8;
-    color: var(--color-gray-700);
+    color: var(--color-gray-900);
 }
 
 /* Typography for blog content */
@@ -175,7 +175,7 @@
     position: relative;
     margin: var(--space-10) 0;
     font-style: italic;
-    color: var(--color-gray-700);
+    color: var(--color-gray-900);
     font-size: var(--font-size-xl);
     background: var(--color-gray-50);
     padding: var(--space-8) var(--space-8) var(--space-8) var(--space-12);

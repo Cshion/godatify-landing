@@ -61,7 +61,7 @@
 }
 
 .header.scrolled .navLink {
-    color: var(--color-gray-700);
+    color: var(--color-gray-900);
 }
 
 .navLink:hover {
@@ -132,7 +132,7 @@
 .dropdownItem {
     display: block;
     padding: 0.75rem 1rem;
-    color: var(--color-gray-700);
+    color: var(--color-gray-900);
     text-decoration: none;
     transition: all 0.2s ease;
 }
@@ -264,7 +264,7 @@
 .mobileLink {
     display: block;
     padding: 0.75rem 1.5rem;
-    color: var(--color-gray-700);
+    color: var(--color-gray-900);
     text-decoration: none;
     transition: all 0.2s ease;
 }
@@ -310,7 +310,7 @@
     padding: 0.75rem 1.5rem;
     background: none;
     border: none;
-    color: var(--color-gray-700);
+    color: var(--color-gray-900);
     font-size: var(--font-size-base);
     font-family: inherit;
     font-weight: 500;

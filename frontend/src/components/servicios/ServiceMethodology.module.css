@@ -61,8 +61,8 @@
 
 .stepDesc {
     font-family: var(--font-primary);
-    font-size: var(--font-size-sm);
-    color: var(--color-gray-600);
+    font-size: var(--font-size-base);
+    color: var(--color-gray-900);
     line-height: 1.5;
 }
 

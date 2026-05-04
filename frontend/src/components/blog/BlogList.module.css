@@ -55,7 +55,7 @@
 
 .endMessage {
     text-align: center;
-    color: var(--color-gray-400);
+    color: var(--color-gray-900);
     padding: var(--space-8) 0;
     font-size: var(--font-size-sm);
 }

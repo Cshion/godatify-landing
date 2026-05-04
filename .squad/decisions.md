@@ -39,6 +39,45 @@ Added `prefers-reduced-motion` support for WCAG 2.3.3 compliance.
 
 ---
 
+### 2026-05-03: Sprint Kickoff — Services Section Timeline Redesign (OPP 1 + OPP 2)
+**By:** Coordinator (Squad) | **Requested by:** Aaron
+**Team:** Dallas (Frontend), Brett (Designer), Lambert (Tester), Ripley (Lead)
+**Phase:** Pre-launch development (no prod constraints)
+
+**What:** Redesign Services section from 2-column grid → "Data Transformation Journey" timeline:
+- **OPP 2 (1 day):** Elevate featured service visually (teal border 2px, gradient, larger icon, bold title)
+- **OPP 1 (2-3 days):** Restructure layout as horizontal (desktop) / vertical (mobile) timeline showing 5 phases
+
+**Phase mapping:** 
+1. Data Engineering (ingesta)
+2. Big Data Management (gobernanza)
+3. Business Analytics (análisis)
+4. Business Intelligence (visualización)
+5. Digital Platform (acción)
+
+**Why:** Current section is generic (looks like any consultant). Timeline communicates "deep data transformation expertise" + CTO-friendly language (pipeline/phases). Expected impact: 50% improvement in "credibility" metric.
+
+**Deliverables:**
+- Design specs (Brett) + mockup
+- Updated Services.tsx + Services.module.css (Dallas)
+- Responsive testing desktop/table/mobile (Lambert)
+- Merged & live before EOW
+
+**Status:** ✅ Approved | Specs queued in `.squad/decisions/inbox/` | Team ready to kickoff
+
+**Key decisions:**
+- ✅ No backend changes (5 services already in correct order)
+- ✅ Component stays backward compatible (same props)
+- ✅ Brand teal only (#135C51), no new colors
+- ⚠️ Pending: Connector visual (CSS arrows vs SVG curves)?  
+- ⚠️ Pending: Click behavior on phase cards?
+
+**Sprint specs:** `.squad/decisions/inbox/services-sprint-design-specs.md`  
+**Implementation brief:** `.squad/decisions/inbox/sprint-services-brief.md`  
+**Timeline:** 3-5 days starting Day 1 (design finalization)
+
+---
+
 ## Governance
 
 - All meaningful changes require team consensus

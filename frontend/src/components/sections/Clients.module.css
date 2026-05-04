@@ -9,7 +9,7 @@
 .title {
     font-size: var(--font-size-2xl);
     font-weight: var(--font-weight-bold);
-    color: var(--color-gray-400);
+    color: var(--color-gray-900);
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -81,13 +81,13 @@
 .name {
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-bold);
-    color: var(--color-gray-700);
+    color: var(--color-gray-900);
     text-align: center;
 }
 
 .industry {
     font-size: var(--font-size-xs);
-    color: var(--color-gray-400);
+    color: var(--color-gray-900);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }

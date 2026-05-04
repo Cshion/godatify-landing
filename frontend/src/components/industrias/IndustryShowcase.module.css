@@ -36,7 +36,7 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    color: var(--color-gray-500);
+    color: var(--color-gray-900);
 }
 
 .tab:hover {
@@ -83,7 +83,7 @@
 
 .sectorDesc {
     font-size: var(--font-size-lg);
-    color: var(--color-gray-600);
+    color: var(--color-gray-900);
     line-height: var(--line-height-relaxed);
 }
 
@@ -109,7 +109,7 @@
 
 .infoCardText {
     font-size: var(--font-size-sm);
-    color: var(--color-gray-600);
+    color: var(--color-gray-900);
 }
 
 /* Industries Grid */
@@ -169,7 +169,7 @@
 }
 
 .industryCardDesc {
-    color: var(--color-gray-500);
+    color: var(--color-gray-900);
     font-size: var(--font-size-sm);
     margin-bottom: var(--space-6);
     position: relative;
@@ -264,7 +264,7 @@
 
 .buttonDesc {
     font-size: var(--font-size-sm);
-    color: var(--color-gray-500);
+    color: var(--color-gray-900);
     display: block;
     line-height: 1.5;
 }
@@ -327,14 +327,14 @@
     font-size: var(--font-size-xs);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-gray-500);
+    color: var(--color-gray-900);
 }
 
 .projectsList h4 {
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
-    color: var(--color-gray-400);
+    color: var(--color-gray-900);
     margin-bottom: var(--space-4);
 }
 
@@ -348,7 +348,7 @@
     position: relative;
     padding-left: var(--space-6);
     margin-bottom: var(--space-3);
-    color: var(--color-gray-700);
+    color: var(--color-gray-900);
     font-size: var(--font-size-sm);
     line-height: 1.6;
 }

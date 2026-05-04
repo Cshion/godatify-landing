@@ -12,50 +12,55 @@ interface ServicesProps {
 }
 
 export default function Services({ services, title, buttonText }: ServicesProps) {
-  // Display all 5 services as timeline phases (OPP 1)
-  const phases = services.slice(0, 5);
+  // Source data order: [0]=BigData, [1]=Analytics, [2]=BI, [3]=DataEng, [4]=Platform
+  // User journey order: Platform → BigData → DataEng → BI → Analytics
+  const reorderedPhases = [
+    services[4], // Phase 1: Digital Platform (data-entry applications)
+    services[0], // Phase 2: Big Data Management (data lakes)
+    services[3], // Phase 3: Data Engineering (ETL + governance)
+    services[2], // Phase 4: Business Intelligence
+    services[1], // Phase 5: Business Analytics
+  ].filter(Boolean);
 
-  if (!phases.length) return null;
+  if (!reorderedPhases.length) return null;
 
   return (
     <section className={styles.servicesSection} id="servicios">
       <div className="container mx-auto px-6">
-        <h2 className={styles.sectionTitle}>
-          {title}
-        </h2>
+        <h2 className={styles.sectionTitle}>{title}</h2>
+        
+        <p className={styles.sectionSubtitle}>
+          Nuestra metodología de transformación de datos en 5 fases
+        </p>
 
-        {/* Timeline Layout - 5 Phases */}
-        <div 
-          className={styles.servicesLayout}
-          role="tablist"
-          aria-label="Fases de transformación de datos"
-        >
-          {phases.map((service, index) => (
+        {/* Methodology Cards */}
+        <div className={styles.methodologyGrid}>
+          {reorderedPhases.map((service, index) => (
             <Link
               key={service.id}
               href={`/servicios/${service.slug || service.id}`}
-              className={styles.timelinePhase}
-              role="tab"
-              tabIndex={index === 0 ? 0 : -1}
-              aria-label={`Fase ${index + 1}: ${service.title}`}
-              aria-selected={index === 0}
+              className={styles.methodologyCard}
             >
-              <div className={styles.timelineIcon}>
+              {/* Phase Number */}
+              <span className={styles.phaseNumber}>
+                {String(index + 1).padStart(2, '0')}
+              </span>
+
+              {/* Icon */}
+              <div className={styles.cardIcon}>
                 <Icon name={service.icon} />
               </div>
-              <h3 className={styles.timelineTitle}>{service.title}</h3>
-              <p className={styles.timelineDescription}>
-                {service.description}
-              </p>
+
+              {/* Title */}
+              <h3 className={styles.cardTitle}>{service.title}</h3>
+
+              {/* Description */}
+              <p className={styles.cardDescription}>{service.description}</p>
+
+              {/* Arrow indicator */}
+              <span className={styles.cardArrow}>→</span>
             </Link>
           ))}
-        </div>
-
-        {/* View All Services */}
-        <div className={styles.viewAllWrapper}>
-          <Link href="/servicios" className={styles.viewAllLink}>
-            Ver todos los servicios →
-          </Link>
         </div>
       </div>
     </section>

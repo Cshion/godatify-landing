@@ -71,6 +71,31 @@
 - Multiple auto-playing carousels compete for attention
 - Hero background image has no preload hint
 
+### 2026-05-04 — Typography Size Audit
+
+**Key Findings:**
+- Body text at 14px (`--font-size-sm`) too small for enterprise audience (40-55 year old CTOs/CDOs)
+- Minimum readable body text should be 16px
+- Hero subtitle at 20px lacks premium gravitas for consultancy positioning
+
+**Problem Areas:**
+- Service card descriptions: 14px → 16px
+- Testimonial author name: 14px → 16px  
+- Testimonial author role: 12px → 14px
+- Testimonial quote: 16px → 18px
+- Hero subtitle: 20px → 24px
+- Service methodology step descriptions: 14px → 16px
+
+**Reference:** DataArt uses 22-24px for hero subtitles, 16-18px minimum for body text
+
+**Pattern:** When auditing typography, check:
+1. Audience age (enterprise = larger text)
+2. Hierarchy clarity (headings vs body)
+3. Mobile scaling (needs to work thumb-scrolling)
+4. Premium positioning (bigger = more gravitas)
+
+---
+
 ### 2026-04-19 — UI/UX Improvements Implementation
 
 **Improvements Fixed (5/8):**

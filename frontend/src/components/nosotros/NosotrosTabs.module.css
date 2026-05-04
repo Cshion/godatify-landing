@@ -29,7 +29,7 @@
     transition: all 0.3s ease;
     border: 1px solid var(--color-gray-200);
     background: var(--color-white);
-    color: var(--color-gray-600);
+    color: var(--color-gray-900);
     cursor: pointer;
 }
 
@@ -113,7 +113,7 @@
 
 .textContent p {
     font-size: var(--font-size-lg);
-    color: var(--color-gray-600);
+    color: var(--color-gray-900);
     line-height: var(--line-height-relaxed);
     margin-bottom: var(--space-8);
 }
@@ -196,7 +196,7 @@
 .statLabel {
     font-size: var(--font-size-sm);
     text-transform: uppercase;
-    color: var(--color-gray-500);
+    color: var(--color-gray-900);
     letter-spacing: 0.1em;
 }
 

@@ -7,52 +7,66 @@
     font-size: var(--font-size-4xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-gray-900);
-    margin-bottom: var(--space-12);
+    margin-bottom: var(--space-4);
     line-height: var(--line-height-tight);
+    text-align: center;
+}
+
+.sectionSubtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-900);
+    text-align: center;
+    margin-bottom: var(--space-12);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* ================================================================
-   TIMELINE LAYOUT (OPP 1) - 5-Phase Horizontal Flow
+   METHODOLOGY CARDS - Clean, Professional, Premium
    ================================================================ */
 
-.servicesLayout {
+.methodologyGrid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: var(--space-8);
-    align-items: start;
-    margin-bottom: var(--space-12);
+    gap: var(--space-6);
 }
 
-/* Timeline Phase Card */
-.timelinePhase {
+.methodologyCard {
     background: var(--color-white);
     border-radius: var(--space-3);
-    padding: var(--space-6);
+    padding: var(--space-8);
     border: 1px solid var(--color-gray-200);
     text-decoration: none;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: all 0.3s ease;
     position: relative;
-    outline: none;
+    transition: all 0.25s ease;
+    min-height: 280px;
 }
 
-.timelinePhase:hover,
-.timelinePhase:focus {
-    border: 2px solid var(--color-brand-green);
-    box-shadow: 0 8px 20px rgba(19, 92, 81, 0.1);
-    padding: var(--space-6);
+.methodologyCard:hover {
+    border-color: var(--color-brand-green);
+    box-shadow: 0 8px 24px rgba(19, 92, 81, 0.1);
+    transform: translateY(-4px);
 }
 
-.timelinePhase:focus {
+.methodologyCard:focus {
     outline: 2px solid var(--color-brand-green);
     outline-offset: 2px;
 }
 
-/* Timeline Phase Icon - Elevated styling (OPP 2 inspired) */
-.timelineIcon {
+/* Phase Number - Large, visible but decorative */
+.phaseNumber {
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-bold);
+    color: rgba(19, 92, 81, 0.2);
+    line-height: 1;
+    margin-bottom: var(--space-4);
+}
+
+/* Icon */
+.cardIcon {
     width: 48px;
     height: 48px;
     display: flex;
@@ -60,265 +74,109 @@
     justify-content: center;
     font-size: 1.5rem;
     color: var(--color-brand-green);
-    background: rgba(19, 92, 81, 0.08);
-    border-radius: 50%;
     margin-bottom: var(--space-4);
-    transition: all 0.3s ease;
 }
 
-.timelinePhase:hover .timelineIcon,
-.timelinePhase:focus .timelineIcon {
-    background: rgba(19, 92, 81, 0.12);
-    transform: scale(1.1);
-}
-
-/* Timeline Phase Title */
-.timelineTitle {
-    font-size: var(--font-size-base);
+/* Title */
+.cardTitle {
+    font-size: var(--font-size-lg);
     font-weight: var(--font-weight-semibold);
     color: var(--color-gray-900);
-    margin-bottom: var(--space-3);
-}
-
-/* Timeline Phase Description */
-.timelineDescription {
-    font-size: var(--font-size-sm);
-    color: var(--color-gray-600);
+    margin: 0 0 var(--space-3) 0;
     line-height: var(--line-height-snug);
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
-/* Connector Arrow Between Phases (Desktop) */
-.timelinePhase::after {
-    content: '→';
-    position: absolute;
-    right: -28px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--color-brand-green-light, rgba(19, 92, 81, 0.3));
-    font-size: var(--font-size-lg);
-    font-weight: bold;
-    z-index: 1;
-    opacity: 0.6;
-}
-
-/* Remove connector from last phase */
-.timelinePhase:last-child::after {
-    display: none;
-}
-
-/* ================================================================
-   RESPONSIVE BREAKPOINTS
-   ================================================================ */
-
-/* Tablet: 768px - 1023px */
-@media (max-width: 1023px) and (min-width: 768px) {
-    .servicesLayout {
-        grid-template-columns: repeat(3, 1fr);
-        gap: var(--space-6);
-    }
-
-    /* Remove connectors on tablet/mobile for 3-column layout */
-    .timelinePhase::after {
-        display: none;
-    }
-}
-
-/* Mobile: < 768px - Vertical Timeline */
-@media (max-width: 767px) {
-    .servicesLayout {
-        grid-template-columns: 1fr;
-        gap: var(--space-6);
-    }
-
-    .timelinePhase {
-        text-align: left;
-        align-items: flex-start;
-        padding-left: var(--space-10);
-        position: relative;
-        border-left: 3px solid var(--color-brand-green);
-    }
-
-    .timelinePhase::before {
-        content: '';
-        position: absolute;
-        left: -7px;
-        top: var(--space-6);
-        width: 12px;
-        height: 12px;
-        background: var(--color-brand-green);
-        border-radius: 50%;
-        border: 3px solid var(--color-gray-50);
-    }
-
-    /* Remove right connector on mobile */
-    .timelinePhase::after {
-        display: none;
-    }
-
-    .timelineIcon {
-        margin-bottom: var(--space-3);
-        width: 40px;
-        height: 40px;
-        font-size: 1.25rem;
-    }
-
-    .timelineTitle {
-        font-size: var(--font-size-base);
-    }
-
-    .timelineDescription {
-        font-size: var(--font-size-sm);
-    }
-}
-
-/* ================================================================
-   FEATURED SERVICE STYLE (Legacy - for compatibility)
-   ================================================================ */
-
-.featuredService {
-    background: linear-gradient(135deg, #ffffff 0%, rgba(19, 92, 81, 0.04) 100%);
-    border-radius: var(--space-4);
-    padding: var(--space-10);
-    border: 2px solid var(--color-brand-green);
-    box-shadow: 0 8px 24px rgba(19, 92, 81, 0.1);
-    display: none;
-}
-
-.featuredService:hover {
-    box-shadow: 0 12px 32px rgba(19, 92, 81, 0.12);
-}
-
-.featuredIcon {
-    width: 72px;
-    height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.25rem;
-    color: var(--color-brand-green);
-    background: rgba(19, 92, 81, 0.08);
-    border-radius: 50%;
-    margin-bottom: var(--space-6);
-}
-
-.featuredTitle {
-    font-size: var(--font-size-2xl);
-    font-weight: 800;
-    color: var(--color-gray-900);
-    margin-bottom: var(--space-4);
-}
-
-.featuredDescription {
+/* Description */
+.cardDescription {
     font-size: var(--font-size-base);
-    color: var(--color-gray-600);
+    color: var(--color-gray-900);
     line-height: var(--line-height-relaxed);
-    margin-bottom: var(--space-8);
-}
-
-.featuredCta {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-4) var(--space-8);
-    background: var(--color-brand-green);
-    color: var(--color-white);
-    border-radius: 9999px;
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-base);
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.featuredCta:hover {
-    background: var(--color-brand-green-dark);
-    transform: translateY(-2px);
-}
-
-/* Compact Services - Hidden in new layout */
-.compactServices {
-    display: none;
-}
-
-.compactService {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    padding: var(--space-5);
-    background: var(--color-white);
-    border: 1px solid var(--color-gray-200);
-    border-radius: var(--space-3);
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.compactService:hover {
-    border-color: var(--color-brand-green);
-    box-shadow: 0 4px 12px rgba(19, 92, 81, 0.08);
-}
-
-.compactIcon {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    color: var(--color-brand-green);
-    flex-shrink: 0;
-}
-
-.compactContent {
-    flex: 1;
-    min-width: 0;
-}
-
-.compactTitle {
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-gray-900);
-    margin-bottom: var(--space-1);
-}
-
-.compactDescription {
-    font-size: var(--font-size-sm);
-    color: var(--color-gray-500);
-    line-height: var(--line-height-snug);
+    margin: 0;
+    flex-grow: 1;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
-.compactArrow {
-    color: var(--color-gray-400);
+/* Arrow indicator */
+.cardArrow {
     font-size: var(--font-size-lg);
-    transition: all 0.2s ease;
-    flex-shrink: 0;
+    color: var(--color-brand-green);
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    margin-top: var(--space-4);
 }
 
-.compactService:hover .compactArrow {
-    color: var(--color-brand-green);
+.methodologyCard:hover .cardArrow {
+    opacity: 1;
     transform: translateX(4px);
 }
 
-/* View All */
-.viewAllWrapper {
-    text-align: center;
-    margin-top: var(--space-10);
+/* ================================================================
+   RESPONSIVE - Tablet
+   ================================================================ */
+
+@media (max-width: 1200px) {
+    .methodologyGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
-.viewAllLink {
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-brand-green);
-    text-decoration: none;
-    transition: all 0.2s ease;
+@media (max-width: 900px) {
+    .methodologyGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.viewAllLink:hover {
-    text-decoration: underline;
+/* ================================================================
+   RESPONSIVE - Mobile
+   ================================================================ */
+
+@media (max-width: 640px) {
+    .servicesSection {
+        padding: var(--space-16) 0;
+    }
+
+    .sectionTitle {
+        font-size: var(--font-size-3xl);
+    }
+
+    .sectionSubtitle {
+        font-size: var(--font-size-base);
+    }
+
+    .methodologyGrid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+
+    .methodologyCard {
+        padding: var(--space-6);
+        min-height: auto;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: var(--space-4);
+    }
+
+    .phaseNumber {
+        font-size: var(--font-size-3xl);
+        min-width: 48px;
+    }
+
+    .cardIcon {
+        display: none;
+    }
+
+    .cardTitle {
+        font-size: var(--font-size-base);
+    }
+
+    .cardDescription {
+        -webkit-line-clamp: 2;
+    }
+
+    .cardArrow {
+        display: none;
+    }
 }
