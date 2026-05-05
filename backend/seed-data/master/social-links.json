@@ -1,21 +1,25 @@
 [
     {
         "slug": "linkedin",
+        "icon": "linkedin-in",
         "url": "https://www.linkedin.com/company/godatify/",
         "label": "LinkedIn"
     },
     {
         "slug": "facebook",
+        "icon": "facebook-f",
         "url": "https://www.facebook.com/godatify",
         "label": "Facebook"
     },
     {
         "slug": "instagram",
+        "icon": "instagram",
         "url": "https://www.instagram.com/godatify/",
         "label": "Instagram"
     },
     {
         "slug": "youtube",
+        "icon": "youtube",
         "url": "https://www.youtube.com/@godatify",
         "label": "YouTube"
     }

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import styles from './PartnerLogos.module.css';
 
+// TODO: Before production, download these logos to /public/images/partners/ to avoid external dependencies
 const partners = [
     { name: 'AWS', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg' },
     { name: 'Microsoft Azure', logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg' },

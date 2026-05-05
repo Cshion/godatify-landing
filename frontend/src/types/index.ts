@@ -118,6 +118,8 @@ export interface CaseStudy {
     industry: string;
     relatedIndustryId?: string;
     description: string;
+    challenge?: string;
+    solution?: string;
     results: CaseResult[];
     techStack: string[];
     image: string;

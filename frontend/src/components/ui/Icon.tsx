@@ -43,6 +43,12 @@ export default function Icon({
   ariaLabel,
   ariaHidden = true,
 }: IconProps) {
+  // Guard against null/undefined name
+  if (!name) {
+    console.warn('Icon component received null/undefined name');
+    return null;
+  }
+
   // Auto-detect prefix if not provided
   const iconPrefix = prefix || (BRAND_ICONS.includes(name) ? 'fab' : 'fas');
   

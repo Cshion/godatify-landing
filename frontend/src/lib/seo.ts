@@ -55,7 +55,7 @@ export const defaultMetadata: Metadata = {
         },
     },
     verification: {
-        google: 'google-site-verification=YOUR_VERIFICATION_CODE',
+        google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
     },
     category: 'technology',
     classification: 'Data Consultancy',
@@ -73,11 +73,12 @@ export const defaultMetadata: Metadata = {
         siteName: siteConfig.name,
         title: `${siteConfig.name} – Datificando las Organizaciones`,
         description: siteConfig.description,
+        // TODO: Replace with branded 1200x630 og-image.png when ready
         images: [
             {
-                url: `${siteConfig.url}/images/og-image.png`,
-                width: 1200,
-                height: 630,
+                url: `${siteConfig.url}/images/logo-brand-harmonized.png`,
+                width: 400,
+                height: 400,
                 alt: `${siteConfig.name} - Consultoría de Datos`,
             },
         ],
@@ -88,7 +89,8 @@ export const defaultMetadata: Metadata = {
         creator: "@godatify",
         title: `${siteConfig.name} – Datificando las Organizaciones`,
         description: siteConfig.description,
-        images: [`${siteConfig.url}/images/og-image.png`],
+        // TODO: Replace with branded 1200x630 og-image.png when ready
+        images: [`${siteConfig.url}/images/logo-brand-harmonized.png`],
     },
 };
 
