@@ -30,9 +30,6 @@
         "icon": {
             "type": "string"
         },
-        "imageUrl": {
-            "type": "string"
-        },
         "bgImageUrl": {
             "type": "string"
         },

@@ -1,3 +1,5 @@
+import type { BlocksContent } from '@strapi/blocks-react-renderer';
+
 export interface SocialLink {
     id: string;
     icon: string;
@@ -38,7 +40,7 @@ export interface Service {
     subtitle: string;
     description: string;
     icon: string;
-    image: string;
+    image?: string;
     slug?: string;
     phrases?: string[];
     backgroundImage?: string; // Added for hero background
@@ -116,15 +118,12 @@ export interface CaseStudy {
     industry: string;
     relatedIndustryId?: string;
     description: string;
-    challenge: string;
-    solution: string;
     results: CaseResult[];
     techStack: string[];
     image: string;
-    videoUrl?: string;
     client: Client;
     testimonial?: Testimonial;
-    content: string;
+    content?: BlocksContent;
 }
 
 export interface IndustryStats {

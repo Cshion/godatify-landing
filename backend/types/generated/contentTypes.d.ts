@@ -595,7 +595,6 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    challenge: Schema.Attribute.Text;
     client: Schema.Attribute.Relation<'manyToOne', 'api::client.client'>;
     clientLogoUrl: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
@@ -615,6 +614,7 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
           visible: false;
         };
       }>;
+    content: Schema.Attribute.Blocks;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -639,7 +639,6 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
     results: Schema.Attribute.JSON;
     services: Schema.Attribute.Relation<'manyToMany', 'api::service.service'>;
     slug: Schema.Attribute.UID<'title'>;
-    solution: Schema.Attribute.Text;
     techStack: Schema.Attribute.JSON;
     testimonial: Schema.Attribute.Relation<
       'oneToOne',
@@ -679,7 +678,6 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    videoUrl: Schema.Attribute.String;
   };
 }
 
@@ -1056,7 +1054,6 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
     description: Schema.Attribute.Text;
     features: Schema.Attribute.JSON;
     icon: Schema.Attribute.String;
-    imageUrl: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

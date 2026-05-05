@@ -42,12 +42,6 @@
         "description": {
             "type": "text"
         },
-        "challenge": {
-            "type": "text"
-        },
-        "solution": {
-            "type": "text"
-        },
         "results": {
             "type": "json"
         },
@@ -64,9 +58,6 @@
             ]
         },
         "mainImageUrl": {
-            "type": "string"
-        },
-        "videoUrl": {
             "type": "string"
         },
         "testimonial": {
@@ -145,6 +136,9 @@
                     "visible": false
                 }
             }
+        },
+        "content": {
+            "type": "blocks"
         }
     }
 }

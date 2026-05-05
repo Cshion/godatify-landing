@@ -15,6 +15,7 @@ export const MEDIA_FIELDS_MAP = {
     'api::client.client': [{ media: 'logo', url: 'logoUrl' }],
     'api::service.service': [{ media: 'bgImage', url: 'bgImageUrl' }],
     'api::company-info.company-info': [{ media: 'logo', url: 'logoUrl' }],
+    'api::blog-post.blog-post': [{ media: 'coverImage', url: 'coverImageUrl' }],
 };
 
 /**

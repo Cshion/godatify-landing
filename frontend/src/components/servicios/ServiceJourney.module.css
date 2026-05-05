@@ -1,0 +1,112 @@
+.section {
+    padding: var(--space-20) 0;
+    background-color: var(--color-white);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+.title {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+    text-align: center;
+    margin-bottom: var(--space-4);
+}
+
+.subtitle {
+    font-size: var(--font-size-xl);
+    color: var(--color-gray-600);
+    text-align: center;
+    margin-bottom: var(--space-16);
+}
+
+.stepsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-8);
+    position: relative;
+}
+
+.step {
+    position: relative;
+    text-align: center;
+}
+
+.stepNumber {
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-extrabold);
+    color: var(--color-brand-green);
+    opacity: 0.15;
+    line-height: 1;
+    margin-bottom: var(--space-4);
+}
+
+.stepContent {
+    position: relative;
+}
+
+.stepIcon {
+    width: 3.5rem;
+    height: 3.5rem;
+    background-color: rgba(19, 92, 81, 0.1);
+    color: var(--color-brand-green);
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-4);
+    font-size: var(--font-size-xl);
+}
+
+.stepTitle {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+    margin-bottom: var(--space-2);
+}
+
+.stepDescription {
+    font-size: var(--font-size-base);
+    color: var(--color-gray-600);
+    line-height: 1.6;
+}
+
+.connector {
+    position: absolute;
+    top: 4rem;
+    right: -1rem;
+    width: 2rem;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-brand-green) 0%, transparent 100%);
+    opacity: 0.3;
+}
+
+@media (max-width: 1024px) {
+    .stepsGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-12);
+    }
+    .connector { display: none; }
+}
+
+@media (max-width: 640px) {
+    .stepsGrid {
+        grid-template-columns: 1fr;
+    }
+    .step {
+        display: flex;
+        text-align: left;
+        gap: var(--space-4);
+    }
+    .stepNumber {
+        font-size: var(--font-size-4xl);
+        flex-shrink: 0;
+    }
+    .stepIcon {
+        margin: 0 0 var(--space-3) 0;
+    }
+}

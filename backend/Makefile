@@ -80,15 +80,31 @@ seed-mock:
 ## reset-db: Truncate all tables, sync schema, seed all data
 ## Development ONLY - destroys all data!
 reset-db:
+	@echo "🛑 Stopping any running Strapi processes..."
 	@pkill -f "strapi develop" 2>/dev/null || true
-	@sleep 1
+	@pkill -f "strapi" 2>/dev/null || true
+	@sleep 2
+	@echo "🔄 Resetting database..."
+	@if [ ! -f scripts/reset.ts ]; then \
+		echo "❌ Error: scripts/reset.ts not found. Run from backend/ directory."; \
+		exit 1; \
+	fi
 	npx ts-node scripts/reset.ts
+	@echo "✅ Database reset complete. Run 'make dev' to start the server."
 
 ## reset-db-no-mock: Same as reset-db but skip mock data
 reset-db-no-mock:
+	@echo "🛑 Stopping any running Strapi processes..."
 	@pkill -f "strapi develop" 2>/dev/null || true
-	@sleep 1
+	@pkill -f "strapi" 2>/dev/null || true
+	@sleep 2
+	@echo "🔄 Resetting database (master only)..."
+	@if [ ! -f scripts/reset.ts ]; then \
+		echo "❌ Error: scripts/reset.ts not found. Run from backend/ directory."; \
+		exit 1; \
+	fi
 	npx ts-node scripts/reset.ts --skip-mock
+	@echo "✅ Database reset complete. Run 'make dev' to start the server."
 
 # ----------------------------------------------------------------------------
 # Cleanup

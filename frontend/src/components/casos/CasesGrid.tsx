@@ -126,15 +126,6 @@ export default function CasesGrid({ cases: initialCases, initialTotal, standalon
                                 </div>
                                 <h3 className={styles.title}>{caseStudy.title}</h3>
                                 <p className={styles.description}>{caseStudy.description}</p>
-
-                                <div className={styles.resultsPreview}>
-                                    {caseStudy.results.slice(0, 2).map((result, idx) => (
-                                        <div key={idx} className={styles.resultItem}>
-                                            <span className={styles.resultValue}>{result.value}</span>
-                                            <span className={styles.resultLabel}>{result.suffix}</span>
-                                        </div>
-                                    ))}
-                                </div>
                             </div>
                         </Link>
                     ))}

@@ -1,38 +1,7 @@
-import { Metadata } from 'next';
-import IndustriesHero from '@/components/industrias/IndustriesHero';
-import IndustryShowcase from '@/components/industrias/IndustryShowcase';
-import { api } from '@/lib/api';
-import { generateBreadcrumbSchema } from '@/lib/schemas';
+import { redirect } from 'next/navigation';
 
-export async function generateMetadata(): Promise<Metadata> {
-    const { hero } = await api.industries.getPageData();
-    return {
-        title: 'Soluciones por Industria | Datify',
-        description: 'Soluciones de Data Analytics personalizadas para tu industria. Retail, Banca, Salud, Manufactura y más. Conoce nuestros casos de éxito. →',
-        alternates: {
-            canonical: '/industrias',
-        },
-    };
-}
-
-export default async function IndustriasPage() {
-    const { hero, sectors, cases } = await api.industries.getPageData();
-
-    return (
-        <main id="main-content">
-            {/* Breadcrumb Schema */}
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(generateBreadcrumbSchema([
-                        { name: 'Inicio', url: 'https://godatify.com/' },
-                        { name: 'Industrias' }
-                    ]))
-                }}
-            />
-            
-            <IndustriesHero hero={hero} />
-            <IndustryShowcase sectors={sectors} cases={cases} />
-        </main>
-    );
+// Redirect /industrias to the first industry page
+// Individual industry pages: /industrias/cervecera, /industrias/logistica, etc.
+export default function IndustriasPage() {
+    redirect('/industrias/cervecera');
 }

@@ -15,17 +15,33 @@
             "slug": "cervecera",
             "title": "Industria Cervecera",
             "sector": "consumo-masivo",
-            "description": "Precisión operativa y visibilidad comercial en toda la cadena de valor.",
+            "description": "Transformamos la cadena de valor cervecera con inteligencia de datos: desde la planta de producción hasta el punto de venta, ofrecemos visibilidad completa para decisiones comerciales y operativas precisas.",
             "imageUrl": "https://images.unsplash.com/photo-1600256698643-1d9345bfd9ee?auto=format&fit=crop&q=80&w=1000",
             "stats": [
                 {
-                    "label": "Eficiencia",
+                    "label": "Eficiencia Operativa",
                     "value": "+25%"
                 },
                 {
-                    "label": "Visibilidad",
+                    "label": "Visibilidad Comercial",
                     "value": "360°"
+                },
+                {
+                    "label": "Reducción de Quiebres",
+                    "value": "-30%"
                 }
+            ],
+            "challenges": [
+                "Falta de visibilidad en tiempo real sobre ventas por canal y zona",
+                "Desconexión entre Sell In y Sell Out que genera quiebres de stock",
+                "Equipos de frío sin monitoreo que afectan la calidad del producto",
+                "Reportes manuales que llegan tarde para la toma de decisiones"
+            ],
+            "solutions": [
+                "Dashboards de KPIs comerciales actualizados en tiempo real",
+                "Integración de datos de distribuidores para calcular Sell Out real",
+                "IoT y telemetría para monitoreo de equipos de refrigeración",
+                "Alertas automáticas y reportes programados vía Telegram/Email"
             ],
             "projects": [
                 "Automatización de procesos ETL y alertas vía Telegram.",
@@ -38,51 +54,85 @@
             "slug": "logistica",
             "title": "Industria Logística",
             "sector": "logistica-transporte",
-            "description": "Optimización de rutas, gestión de flotas y monitoreo en tiempo real.",
+            "description": "Optimizamos cada eslabón de la cadena logística con analítica avanzada: rutas inteligentes, gestión predictiva de flotas y visibilidad end-to-end para cumplir con entregas a tiempo y reducir costos operativos.",
             "imageUrl": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000",
             "stats": [
                 {
-                    "label": "Entregas",
-                    "value": "On-Time"
+                    "label": "Entregas On-Time",
+                    "value": "98%"
                 },
                 {
-                    "label": "Control",
-                    "value": "Total"
+                    "label": "Ahorro Combustible",
+                    "value": "-18%"
+                },
+                {
+                    "label": "Eficiencia Flota",
+                    "value": "+22%"
                 }
+            ],
+            "challenges": [
+                "Rutas ineficientes que incrementan costos de combustible",
+                "Falta de visibilidad sobre el estado de entregas en tiempo real",
+                "Mantenimiento reactivo de flota que genera paradas no planificadas",
+                "KPIs logísticos calculados manualmente con días de retraso"
+            ],
+            "solutions": [
+                "Algoritmos de optimización de rutas con IA y restricciones reales",
+                "Tracking en tiempo real con GPS y estimaciones de llegada precisas",
+                "Mantenimiento predictivo basado en telemetría de vehículos",
+                "Dashboards de OTIF, tiempos de ciclo y utilización de flota"
             ],
             "projects": [
                 "Tableros de monitoreo de entregas en tiempo real.",
                 "Cálculo de KPIs logísticos (OTIF, Tiempos de Ciclo).",
-                "Automatización de flujos entre operaciones y comercial."
+                "Automatización de flujos entre operaciones y comercial.",
+                "Optimización de rutas con Machine Learning."
             ]
         },
         {
             "slug": "agricola",
             "title": "Industria Agrícola",
             "sector": "agro-pesca",
-            "description": "Transformación digital para un entorno estacional y de alta variabilidad.",
+            "description": "Llevamos la agricultura de precisión a otro nivel: imágenes satelitales, sensores IoT y modelos predictivos que permiten maximizar rendimiento por hectárea, optimizar recursos hídricos y garantizar calidad de exportación.",
             "imageUrl": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=1000",
             "stats": [
                 {
-                    "label": "Gestión",
-                    "value": "Campo"
+                    "label": "Rendimiento",
+                    "value": "+15%"
                 },
                 {
-                    "label": "Datos",
-                    "value": "Integrados"
+                    "label": "Ahorro Agua",
+                    "value": "-25%"
+                },
+                {
+                    "label": "Calidad Export",
+                    "value": "Top"
                 }
+            ],
+            "challenges": [
+                "Variabilidad inexplicable en rendimiento entre lotes similares",
+                "Detección tardía de plagas y estrés hídrico en cultivos",
+                "Alto consumo de agua y energía sin optimización por zona",
+                "Gestión de campo basada en experiencia sin datos objetivos"
+            ],
+            "solutions": [
+                "Análisis espectral satelital (NDVI, NDWI) para diagnóstico temprano",
+                "Modelos predictivos de plagas y enfermedades con Machine Learning",
+                "Riego de precisión con sensores IoT y mapas de prescripción variable",
+                "Apps móviles para supervisores con datos de campo en tiempo real"
             ],
             "projects": [
                 "App móvil para gestión de lotes y producción en campo.",
                 "Arquitectura Big Data para escalabilidad de información.",
-                "BI para fenología, costos de riego y control de calidad."
+                "BI para fenología, costos de riego y control de calidad.",
+                "Sistema de agricultura de precisión con imágenes satelitales."
             ]
         },
         {
             "slug": "pesquera",
             "title": "Industria Pesquera",
             "sector": "agro-pesca",
-            "description": "Digitalización y cumplimiento normativo en procesos complejos.",
+            "description": "Digitalizamos operaciones pesqueras complejas: desde la captura hasta la planta de procesamiento, integramos datos para cumplimiento normativo, trazabilidad total y optimización de la flota en tiempo real.",
             "imageUrl": "https://images.unsplash.com/photo-1534951009808-766178b47a8e?auto=format&fit=crop&q=80&w=1000",
             "stats": [
                 {
@@ -90,14 +140,31 @@
                     "value": "100%"
                 },
                 {
-                    "label": "Normativa",
-                    "value": "Cumplida"
+                    "label": "Cumplimiento",
+                    "value": "Total"
+                },
+                {
+                    "label": "Eficiencia Captura",
+                    "value": "+18%"
                 }
+            ],
+            "challenges": [
+                "Gestión manual de flota sin visibilidad en tiempo real",
+                "Cumplimiento normativo complejo (vedas, cuotas, certificaciones)",
+                "Trazabilidad de producto difícil de demostrar a compradores internacionales",
+                "Producción sin optimización (rendimiento harina/aceite variable)"
+            ],
+            "solutions": [
+                "Plataforma de inteligencia operativa con datos satelitales y telemetría",
+                "Reportes automáticos de cumplimiento para PRODUCE y certificadoras",
+                "Trazabilidad blockchain desde captura hasta embarque final",
+                "Dashboards de producción por planta, turno y tipo de producto"
             ],
             "projects": [
                 "Análisis de producción por planta y veda.",
                 "Reportes automatizados para áreas legales y RRHH.",
-                "Cuadros de mando de producción detallada (harina, aceite)."
+                "Cuadros de mando de producción detallada (harina, aceite).",
+                "Sistema de trazabilidad para certificación sostenible."
             ]
         }
     ]

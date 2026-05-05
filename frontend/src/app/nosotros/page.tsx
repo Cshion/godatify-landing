@@ -4,6 +4,7 @@ import ScrollReveal from '@/components/ui/ScrollReveal';
 import NosotrosHero from '@/components/nosotros/NosotrosHero';
 import NosotrosTabs from '@/components/nosotros/NosotrosTabs';
 import Clients from '@/components/sections/Clients';
+import Testimonials from '@/components/sections/Testimonials';
 import { generateBreadcrumbSchema } from '@/lib/schemas';
 
 import { api } from '@/lib/api';
@@ -21,6 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function NosotrosPage() {
     const content = await api.about.getContent();
+    const homeData = await api.home.getData();
     const { videoConfig, sectionLabels } = content;
 
     return (
@@ -40,6 +42,13 @@ export default async function NosotrosPage() {
                 <NosotrosHero hero={content.hero} />
                 <NosotrosTabs content={content} videoConfig={videoConfig} />
                 <Clients clients={content.clients} title={sectionLabels.clients.title} />
+                <Testimonials 
+                    testimonials={homeData.testimonials}
+                    carouselConfig={homeData.carouselConfig}
+                    title={homeData.sectionLabels.testimonials.title}
+                    subtitle={homeData.sectionLabels.testimonials.subtitle}
+                    description={homeData.sectionLabels.testimonials.description}
+                />
             </main>
             <ScrollReveal />
 

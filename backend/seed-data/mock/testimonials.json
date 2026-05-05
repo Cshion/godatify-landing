@@ -1,38 +1,44 @@
 [
     {
-        "quote": "Es increíble, es realmente maravilloso. Datify ha superado completamente nuestras expectativas...",
-        "author": "Cliente Satisfecho",
-        "role": "CEO, Empresa",
-        "authorImageUrl": "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random&format=png"
+        "quote": "Datify transformó nuestra forma de tomar decisiones. Ahora tenemos visibilidad total sobre las operaciones y podemos actuar en tiempo real.",
+        "author": "Roberto Gutiérrez",
+        "role": "Director de Operaciones, Cervecería Nacional",
+        "authorImageUrl": "https://ui-avatars.com/api/?name=Roberto+Gutierrez&background=135c51&color=fff&format=png",
+        "linkedIn": "https://www.linkedin.com/in/roberto-gutierrez-ejemplo"
     },
     {
-        "quote": "Datify ha transformado completamente nuestra capacidad de tomar decisiones basadas en datos...",
-        "author": "Cliente Satisfecho",
-        "role": "Director, Organización",
-        "authorImageUrl": "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random&format=png"
+        "quote": "La implementación del data lake nos permitió reducir los tiempos de análisis de semanas a horas. El ROI fue evidente desde el primer trimestre.",
+        "author": "Ana María Fernández",
+        "role": "CFO, LogiTrans MX",
+        "authorImageUrl": "https://ui-avatars.com/api/?name=Ana+Fernandez&background=135c51&color=fff&format=png",
+        "linkedIn": "https://www.linkedin.com/in/ana-fernandez-ejemplo"
     },
     {
-        "quote": "La implementación fue rápida y eficiente...",
-        "author": "Cliente Satisfecho",
-        "role": "Gerente, Compañía",
-        "authorImageUrl": "https://ui-avatars.com/api/?name=Cliente+Satisfecho&background=random&format=png"
-    },
-    {
-        "quote": "El soporte y la atención al cliente son excepcionales...",
-        "author": "María González",
-        "role": "CFO, Tech Solutions",
-        "authorImageUrl": "https://ui-avatars.com/api/?name=Maria+Gonzalez&background=random&format=png"
-    },
-    {
-        "quote": "Los insights que hemos obtenido gracias a Datify han sido fundamentales...",
+        "quote": "El equipo de Datify entendió nuestras necesidades desde el día uno. La solución de BI que implementaron superó nuestras expectativas.",
         "author": "Carlos Mendoza",
-        "role": "VP Operaciones, Retail Corp",
-        "authorImageUrl": "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=random&format=png"
+        "role": "VP Comercial, Grupo Agroindustrial",
+        "authorImageUrl": "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=135c51&color=fff&format=png",
+        "linkedIn": "https://www.linkedin.com/in/carlos-mendoza-ejemplo"
     },
     {
-        "quote": "Datify nos ayudó a centralizar toda nuestra información...",
-        "author": "Ana Rodríguez",
-        "role": "Directora General, Innovación SA",
-        "authorImageUrl": "https://ui-avatars.com/api/?name=Ana+Rodriguez&background=random&format=png"
+        "quote": "Gracias a la inteligencia operativa, optimizamos nuestras rutas de pesca y aumentamos la captura en un 18% mientras reducíamos el consumo de combustible.",
+        "author": "Jorge Villanueva",
+        "role": "Gerente General, Pesquera Pacífico",
+        "authorImageUrl": "https://ui-avatars.com/api/?name=Jorge+Villanueva&background=135c51&color=fff&format=png",
+        "linkedIn": "https://www.linkedin.com/in/jorge-villanueva-ejemplo"
+    },
+    {
+        "quote": "La agricultura de precisión que Datify implementó nos permite tomar decisiones basadas en datos reales, no en suposiciones. Nuestro rendimiento por hectárea aumentó significativamente.",
+        "author": "María Elena Torres",
+        "role": "Directora Agrícola, AgroExport Peru",
+        "authorImageUrl": "https://ui-avatars.com/api/?name=Maria+Torres&background=135c51&color=fff&format=png",
+        "linkedIn": "https://www.linkedin.com/in/maria-torres-ejemplo"
+    },
+    {
+        "quote": "El dashboard de KPIs comerciales que nos diseñaron se ha convertido en nuestra herramienta más valiosa. Las ventas han mejorado un 15% año contra año.",
+        "author": "Fernando Rojas",
+        "role": "Director Comercial, Distribuidora Nacional",
+        "authorImageUrl": "https://ui-avatars.com/api/?name=Fernando+Rojas&background=135c51&color=fff&format=png",
+        "linkedIn": "https://www.linkedin.com/in/fernando-rojas-ejemplo"
     }
 ]

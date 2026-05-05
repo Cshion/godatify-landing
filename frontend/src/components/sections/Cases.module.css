@@ -168,18 +168,19 @@
     text-align: center;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-brand-green);
+    color: var(--color-white);
+    background: var(--color-brand-green);
     text-decoration: none;
-    border: 1px solid var(--color-gray-200);
+    border: 1px solid var(--color-brand-green);
     border-radius: var(--space-3);
     transition: all 0.2s ease;
 }
 
 .viewAllLink:hover,
 .viewAllLink:focus {
-    background: var(--color-brand-green);
+    background: var(--color-brand-green-dark, #0e4a42);
     color: var(--color-white);
-    border-color: var(--color-brand-green);
+    border-color: var(--color-brand-green-dark, #0e4a42);
     outline: none;
 }
 

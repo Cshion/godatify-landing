@@ -1,3 +1,832 @@
+/* =============================================================================
+   CaseDetail.module.css — DataArt LBS-Inspired Premium Style
+   Typography: weight 400 for all headings, hierarchy through size
+   Color: Minimal — near-black text, warm off-white backgrounds
+   Layout: Two-column with sticky sidebar
+   ============================================================================= */
+
+/* Layout Structure */
+.article {
+    padding-top: calc(var(--space-24) + 80px);
+    padding-bottom: var(--space-24);
+    background-color: var(--color-white);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    font-size: 14px;
+    color: #6B7280;
+    margin-bottom: var(--space-6);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.breadcrumbLink {
+    color: #135c51;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumbLink:hover {
+    color: #0e4a42;
+    text-decoration: underline;
+}
+
+.breadcrumbSeparator {
+    color: #9CA3AF;
+}
+
+.breadcrumbCurrent {
+    color: #6B7280;
+}
+
+/* Section Navigation - Sticky */
+.sectionNav {
+    position: sticky;
+    top: 80px;
+    z-index: 40;
+    background: white;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.sectionNavLink {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6B7280;
+    text-decoration: none;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.sectionNavLink:hover {
+    color: #135c51;
+}
+
+.sectionNavLinkActive {
+    color: #135c51;
+    border-bottom-color: #135c51;
+}
+
+/* Tags */
+.tags {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.tag {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #135c51;
+    background: rgba(19, 92, 81, 0.08);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+/* Two-Column Layout */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .layout {
+        grid-template-columns: 1fr 320px;
+        gap: 4rem;
+    }
+}
+
+.mainContent {
+    /* Prose column */
+}
+
+/* Typography — weight 400 for everything, hierarchy through size */
+.title {
+    font-size: 50px;
+    font-weight: 400;
+    line-height: 1.12;
+    color: #0A0A0A;
+    margin-bottom: 1.5rem;
+}
+
+.introText {
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #0A0A0A;
+    margin-bottom: 3rem;
+}
+
+.sectionTitle {
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.1;
+    color: #0A0A0A;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.sectionTitle:first-of-type {
+    margin-top: 0;
+}
+
+.bodyText {
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #0A0A0A;
+    margin-bottom: 1.5rem;
+}
+
+.bodyText strong {
+    font-weight: 600;
+}
+
+/* Tech Stack List */
+.techList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+}
+
+.techItem {
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #0A0A0A;
+    padding-left: 1.5rem;
+    position: relative;
+    margin-bottom: 0.75rem;
+}
+
+.techItem::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #135c51;
+}
+
+.techItem strong {
+    font-weight: 600;
+}
+
+/* Key Learnings List */
+.learningsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.learningItem {
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #0A0A0A;
+    padding-left: 1.5rem;
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.learningItem::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #135c51;
+}
+
+/* Results Grid — horizontal metric cards */
+.resultsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.resultCard {
+    background: #F8FAFA;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.resultValue {
+    font-size: 36px;
+    font-weight: 600;
+    color: #135c51;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.resultLabel {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6B7280;
+    margin-bottom: 0.25rem;
+}
+
+.resultSuffix {
+    font-size: 13px;
+    color: #9CA3AF;
+}
+
+/* Sidebar */
+.sidebar {
+    position: relative;
+}
+
+@media (min-width: 1024px) {
+    .sidebar {
+        position: sticky;
+        top: 140px;
+        height: fit-content;
+    }
+}
+
+/* Sidebar Card */
+.sidebarCard {
+    background: #F8FAFA;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.sidebarLabel {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #6B7280;
+    margin-bottom: 0.5rem;
+}
+
+.sidebarValue {
+    font-size: 16px;
+    font-weight: 400;
+    color: #0A0A0A;
+    margin-bottom: 1.5rem;
+}
+
+.sidebarValue:last-child {
+    margin-bottom: 0;
+}
+
+/* Client Logo in Sidebar */
+.clientLogoWrapper {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    margin-bottom: 1rem;
+}
+
+.clientLogo {
+    object-fit: contain;
+    object-position: left;
+}
+
+.clientName {
+    font-size: 18px;
+    font-weight: 500;
+    color: #0A0A0A;
+    margin-bottom: 0.5rem;
+}
+
+.clientWebsite {
+    font-size: 14px;
+    color: #135c51;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: color 0.2s;
+}
+
+.clientWebsite:hover {
+    color: #0e4a42;
+    text-decoration: underline;
+}
+
+.clientWebsiteIcon {
+    font-size: 12px;
+}
+
+/* Sidebar Tech Tags */
+.sidebarTechList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.sidebarTechTag {
+    font-size: 14px;
+    font-weight: 400;
+    color: #374151;
+    background: white;
+    border: 1px solid #E5E7EB;
+    padding: 0.375rem 0.75rem;
+    border-radius: 4px;
+}
+
+/* Testimonial Card */
+.testimonialCard {
+    background: linear-gradient(to bottom right, rgba(19, 92, 81, 0.05), transparent);
+    border: 1px solid rgba(19, 92, 81, 0.1);
+    border-radius: 8px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonialQuoteIcon {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 80px;
+    color: rgba(19, 92, 81, 0.08);
+    line-height: 1;
+}
+
+.testimonialQuote {
+    font-size: 16px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.6;
+    color: #374151;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.testimonialAuthor {
+    font-size: 15px;
+    font-weight: 600;
+    font-style: normal;
+    color: #0A0A0A;
+    display: block;
+}
+
+.testimonialRole {
+    font-size: 13px;
+    color: #135c51;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.testimonialLinkedIn {
+    margin-top: 1rem;
+}
+
+.testimonialLinkedInLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 13px;
+    color: #6B7280;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.testimonialLinkedInLink:hover {
+    color: #0077B5;
+}
+
+/* CTA Section with Share */
+.ctaSection {
+    border-top: 1px solid #E5E7EB;
+    padding-top: 3rem;
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .ctaSection {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.ctaContent {
+    flex: 1;
+}
+
+.ctaTitle {
+    font-size: 28px;
+    font-weight: 400;
+    color: #0A0A0A;
+    margin-bottom: 0.5rem;
+}
+
+.ctaSubtitle {
+    font-size: 16px;
+    color: #6B7280;
+}
+
+.ctaActions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.ctaButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #135c51;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.ctaButton:hover {
+    background: #0e4a42;
+}
+
+/* Share Buttons */
+.shareLabel {
+    font-size: 13px;
+    color: #6B7280;
+    margin-right: 0.5rem;
+}
+
+.shareButtons {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.shareButton {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #E5E7EB;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6B7280;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.shareButton:hover {
+    border-color: #135c51;
+    color: #135c51;
+}
+
+/* Inline Contact Form */
+.contactFormSection {
+    background: #F8FAFA;
+    padding: 3rem;
+    border-radius: 12px;
+    margin-top: 4rem;
+}
+
+.contactFormTitle {
+    font-size: 28px;
+    font-weight: 400;
+    color: #0A0A0A;
+    margin-bottom: 0.5rem;
+}
+
+.contactFormSubtitle {
+    font-size: 16px;
+    color: #6B7280;
+    margin-bottom: 2rem;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .formGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroupFull {
+    grid-column: 1 / -1;
+}
+
+.formLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.formInput {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+    color: #0A0A0A;
+    background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formInput:focus {
+    border-color: #135c51;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(19, 92, 81, 0.1);
+}
+
+.formInput::placeholder {
+    color: #9CA3AF;
+}
+
+.formTextarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.formActions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 0.5rem;
+}
+
+.formSubmit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #135c51;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.formSubmit:hover {
+    background: #0e4a42;
+}
+
+.formSubmit:disabled {
+    background: #9CA3AF;
+    cursor: not-allowed;
+}
+
+/* Form Success State */
+.formSuccess {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.formSuccessIcon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1.5rem;
+    color: #135c51;
+}
+
+.formSuccessTitle {
+    font-size: 24px;
+    font-weight: 500;
+    color: #0A0A0A;
+    margin-bottom: 0.5rem;
+}
+
+.formSuccessText {
+    font-size: 16px;
+    color: #6B7280;
+}
+
+/* Honeypot */
+.honeypot {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Related Cases Section */
+.relatedSection {
+    background: #F8FAFA;
+    border-top: 1px solid #E5E7EB;
+    padding: var(--space-20) 0;
+}
+
+.relatedContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+.relatedTitle {
+    font-size: 36px;
+    font-weight: 400;
+    color: #0A0A0A;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+    .title {
+        font-size: 36px;
+    }
+
+    .sectionTitle {
+        font-size: 28px;
+    }
+
+    .bodyText,
+    .introText,
+    .techItem,
+    .learningItem {
+        font-size: 18px;
+    }
+
+    .resultValue {
+        font-size: 28px;
+    }
+
+    .ctaTitle,
+    .contactFormTitle {
+        font-size: 24px;
+    }
+
+    .sectionNav {
+        gap: 1rem;
+    }
+
+    .contactFormSection {
+        padding: 2rem;
+    }
+
+    /* Responsive figures */
+    .contentBody figure {
+        margin: 32px 0 16px;
+        padding: 16px;
+    }
+
+    .contentBody img {
+        margin: 24px auto;
+        padding: 12px;
+    }
+}
+
+/* Mobile sidebar order */
+@media (max-width: 1023px) {
+    .sidebar {
+        order: -1;
+    }
+}
+
+/* Video Wrapper */
+.videoWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 450px;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #F3F4F6;
+}
+
+.videoIframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Hero Image - Optional, minimal */
+.heroImage {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.heroImageInner {
+    object-fit: cover;
+}
+
+/* Content from CMS */
+.contentBody {
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #0A0A0A;
+}
+
+.contentBody h2 {
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.1;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.contentBody h3 {
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.contentBody p {
+    margin-bottom: 1.5rem;
+}
+
+.contentBody ul,
+.contentBody ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+.contentBody li {
+    margin-bottom: 0.5rem;
+}
+
+.contentBody strong {
+    font-weight: 600;
+}
+
+/* Figure/Image Support — DataArt-Inspired */
+.contentBody figure {
+    margin: 48px 0 24px;
+    padding: 24px 32px 32px;
+    background-color: #FFFFFF;
+    border: 1px solid #E2E6E9;
+    border-radius: 0;
+}
+
+.contentBody figure img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.contentBody figure figcaption {
+    font-size: 14px;
+    color: #6B7280;
+    text-align: center;
+    margin-top: 16px;
+    font-style: italic;
+}
+
+/* Standalone images (not in figure) */
+.contentBody img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 32px auto;
+    border: 1px solid #E2E6E9;
+    padding: 16px;
+    background: #FFFFFF;
+}
+
 .detailSection {
     padding-top: calc(var(--space-24) + 100px);
     padding-bottom: var(--space-24);
@@ -47,6 +876,30 @@
     margin: 0 auto;
 }
 
+/* Section Navigation */
+.sectionNav {
+    display: flex;
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
+    margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-gray-200);
+    flex-wrap: wrap;
+}
+
+.sectionNavLink {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-500);
+    text-decoration: none;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--space-2);
+    transition: all 0.2s;
+}
+
+.sectionNavLink:hover {
+    color: var(--color-brand-green);
+    background-color: rgba(19, 92, 81, 0.05);
+}
+
 .contentGrid {
     display: grid;
     grid-template-columns: 1fr;
@@ -68,9 +921,10 @@
 
 .mainImageWrapper {
     position: relative;
-    height: 400px;
     width: 100%;
-    margin-bottom: var(--space-16);
+    aspect-ratio: 16 / 9;
+    max-height: 400px;
+    margin-bottom: var(--space-10);
     border-radius: var(--space-4);
     overflow: hidden;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
@@ -147,35 +1001,20 @@
     margin-bottom: var(--space-6);
 }
 
-.techStack {
-    border-top: 1px solid var(--color-gray-200);
-    padding-top: var(--space-12);
-    margin-top: var(--space-16);
-}
-
-.techTitle {
-    display: block;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-gray-900);
-    margin-bottom: var(--space-4);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
+/* Tech Tags (used in sidebar) */
 .techTags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-4);
+    gap: var(--space-3);
 }
 
 .techTag {
     padding: var(--space-2) var(--space-4);
-    background: var(--color-white);
+    background: var(--color-gray-50);
     border: 1px solid var(--color-gray-200);
     border-radius: var(--space-2);
     font-size: var(--font-size-sm);
-    color: var(--color-gray-900);
+    color: var(--color-gray-700);
     font-weight: var(--font-weight-medium);
 }
 
@@ -202,18 +1041,16 @@
     gap: var(--space-16);
 }
 
-.challengeCard {
-    background-color: rgba(254, 242, 242, 0.5);
+/* All content cards should have the same neutral styling */
+.challengeCard,
+.solutionCard,
+.implementationCard,
+.learningsCard {
+    background-color: var(--color-white);
     border-radius: var(--space-4);
     padding: var(--space-10);
-    border: 1px solid rgb(254, 226, 226);
-}
-
-.solutionCard {
-    background-color: rgba(19, 92, 81, 0.05);
-    border-radius: var(--space-4);
-    padding: var(--space-10);
-    border: 1px solid rgba(19, 92, 81, 0.1);
+    border: 1px solid var(--color-gray-200);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .cardHeader {
@@ -233,14 +1070,22 @@
     flex-shrink: 0;
 }
 
-.cardIconWrapperChallenge {
-    background-color: var(--color-error-light);
-    color: var(--color-error);
+/* Keep icon colors but muted - only solution/learnings get brand color */
+.cardIconWrapperChallenge { 
+    background-color: var(--color-gray-100); 
+    color: var(--color-gray-600); 
 }
-
-.cardIconWrapperSolution {
-    background-color: rgba(19, 92, 81, 0.1);
-    color: var(--color-brand-green);
+.cardIconWrapperSolution { 
+    background-color: rgba(19, 92, 81, 0.1); 
+    color: var(--color-brand-green); 
+}
+.cardIconWrapperImplementation { 
+    background-color: var(--color-gray-100); 
+    color: var(--color-gray-600); 
+}
+.cardIconWrapperLearnings { 
+    background-color: rgba(19, 92, 81, 0.1); 
+    color: var(--color-brand-green); 
 }
 
 .cardTitle {
@@ -253,6 +1098,31 @@
     color: var(--color-gray-900);
     font-size: var(--font-size-lg);
     line-height: 1.7;
+}
+
+/* Key Learnings List */
+.learningsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.learningItem {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-900);
+    line-height: 1.6;
+}
+
+.learningIcon {
+    color: var(--color-brand-green);
+    flex-shrink: 0;
+    margin-top: 4px;
 }
 
 /* Sidebar Cards */
@@ -273,6 +1143,36 @@
     letter-spacing: 0.05em;
     margin-bottom: var(--space-6);
 }
+
+/* Utility classes for sidebar */
+.clientInfoWrapper { display: flex; align-items: center; gap: var(--space-3); }
+.clientInfoInner { flex: 1; }
+.clientName { font-weight: var(--font-weight-bold); color: var(--color-gray-900); display: block; }
+.clientLink { 
+    font-size: var(--font-size-xs); 
+    color: var(--color-gray-500); 
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+    transition: color 0.2s;
+}
+.clientLink:hover { color: var(--color-brand-green); }
+.clientLinkIcon { font-size: 10px; }
+.clientMeta { font-size: var(--font-size-xs); color: var(--color-gray-400); display: block; margin-top: var(--space-1); }
+.clientFallbackIcon { 
+    width: 2.5rem; 
+    height: 2.5rem; 
+    border-radius: 9999px; 
+    background: var(--color-gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-400);
+}
+.clientLogoWrapper { position: relative; width: 8rem; height: 3rem; }
+.resultItemContent { display: flex; flex-direction: column; text-align: left; }
+.testimonialAuthorWrapper { display: flex; flex-direction: column; }
 
 /* Testimonial Card */
 .testimonialCard {
@@ -347,6 +1247,59 @@
 
 .linkedInButton:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Similar Challenge CTA */
+.similarChallengeCta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, rgba(19, 92, 81, 0.05) 0%, rgba(19, 92, 81, 0.1) 100%);
+    border: 1px solid rgba(19, 92, 81, 0.15);
+    border-radius: var(--space-4);
+    padding: var(--space-10) var(--space-12);
+    margin-top: var(--space-16);
+    margin-bottom: var(--space-16);
+}
+
+.ctaContent { flex: 1; }
+
+.ctaTitle {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+    margin-bottom: var(--space-2);
+}
+
+.ctaDescription {
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-600);
+}
+
+.ctaButton {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background-color: var(--color-brand-green);
+    color: var(--color-white);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--space-2);
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.ctaButton:hover {
+    background-color: var(--color-brand-green-dark);
+    transform: translateX(2px);
+}
+
+@media (max-width: 768px) {
+    .similarChallengeCta {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-6);
+    }
 }
 
 /* Related Cases Section */

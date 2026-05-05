@@ -146,7 +146,7 @@ export const api = {
                 // Parallel fetch for Home Page components
                 const [testimonialsRes, servicesRes, casesRes, clientsRes] = await Promise.all([
                     fetch(`${STRAPI_URL}/api/testimonials?pagination[limit]=6&populate=*`, { cache: 'no-store' }),
-                    fetch(`${STRAPI_URL}/api/services?fields[0]=title&fields[1]=slug&fields[2]=description&fields[3]=icon&fields[4]=imageUrl&pagination[limit]=10`, { cache: 'no-store' }),
+                    fetch(`${STRAPI_URL}/api/services?fields[0]=title&fields[1]=slug&fields[2]=description&fields[3]=icon&pagination[limit]=10`, { cache: 'no-store' }),
                     fetch(`${STRAPI_URL}/api/case-studies?sort[0]=publishedAt:desc&sort[1]=slug:asc&pagination[limit]=6&fields[0]=slug&fields[1]=title&fields[2]=description&fields[3]=mainImageUrl`, { cache: 'no-store' }),
                     fetch(`${STRAPI_URL}/api/clients?fields[0]=name&fields[1]=logoUrl&pagination[limit]=20`, { cache: 'no-store' })
                 ]);
@@ -173,8 +173,7 @@ export const api = {
                     slug: item.slug,
                     title: item.title,
                     description: item.description,
-                    icon: item.icon,
-                    image: item.imageUrl || '/images/placeholder.png'
+                    icon: item.icon
                 }));
 
                 // Process Cases
@@ -282,7 +281,6 @@ export const api = {
                     subtitle: item.subtitle,
                     description: item.description,
                     icon: item.icon,
-                    image: item.imageUrl || '/images/placeholder.png',
                     backgroundImage: item.bgImageUrl,
                     phrases: item.phrases || [],
                     features: item.features || [],
@@ -427,12 +425,9 @@ export const api = {
                     title: item.title,
                     industry: item.industry?.title || item.industryName || 'General',
                     description: item.description,
-                    challenge: item.challenge,
-                    solution: item.solution,
                     results: item.results || [],
                     techStack: item.techStack || [],
                     image: item.mainImageUrl || '/images/placeholder.png',
-                    videoUrl: item.videoUrl,
                     client: {
                         name: item.clientName || 'Anonymous',
                         logo: item.clientLogoUrl || '/images/placeholder.png',
@@ -446,7 +441,7 @@ export const api = {
                         linkedIn: item.testimonialLinkedIn,
                         image: item.testimonialAuthorImageUrl
                     } : undefined,
-                    content: ''
+                    content: item.content || null
                 };
 
                 // Filter out current case and limit to 3
@@ -520,13 +515,11 @@ export const api = {
                     title: 'Sitemap Placeholder',
                     industry: 'General',
                     description: '',
-                    challenge: '',
-                    solution: '',
                     results: [],
                     techStack: [],
                     image: '',
                     client: { name: '', anonymous: false },
-                    content: ''
+                    content: []
                 } as CaseStudy));
             } catch (error) {
                 console.error('Failed to getAll cases:', error);

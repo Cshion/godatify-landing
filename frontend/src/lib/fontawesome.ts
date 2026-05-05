@@ -39,6 +39,9 @@ import {
   faHandshake,
   faCheckCircle,
   faUsers,
+  faCogs,
+  faGraduationCap,
+  faPaperPlane,
 } from '@fortawesome/free-solid-svg-icons';
 
 // Import brand icons
@@ -53,6 +56,7 @@ import {
   faRProject,
   faAws,
   faMicrosoft,
+  faXTwitter,
 } from '@fortawesome/free-brands-svg-icons';
 
 // Add all icons to library
@@ -89,6 +93,9 @@ library.add(
   faHandshake,
   faCheckCircle,
   faUsers,
+  faCogs,
+  faGraduationCap,
+  faPaperPlane,
   // Brand icons
   faLinkedinIn,
   faFacebookF,
@@ -99,7 +106,8 @@ library.add(
   faPython,
   faRProject,
   faAws,
-  faMicrosoft
+  faMicrosoft,
+  faXTwitter
 );
 
 // Export for external use if needed

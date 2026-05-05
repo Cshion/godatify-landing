@@ -27,7 +27,6 @@ export const CASES_CONTENT: CaseStudy[] = [
         ],
         techStack: ['Power BI', 'SQL Server', 'Azure'],
         image: '/images/cases/case_kpis_comerciales_1764948784061.png',
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Placeholder video
         client: {
             name: 'Distribuidora Nacional',
             logo: 'https://placehold.co/200x80.png?text=Distribuidora&font=roboto',
@@ -62,7 +61,6 @@ export const CASES_CONTENT: CaseStudy[] = [
         ],
         techStack: ['Tableau', 'Python', 'Snowflake'],
         image: '/images/cases/case_sell_in_out_1764948806601.png',
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Placeholder video
         client: {
             name: 'Confidencial',
             anonymous: true

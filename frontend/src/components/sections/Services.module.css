@@ -93,10 +93,6 @@
     line-height: var(--line-height-relaxed);
     margin: 0;
     flex-grow: 1;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
 /* Arrow indicator */
@@ -170,10 +166,6 @@
 
     .cardTitle {
         font-size: var(--font-size-base);
-    }
-
-    .cardDescription {
-        -webkit-line-clamp: 2;
     }
 
     .cardArrow {

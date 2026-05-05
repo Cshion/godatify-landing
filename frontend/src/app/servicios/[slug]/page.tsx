@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation';
 import { api } from '@/lib/api';
 import ServiceHero from '@/components/servicios/ServiceHero';
+import ServiceJourney from '@/components/servicios/ServiceJourney';
 import ServiceFeatures from '@/components/servicios/ServiceFeatures';
-import ServiceMethodology from '@/components/servicios/ServiceMethodology';
-import ServiceTechStack from '@/components/servicios/ServiceTechStack';
+import PartnerLogos from '@/components/common/PartnerLogos';
 import CasesGrid from '@/components/casos/CasesGrid';
 import { Metadata } from 'next';
 import { generateServiceSchema, generateBreadcrumbSchema } from '@/lib/schemas';
@@ -77,14 +77,12 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                 phrases={service.phrases}
                 backgroundImage={service.backgroundImage}
             />
-            <div className={styles.container}>
 
-                <ServiceFeatures features={service.features} />
+            <ServiceFeatures features={service.features} />
 
-                <ServiceMethodology steps={service.methodology} />
+            <ServiceJourney />
 
-                <ServiceTechStack techStack={service.techStack} />
-            </div>
+            <PartnerLogos />
 
             {relatedCases.length > 0 && (
                 <section className={styles.relatedSection}>

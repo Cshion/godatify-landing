@@ -905,5 +905,208 @@
             "Compliance",
             "Gestión"
         ]
+    },
+    {
+        "title": "Cómo Construir un Data Lake que Realmente Funcione",
+        "slug": "construir-data-lake-efectivo",
+        "excerpt": "Evita el 'data swamp'. Aprende las mejores prácticas para diseñar e implementar un data lake que escale con tu negocio.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Un data lake sin estructura termina siendo un pantano de datos. La clave está en el diseño desde el día uno."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-10-15",
+        "readingTime": "8 min",
+        "featured": true,
+        "author": {
+            "name": "Roberto Gutiérrez"
+        },
+        "tags": [
+            "Data Lake",
+            "Big Data",
+            "Arquitectura"
+        ]
+    },
+    {
+        "title": "Power BI vs Tableau: ¿Cuál es Mejor para tu Empresa?",
+        "slug": "power-bi-vs-tableau-comparacion",
+        "excerpt": "Comparativa detallada de las dos herramientas de BI más populares. Pros, contras y casos de uso ideales para cada una.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "La guerra de las herramientas de BI continúa. Ambas son excelentes, pero la mejor elección depende de tu contexto específico."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-11-01",
+        "readingTime": "10 min",
+        "featured": false,
+        "author": {
+            "name": "María Elena Torres"
+        },
+        "tags": [
+            "Power BI",
+            "Tableau",
+            "Business Intelligence"
+        ]
+    },
+    {
+        "title": "El ROI del Machine Learning: Cómo Medir el Impacto Real",
+        "slug": "roi-machine-learning-medir-impacto",
+        "excerpt": "Más allá de la precisión del modelo. Aprende a calcular y comunicar el retorno de inversión de proyectos de ML.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Un modelo con 95% de precisión no significa nada si no se traduce en valor de negocio medible."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1535378620166-273708d44e4c?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1535378620166-273708d44e4c?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-11-20",
+        "readingTime": "7 min",
+        "featured": false,
+        "author": {
+            "name": "Carlos Mendoza"
+        },
+        "tags": [
+            "Machine Learning",
+            "ROI",
+            "Business Value"
+        ]
+    },
+    {
+        "title": "De Excel a Dashboards: La Transición que Toda Empresa Debe Hacer",
+        "slug": "excel-dashboards-transicion-empresarial",
+        "excerpt": "Excel es poderoso, pero tiene límites. Descubre cuándo y cómo dar el salto a soluciones de BI empresariales.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "Si tu empresa pasa más tiempo arreglando fórmulas rotas que analizando datos, es hora de evolucionar."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1543286386-713bdd548da4?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1543286386-713bdd548da4?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-12-05",
+        "readingTime": "6 min",
+        "featured": false,
+        "author": {
+            "name": "Ana Rodríguez"
+        },
+        "tags": [
+            "Excel",
+            "Business Intelligence",
+            "Transformación Digital"
+        ]
+    },
+    {
+        "title": "IoT en la Industria Pesquera: Casos de Éxito en Latinoamérica",
+        "slug": "iot-industria-pesquera-latinoamerica",
+        "excerpt": "Cómo las empresas pesqueras de la región están usando sensores y conectividad para optimizar sus operaciones.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "La pesca tradicional se encuentra con la tecnología moderna. Los resultados son impresionantes."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1559825481-12a05cc00344?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1559825481-12a05cc00344?q=80&w=1000&auto=format&fit=crop",
+        "date": "2024-12-18",
+        "readingTime": "8 min",
+        "featured": true,
+        "author": {
+            "name": "Jorge Villanueva"
+        },
+        "tags": [
+            "IoT",
+            "Pesca",
+            "Casos de Éxito"
+        ]
+    },
+    {
+        "title": "Agricultura de Precisión: Guía Completa para CTOs Agroindustriales",
+        "slug": "agricultura-precision-guia-cto",
+        "excerpt": "Todo lo que un líder técnico necesita saber sobre sensores, drones, y análisis de datos en el campo.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "La agricultura del siglo XXI es una operación de datos. Aquí está el roadmap tecnológico."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?q=80&w=1000&auto=format&fit=crop",
+        "date": "2025-01-10",
+        "readingTime": "12 min",
+        "featured": false,
+        "author": {
+            "name": "María Elena Torres"
+        },
+        "tags": [
+            "Agricultura",
+            "IoT",
+            "Guía Técnica"
+        ]
+    },
+    {
+        "title": "Cómo Heineken México Transformó su Cadena de Suministro con Datos",
+        "slug": "heineken-transformacion-datos-supply-chain",
+        "excerpt": "Un caso de estudio sobre cómo una de las cervecerías más grandes del mundo usa analytics para optimizar su distribución.",
+        "content": [
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "type": "text",
+                        "text": "De 100+ hojas de cálculo a una plataforma unificada. Esta es la historia de una transformación real."
+                    }
+                ]
+            }
+        ],
+        "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=1000&auto=format&fit=crop",
+        "coverImageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=1000&auto=format&fit=crop",
+        "date": "2025-02-01",
+        "readingTime": "9 min",
+        "featured": true,
+        "author": {
+            "name": "Roberto Gutiérrez"
+        },
+        "tags": [
+            "Caso de Éxito",
+            "Supply Chain",
+            "Cervecería"
+        ]
     }
 ]
