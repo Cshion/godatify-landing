@@ -21,24 +21,50 @@
     margin-bottom: var(--space-10);
 }
 
-.logoGrid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-12);
+.marqueeContainer {
+    position: relative;
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
-.logoWrapper {
+.marqueeTrack {
+    display: flex;
+    gap: var(--space-16);
+    width: max-content;
+    animation: scroll 40s linear infinite;
+    will-change: transform;
+}
+
+.marqueeTrack:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* Translate by 50% of the duplicated track to create seamless loop */
+        transform: translateX(calc(-50% - var(--space-8)));
+    }
+}
+
+.logoCard {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     filter: grayscale(100%);
-    opacity: 0.6;
+    opacity: 0.5;
     transition: all 0.3s;
 }
 
-.logoWrapper:hover {
+.logoCard:hover {
     filter: grayscale(0%);
     opacity: 1;
 }
@@ -50,9 +76,14 @@
 }
 
 @media (max-width: 640px) {
-    .logoGrid {
+    .marqueeContainer {
+        mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    }
+    
+    .marqueeTrack {
         gap: var(--space-8);
     }
+    
     .logo {
         height: 2rem;
     }

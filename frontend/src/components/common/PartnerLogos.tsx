@@ -1,4 +1,5 @@
-import Image from 'next/image';
+'use client';
+
 import styles from './PartnerLogos.module.css';
 
 const partners = [
@@ -10,13 +11,18 @@ const partners = [
 ];
 
 export default function PartnerLogos() {
+    // Duplicate the list to ensure seamless scrolling
+    const marqueePartners = [...partners, ...partners];
+
     return (
         <section className={styles.section}>
             <div className={styles.container}>
                 <p className={styles.label}>Tecnologías con las que trabajamos</p>
-                <div className={styles.logoGrid}>
-                    {partners.map((partner) => (
-                        <div key={partner.name} className={styles.logoWrapper}>
+            </div>
+            <div className={styles.marqueeContainer}>
+                <div className={styles.marqueeTrack}>
+                    {marqueePartners.map((partner, idx) => (
+                        <div key={idx} className={styles.logoCard}>
                             {/* Using img for external SVGs — Next Image doesn't support external SVGs well */}
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img 
