@@ -4,6 +4,7 @@ import ScrollReveal from '@/components/ui/ScrollReveal';
 import NosotrosHero from '@/components/nosotros/NosotrosHero';
 import NosotrosTabs from '@/components/nosotros/NosotrosTabs';
 import Clients from '@/components/sections/Clients';
+import PartnerLogos from '@/components/common/PartnerLogos';
 import Testimonials from '@/components/sections/Testimonials';
 import { generateBreadcrumbSchema } from '@/lib/schemas';
 
@@ -42,6 +43,7 @@ export default async function NosotrosPage() {
                 <NosotrosHero hero={content.hero} />
                 <NosotrosTabs content={content} videoConfig={videoConfig} />
                 <Clients clients={content.clients} title={sectionLabels.clients.title} />
+                <PartnerLogos />
                 <Testimonials 
                     testimonials={homeData.testimonials}
                     carouselConfig={homeData.carouselConfig}

@@ -5,7 +5,6 @@ const partners = [
     { name: 'AWS', logo: '/images/partners/aws.svg' },
     { name: 'Microsoft Azure', logo: '/images/partners/azure.svg' },
     { name: 'Google Cloud', logo: '/images/partners/google-cloud.svg' },
-    { name: 'Snowflake', logo: '/images/partners/snowflake.svg' },
     { name: 'Power BI', logo: '/images/partners/power-bi.svg' },
     { name: 'Databricks', logo: '/images/partners/databricks.svg' },
 ];

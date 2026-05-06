@@ -4,6 +4,7 @@ import Clients from '@/components/sections/Clients';
 import Services from '@/components/sections/Services';
 import Cases from '@/components/sections/Cases';
 import Testimonials from '@/components/sections/Testimonials';
+import PartnerLogos from '@/components/common/PartnerLogos';
 import ScrollReveal from '@/components/ui/ScrollReveal';
 import { api } from '@/lib/api';
 
@@ -37,6 +38,7 @@ export default async function Home() {
           title={sectionLabels.services.title}
           buttonText={sectionLabels.services.button}
         />
+        <PartnerLogos />
         <Clients
           clients={clients}
           title={sectionLabels.clients.title}
