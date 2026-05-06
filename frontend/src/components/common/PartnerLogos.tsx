@@ -1,14 +1,13 @@
 import Image from 'next/image';
 import styles from './PartnerLogos.module.css';
 
-// TODO: Before production, download these logos to /public/images/partners/ to avoid external dependencies
 const partners = [
-    { name: 'AWS', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg' },
-    { name: 'Microsoft Azure', logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg' },
-    { name: 'Google Cloud', logo: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg' },
-    { name: 'Snowflake', logo: 'https://www.vectorlogo.zone/logos/snowflake/snowflake-ar21.svg' },
-    { name: 'Power BI', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg' },
-    { name: 'Databricks', logo: 'https://www.vectorlogo.zone/logos/databricks/databricks-ar21.svg' },
+    { name: 'AWS', logo: '/images/partners/aws.svg' },
+    { name: 'Microsoft Azure', logo: '/images/partners/azure.svg' },
+    { name: 'Google Cloud', logo: '/images/partners/google-cloud.svg' },
+    { name: 'Snowflake', logo: '/images/partners/snowflake.svg' },
+    { name: 'Power BI', logo: '/images/partners/power-bi.svg' },
+    { name: 'Databricks', logo: '/images/partners/databricks.svg' },
 ];
 
 export default function PartnerLogos() {

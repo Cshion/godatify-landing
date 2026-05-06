@@ -29,6 +29,9 @@
         "website": {
             "type": "string"
         },
+        "phone": {
+            "type": "string"
+        },
         "logo": {
             "type": "media",
             "multiple": false,

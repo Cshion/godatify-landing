@@ -284,6 +284,107 @@ Required for CI/CD:
 
 ---
 
+## Content Management & Data Seeding
+
+**Strategy: Hybrid Approach** — Seed files in git + Runtime database edits
+
+### Architecture
+
+```
+Seed Files (JSON in git)
+    ↓ (make reset-db or make seed)
+Strapi Database (runtime source of truth)
+    ↓
+Strapi Admin Panel (edit content here)
+    ↓
+Frontend API (reads from database only)
+```
+
+### When to Use Seed Files
+
+✅ **Initial Setup** — `make reset-db` populates fresh database on new deployments  
+✅ **Team Onboarding** — New developers run `make seed` to get canonical data  
+✅ **CI/CD** — Staging/preview environments get seeded from git  
+✅ **Disaster Recovery** — Restore from seed if database corrupted  
+✅ **Version Control** — Git history tracks content changes
+
+### When to Edit in Strapi Admin
+
+✅ **Live Updates** — Change company info, contact details, case studies  
+✅ **Content Management** — Blog posts, testimonials, service descriptions  
+✅ **Non-Destructive** — Changes persist between deployments  
+✅ **User-Friendly** — Use Strapi CMS UI instead of editing JSON files
+
+### Seeding Commands
+
+```bash
+# Dev: Fresh database with master + mock data
+make reset-db
+
+# Production: Safe, non-destructive master data update
+make seed
+
+# Skip mock data (production-safe)
+make seed --skip-mock
+```
+
+### ⚠️ CRITICAL: `make reset-db` is DESTRUCTIVE
+
+- **Wipes entire database** — Use only in development
+- **Loses all Strapi admin edits** — Unless you backed up
+- **Non-recoverable** — No undo in production
+
+**Best Practice:**
+1. Always backup production DB before any reset
+2. Test in staging first
+3. Use `make seed` (non-destructive) in production
+4. Document changes in git commit
+
+### Updating Seed Files
+
+Only update seed files if making **intentional template changes**:
+
+```bash
+# After editing in Strapi admin, DO NOT auto-sync
+# Instead, manually update seed files if needed:
+
+# Example: Update contact.json after changing office details
+vim backend/seed-data/master/contact.json
+git add backend/seed-data/master/contact.json
+git commit -m "Update contact office details"
+```
+
+### Content Ownership
+
+| Content Type | Edit In | Seed File | Use Case |
+|---|---|---|---|
+| Company Info | Strapi admin | company.json | Main company phone, address |
+| Services | Strapi admin | services.json | Service offerings, descriptions |
+| Case Studies | Strapi admin | cases.json | Client projects, results |
+| Contact Page | Strapi admin | contact.json | Regional offices, form labels |
+| Home Page | Strapi admin | home.json | Hero, stats, CTA |
+| Blog Posts | Strapi admin | blog-posts.json | Articles (mock data only) |
+
+### Production Data Flow
+
+```
+Vercel (Frontend)
+    ↓ (NEXT_PUBLIC_API_URL)
+Cloudflare (CDN)
+    ↓ (api.godatify.com)
+EC2 Nginx (Reverse Proxy)
+    ↓ (localhost:1337)
+Strapi API
+    ↓ (SQL queries)
+PostgreSQL Database
+    ↓
+Data from Strapi Admin Edits
+```
+
+**Key Point:** Frontend always reads from **live database**, not seed files.
+
+---
+
 ## GitHub Actions CI/CD
 
 The workflow (\`.github/workflows/deploy.yml\`) handles both deployments:
