@@ -35,6 +35,10 @@ export async function seedCollection(
                 filters['name'] = item['name'];
             } else if (item['title']) {
                 filters['title'] = item['title'];
+            } else if (item['author']) {
+                filters['author'] = item['author'];
+            } else if (item['quote']) {
+                filters['quote'] = item['quote'];
             } else {
                 // Fallback: Skip if no discernible unique field
                 skipCount++;

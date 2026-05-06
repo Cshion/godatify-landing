@@ -104,7 +104,7 @@ export function generatePageMetadata(
     image?: string
 ): Metadata {
     const url = `${siteConfig.url}${path}`;
-    const ogImage = image || `${siteConfig.url}/images/og-image.png`;
+    const ogImage = image || `${siteConfig.url}/images/logo-brand-harmonized.png`;
 
     return {
         title,

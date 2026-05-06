@@ -11,7 +11,7 @@ export default function BlogHero({ title, subtitle, description }: BlogHeroProps
         <PageHero
             title={title}
             subtitle={description}
-            backgroundImage="/images/hero-blog.jpg"
+            backgroundImage="/images/hero-bg.jpg"
             phrases={[subtitle, title]}
         />
     );

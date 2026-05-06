@@ -21,8 +21,6 @@ import {
 } from '@/types';
 import qs from 'qs';
 
-import { BLOG_STATIC_DATA } from '@/data/blog-data';
-
 // Static navigation links - these rarely change and are intentionally not from CMS
 export const NAV_LINKS: NavLink[] = [
     { href: '/', label: 'Inicio' },
@@ -618,26 +616,15 @@ export const api = {
                 } : undefined
             };
 
-            // Fetch Related Cases
+            // Fetch Related Cases for this specific industry
             const casesQuery = qs.stringify({
                 filters: { industryName: { $eq: industry.title } },
                 populate: '*',
                 pagination: { limit: 3 }
             }, { encodeValuesOnly: true });
 
-            let casesRes = await fetch(`${STRAPI_URL}/api/case-studies?${casesQuery}`, { cache: 'no-store' });
-            let casesJson = await casesRes.json();
-
-            // If no specific cases found, fetch recent cases
-            if (!casesJson.data || casesJson.data.length === 0) {
-                const fallbackQuery = qs.stringify({
-                    sort: ['publishedAt:desc'],
-                    populate: '*',
-                    pagination: { limit: 3 }
-                }, { encodeValuesOnly: true });
-                casesRes = await fetch(`${STRAPI_URL}/api/case-studies?${fallbackQuery}`, { cache: 'no-store' });
-                casesJson = await casesRes.json();
-            }
+            const casesRes = await fetch(`${STRAPI_URL}/api/case-studies?${casesQuery}`, { cache: 'no-store' });
+            const casesJson = await casesRes.json();
 
             const relatedCases: CaseStudy[] = (casesJson.data || []).map((c: any) => ({
                 slug: c.slug,
@@ -775,9 +762,9 @@ export const api = {
             
             return {
                 hero: {
-                    title: pageData.heroTitle || BLOG_STATIC_DATA.hero.title,
-                    subtitle: pageData.heroSubtitle || BLOG_STATIC_DATA.hero.subtitle,
-                    description: pageData.heroDescription || BLOG_STATIC_DATA.hero.description
+                    title: pageData.heroTitle,
+                    subtitle: pageData.heroSubtitle,
+                    description: pageData.heroDescription
                 }
             };
         },

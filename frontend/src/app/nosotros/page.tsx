@@ -45,9 +45,9 @@ export default async function NosotrosPage() {
                 <Testimonials 
                     testimonials={homeData.testimonials}
                     carouselConfig={homeData.carouselConfig}
-                    title={homeData.sectionLabels.testimonials.title}
-                    subtitle={homeData.sectionLabels.testimonials.subtitle}
-                    description={homeData.sectionLabels.testimonials.description}
+                    title={homeData.sectionLabels?.testimonials?.title ?? 'Testimonios'}
+                    subtitle={homeData.sectionLabels?.testimonials?.subtitle ?? 'NUESTROS CLIENTES'}
+                    description={homeData.sectionLabels?.testimonials?.description ?? ''}
                 />
             </main>
             <ScrollReveal />

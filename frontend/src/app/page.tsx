@@ -49,9 +49,9 @@ export default async function Home() {
         <Testimonials
           testimonials={testimonials}
           carouselConfig={carouselConfig}
-          title={sectionLabels.testimonials.title}
-          subtitle={sectionLabels.testimonials.subtitle}
-          description={sectionLabels.testimonials.description}
+          title={sectionLabels?.testimonials?.title ?? 'Testimonios'}
+          subtitle={sectionLabels?.testimonials?.subtitle ?? 'NUESTROS CLIENTES'}
+          description={sectionLabels?.testimonials?.description ?? ''}
         />
       </main>
       <ScrollReveal />
