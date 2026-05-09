@@ -37,6 +37,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             title: `${service.title} | Datify`,
             description: service.description,
             url: `https://godatify.com/servicios/${slug}`,
+            type: 'website',
+            images: [{
+                url: service.backgroundImage || service.image || `https://godatify.com/images/og-image.png`,
+                width: 1200,
+                height: 630,
+                alt: service.title,
+            }],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `${service.title} | Datify`,
+            description: service.description,
+            images: [service.backgroundImage || service.image || `https://godatify.com/images/og-image.png`],
         },
     };
 }
@@ -48,7 +61,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     if (!service) {
         notFound();
     }
-
+    
     return (
         <main id="main-content">
             {/* Service Schema */}
