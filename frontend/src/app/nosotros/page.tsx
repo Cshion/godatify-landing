@@ -18,6 +18,13 @@ export async function generateMetadata(): Promise<Metadata> {
         alternates: {
             canonical: '/nosotros',
         },
+        openGraph: {
+            title: 'Nosotros - Expertos en Data Analytics | Datify',
+            description: 'Conoce al equipo de Datify, tu aliado estratégico en transformación de datos. Descubre nuestra misión, visión y valores.',
+            url: 'https://godatify.com/nosotros',
+            type: 'website',
+            images: [{ url: 'https://godatify.com/images/og-image.png', width: 1200, height: 630 }],
+        },
     };
 }
 

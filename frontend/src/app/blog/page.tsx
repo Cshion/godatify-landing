@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     alternates: {
         canonical: '/blog',
     },
+    openGraph: {
+        title: 'Blog de Data & AI para Empresas | Datify',
+        description: 'Explora artículos sobre Data Analytics, Machine Learning e Inteligencia Artificial. Estrategias prácticas para transformar tu negocio.',
+        url: 'https://godatify.com/blog',
+        type: 'website',
+        images: [{ url: 'https://godatify.com/images/og-image.png', width: 1200, height: 630 }],
+    },
 };
 
 export default async function BlogPage() {

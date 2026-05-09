@@ -7,6 +7,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const posts = await api.blog.getAll();
     const services = await api.services.getAll();
     const cases = await api.cases.getAll();
+    const sectors = await api.industries.getSectors();
 
     const staticRoutes: MetadataRoute.Sitemap = [
         {
@@ -74,5 +75,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.6,
     }));
 
-    return [...staticRoutes, ...blogRoutes, ...serviceRoutes, ...caseRoutes];
+    // Flatten industries from all sectors
+    const industries = sectors.flatMap((sector) => sector.industries || []);
+    const industryRoutes: MetadataRoute.Sitemap = industries.map((industry) => ({
+        url: `${baseUrl}/industrias/${industry.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.7,
+    }));
+
+    return [...staticRoutes, ...blogRoutes, ...serviceRoutes, ...caseRoutes, ...industryRoutes];
 }

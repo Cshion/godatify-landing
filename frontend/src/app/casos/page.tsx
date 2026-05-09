@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     alternates: {
         canonical: '/casos',
     },
+    openGraph: {
+        title: 'Casos de Éxito | Datify',
+        description: 'Descubre cómo hemos ayudado a empresas líderes a transformar sus datos en resultados tangibles.',
+        url: 'https://godatify.com/casos',
+        type: 'website',
+        images: [{ url: 'https://godatify.com/images/og-image.png', width: 1200, height: 630 }],
+    },
 };
 
 export const revalidate = 3600; // Revalidate every hour

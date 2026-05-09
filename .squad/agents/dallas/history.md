@@ -99,6 +99,34 @@ frontend/src/components/
 
 **Pattern:** Each component folder contains `.tsx` + `.module.css` pairs
 
+### SEO Implementation (2026-05-09)
+**OpenGraph tags pattern:**
+```typescript
+openGraph: {
+    title: 'Page Title | Datify',
+    description: 'Short description without arrow',
+    url: 'https://godatify.com/path',
+    type: 'website',
+    images: [{ url: 'https://godatify.com/images/og-image.png', width: 1200, height: 630 }],
+},
+```
+- OG description should NOT include trailing arrow (→) unlike meta description
+- Standard OG image: `/images/og-image.png` at 1200x630
+
+**Sitemap dynamic routes pattern:**
+```typescript
+const sectors = await api.industries.getSectors();
+const industries = sectors.flatMap((sector) => sector.industries || []);
+const industryRoutes = industries.map((industry) => ({
+    url: `${baseUrl}/industrias/${industry.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+}));
+```
+- Sectors contain nested industries array
+- Flatten with `flatMap()` before mapping to routes
+
 ---
 
 ## Dead Code Cleanup — April 19, 2026

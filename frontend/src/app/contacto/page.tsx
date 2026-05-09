@@ -9,6 +9,13 @@ export const metadata: Metadata = {
     alternates: {
         canonical: '/contacto',
     },
+    openGraph: {
+        title: 'Contacto - Consultoría de Datos | Datify',
+        description: 'Hablemos de tus datos. Agenda una consulta gratuita y descubre cómo transformar tu organización con Data Analytics y BI.',
+        url: 'https://godatify.com/contacto',
+        type: 'website',
+        images: [{ url: 'https://godatify.com/images/og-image.png', width: 1200, height: 630 }],
+    },
 };
 
 export default async function ContactPage() {

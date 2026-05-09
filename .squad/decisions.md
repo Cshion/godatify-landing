@@ -2,6 +2,20 @@
 
 ## Active Decisions
 
+### 2026-05-09: Social SEO Focus — LinkedIn, Not Twitter
+**By:** Aaron (via Coordinator)
+
+Twitter cards are NOT needed. Focus social SEO on LinkedIn.
+
+**Why:** LinkedIn is the target social network for this B2B landing page.
+
+**Implications:**
+- Twitter card metadata (`twitter:*`) → Skip
+- Open Graph tags (`og:*`) → Critical for LinkedIn previews
+- Validate with LinkedIn Post Inspector: https://www.linkedin.com/post-inspector/inspect/
+
+---
+
 ### 2026-05-09: Industry Pages Missing from Sitemap (P0)
 **By:** Kane (Content/SEO) | **Priority:** Critical
 
@@ -11,7 +25,7 @@ Industry pages (`/industrias/[slug]`) not included in sitemap.xml. Sitemap corre
 
 **Fix:** Add industry routes to `frontend/src/app/sitemap.ts` following existing pattern.
 
-**Status:** 🔴 Pending fix | Filed during SEO audit
+**Status:** ✅ Fixed by Dallas (2026-05-09) — Added industry routes to sitemap
 
 ---
 
