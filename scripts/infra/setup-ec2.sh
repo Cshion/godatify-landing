@@ -568,8 +568,13 @@ step_clone_repository() {
     fi
     
     # Test GitHub SSH connection
+    # Note: ssh -T git@github.com returns exit code 1 even on success (no shell access)
+    # So we capture output and check the message, not the exit code
     log_info "Testing GitHub SSH connection..."
-    if sudo -u "$STRAPI_USER" ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+    local ssh_output
+    ssh_output=$(sudo -u "$STRAPI_USER" ssh -T git@github.com 2>&1 || true)
+    
+    if echo "$ssh_output" | grep -q "successfully authenticated"; then
         log_info "GitHub SSH connection successful!"
     else
         # Connection failed - show the key and ask user to add it
@@ -595,11 +600,14 @@ step_clone_repository() {
             case "$response" in
                 [sS]|[yY]|[sS][iI]|[yY][eE][sS])
                     log_info "Verifying GitHub connection..."
-                    if sudo -u "$STRAPI_USER" ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+                    local verify_output
+                    verify_output=$(sudo -u "$STRAPI_USER" ssh -T git@github.com 2>&1 || true)
+                    if echo "$verify_output" | grep -q "successfully authenticated"; then
                         log_info "GitHub connection verified!"
                         break
                     else
                         log_error "GitHub connection still fails. Please verify the key was added correctly."
+                        echo "Debug output: $verify_output"
                         echo ""
                     fi
                     ;;
