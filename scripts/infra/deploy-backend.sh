@@ -249,7 +249,7 @@ pull_latest_code() {
     sudo -u "$STRAPI_USER" git pull origin "$BRANCH"
     
     local commit_hash
-    commit_hash=$(git rev-parse --short HEAD)
+    commit_hash=$(sudo -u "$STRAPI_USER" git rev-parse --short HEAD)
     log_info "Checked out ${BRANCH} at ${commit_hash}"
 }
 
