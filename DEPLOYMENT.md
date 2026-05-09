@@ -122,30 +122,35 @@ The Strapi backend remains on EC2 for database persistence and full server contr
 ### Quick Setup
 
 \`\`\`bash
-# SSH into EC2
-ssh -i your-key.pem ubuntu@<EC2-IP>
+# Connect via EC2 Instance Connect (no SSH key needed)
+aws ec2-instance-connect ssh \
+  --instance-id $INSTANCE_ID \
+  --os-user ec2-user \
+  --region us-east-1
 
-# Clone and setup
-git clone <repo-url> /var/www/godatify
-cd /var/www/godatify
-bash scripts/setup-ec2.sh
+# Run setup script
+sudo bash scripts/infra/setup-ec2.sh
+
+# Clone repo
+sudo -u strapi git clone <repo-url> /var/www/godatify
 
 # Configure environment
-cp backend/.env.example backend/.env
-nano backend/.env
+sudo vim /etc/strapi/env
 
 # Deploy
-bash scripts/deploy.sh
+sudo bash scripts/infra/deploy-backend.sh
 \`\`\`
 
 ### EC2 Requirements
 
-| Component | Minimum | Recommended |
-|-----------|---------|-------------|
-| Instance | t3.small | t3.medium |
-| RAM | 2 GB | 4 GB |
-| Storage | 20 GB | 50 GB |
-| OS | Ubuntu 22.04 | Ubuntu 22.04 |
+| Component | Specification |
+|-----------|---------------|
+| Instance | t4g.small (ARM64 Graviton3) |
+| RAM | 2 GB |
+| Storage | 20 GB gp3 |
+| OS | Amazon Linux 2023 |
+| Node.js | 22 LTS (via NodeSource) |
+| PostgreSQL | 15 (native AL2023) |
 
 ### PM2 Commands
 
@@ -157,7 +162,7 @@ pm2 status
 pm2 logs strapi
 
 # Restart
-pm2 reload ecosystem.config.js
+pm2 reload strapi
 
 # Monitor
 pm2 monit

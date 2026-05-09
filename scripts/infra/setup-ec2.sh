@@ -158,11 +158,20 @@ step_install_nodejs() {
             log_skip "Node.js $(node --version) already installed"
             return
         fi
+        log_info "Node.js $(node --version) found, upgrading to v${NODE_VERSION}..."
     fi
     
-    # Install Node.js from Amazon Linux repos
-    dnf install -y nodejs npm
-    log_info "Node.js $(node --version) installed"
+    # NodeSource repo for Node.js 22 LTS
+    # AL2023 native repos only have Node.js 18 — we need 22 for Strapi 5
+    # NodeSource officially supports AL2023 ARM64: https://github.com/nodesource/distributions
+    log_info "Setting up NodeSource repository for Node.js ${NODE_VERSION}..."
+    curl -fsSL https://rpm.nodesource.com/setup_${NODE_VERSION}.x -o /tmp/nodesource_setup.sh
+    bash /tmp/nodesource_setup.sh
+    rm -f /tmp/nodesource_setup.sh
+    
+    # Install Node.js from NodeSource
+    dnf install -y nodejs
+    log_info "Node.js $(node --version) installed from NodeSource"
 }
 
 step_install_pm2() {

@@ -26,12 +26,12 @@
 Description=Cloudflare Tunnel - godatify API
 Documentation=https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/
 
-# Start after Strapi is running
-After=network-online.target strapi.service
+# Start after Strapi is running (PM2 creates pm2-strapi service)
+After=network-online.target pm2-strapi.service
 Wants=network-online.target
 
 # Optional: require Strapi to be running
-# Wants=strapi.service
+# Wants=pm2-strapi.service
 
 [Service]
 # ------------------------------------------------------------------------------

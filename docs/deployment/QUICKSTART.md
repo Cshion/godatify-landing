@@ -163,7 +163,7 @@ sudo /tmp/setup-ec2.sh
 # Check installed versions
 node --version    # v22.x.x
 pm2 --version     # 5.x.x
-psql --version    # 17.x
+psql --version    # 15.x (native AL2023)
 cloudflared --version
 
 # Check PostgreSQL is running (native AL2023 service name)
@@ -494,7 +494,7 @@ systemctl list-timers backup-db.timer
 sudo /opt/godatify/scripts/backup-db.sh
 
 # Check backup was created
-ls -la /var/lib/postgresql/backups/
+ls -la /var/lib/pgsql/backups/
 
 # Verify upload to S3 (from local machine)
 aws s3 ls s3://godatify-backups/postgres/ --recursive

@@ -815,7 +815,7 @@ sudo systemctl stop cloudflared
 # 2. Preserve evidence
 sudo tar -czvf /tmp/incident-$(date +%Y%m%d).tar.gz \
   /var/log \
-  /var/lib/postgresql/17/data/log
+  /var/lib/pgsql/data/log
 
 # 3. Check for suspicious activity
 sudo last -20
