@@ -2,6 +2,19 @@
 
 ## Active Decisions
 
+### 2026-05-09: Industry Pages Missing from Sitemap (P0)
+**By:** Kane (Content/SEO) | **Priority:** Critical
+
+Industry pages (`/industrias/[slug]`) not included in sitemap.xml. Sitemap correctly generates routes for services, cases, and blog — but omits all 4 industry pages (cervecera, logistica, pesca, agroindustria).
+
+**Impact:** Google cannot discover industry pages from sitemap. Reduces indexation speed for key landing pages.
+
+**Fix:** Add industry routes to `frontend/src/app/sitemap.ts` following existing pattern.
+
+**Status:** 🔴 Pending fix | Filed during SEO audit
+
+---
+
 ### 2026-04-26: Database Reset Process Improvement
 **By:** Parker (Backend Dev) | **Requested by:** Aaron
 

@@ -64,6 +64,49 @@
 
 ---
 
+### 2026-05-09 — Comprehensive SEO Audit Follow-up ✅
+
+**Requested by:** Aaron
+
+**Audit Findings:**
+
+**Phase 0 (May 6) — All Resolved:**
+- ✅ Task 0.1: Sitemap now uses `service.slug` instead of `service.id`
+- ✅ Task 0.2: Service pages have og:image with dynamic fallback
+
+**Phase 1 (May 6) — Mostly Complete:**
+- ✅ Task 1.1: Case detail pages have og:type='article' and og:url
+- ✅ Task 1.2: Twitter cards on /servicios/[slug] and /casos/[slug]
+- ✅ Task 1.5: /servicios listing page exists with full metadata + schemas
+
+**New Critical Gap Found:**
+- ❌ **Industry detail pages NOT in sitemap** — `/industrias/[slug]` routes missing from sitemap.ts
+- This means Google cannot discover industry pages from sitemap.xml
+
+**Remaining Issues (P1-P2):**
+- `/nosotros` missing explicit OG + Twitter tags
+- `/casos` listing missing OG + Twitter tags  
+- `/blog` listing missing OG + Twitter tags
+- `/industrias/[slug]` missing Twitter card + incomplete OG
+- CaseStudy schema not yet implemented
+
+**Key Pattern Observed:**
+- Listing pages (collections) consistently have structured data but lack explicit OG/Twitter
+- Detail pages properly implement dynamic OG/Twitter
+- Pattern break: `/industrias/[slug]` was missed during April improvements
+
+**SEO Readiness: 8.1/10** (up from 7.2/10 on May 6)
+
+**Files Reviewed:**
+- `frontend/src/app/sitemap.ts` — Dynamic routes checked
+- `frontend/src/lib/seo.ts` — defaultMetadata structure
+- `frontend/src/lib/schemas.ts` — All schema generators
+- All page.tsx files under `/app/*`
+
+**Report:** `docs/SEO_AUDIT_MAY9.md`
+
+---
+
 ### 2026-04-18 — Critical SEO Fixes Applied ✅
 
 **Requested by:** Aaron

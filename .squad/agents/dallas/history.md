@@ -118,6 +118,46 @@ frontend/src/components/
 ### Verified As Used (Not Removed)
 - All FontAwesome icons in `fontawesome.ts` are used dynamically via data files
 - All components in `frontend/src/components/` are imported and used
+
+---
+
+## SEO Technical Review — May 9, 2026
+
+**Task:** Comprehensive SEO audit against May 6 SEO_AUDIT.md findings
+
+### Key SEO Files
+| File | Purpose |
+|------|---------|
+| `frontend/src/app/sitemap.ts` | Dynamic sitemap generation |
+| `frontend/src/app/robots.ts` | Crawler rules |
+| `frontend/src/app/layout.tsx` | Root metadata + schemas |
+| `frontend/src/lib/seo.ts` | Metadata helpers, default config |
+| `frontend/src/lib/schemas.ts` | JSON-LD schema generators |
+
+### SEO Utilities Available
+- `defaultMetadata` — Full default metadata export with OG, Twitter, robots
+- `generatePageMetadata(title, description, path, image?)` — Page-specific metadata helper 
+- Schema generators: `generateWebSiteSchema`, `generateOrganizationSchema`, `generateBreadcrumbSchema`, `generateArticleSchema`, `generateServiceSchema`, `generateContactPageSchema`, `generateLocalBusinessSchema`, `generateCollectionPageSchema`
+
+### Verified Implementations
+- **sitemap.ts**: Uses `service.slug` (not id), all dynamic routes included (blog, services, cases)
+- **robots.ts**: Proper disallow rules, sitemap reference correct
+- **Service pages**: Full OG + Twitter metadata (Task 0.2, 1.2 complete)
+- **Case pages**: Full OG + Twitter metadata (Task 1.1, 1.2 complete)
+- **Blog pages**: Full OG + Twitter metadata on detail pages
+- **Schemas**: BreadcrumbList on all pages, Service/Article schemas on detail pages
+
+### Pattern: Page Metadata
+Dynamic pages use `generateMetadata()` with:
+```tsx
+return {
+    title: `${item.title} | Datify`,
+    description: item.description,
+    alternates: { canonical: `/path/${slug}` },
+    openGraph: { type: 'website', url: `/path/${slug}`, images: [...] },
+    twitter: { card: 'summary_large_image', ... },
+};
+```
 - All exports in `frontend/src/data/*.ts` are used by `api.ts` or components
 - All other schema functions in `schemas.ts` are imported and used by page components
 
