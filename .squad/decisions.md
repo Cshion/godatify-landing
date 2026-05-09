@@ -105,6 +105,37 @@ Added `prefers-reduced-motion` support for WCAG 2.3.3 compliance.
 
 ---
 
+### 2026-05-09: AWS Infrastructure Architecture Decisions
+**By:** Jonesy (DevOps) | **Reviewed by:** Ripley (Lead)
+
+Key infrastructure decisions for EC2 deployment:
+
+**Systemd over PM2:**
+- Native to Amazon Linux 2023, no additional dependency
+- Better journald integration, proper cgroup limits
+- Security sandboxing (ProtectSystem, NoNewPrivileges)
+- Saves ~100MB memory overhead
+
+**Unix Domain Socket for PostgreSQL:**
+- ~10% lower latency (no TCP overhead)
+- No port exposure, simpler connection string
+
+**Separate EBS Data Volume (20GB gp3):**
+- Independent backup schedule
+- Easier disaster recovery (attach to new instance)
+
+**ZRAM over EBS Swap:**
+- No IOPS consumed, lower latency
+- ~2-3x effective memory with zstd compression
+
+**Glacier Instant Retrieval for S3 Backups:**
+- 68% cheaper than S3 Standard
+- Millisecond retrieval when needed
+
+**Files:** `docs/deployment/INFRASTRUCTURE.md`, `docs/deployment/RUNBOOK.md`, `scripts/infra/*`
+
+---
+
 ## Governance
 
 - All meaningful changes require team consensus
