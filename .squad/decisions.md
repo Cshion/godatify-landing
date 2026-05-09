@@ -2,6 +2,37 @@
 
 ## Active Decisions
 
+### 2026-05-09: PM2 for Strapi Process Management (Infrastructure)
+**By:** Jonesy (DevOps) | **Requested by:** Aaron
+
+Migrated from systemd to PM2 for Strapi process management. PostgreSQL and cloudflared remain on systemd.
+
+**Why:**
+- Familiar Node.js tooling (`pm2 monit`, `pm2 logs`)
+- Zero-downtime reloads (`pm2 reload`) built-in
+- Same tooling local and production
+- Better log management (JSON format)
+
+**Changes:**
+- Created `scripts/infra/ecosystem.config.js` (production config)
+- Updated `scripts/infra/user-data.sh` (PM2 install + startup)
+- Updated `docs/deployment/RUNBOOK.md` (PM2 commands)
+- Updated `docs/deployment/INFRASTRUCTURE.md` (memory budget)
+- Archived `strapi.service` → `strapi.service.bak`
+
+**Key commands:**
+```bash
+pm2 status              # Process list
+pm2 restart strapi      # Restart
+pm2 reload strapi       # Zero-downtime reload
+pm2 logs strapi         # View logs
+pm2 monit               # Real-time dashboard
+```
+
+**Memory impact:** +50-100MB for PM2 daemon (fits in 2GB budget with ZRAM).
+
+---
+
 ### 2026-05-09: Social SEO Focus — LinkedIn, Not Twitter
 **By:** Aaron (via Coordinator)
 

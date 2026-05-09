@@ -1,0 +1,33 @@
+# ==============================================================================
+# Systemd Timer for PostgreSQL Backups — godatify-landing
+# ==============================================================================
+# Runs daily database backups at 4:00 AM UTC
+#
+# Installation:
+#   sudo cp backup-db.timer backup-db.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now backup-db.timer
+#
+# Verify:
+#   systemctl list-timers backup-db.timer
+#   journalctl -u backup-db.service
+#
+# Manual trigger:
+#   sudo systemctl start backup-db.service
+# ==============================================================================
+
+[Unit]
+Description=Daily PostgreSQL backup for godatify
+
+[Timer]
+# Run at 4:00 AM UTC daily
+OnCalendar=*-*-* 04:00:00
+# Add randomized delay up to 15 minutes to avoid thundering herd
+RandomizedDelaySec=15min
+# Run immediately if last scheduled run was missed (e.g., server was down)
+Persistent=true
+# Accuracy window
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target

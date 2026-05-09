@@ -1,16 +1,19 @@
 // ==============================================================================
-// PM2 Ecosystem Configuration
+// PM2 Ecosystem Configuration — LOCAL DEVELOPMENT
 // ==============================================================================
-// Production process management for Strapi backend
+// This file is for LOCAL DEVELOPMENT convenience.
+// 
+// Production uses a separate config at: scripts/infra/ecosystem.config.js
+// (deployed to /opt/godatify/scripts/ecosystem.config.js on EC2)
 //
-// Usage:
+// Usage (development):
 //   Start:    pm2 start ecosystem.config.js
 //   Stop:     pm2 stop strapi
 //   Restart:  pm2 restart strapi
 //   Logs:     pm2 logs strapi
 //   Monitor:  pm2 monit
-//   Save:     pm2 save
-//   Startup:  pm2 startup (run once to enable auto-start on boot)
+//
+// See docs/deployment/RUNBOOK.md for production operations.
 // ==============================================================================
 
 module.exports = {
@@ -22,13 +25,13 @@ module.exports = {
       name: 'strapi',
       script: 'npm',
       args: 'run start',
-      cwd: '/var/www/godatify/backend',
+      cwd: __dirname,  // Use this directory for local dev
 
       // --------------------------------------------------------------------------
-      // Cluster Mode - Utilize multiple CPU cores
+      // Cluster Mode - Utilize multiple CPU cores (dev machines usually have more)
       // --------------------------------------------------------------------------
-      instances: 'max', // Use all available CPUs (or set to number like 2, 4)
-      exec_mode: 'cluster',
+      instances: 1, // Single instance for development
+      exec_mode: 'fork',
 
       // --------------------------------------------------------------------------
       // Environment Variables

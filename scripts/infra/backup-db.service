@@ -1,0 +1,52 @@
+# ==============================================================================
+# Systemd Service for PostgreSQL Backups — godatify-landing
+# ==============================================================================
+# Backup service triggered by backup-db.timer
+#
+# Installation:
+#   sudo cp backup-db.timer backup-db.service /etc/systemd/system/
+#   sudo cp backup-db.sh /opt/godatify/scripts/
+#   sudo chmod +x /opt/godatify/scripts/backup-db.sh
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now backup-db.timer
+#
+# Status:
+#   systemctl status backup-db.service
+#   journalctl -u backup-db.service --since today
+#
+# Manual run:
+#   sudo systemctl start backup-db.service
+# ==============================================================================
+
+[Unit]
+Description=PostgreSQL backup for godatify
+After=postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=oneshot
+# Run as postgres user for database access
+User=postgres
+Group=postgres
+# Set working directory
+WorkingDirectory=/opt/godatify/scripts
+# Execute the backup script
+ExecStart=/opt/godatify/scripts/backup-db.sh
+# Timeout after 1 hour (adjust based on database size)
+TimeoutStartSec=3600
+# Nice level to reduce impact on production
+Nice=10
+# IO scheduling class (best-effort, low priority)
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+# Resource limits
+MemoryLimit=512M
+# Environment
+Environment="PATH=/usr/local/bin:/usr/bin:/bin"
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=backup-db
+
+[Install]
+WantedBy=multi-user.target
