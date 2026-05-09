@@ -626,6 +626,9 @@ step_clone_repository() {
     log_info "Cloning repository to ${APP_DIR}..."
     sudo -u "$STRAPI_USER" git clone "$REPO_URL" "$APP_DIR"
     
+    # Mark directory as safe to avoid "dubious ownership" errors
+    sudo -u "$STRAPI_USER" git config --global --add safe.directory "$APP_DIR"
+    
     # Copy deploy scripts to /opt/godatify/scripts/
     if [[ -f "${APP_DIR}/scripts/infra/deploy-backend.sh" ]]; then
         cp "${APP_DIR}/scripts/infra/deploy-backend.sh" "${OPT_DIR}/scripts/"
