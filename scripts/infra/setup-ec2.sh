@@ -66,6 +66,7 @@ readonly PM2_APP_NAME="strapi"
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
+readonly BLUE='\033[0;34m'
 readonly NC='\033[0m' # No Color
 
 # ==============================================================================
@@ -103,14 +104,15 @@ Options:
 
 What this script does:
     1. Updates system packages
-    2. Installs Node.js ${NODE_VERSION}
-    3. Installs PostgreSQL ${PG_VERSION}
-    4. Installs PM2 globally
-    5. Installs cloudflared (Cloudflare Tunnel)
-    6. Creates strapi system user
+    2. Creates strapi system user
+    3. Installs Node.js ${NODE_VERSION} via NVM (for strapi user)
+    4. Installs PM2 globally (via NVM for strapi user)
+    5. Installs PostgreSQL ${PG_VERSION}
+    6. Installs cloudflared (Cloudflare Tunnel)
     7. Creates required directories
     8. Configures PostgreSQL (db/user)
-    9. Sets up PM2 startup
+    9. Generates SSH deploy key for GitHub
+    10. Generates Strapi secrets (APP_KEYS, JWT, etc.)
 
 This script is idempotent — safe to run multiple times.
 
@@ -139,7 +141,9 @@ step_system_update() {
     dnf update -y
     
     # Install essential tools
-    local packages=(git curl wget vim htop jq tar gzip unzip)
+    # Note: curl-minimal is preinstalled on AL2023 and conflicts with full curl
+    # curl-minimal is sufficient for downloads (curl -fsSL works fine)
+    local packages=(git wget vim htop jq tar gzip unzip)
     for pkg in "${packages[@]}"; do
         if ! rpm -q "$pkg" &> /dev/null; then
             dnf install -y "$pkg"
@@ -149,45 +153,74 @@ step_system_update() {
 }
 
 step_install_nodejs() {
-    log_info "[2/8] Installing Node.js ${NODE_VERSION}..."
+    log_info "[3/8] Installing Node.js ${NODE_VERSION} via NVM for user ${STRAPI_USER}..."
     
-    if command -v node &> /dev/null; then
+    # NVM is installed per-user. We install it for strapi user since PM2 runs as strapi.
+    # This makes node available whenever strapi user runs anything (including PM2).
+    
+    local NVM_DIR="${STRAPI_HOME}/.nvm"
+    
+    # Check if node is already available for strapi user
+    if sudo -u "$STRAPI_USER" bash -c "source ${NVM_DIR}/nvm.sh 2>/dev/null && command -v node" &>/dev/null; then
         local current_version
-        current_version=$(node --version | cut -d'v' -f2 | cut -d'.' -f1)
-        if [[ "$current_version" -ge "$NODE_VERSION" ]]; then
-            log_skip "Node.js $(node --version) already installed"
-            return
-        fi
-        log_info "Node.js $(node --version) found, upgrading to v${NODE_VERSION}..."
-    fi
-    
-    # NodeSource repo for Node.js 22 LTS
-    # AL2023 native repos only have Node.js 18 — we need 22 for Strapi 5
-    # NodeSource officially supports AL2023 ARM64: https://github.com/nodesource/distributions
-    log_info "Setting up NodeSource repository for Node.js ${NODE_VERSION}..."
-    curl -fsSL https://rpm.nodesource.com/setup_${NODE_VERSION}.x -o /tmp/nodesource_setup.sh
-    bash /tmp/nodesource_setup.sh
-    rm -f /tmp/nodesource_setup.sh
-    
-    # Install Node.js from NodeSource
-    dnf install -y nodejs
-    log_info "Node.js $(node --version) installed from NodeSource"
-}
-
-step_install_pm2() {
-    log_info "[3/8] Installing PM2..."
-    
-    if command -v pm2 &> /dev/null; then
-        log_skip "PM2 $(pm2 --version) already installed"
+        current_version=$(sudo -u "$STRAPI_USER" bash -c "source ${NVM_DIR}/nvm.sh && node --version")
+        log_skip "Node.js ${current_version} already installed for ${STRAPI_USER}"
         return
     fi
     
-    npm install -g pm2
-    log_info "PM2 $(pm2 --version) installed"
+    # Install NVM for strapi user
+    log_info "Installing NVM for ${STRAPI_USER}..."
+    sudo -u "$STRAPI_USER" bash -c '
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    '
+    
+    # Install Node.js and set as default
+    log_info "Installing Node.js ${NODE_VERSION} via NVM..."
+    sudo -u "$STRAPI_USER" bash -c "
+        export NVM_DIR=\"${NVM_DIR}\"
+        source \"\${NVM_DIR}/nvm.sh\"
+        nvm install ${NODE_VERSION}
+        nvm alias default ${NODE_VERSION}
+        nvm use default
+    "
+    
+    # Verify installation
+    local node_version
+    node_version=$(sudo -u "$STRAPI_USER" bash -c "source ${NVM_DIR}/nvm.sh && node --version")
+    local npm_version
+    npm_version=$(sudo -u "$STRAPI_USER" bash -c "source ${NVM_DIR}/nvm.sh && npm --version")
+    
+    log_info "Node.js ${node_version} installed via NVM"
+    log_info "npm ${npm_version} installed"
+    log_info "NVM configured with default alias → Node.js ${NODE_VERSION}"
+}
+
+step_install_pm2() {
+    log_info "[4/8] Installing PM2 for user ${STRAPI_USER}..."
+    
+    local NVM_DIR="${STRAPI_HOME}/.nvm"
+    
+    # Check if PM2 is already installed for strapi user
+    if sudo -u "$STRAPI_USER" bash -c "source ${NVM_DIR}/nvm.sh && command -v pm2" &>/dev/null; then
+        local pm2_version
+        pm2_version=$(sudo -u "$STRAPI_USER" bash -c "source ${NVM_DIR}/nvm.sh && pm2 --version")
+        log_skip "PM2 ${pm2_version} already installed for ${STRAPI_USER}"
+        return
+    fi
+    
+    # Install PM2 globally for strapi user via NVM
+    sudo -u "$STRAPI_USER" bash -c "
+        source ${NVM_DIR}/nvm.sh
+        npm install -g pm2
+    "
+    
+    local pm2_version
+    pm2_version=$(sudo -u "$STRAPI_USER" bash -c "source ${NVM_DIR}/nvm.sh && pm2 --version")
+    log_info "PM2 ${pm2_version} installed for ${STRAPI_USER}"
 }
 
 step_install_postgresql() {
-    log_info "[4/8] Installing PostgreSQL ${PG_VERSION}..."
+    log_info "[5/8] Installing PostgreSQL ${PG_VERSION}..."
     
     # Check if already installed from native AL2023 repos
     if rpm -q postgresql${PG_VERSION}-server &> /dev/null; then
@@ -231,7 +264,7 @@ step_install_postgresql() {
 }
 
 step_install_cloudflared() {
-    log_info "[5/8] Installing cloudflared..."
+    log_info "[6/8] Installing cloudflared..."
     
     if command -v cloudflared &> /dev/null; then
         log_skip "cloudflared $(cloudflared --version | head -1) already installed"
@@ -285,7 +318,7 @@ step_install_cloudflared() {
 }
 
 step_create_strapi_user() {
-    log_info "[6/8] Creating strapi system user..."
+    log_info "[2/8] Creating strapi system user..."
     
     if id "$STRAPI_USER" &> /dev/null; then
         log_skip "User ${STRAPI_USER} already exists"
@@ -448,9 +481,77 @@ step_setup_pm2_startup() {
         return
     fi
     
+    local NVM_DIR="${STRAPI_HOME}/.nvm"
+    
+    # Get the path to pm2 binary inside NVM
+    local PM2_PATH
+    PM2_PATH=$(sudo -u "$STRAPI_USER" bash -c "source ${NVM_DIR}/nvm.sh && which pm2")
+    
+    # Get the path to node binary inside NVM  
+    local NODE_PATH
+    NODE_PATH=$(sudo -u "$STRAPI_USER" bash -c "source ${NVM_DIR}/nvm.sh && which node")
+    local NODE_BIN_DIR
+    NODE_BIN_DIR=$(dirname "$NODE_PATH")
+    
     # Configure PM2 to start on boot
-    env PATH=$PATH:/usr/bin pm2 startup systemd -u "$STRAPI_USER" --hp "$STRAPI_HOME" --service-name "pm2-${STRAPI_USER}"
+    # pm2 startup generates a systemd service that runs as strapi user
+    env PATH="${NODE_BIN_DIR}:$PATH" "$PM2_PATH" startup systemd -u "$STRAPI_USER" --hp "$STRAPI_HOME" --service-name "pm2-${STRAPI_USER}"
+    
     log_info "PM2 startup configured"
+    log_info "PM2 will use node from: ${NODE_BIN_DIR}"
+}
+
+step_generate_ssh_key() {
+    log_info "[9/10] Generating SSH deploy key for ${STRAPI_USER}..."
+    
+    local SSH_KEY="${STRAPI_HOME}/.ssh/id_ed25519"
+    
+    if [[ -f "$SSH_KEY" ]]; then
+        log_skip "SSH key already exists at ${SSH_KEY}"
+        return
+    fi
+    
+    # Create .ssh directory with correct permissions
+    sudo -u "$STRAPI_USER" mkdir -p "${STRAPI_HOME}/.ssh"
+    chmod 700 "${STRAPI_HOME}/.ssh"
+    
+    # Generate ED25519 key (no passphrase for automated deploys)
+    sudo -u "$STRAPI_USER" ssh-keygen -t ed25519 -C "godatify-deploy-$(hostname)" -f "$SSH_KEY" -N ""
+    
+    # Configure SSH to use this key for GitHub and skip host key checking
+    sudo -u "$STRAPI_USER" bash -c "cat > ${STRAPI_HOME}/.ssh/config << 'SSHCONFIG'
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    StrictHostKeyChecking no
+SSHCONFIG"
+    chmod 600 "${STRAPI_HOME}/.ssh/config"
+    
+    log_info "SSH deploy key generated"
+}
+
+step_generate_strapi_secrets() {
+    log_info "[10/10] Generating Strapi secrets..."
+    
+    # Check if secrets already exist in env file
+    if grep -q "^APP_KEYS=" "$ENV_FILE" 2>/dev/null; then
+        log_skip "Strapi secrets already configured in ${ENV_FILE}"
+        return
+    fi
+    
+    # Generate and append secrets
+    {
+        echo ""
+        echo "# Strapi secrets (auto-generated by setup-ec2.sh)"
+        echo "APP_KEYS=$(openssl rand -base64 32),$(openssl rand -base64 32)"
+        echo "API_TOKEN_SALT=$(openssl rand -base64 32)"
+        echo "ADMIN_JWT_SECRET=$(openssl rand -base64 32)"
+        echo "TRANSFER_TOKEN_SALT=$(openssl rand -base64 32)"
+        echo "JWT_SECRET=$(openssl rand -base64 32)"
+    } >> "$ENV_FILE"
+    
+    log_info "Strapi secrets generated and saved to ${ENV_FILE}"
 }
 
 # ==============================================================================
@@ -480,24 +581,48 @@ main() {
     echo ""
     
     step_system_update
-    step_install_nodejs
-    step_install_pm2
+    step_create_strapi_user      # Must be before Node.js (NVM is per-user)
+    step_install_nodejs           # Installs NVM + Node.js for strapi user
+    step_install_pm2              # Installs PM2 via NVM for strapi user
     step_install_postgresql
     step_install_cloudflared
-    step_create_strapi_user
     step_create_directories
     step_configure_postgresql
     step_setup_pm2_startup
+    step_generate_ssh_key         # Generate SSH key for git clone
+    step_generate_strapi_secrets  # Generate APP_KEYS, JWT_SECRET, etc.
     
     echo ""
     echo "=========================================="
     echo -e "${GREEN}Setup Complete!${NC}"
     echo "=========================================="
     echo ""
-    echo "Next steps:"
-    echo "  1. Create /etc/strapi/env with environment variables"
-    echo "  2. Configure Cloudflare Tunnel (see docs/cloudflare-setup.md)"
-    echo "  3. Deploy code with: ./scripts/infra/deploy-backend.sh"
+    
+    # Show the SSH public key with instructions
+    local SSH_PUB_KEY="${STRAPI_HOME}/.ssh/id_ed25519.pub"
+    if [[ -f "$SSH_PUB_KEY" ]]; then
+        echo -e "${YELLOW}╔══════════════════════════════════════════════════════════════╗${NC}"
+        echo -e "${YELLOW}║  DEPLOY KEY - Add this to GitHub                             ║${NC}"
+        echo -e "${YELLOW}╚══════════════════════════════════════════════════════════════╝${NC}"
+        echo ""
+        cat "$SSH_PUB_KEY"
+        echo ""
+        echo -e "${BLUE}To add this key to GitHub:${NC}"
+        echo "  1. Go to: https://github.com/YOUR_USER/godatify-landing/settings/keys"
+        echo "  2. Click 'Add deploy key'"
+        echo "  3. Title: 'godatify-ec2-deploy'"
+        echo "  4. Paste the key above"
+        echo "  5. Check 'Allow write access' if you want to push from server"
+        echo "  6. Click 'Add key'"
+        echo ""
+    fi
+    
+    echo -e "${BLUE}Next steps:${NC}"
+    echo "  1. Add the deploy key to GitHub (see above)"
+    echo "  2. Clone the repo:"
+    echo "     sudo -u strapi git clone git@github.com:YOUR_USER/godatify-landing.git ${APP_DIR}"
+    echo "  3. Configure Cloudflare Tunnel (see docs/cloudflare-setup.md)"
+    echo "  4. Run: sudo ${OPT_DIR}/scripts/deploy-backend.sh"
     echo ""
 }
 

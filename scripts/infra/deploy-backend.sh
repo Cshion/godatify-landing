@@ -97,6 +97,26 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1" >&2
 }
 
+# NVM-aware command execution
+# Runs commands as strapi user with NVM loaded
+readonly NVM_DIR="${STRAPI_HOME}/.nvm"
+
+run_as_strapi() {
+    # Run command as strapi user with NVM loaded
+    sudo -u "$STRAPI_USER" bash -c "source ${NVM_DIR}/nvm.sh && $*"
+}
+
+run_as_strapi_with_env() {
+    # Run command as strapi user with NVM loaded AND env vars from /etc/strapi/env
+    sudo -u "$STRAPI_USER" bash -c "
+        source ${NVM_DIR}/nvm.sh
+        set -a
+        source ${ENV_FILE}
+        set +a
+        $*
+    "
+}
+
 show_help() {
     cat << EOF
 Backend Deployment Script — godatify-landing
@@ -138,20 +158,24 @@ check_prerequisites() {
     
     local has_error=false
     
-    # Check Node.js
-    if ! command -v node &> /dev/null; then
-        log_error "Node.js not installed. Run setup-ec2.sh first."
+    # Check Node.js (via NVM for strapi user)
+    if ! run_as_strapi "command -v node" &>/dev/null; then
+        log_error "Node.js not installed for ${STRAPI_USER}. Run setup-ec2.sh first."
         has_error=true
     else
-        log_info "Node.js $(node --version) ✓"
+        local node_version
+        node_version=$(run_as_strapi "node --version")
+        log_info "Node.js ${node_version} ✓"
     fi
     
-    # Check PM2
-    if ! command -v pm2 &> /dev/null; then
-        log_error "PM2 not installed. Run setup-ec2.sh first."
+    # Check PM2 (via NVM for strapi user)
+    if ! run_as_strapi "command -v pm2" &>/dev/null; then
+        log_error "PM2 not installed for ${STRAPI_USER}. Run setup-ec2.sh first."
         has_error=true
     else
-        log_info "PM2 $(pm2 --version) ✓"
+        local pm2_version
+        pm2_version=$(run_as_strapi "pm2 --version")
+        log_info "PM2 ${pm2_version} ✓"
     fi
     
     # Check PostgreSQL using pg_isready with correct native AL2023 socket path
@@ -231,8 +255,8 @@ install_dependencies() {
     
     cd "$BACKEND_DIR"
     
-    # Clean install for production
-    sudo -u "$STRAPI_USER" npm ci --omit=dev
+    # Clean install for production (via NVM)
+    run_as_strapi "cd ${BACKEND_DIR} && npm ci --omit=dev"
     
     log_info "Dependencies installed"
 }
@@ -247,23 +271,8 @@ build_strapi() {
     
     cd "$BACKEND_DIR"
     
-    # Load environment variables for build
-    # The env file is owned by root:strapi with 640 permissions
-    # If running as root, we can source directly; otherwise use sudo cat
-    if [[ -r "$ENV_FILE" ]]; then
-        set -a
-        source "$ENV_FILE"
-        set +a
-    elif [[ -f "$ENV_FILE" ]]; then
-        log_info "Loading environment via sudo (file not directly readable)"
-        while IFS='=' read -r key value; do
-            [[ -z "$key" || "$key" =~ ^# ]] && continue
-            export "$key=$value"
-        done < <(sudo cat "$ENV_FILE")
-    fi
-    
-    # Run build as strapi user
-    sudo -u "$STRAPI_USER" -E npm run build
+    # Run build as strapi user with env vars loaded (via NVM)
+    run_as_strapi_with_env "cd ${BACKEND_DIR} && npm run build"
     
     log_info "Strapi build complete"
 }
@@ -295,7 +304,7 @@ check_migrations() {
     echo ""
     log_warn "⚠️  Migrations will be executed automatically when Strapi starts"
     log_warn "⚠️  Strapi runs migrations BEFORE schema sync (safe for data preservation)"
-    log_warn "⚠️  If a migration fails, Strapi will NOT start — check PM2 logs"
+    log_warn "⚠️  If a migration fails, Strapi will NOT start — check: sudo -iu strapi pm2 logs"
     echo ""
 }
 
@@ -324,41 +333,22 @@ copy_pm2_config() {
 restart_pm2() {
     log_step "Restarting Strapi via PM2..."
     
-    # Switch to strapi user for PM2 operations
     cd "$BACKEND_DIR"
     
-    # Issue 4: PM2 does NOT support env_file - must source env vars before PM2 commands
-    # Load environment variables so PM2 picks them up
-    # The env file is owned by root:strapi with 640 permissions
-    if [[ -r "$ENV_FILE" ]]; then
-        log_info "Loading environment from ${ENV_FILE}"
-        set -a
-        source "$ENV_FILE"
-        set +a
-    elif [[ -f "$ENV_FILE" ]]; then
-        log_info "Loading environment via sudo (file not directly readable)"
-        while IFS='=' read -r key value; do
-            [[ -z "$key" || "$key" =~ ^# ]] && continue
-            export "$key=$value"
-        done < <(sudo cat "$ENV_FILE")
-    else
-        log_warn "Environment file not found: ${ENV_FILE}"
-    fi
-    
-    # Check if strapi is already running in PM2
-    if sudo -u "$STRAPI_USER" pm2 describe "${PM2_APP_NAME}" &> /dev/null; then
+    # Check if strapi is already running in PM2 (via NVM)
+    if run_as_strapi "pm2 describe ${PM2_APP_NAME}" &>/dev/null; then
         # Graceful reload with updated environment
-        sudo -u "$STRAPI_USER" -E pm2 reload "${PM2_APP_NAME}" --update-env
+        run_as_strapi_with_env "cd ${BACKEND_DIR} && pm2 reload ${PM2_APP_NAME} --update-env"
         log_info "Strapi reloaded (zero-downtime)"
     else
         # First start - pass environment to pm2 start
-        sudo -u "$STRAPI_USER" -E pm2 start "$PM2_CONFIG" --env production
-        sudo -u "$STRAPI_USER" pm2 save
+        run_as_strapi_with_env "cd ${BACKEND_DIR} && pm2 start ${PM2_CONFIG} --env production"
+        run_as_strapi "pm2 save"
         log_info "Strapi started"
     fi
     
     # Show status
-    sudo -u "$STRAPI_USER" pm2 status
+    run_as_strapi "pm2 status"
 }
 
 health_check() {
@@ -385,7 +375,7 @@ health_check() {
     
     echo ""
     log_error "Health check failed after ${max_attempts} attempts"
-    log_error "Check logs: pm2 logs ${PM2_APP_NAME}"
+    log_error "Check logs: sudo -iu strapi pm2 logs ${PM2_APP_NAME}"
     return 1
 }
 
@@ -445,7 +435,8 @@ main() {
     echo ""
     echo "Strapi is running at http://localhost:1337"
     echo ""
-    echo "Useful commands:"
+    echo "Useful commands (run as strapi user):"
+    echo "  sudo -iu strapi"
     echo "  pm2 logs strapi        # View logs"
     echo "  pm2 monit              # Real-time monitoring"
     echo "  pm2 reload strapi      # Zero-downtime restart"
