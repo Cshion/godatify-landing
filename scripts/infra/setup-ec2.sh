@@ -113,6 +113,7 @@ What this script does:
     8. Configures PostgreSQL (db/user)
     9. Generates SSH deploy key for GitHub
     10. Generates Strapi secrets (APP_KEYS, JWT, etc.)
+    11. Clones the repository (asks for GitHub key if needed)
 
 This script is idempotent — safe to run multiple times.
 
@@ -137,7 +138,7 @@ check_root() {
 # ==============================================================================
 
 step_system_update() {
-    log_info "[1/8] Updating system packages..."
+    log_info "[1/11] Updating system packages..."
     dnf update -y
     
     # Install essential tools
@@ -153,7 +154,7 @@ step_system_update() {
 }
 
 step_install_nodejs() {
-    log_info "[3/8] Installing Node.js ${NODE_VERSION} via NVM for user ${STRAPI_USER}..."
+    log_info "[3/11] Installing Node.js ${NODE_VERSION} via NVM for user ${STRAPI_USER}..."
     
     # NVM is installed per-user. We install it for strapi user since PM2 runs as strapi.
     # This makes node available whenever strapi user runs anything (including PM2).
@@ -196,7 +197,7 @@ step_install_nodejs() {
 }
 
 step_install_pm2() {
-    log_info "[4/8] Installing PM2 for user ${STRAPI_USER}..."
+    log_info "[4/11] Installing PM2 for user ${STRAPI_USER}..."
     
     local NVM_DIR="${STRAPI_HOME}/.nvm"
     
@@ -220,7 +221,7 @@ step_install_pm2() {
 }
 
 step_install_postgresql() {
-    log_info "[5/8] Installing PostgreSQL ${PG_VERSION}..."
+    log_info "[5/11] Installing PostgreSQL ${PG_VERSION}..."
     
     # Check if already installed from native AL2023 repos
     if rpm -q postgresql${PG_VERSION}-server &> /dev/null; then
@@ -264,7 +265,7 @@ step_install_postgresql() {
 }
 
 step_install_cloudflared() {
-    log_info "[6/8] Installing cloudflared..."
+    log_info "[6/11] Installing cloudflared..."
     
     if command -v cloudflared &> /dev/null; then
         log_skip "cloudflared $(cloudflared --version | head -1) already installed"
@@ -318,7 +319,7 @@ step_install_cloudflared() {
 }
 
 step_create_strapi_user() {
-    log_info "[2/8] Creating strapi system user..."
+    log_info "[2/11] Creating strapi system user..."
     
     if id "$STRAPI_USER" &> /dev/null; then
         log_skip "User ${STRAPI_USER} already exists"
@@ -334,7 +335,7 @@ step_create_strapi_user() {
 }
 
 step_create_directories() {
-    log_info "[7/8] Creating directories..."
+    log_info "[7/11] Creating directories..."
     
     # Application directory
     if [[ ! -d "$APP_DIR" ]]; then
@@ -387,7 +388,7 @@ step_create_directories() {
 }
 
 step_configure_postgresql() {
-    log_info "[8/8] Configuring PostgreSQL..."
+    log_info "[8/11] Configuring PostgreSQL..."
     
     # Check if strapi database exists
     if sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw strapi; then
@@ -502,7 +503,7 @@ step_setup_pm2_startup() {
 }
 
 step_generate_ssh_key() {
-    log_info "[9/10] Generating SSH deploy key for ${STRAPI_USER}..."
+    log_info "[9/11] Generating SSH deploy key for ${STRAPI_USER}..."
     
     local SSH_KEY="${STRAPI_HOME}/.ssh/id_ed25519"
     
@@ -532,7 +533,7 @@ SSHCONFIG"
 }
 
 step_generate_strapi_secrets() {
-    log_info "[10/10] Generating Strapi secrets..."
+    log_info "[10/11] Generating Strapi secrets..."
     
     # Check if secrets already exist in env file
     if grep -q "^APP_KEYS=" "$ENV_FILE" 2>/dev/null; then
@@ -552,6 +553,84 @@ step_generate_strapi_secrets() {
     } >> "$ENV_FILE"
     
     log_info "Strapi secrets generated and saved to ${ENV_FILE}"
+}
+
+step_clone_repository() {
+    log_info "[11/11] Cloning repository..."
+    
+    local REPO_URL="git@github.com:Cshion/godatify-landing.git"
+    local SSH_PUB_KEY="${STRAPI_HOME}/.ssh/id_ed25519.pub"
+    
+    # Check if already cloned
+    if [[ -d "${APP_DIR}/.git" ]]; then
+        log_skip "Repository already cloned at ${APP_DIR}"
+        return
+    fi
+    
+    # Test GitHub SSH connection
+    log_info "Testing GitHub SSH connection..."
+    if sudo -u "$STRAPI_USER" ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+        log_info "GitHub SSH connection successful!"
+    else
+        # Connection failed - show the key and ask user to add it
+        echo ""
+        echo -e "${YELLOW}╔══════════════════════════════════════════════════════════════╗${NC}"
+        echo -e "${YELLOW}║  DEPLOY KEY - Add this to GitHub                             ║${NC}"
+        echo -e "${YELLOW}╚══════════════════════════════════════════════════════════════╝${NC}"
+        echo ""
+        cat "$SSH_PUB_KEY"
+        echo ""
+        echo -e "${BLUE}To add this key to GitHub:${NC}"
+        echo "  1. Go to: https://github.com/Cshion/godatify-landing/settings/keys"
+        echo "  2. Click 'Add deploy key'"
+        echo "  3. Title: 'godatify-ec2-deploy'"
+        echo "  4. Paste the key above"
+        echo "  5. Click 'Add key'"
+        echo ""
+        
+        # Wait for user confirmation
+        while true; do
+            echo -n -e "${GREEN}¿Ya agregaste la deploy key a GitHub? (s/n): ${NC}"
+            read -r response
+            case "$response" in
+                [sS]|[yY]|[sS][iI]|[yY][eE][sS])
+                    log_info "Verifying GitHub connection..."
+                    if sudo -u "$STRAPI_USER" ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+                        log_info "GitHub connection verified!"
+                        break
+                    else
+                        log_error "GitHub connection still fails. Please verify the key was added correctly."
+                        echo ""
+                    fi
+                    ;;
+                [nN]|[nN][oO])
+                    log_warn "Cannot clone without deploy key. Add the key and re-run the setup."
+                    return 1
+                    ;;
+                *)
+                    echo "Please answer 's' (sí) or 'n' (no)"
+                    ;;
+            esac
+        done
+    fi
+    
+    # Clone the repository
+    log_info "Cloning repository to ${APP_DIR}..."
+    sudo -u "$STRAPI_USER" git clone "$REPO_URL" "$APP_DIR"
+    
+    # Copy deploy scripts to /opt/godatify/scripts/
+    if [[ -f "${APP_DIR}/scripts/infra/deploy-backend.sh" ]]; then
+        cp "${APP_DIR}/scripts/infra/deploy-backend.sh" "${OPT_DIR}/scripts/"
+        chmod +x "${OPT_DIR}/scripts/deploy-backend.sh"
+        log_info "Copied deploy-backend.sh to ${OPT_DIR}/scripts/"
+    fi
+    
+    if [[ -f "${APP_DIR}/scripts/infra/ecosystem.config.js" ]]; then
+        cp "${APP_DIR}/scripts/infra/ecosystem.config.js" "${OPT_DIR}/scripts/"
+        log_info "Copied ecosystem.config.js to ${OPT_DIR}/scripts/"
+    fi
+    
+    log_success "Repository cloned successfully!"
 }
 
 step_configure_aliases() {
@@ -625,31 +704,13 @@ main() {
     step_generate_ssh_key         # Generate SSH key for git clone
     step_generate_strapi_secrets  # Generate APP_KEYS, JWT_SECRET, etc.
     step_configure_aliases        # Add convenience aliases to ec2-user
+    step_clone_repository         # Clone repo (asks for GitHub key if needed)
     
     echo ""
     echo "=========================================="
     echo -e "${GREEN}Setup Complete!${NC}"
     echo "=========================================="
     echo ""
-    
-    # Show the SSH public key with instructions
-    local SSH_PUB_KEY="${STRAPI_HOME}/.ssh/id_ed25519.pub"
-    if [[ -f "$SSH_PUB_KEY" ]]; then
-        echo -e "${YELLOW}╔══════════════════════════════════════════════════════════════╗${NC}"
-        echo -e "${YELLOW}║  DEPLOY KEY - Add this to GitHub                             ║${NC}"
-        echo -e "${YELLOW}╚══════════════════════════════════════════════════════════════╝${NC}"
-        echo ""
-        cat "$SSH_PUB_KEY"
-        echo ""
-        echo -e "${BLUE}To add this key to GitHub:${NC}"
-        echo "  1. Go to: https://github.com/Cshion/godatify-landing/settings/keys"
-        echo "  2. Click 'Add deploy key'"
-        echo "  3. Title: 'godatify-ec2-deploy'"
-        echo "  4. Paste the key above"
-        echo "  5. Check 'Allow write access' if you want to push from server"
-        echo "  6. Click 'Add key'"
-        echo ""
-    fi
     
     echo -e "${YELLOW}╔══════════════════════════════════════════════════════════════╗${NC}"
     echo -e "${YELLOW}║  AVAILABLE COMMANDS (run 'source ~/.bashrc' first)           ║${NC}"
@@ -663,13 +724,21 @@ main() {
     echo "  strapi-deploy     - Run full deployment"
     echo ""
     
-    echo -e "${BLUE}Next steps:${NC}"
-    echo "  1. Add the deploy key to GitHub (see above)"
-    echo "  2. Clone the repo:"
-    echo "     sudo -u strapi git clone git@github.com:Cshion/godatify-landing.git ${APP_DIR}"
-    echo "  3. Configure Cloudflare Tunnel (see docs/cloudflare-setup.md)"
-    echo "  4. Run: strapi-deploy"
-    echo ""
+    # Check if repo was cloned successfully
+    if [[ -d "${APP_DIR}/.git" ]]; then
+        echo -e "${BLUE}Next steps:${NC}"
+        echo "  1. Configure Cloudflare Tunnel (see docs/cloudflare-setup.md)"
+        echo "  2. Run first deploy: strapi-deploy"
+        echo ""
+    else
+        echo -e "${BLUE}Next steps:${NC}"
+        echo "  1. Add the deploy key to GitHub"
+        echo "  2. Re-run this setup or clone manually:"
+        echo "     sudo -u strapi git clone git@github.com:Cshion/godatify-landing.git ${APP_DIR}"
+        echo "  3. Configure Cloudflare Tunnel (see docs/cloudflare-setup.md)"
+        echo "  4. Run: strapi-deploy"
+        echo ""
+    fi
 }
 
 main "$@"
