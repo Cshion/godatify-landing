@@ -90,7 +90,7 @@ The script is idempotent — it checks before making changes:
 | System Update | Updates dnf packages | Always runs (safe) |
 | Node.js 22 | Installs Node.js | Checks `command -v node` |
 | PM2 | Installs PM2 globally | Checks `command -v pm2` |
-| PostgreSQL 17 | Installs and initializes | Checks rpm package |
+| PostgreSQL 15 | Installs and initializes | Checks rpm package |
 | cloudflared | Installs tunnel agent | Checks `command -v cloudflared` |
 | strapi user | Creates system user | Checks `id strapi` |
 | Directories | Creates /var/www/godatify, /etc/strapi, /var/log/strapi | Checks `-d` |

@@ -181,6 +181,24 @@ check_prerequisites() {
         log_info "User ${STRAPI_USER} exists ✓"
     fi
     
+    # Check critical environment variables
+    if [[ -f "$ENV_FILE" ]]; then
+        # Check DATABASE_CLIENT is set to postgres
+        if ! grep -q "^DATABASE_CLIENT=postgres" "$ENV_FILE" 2>/dev/null; then
+            log_error "DATABASE_CLIENT=postgres not found in ${ENV_FILE}"
+            log_error "Strapi will default to SQLite without this variable!"
+            has_error=true
+        else
+            log_info "DATABASE_CLIENT=postgres ✓"
+        fi
+        
+        # Check NODE_ENV is set
+        if ! grep -q "^NODE_ENV=" "$ENV_FILE" 2>/dev/null; then
+            log_warn "NODE_ENV not set in ${ENV_FILE} — will default to development"
+            log_warn "Add NODE_ENV=production to ${ENV_FILE}"
+        fi
+    fi
+    
     if [[ "$has_error" == true ]]; then
         exit 1
     fi
@@ -248,6 +266,37 @@ build_strapi() {
     sudo -u "$STRAPI_USER" -E npm run build
     
     log_info "Strapi build complete"
+}
+
+check_migrations() {
+    log_step "Checking for database migrations..."
+    
+    local migrations_dir="${BACKEND_DIR}/database/migrations"
+    
+    if [[ ! -d "$migrations_dir" ]]; then
+        log_info "No migrations directory found"
+        return
+    fi
+    
+    # Count migration files (exclude .gitkeep)
+    local migration_count
+    migration_count=$(find "$migrations_dir" -type f -name "*.js" -o -name "*.ts" 2>/dev/null | wc -l)
+    
+    if [[ "$migration_count" -eq 0 ]]; then
+        log_info "No pending migrations"
+        return
+    fi
+    
+    log_warn "Found ${migration_count} migration file(s):"
+    find "$migrations_dir" -type f \( -name "*.js" -o -name "*.ts" \) -exec basename {} \; | sort | while read -r file; do
+        log_warn "  → $file"
+    done
+    
+    echo ""
+    log_warn "⚠️  Migrations will be executed automatically when Strapi starts"
+    log_warn "⚠️  Strapi runs migrations BEFORE schema sync (safe for data preservation)"
+    log_warn "⚠️  If a migration fails, Strapi will NOT start — check PM2 logs"
+    echo ""
 }
 
 copy_pm2_config() {
@@ -384,6 +433,7 @@ main() {
     pull_latest_code
     install_dependencies
     build_strapi
+    check_migrations
     copy_pm2_config
     restart_pm2
     health_check
