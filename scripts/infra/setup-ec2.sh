@@ -554,6 +554,39 @@ step_generate_strapi_secrets() {
     log_info "Strapi secrets generated and saved to ${ENV_FILE}"
 }
 
+step_configure_aliases() {
+    log_info "Configuring convenience aliases..."
+    
+    local BASHRC="/home/ec2-user/.bashrc"
+    local ALIAS_MARKER="# godatify aliases"
+    
+    # Check if aliases already exist
+    if grep -q "$ALIAS_MARKER" "$BASHRC" 2>/dev/null; then
+        log_skip "Aliases already configured in ${BASHRC}"
+        return
+    fi
+    
+    # Add aliases to ec2-user's .bashrc
+    cat >> "$BASHRC" << 'ALIASES'
+
+# godatify aliases
+alias strapi-env='sudo cat /etc/strapi/env'
+alias strapi-env-edit='sudo vim /etc/strapi/env'
+alias strapi-logs='sudo -u strapi bash -c "source ~/.nvm/nvm.sh && pm2 logs strapi"'
+alias strapi-status='sudo -u strapi bash -c "source ~/.nvm/nvm.sh && pm2 status"'
+alias strapi-restart='sudo -u strapi bash -c "source ~/.nvm/nvm.sh && pm2 restart strapi"'
+alias strapi-deploy='sudo /opt/godatify/scripts/deploy-backend.sh'
+ALIASES
+
+    log_info "Aliases configured. Available commands:"
+    log_info "  strapi-env        - View environment variables"
+    log_info "  strapi-env-edit   - Edit environment variables"
+    log_info "  strapi-logs       - View Strapi logs"
+    log_info "  strapi-status     - Check PM2 status"
+    log_info "  strapi-restart    - Restart Strapi"
+    log_info "  strapi-deploy     - Run deployment script"
+}
+
 # ==============================================================================
 # Main
 # ==============================================================================
@@ -591,6 +624,7 @@ main() {
     step_setup_pm2_startup
     step_generate_ssh_key         # Generate SSH key for git clone
     step_generate_strapi_secrets  # Generate APP_KEYS, JWT_SECRET, etc.
+    step_configure_aliases        # Add convenience aliases to ec2-user
     
     echo ""
     echo "=========================================="
@@ -608,7 +642,7 @@ main() {
         cat "$SSH_PUB_KEY"
         echo ""
         echo -e "${BLUE}To add this key to GitHub:${NC}"
-        echo "  1. Go to: https://github.com/YOUR_USER/godatify-landing/settings/keys"
+        echo "  1. Go to: https://github.com/Cshion/godatify-landing/settings/keys"
         echo "  2. Click 'Add deploy key'"
         echo "  3. Title: 'godatify-ec2-deploy'"
         echo "  4. Paste the key above"
@@ -617,12 +651,24 @@ main() {
         echo ""
     fi
     
+    echo -e "${YELLOW}╔══════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${YELLOW}║  AVAILABLE COMMANDS (run 'source ~/.bashrc' first)           ║${NC}"
+    echo -e "${YELLOW}╚══════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+    echo "  strapi-env        - View environment variables (/etc/strapi/env)"
+    echo "  strapi-env-edit   - Edit environment variables"
+    echo "  strapi-logs       - View Strapi logs (real-time)"
+    echo "  strapi-status     - Check PM2 process status"
+    echo "  strapi-restart    - Restart Strapi"
+    echo "  strapi-deploy     - Run full deployment"
+    echo ""
+    
     echo -e "${BLUE}Next steps:${NC}"
     echo "  1. Add the deploy key to GitHub (see above)"
     echo "  2. Clone the repo:"
-    echo "     sudo -u strapi git clone git@github.com:YOUR_USER/godatify-landing.git ${APP_DIR}"
+    echo "     sudo -u strapi git clone git@github.com:Cshion/godatify-landing.git ${APP_DIR}"
     echo "  3. Configure Cloudflare Tunnel (see docs/cloudflare-setup.md)"
-    echo "  4. Run: sudo ${OPT_DIR}/scripts/deploy-backend.sh"
+    echo "  4. Run: strapi-deploy"
     echo ""
 }
 
