@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         },
         openGraph: {
             type: 'article',
-            url: `/casos/${slug}`,
+            url: `https://godatify.com/casos/${slug}`,
             title: `${caseStudy.title} | Casos de Éxito Datify`,
             description: caseStudy.description,
             images: [caseStudy.image],

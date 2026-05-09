@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Hero from '@/components/sections/Hero';
 import Nosotros from '@/components/sections/Nosotros';
 import Clients from '@/components/sections/Clients';
@@ -7,6 +8,18 @@ import Testimonials from '@/components/sections/Testimonials';
 import PartnerLogos from '@/components/common/PartnerLogos';
 import ScrollReveal from '@/components/ui/ScrollReveal';
 import { api } from '@/lib/api';
+
+export const metadata: Metadata = {
+    title: 'Datify – Datificando las Organizaciones',
+    description: 'Transformamos datos en decisiones de negocio. Consultoría especializada en Data Analytics, BI y AI para empresas en LATAM.',
+    openGraph: {
+        title: 'Datify – Datificando las Organizaciones',
+        description: 'Transformamos datos en decisiones de negocio. Consultoría en Data Analytics, BI y AI para LATAM.',
+        url: 'https://godatify.com/',
+        type: 'website',
+        images: [{ url: 'https://godatify.com/images/og-image.png', width: 1200, height: 630 }],
+    },
+};
 
 export default async function Home() {
   // Fetch ALL Home Page data (Dynamic + Static) in a single "View-Model" request

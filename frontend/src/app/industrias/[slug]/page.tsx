@@ -14,6 +14,12 @@ interface IndustryPageProps {
     }>;
 }
 
+const INDUSTRY_SLUGS = ['cervecera', 'logistica', 'pesca', 'agroindustria'];
+
+export async function generateStaticParams() {
+    return INDUSTRY_SLUGS.map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({ params }: IndustryPageProps): Promise<Metadata> {
     const { slug } = await params;
     const { industry } = await api.industries.getIndustryBySlug(slug);
@@ -31,9 +37,11 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
             canonical: `/industrias/${slug}`,
         },
         openGraph: {
+            type: 'website',
+            url: `https://godatify.com/industrias/${slug}`,
             title: `${industry.title} | Datify`,
             description: industry.description,
-            images: [industry.image],
+            images: [{ url: industry.image.startsWith('http') ? industry.image : `https://godatify.com${industry.image}`, width: 1200, height: 630 }],
         },
     };
 }
