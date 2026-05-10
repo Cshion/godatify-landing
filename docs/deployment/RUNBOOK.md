@@ -588,74 +588,66 @@ sudo systemctl start cloudflared
 
 ## Cloudflare Tunnel
 
-### Setup Overview
+### Setup Overview (Token Method)
 
 The tunnel exposes Strapi (port 1337) to the internet via `api.godatify.com`.
 
-```yaml
-# /etc/cloudflared/config.yml
-tunnel: <TUNNEL-UUID>
-credentials-file: /etc/cloudflared/creds.json
-
-ingress:
-  - hostname: api.godatify.com
-    service: http://localhost:1337
-  - service: http_status:404
-```
+When using the token method, cloudflared configuration is managed by Cloudflare and stored locally at `/root/.cloudflared/` (created automatically by `cloudflared service install`).
 
 ### Managing the Tunnel
 
 ```bash
-# List tunnels
-cloudflared tunnel list
+# Check service status
+sudo systemctl status cloudflared
 
-# Get tunnel info
-cloudflared tunnel info godatify-api
+# View logs
+sudo journalctl -u cloudflared -f
 
 # Check tunnel health (/_health endpoint returns HTTP 204)
 curl -s -o /dev/null -w "%{http_code}" https://api.godatify.com/_health
 # Returns: 204
 ```
 
-### Rotating Tunnel Credentials
+### Rotating Tunnel / Recreating
+
+If you need to recreate the tunnel (e.g., security incident):
 
 ```bash
-# 1. Delete old tunnel
-cloudflared tunnel delete godatify-api
+# 1. Uninstall current tunnel service
+sudo cloudflared service uninstall
 
-# 2. Create new tunnel
-cloudflared tunnel create godatify-api
+# 2. In Cloudflare Dashboard (Networks → Tunnels):
+#    - Delete the old tunnel
+#    - Create a new tunnel
+#    - Copy the new install token
 
-# 3. Update DNS (if UUID changed)
-cloudflared tunnel route dns godatify-api api.godatify.com
+# 3. Install with new token
+sudo cloudflared service install <NEW_TOKEN>
 
-# 4. Copy new credentials
-sudo cp ~/.cloudflared/<NEW-UUID>.json /etc/cloudflared/creds.json
-sudo chown cloudflared:cloudflared /etc/cloudflared/creds.json
-
-# 5. Update config.yml with new UUID
-
-# 6. Restart service
-sudo systemctl restart cloudflared
+# 4. Configure public hostnames in dashboard
+#    - Hostname: api.godatify.com
+#    - Service: http://localhost:1337
 ```
 
 ### Tunnel Not Connecting?
 
 ```bash
-# 1. Check credentials exist
-ls -la /etc/cloudflared/creds.json
+# 1. Check service status
+sudo systemctl status cloudflared
 
-# 2. Verify tunnel exists in Cloudflare
-cloudflared tunnel list
+# 2. View logs for errors
+sudo journalctl -u cloudflared -n 50
 
-# 3. Test manual run
-sudo cloudflared tunnel --config /etc/cloudflared/config.yml run
-
-# 4. Check DNS
+# 3. Check DNS
 dig api.godatify.com
 
-# 5. Verify local service (use /api as liveness check)
-curl -s http://localhost:1337/api
+# 4. Verify local service is running
+curl -s http://localhost:1337/_health
+
+# 5. If still failing, reinstall tunnel
+sudo cloudflared service uninstall
+# Get fresh token from dashboard, then:
+sudo cloudflared service install <TOKEN>
 ```
 
 ---

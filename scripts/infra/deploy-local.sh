@@ -154,8 +154,8 @@ sync_to_server() {
         log_warn "DRY RUN - showing what would be synced:"
     fi
 
-    # Use sudo rsync with --chown to write files directly as strapi user
-    # This is cleaner than rsync + separate chown step
+    # Use sudo rsync to write files, then chown to strapi user
+    # Note: --chown is not supported on older rsync (AL2023 has rsync 3.2.3)
     rsync $rsync_opts \
         --exclude 'node_modules' \
         --exclude '.cache' \
@@ -164,7 +164,6 @@ sync_to_server() {
         --exclude '*.log' \
         --exclude '.git' \
         --rsync-path="sudo rsync" \
-        --chown="${STRAPI_USER}:${STRAPI_USER}" \
         -e "ssh -i ${EC2_KEY} -p ${EC2_PORT}" \
         ./ "${EC2_USER}@${EC2_HOST}:${REMOTE_PATH}/"
 
@@ -172,6 +171,11 @@ sync_to_server() {
         log_info "Dry run complete. No changes made."
         exit 0
     fi
+
+    # Fix ownership after rsync (server rsync doesn't support --chown)
+    log_info "Setting ownership to ${STRAPI_USER}..."
+    ssh -i "$EC2_KEY" -p "$EC2_PORT" "$EC2_USER@$EC2_HOST" \
+        "sudo chown -R ${STRAPI_USER}:${STRAPI_USER} ${REMOTE_PATH}"
 
     log_info "Sync complete"
 }
@@ -193,11 +197,20 @@ install_remote_deps() {
 reload_pm2() {
     log_step "Reloading Strapi via PM2..."
     
+    # PM2 does NOT support env_file natively - must export vars before starting
     ssh -i "$EC2_KEY" -p "$EC2_PORT" "$EC2_USER@$EC2_HOST" "
         sudo -u ${STRAPI_USER} bash -c '
             source ~/.nvm/nvm.sh
             cd ${REMOTE_PATH}
-            pm2 reload strapi || pm2 start /opt/godatify/scripts/ecosystem.config.js
+            
+            # Export all variables from env file (PM2 inherits from parent process)
+            set -a
+            source /etc/strapi/env
+            set +a
+            
+            # Use --update-env to pass new env vars to running process
+            pm2 restart strapi --update-env || pm2 start /opt/godatify/scripts/ecosystem.config.js
+            pm2 save
         '
     "
     

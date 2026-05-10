@@ -257,119 +257,65 @@ ls -la /etc/strapi/env
 
 ## Phase 4: Cloudflare Tunnel
 
-> **Time:** 15-20 minutes
+> **Time:** 10-15 minutes
 
-Set up Cloudflare Tunnel for secure ingress without a public IP.
+Set up Cloudflare Tunnel using the **token method** (recommended by Cloudflare).
 
 ### Step 1: Create Tunnel in Cloudflare Dashboard
 
 1. Log in to [Cloudflare Zero Trust](https://one.dash.cloudflare.com/)
-2. Navigate to **Access** → **Tunnels**
+2. Navigate to **Networks** → **Tunnels**
 3. Click **Create a tunnel**
-4. Name it: `godatify-api`
-5. Click **Save tunnel**
-6. **Download the credentials file** (JSON format) — save as `creds.json`
+4. Select **Cloudflared** connector
+5. Name it: `godatify-api`
+6. **Copy the install token** shown on the "Install connector" page
 
-### Step 2: Copy Credentials to Server
-
-```bash
-# From your local machine
-scp creds.json ec2-user@<connect-via-eic>:/tmp/
-
-# Or copy content manually:
-# 1. Cat the file locally
-cat creds.json
-# 2. On the server, create the file
-sudo vim /etc/cloudflared/creds.json
-# 3. Paste the content
-```
-
-### Step 3: Secure Credentials on Server
+### Step 2: Install Tunnel on Server
 
 ```bash
-# On EC2 instance
-sudo mv /tmp/creds.json /etc/cloudflared/creds.json
-sudo chmod 600 /etc/cloudflared/creds.json
-sudo chown cloudflared:cloudflared /etc/cloudflared/creds.json
-```
+# SSH to server
+ssh godatify-backend
 
-### Step 4: Configure Tunnel
+# Install the tunnel with the token
+sudo cloudflared service install <TOKEN>
 
-```bash
-# Copy config template
-sudo cp /opt/godatify/scripts/cloudflared-config.yml.template /etc/cloudflared/config.yml
-
-# Edit and update TUNNEL_ID
-sudo vim /etc/cloudflared/config.yml
-```
-
-Update the config file with your tunnel UUID:
-
-```yaml
-tunnel: YOUR-TUNNEL-UUID-HERE
-credentials-file: /etc/cloudflared/creds.json
-
-ingress:
-  - hostname: api.godatify.com
-    service: http://localhost:1337
-    originRequest:
-      noTLSVerify: true
-  - service: http_status:404
-```
-
-```bash
-# Secure the config
-sudo chmod 600 /etc/cloudflared/config.yml
-sudo chown cloudflared:cloudflared /etc/cloudflared/config.yml
-```
-
-### Step 5: Configure DNS in Cloudflare
-
-Back in the Cloudflare dashboard:
-
-1. Go to **DNS** → **Records** for your domain
-2. Add a CNAME record:
-   - **Type:** CNAME
-   - **Name:** `api`
-   - **Target:** `<tunnel-uuid>.cfargotunnel.com`
-   - **Proxy status:** Proxied (orange cloud)
-
-Or use the CLI:
-```bash
-cloudflared tunnel route dns godatify-api api.godatify.com
-```
-
-### Step 6: Start Tunnel Service
-
-```bash
-# Copy systemd service file
-sudo cp /opt/godatify/scripts/cloudflared.service /etc/systemd/system/
-
-# Reload systemd
-sudo systemctl daemon-reload
-
-# Enable and start
-sudo systemctl enable --now cloudflared
-
-# Check status
+# Verify service is running
 sudo systemctl status cloudflared
 ```
 
-### Step 7: Verify Tunnel
+This single command creates the configuration, sets up systemd, and starts the service.
+
+### Step 3: Configure Public Hostname
+
+Back in the Cloudflare dashboard (same tunnel configuration page):
+
+1. Click **Next** after the connector shows as connected
+2. Add a **Public Hostname**:
+   - **Subdomain:** `api`
+   - **Domain:** `godatify.com`
+   - **Service Type:** `HTTP`
+   - **URL:** `localhost:1337`
+3. Click **Save tunnel**
+
+### Step 4: Verify Tunnel
 
 ```bash
-# Check tunnel info
-sudo cloudflared tunnel info
+# Check service status
+sudo systemctl status cloudflared
 
-# Should show your tunnel as "HEALTHY"
+# View logs
+sudo journalctl -u cloudflared -f
+
+# Test external access (from your Mac)
+curl -sf https://api.godatify.com/_health
+# Expected: {"status":"ok"}
 ```
 
 ### ✅ Checklist After Phase 4
 
-- [ ] `/etc/cloudflared/creds.json` exists with correct permissions (600)
-- [ ] `/etc/cloudflared/config.yml` has correct tunnel UUID
 - [ ] `cloudflared` service is running (`systemctl status cloudflared`)
-- [ ] DNS record exists for `api.godatify.com`
+- [ ] Public hostname configured in Cloudflare dashboard
+- [ ] `https://api.godatify.com/_health` returns success
 
 ---
 
@@ -585,11 +531,15 @@ sudo systemctl status cloudflared
 # Check cloudflared logs
 sudo journalctl -u cloudflared -f
 
-# Verify credentials
-sudo ls -la /etc/cloudflared/creds.json
+# Restart the tunnel service
+sudo systemctl restart cloudflared
 
-# Test tunnel manually
-sudo cloudflared tunnel --config /etc/cloudflared/config.yml run
+# If tunnel configuration is corrupted, reinstall with fresh token:
+# 1. Get new token from Cloudflare dashboard (Networks → Tunnels)
+# 2. Uninstall current service
+sudo cloudflared service uninstall
+# 3. Reinstall with new token
+sudo cloudflared service install <TOKEN>
 ```
 
 ### Database Connection Failed

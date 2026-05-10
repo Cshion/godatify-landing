@@ -16,6 +16,7 @@ Complete setup guide for Cloudflare with Vercel (frontend) and EC2 (backend).
 8. [Workers (Optional)](#workers-optional)
 9. [Troubleshooting](#troubleshooting)
 10. [Cloudflare Proxy Mode with EC2](#cloudflare-proxy-mode-with-ec2)
+11. [Cloudflare Tunnel (Recommended)](#cloudflare-tunnel-recommended-for-ec2)
 
 ---
 
@@ -1046,3 +1047,211 @@ Now Nginx will reject any connection not from Cloudflare, even if someone discov
 - [ ] CORS configured for your domains
 - [ ] Direct EC2 access blocked (test with curl to raw IP)
 - [ ] (Optional) Authenticated Origin Pulls enabled
+
+---
+
+## Cloudflare Tunnel (Recommended for EC2)
+
+Cloudflare Tunnel is a **simpler and more secure** alternative to the traditional Nginx reverse proxy approach documented above. Instead of opening ports 80/443 on EC2 and configuring Nginx, cloudflared creates an outbound-only connection from your server to Cloudflare's edge.
+
+### Why Use Cloudflare Tunnel?
+
+| Feature | Traditional Proxy | Cloudflare Tunnel |
+|---------|------------------|-------------------|
+| **Open Ports** | 80, 443 required | None (outbound only) |
+| **Security Groups** | Must whitelist Cloudflare IPs | Can block ALL inbound |
+| **TLS Certificates** | Manual setup (Let's Encrypt/Origin) | Automatic |
+| **Nginx Required** | Yes | No |
+| **IP Obfuscation** | Partial (need security groups) | Complete |
+| **Setup Complexity** | High | Low |
+
+### Architecture
+
+```
+┌──────────────┐      ┌─────────────────┐      ┌─────────────┐
+│   Browser    │─────▷│ Cloudflare Edge │◁─────│   EC2       │
+│              │      │ (api.godatify)  │ A    │ cloudflared │
+└──────────────┘      └─────────────────┘      └─────────────┘
+                              │                       │
+                              │   HTTPS (TLS 1.3)     │
+                              ◁───────────────────────┘
+                                 Outbound connection
+                                 (no inbound ports)
+```
+
+### Setup Overview (Token Method)
+
+Cloudflare now recommends the **token method** for tunnel setup. This is simpler than the legacy credentials file method — just copy a token from the dashboard and run one command.
+
+The setup has two parts:
+1. **Automated (done by setup-ec2.sh)**: Package installation via Cloudflare's repo
+2. **Manual (requires Cloudflare auth)**: Tunnel creation in dashboard, token install
+
+### Step 1: Run setup-ec2.sh
+
+The EC2 setup script installs cloudflared via Cloudflare's official AL2023 repository:
+
+```bash
+# On EC2
+sudo ./setup-ec2.sh
+```
+
+This installs:
+- `cloudflared` package via dnf (auto-updates enabled)
+- Creates necessary directories and user (handled by package)
+- Ready for token-based configuration
+
+### Step 2: Create Tunnel in Cloudflare Dashboard
+
+1. Go to **[Cloudflare Zero Trust](https://one.dash.cloudflare.com/)**
+2. Navigate to **Networks → Tunnels**
+3. Click **Create a tunnel**
+4. Select **Cloudflared** connector
+5. Name: `godatify-api`
+6. **Copy the install token** shown on the "Install connector" page
+
+### Step 3: Install the Tunnel on EC2
+
+Run the service install command with your token:
+
+```bash
+# On EC2
+sudo cloudflared service install <TOKEN>
+```
+
+This single command:
+- Creates the configuration file
+- Sets up the systemd service
+- Enables and starts the service
+
+### Step 4: Configure Public Hostnames
+
+Back in the Cloudflare dashboard (same tunnel configuration page):
+
+1. Click **Next** after the connector shows as connected
+2. Add a **Public Hostname**:
+   - **Subdomain**: `api`
+   - **Domain**: `godatify.com`
+   - **Service Type**: `HTTP`
+   - **URL**: `localhost:1337`
+3. Click **Save tunnel**
+
+### Step 5: Verify Connection
+
+```bash
+# Check service status
+sudo systemctl status cloudflared
+
+# View logs
+sudo journalctl -u cloudflared -f
+
+# Test external access
+curl -sf https://api.godatify.com/_health
+# Expected: {"status":"ok"}
+
+# Check Cloudflare headers
+curl -sI https://api.godatify.com | grep -i "cf-\|server:"
+# Expected:
+# server: cloudflare
+# cf-ray: xxxxxxx-IAD
+```
+
+### Security Configuration
+
+With Cloudflare Tunnel, you can lock down EC2 security groups completely:
+
+| Type | Port | Source | Status |
+|------|------|--------|--------|
+| SSH | 22 | Your IP / Bastion | ✅ Keep |
+| HTTP | 80 | Any | ❌ Remove |
+| HTTPS | 443 | Any | ❌ Remove |
+
+No inbound HTTP/HTTPS ports needed! All traffic goes through the tunnel.
+
+### Troubleshooting
+
+#### Tunnel Won't Connect
+
+```bash
+# Check service status
+sudo systemctl status cloudflared
+
+# View detailed logs
+sudo journalctl -u cloudflared -n 100
+
+# Restart the service
+sudo systemctl restart cloudflared
+```
+
+#### Common Issues
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `failed to connect` | Invalid token | Re-copy token from dashboard |
+| `tunnel not found` | Token expired | Create new tunnel or get fresh token |
+| `502 Bad Gateway` | Strapi not running | `pm2 status`, start if needed |
+| `DNS resolution failed` | Public hostname not configured | Add hostname in dashboard |
+
+#### AL2023 Specific Issues
+
+If you encounter issues with the package installation:
+
+```bash
+# Check repo is configured
+cat /etc/yum.repos.d/cloudflared.repo
+
+# Force reinstall
+sudo dnf reinstall -y cloudflared
+
+# Check binary location
+which cloudflared
+# Should be /usr/bin/cloudflared
+```
+
+### Maintenance
+
+#### Restart Tunnel
+
+```bash
+sudo systemctl restart cloudflared
+```
+
+#### Update cloudflared
+
+The package manager handles updates:
+
+```bash
+sudo dnf update cloudflared
+sudo systemctl restart cloudflared
+cloudflared --version
+```
+
+#### Reconfigure Tunnel
+
+If you need to change the tunnel configuration:
+
+```bash
+# Remove current service
+sudo cloudflared service uninstall
+
+# Install with new token
+sudo cloudflared service install <NEW_TOKEN>
+```
+
+### Tunnel vs Traditional Proxy: When to Use Which
+
+| Use Case | Recommendation |
+|----------|----------------|
+| Simple API exposure | ✅ Tunnel |
+| Need custom Nginx rules | Traditional Proxy |
+| Maximum security (no inbound) | ✅ Tunnel |
+| Multiple services/domains | Both work |
+| WebSockets/streaming | ✅ Tunnel (native support) |
+| Compliance (audit trail) | ✅ Tunnel (all traffic logged in CF) |
+
+For godatify-landing, **Cloudflare Tunnel is recommended** because:
+- Simpler setup (one command with token)
+- Better security (no exposed ports)
+- Automatic TLS management
+- Native WebSocket support (Strapi admin)
+- Cloudflare handles all edge concerns

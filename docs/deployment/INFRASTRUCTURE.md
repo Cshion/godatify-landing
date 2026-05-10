@@ -161,10 +161,8 @@ scripts/infra/
 ├── deploy-local.sh      # LOCAL BUILD deploys from Mac (primary method)
 ├── deploy-backend.sh    # Server-side deploy (emergency hot-fixes only)
 ├── ecosystem.config.js  # PM2 configuration
-├── backup-db.sh         # Database backup
-├── cloudflared.service  # Tunnel systemd service
-└── archive/
-    └── user-data.sh.bak # Archived (replaced by setup-ec2.sh)
+├── backup-db.sh         # Database backup (with systemd timer)
+└── logrotate-strapi.conf# Log rotation config
 ```
 
 **setup-ec2.sh** — Configures a fresh or existing EC2 instance:

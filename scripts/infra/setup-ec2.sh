@@ -112,7 +112,7 @@ What this script does:
     7. Installs PM2 globally (via NVM for strapi user)
     8. Configures data volume (if attached) for PostgreSQL
     9. Installs PostgreSQL ${PG_VERSION}
-    10. Installs cloudflared (Cloudflare Tunnel)
+    10. Installs cloudflared (via Cloudflare repo, token method)
     11. Creates required directories
     12. Configures log rotation (daily, 7-day retention)
     13. Configures PostgreSQL (db/user)
@@ -123,6 +123,14 @@ What this script does:
     18. Clones the repository (asks for GitHub key if needed)
 
 This script is idempotent — safe to run multiple times.
+
+CLOUDFLARE TUNNEL (token method):
+    After setup completes, configure the tunnel:
+    1. Create tunnel in Cloudflare dashboard (Networks → Tunnels)
+    2. Copy the install token
+    3. Run: sudo cloudflared service install <TOKEN>
+    4. Configure public hostnames in the dashboard
+    See docs/cloudflare-setup.md for detailed instructions.
 
 DEPLOYMENT STRATEGY:
     This instance uses LOCAL BUILD deploys (the server is too small to build).
@@ -526,55 +534,49 @@ step_install_postgresql() {
 step_install_cloudflared() {
     log_info "[10/18] Installing cloudflared..."
     
-    if command -v cloudflared &> /dev/null; then
-        log_skip "cloudflared $(cloudflared --version | head -1) already installed"
+    # Check if already installed via rpm package
+    if rpm -q cloudflared &> /dev/null; then
+        log_skip "cloudflared $(cloudflared --version | head -1) already installed via rpm"
         return
     fi
     
-    # Detect architecture
-    local arch
-    arch=$(uname -m)
-    if [[ "$arch" == "aarch64" ]]; then
-        arch="arm64"
-    elif [[ "$arch" == "x86_64" ]]; then
-        arch="amd64"
-    fi
+    # Install via Cloudflare's official repo (recommended method)
+    log_info "Adding Cloudflare repository..."
+    curl -fsSl https://pkg.cloudflare.com/cloudflared-ascii.repo | tee /etc/yum.repos.d/cloudflared.repo > /dev/null
     
-    local cloudflared_url="https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-${arch}"
-    curl -L "$cloudflared_url" -o /usr/local/bin/cloudflared
-    chmod +x /usr/local/bin/cloudflared
+    log_info "Installing cloudflared via dnf..."
+    dnf install -y cloudflared
     
-    log_info "cloudflared installed: $(/usr/local/bin/cloudflared --version | head -1)"
+    log_info "cloudflared installed: $(cloudflared --version | head -1)"
     
-    # Create cloudflared user if not exists
-    if ! id cloudflared &> /dev/null; then
-        useradd --system \
-            --no-create-home \
-            --shell /usr/sbin/nologin \
-            --comment "Cloudflare Tunnel Daemon" \
-            cloudflared
-        log_info "cloudflared user created"
-    else
-        log_skip "cloudflared user already exists"
-    fi
-    
-    # Create configuration directory
-    if [[ ! -d /etc/cloudflared ]]; then
-        mkdir -p /etc/cloudflared
-        chown cloudflared:cloudflared /etc/cloudflared
-        chmod 750 /etc/cloudflared
-        log_info "/etc/cloudflared directory created"
-    fi
-    
-    # Issue 5: Post-setup instructions for credentials file
+    # Print post-install instructions for token method
     echo ""
-    log_warn "After copying creds.json, secure it with:"
-    log_warn "  sudo chmod 600 /etc/cloudflared/creds.json"
-    log_warn "  sudo chown cloudflared:cloudflared /etc/cloudflared/creds.json"
-    log_warn ""
-    log_warn "Copy the config template:"
-    log_warn "  sudo cp /opt/godatify/scripts/cloudflared-config.yml.template /etc/cloudflared/config.yml"
-    log_warn "  sudo vim /etc/cloudflared/config.yml  # Update tunnel ID and hostname"
+    echo -e "${YELLOW}╔══════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${YELLOW}║  CLOUDFLARE TUNNEL - Token Method Setup                      ║${NC}"
+    echo -e "${YELLOW}╚══════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+    echo "The cloudflared package is installed. To configure the tunnel:"
+    echo ""
+    echo "  1. Create tunnel in Cloudflare Zero Trust dashboard:"
+    echo "     https://one.dash.cloudflare.com/ → Networks → Tunnels → Create"
+    echo ""
+    echo "  2. Select 'Cloudflared' connector, name your tunnel (e.g., godatify-api)"
+    echo ""
+    echo "  3. Copy the install token from the dashboard"
+    echo ""
+    echo "  4. Run on this server:"
+    echo "     sudo cloudflared service install <TOKEN>"
+    echo ""
+    echo "  5. Configure public hostnames in the Cloudflare dashboard:"
+    echo "     - Hostname: api.godatify.com"
+    echo "     - Service: http://localhost:1337"
+    echo ""
+    echo "  6. Verify the tunnel is running:"
+    echo "     sudo systemctl status cloudflared"
+    echo "     sudo journalctl -u cloudflared -f"
+    echo ""
+    echo "For detailed instructions, see: docs/cloudflare-setup.md"
+    echo ""
 }
 
 step_create_strapi_user() {
@@ -814,9 +816,14 @@ step_generate_strapi_secrets() {
         echo "ADMIN_JWT_SECRET=$(openssl rand -base64 32)"
         echo "TRANSFER_TOKEN_SALT=$(openssl rand -base64 32)"
         echo "JWT_SECRET=$(openssl rand -base64 32)"
+        echo ""
+        echo "# Public URL (MUST be set after configuring Cloudflare Tunnel)"
+        echo "# This is used by Strapi for redirects and absolute URLs"
+        echo "PUBLIC_URL=https://api.godatify.com"
     } >> "$ENV_FILE"
     
     log_info "Strapi secrets generated and saved to ${ENV_FILE}"
+    log_warn "IMPORTANT: Update PUBLIC_URL in ${ENV_FILE} if using a different domain"
 }
 
 step_clone_repository() {
