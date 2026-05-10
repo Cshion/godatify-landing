@@ -119,7 +119,9 @@ The \`frontend/vercel.json\` includes:
 
 The Strapi backend remains on EC2 for database persistence and full server control.
 
-### Quick Setup
+> ⚠️ **Deploy Strategy:** The t4g.small instance (2GB RAM) cannot build Strapi. Use **local-build deploys** from your Mac.
+
+### Quick Setup (One-Time)
 
 \`\`\`bash
 # Connect via EC2 Instance Connect (no SSH key needed)
@@ -136,9 +138,27 @@ sudo -u strapi git clone <repo-url> /var/www/godatify
 
 # Configure environment
 sudo vim /etc/strapi/env
+\`\`\`
 
-# Deploy
-sudo bash scripts/infra/deploy-backend.sh
+### Deploy (From Your Mac)
+
+\`\`\`bash
+# Normal deploy — builds locally, syncs to server
+cd backend && make deploy
+
+# Dry run — preview what would sync
+make deploy-dry
+
+# Quick deploy — skip build, sync existing dist/
+make deploy-fast
+\`\`\`
+
+### Emergency Only (Server-Side)
+
+\`\`\`bash
+# For git-pull hotfixes when you can't access your dev machine
+ssh godatify-backend
+sudo /opt/godatify/scripts/deploy-backend.sh --skip-build
 \`\`\`
 
 ### EC2 Requirements

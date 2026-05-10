@@ -107,20 +107,29 @@ What this script does:
     2. Creates strapi system user
     3. Installs Node.js ${NODE_VERSION} via NVM (for strapi user)
     4. Installs PM2 globally (via NVM for strapi user)
-    5. Installs PostgreSQL ${PG_VERSION}
-    6. Installs cloudflared (Cloudflare Tunnel)
-    7. Creates required directories
-    8. Configures PostgreSQL (db/user)
-    9. Generates SSH deploy key for GitHub
-    10. Generates Strapi secrets (APP_KEYS, JWT, etc.)
-    11. Clones the repository (asks for GitHub key if needed)
+    5. Configures data volume (if attached) for PostgreSQL
+    6. Installs PostgreSQL ${PG_VERSION}
+    7. Installs cloudflared (Cloudflare Tunnel)
+    8. Creates required directories
+    9. Configures PostgreSQL (db/user)
+    10. Generates SSH deploy key for GitHub
+    11. Generates Strapi secrets (APP_KEYS, JWT, etc.)
+    12. Clones the repository (asks for GitHub key if needed)
 
 This script is idempotent — safe to run multiple times.
+
+DEPLOYMENT STRATEGY:
+    This instance uses LOCAL BUILD deploys (the server is too small to build).
+    After setup, deploy from your Mac:
+        cd backend && make deploy   # Builds locally, syncs to server
+    
+    The deploy-backend.sh script is for emergencies only (git-pull hot-fixes).
 
 Requirements:
     - Amazon Linux 2023 (ARM64)
     - Root/sudo access
     - Internet connectivity
+    - (Optional) Separate EBS data volume for PostgreSQL
 
 EOF
     exit 0
@@ -138,7 +147,7 @@ check_root() {
 # ==============================================================================
 
 step_system_update() {
-    log_info "[1/11] Updating system packages..."
+    log_info "[1/12] Updating system packages..."
     dnf update -y
     
     # Install essential tools
@@ -154,7 +163,7 @@ step_system_update() {
 }
 
 step_install_nodejs() {
-    log_info "[3/11] Installing Node.js ${NODE_VERSION} via NVM for user ${STRAPI_USER}..."
+    log_info "[3/12] Installing Node.js ${NODE_VERSION} via NVM for user ${STRAPI_USER}..."
     
     # NVM is installed per-user. We install it for strapi user since PM2 runs as strapi.
     # This makes node available whenever strapi user runs anything (including PM2).
@@ -197,7 +206,7 @@ step_install_nodejs() {
 }
 
 step_install_pm2() {
-    log_info "[4/11] Installing PM2 for user ${STRAPI_USER}..."
+    log_info "[4/12] Installing PM2 for user ${STRAPI_USER}..."
     
     local NVM_DIR="${STRAPI_HOME}/.nvm"
     
@@ -220,8 +229,106 @@ step_install_pm2() {
     log_info "PM2 ${pm2_version} installed for ${STRAPI_USER}"
 }
 
+step_configure_data_volume() {
+    log_info "[5/12] Configuring data volume for PostgreSQL..."
+    
+    local DATA_MOUNT="/var/lib/pgsql"
+    local DATA_DEVICE=""
+    
+    # Detect attached data volume
+    # On Nitro instances (t4g.small), secondary EBS appears as /dev/nvme1n1
+    # On non-Nitro instances, it appears as /dev/xvdf
+    if [[ -b /dev/nvme1n1 ]]; then
+        DATA_DEVICE="/dev/nvme1n1"
+        log_info "Detected Nitro instance data volume: ${DATA_DEVICE}"
+    elif [[ -b /dev/xvdf ]]; then
+        DATA_DEVICE="/dev/xvdf"
+        log_info "Detected non-Nitro data volume: ${DATA_DEVICE}"
+    else
+        log_warn "No data volume detected (/dev/nvme1n1 or /dev/xvdf)"
+        log_warn "PostgreSQL will use root volume (not recommended for production)"
+        log_warn "To add a data volume:"
+        log_warn "  1. Create a gp3 EBS volume (20GB recommended)"
+        log_warn "  2. Attach to this instance as /dev/sdf (appears as /dev/nvme1n1 on Nitro)"
+        log_warn "  3. Re-run setup-ec2.sh"
+        return 0
+    fi
+    
+    # Check if already mounted
+    if mountpoint -q "$DATA_MOUNT"; then
+        log_skip "${DATA_MOUNT} already mounted"
+        return 0
+    fi
+    
+    # Check if volume has a filesystem
+    local fs_type
+    fs_type=$(blkid -o value -s TYPE "$DATA_DEVICE" 2>/dev/null || echo "")
+    
+    if [[ -z "$fs_type" ]]; then
+        # Unformatted volume — format as XFS
+        log_info "Formatting ${DATA_DEVICE} as XFS..."
+        mkfs.xfs -f "$DATA_DEVICE"
+        log_info "Volume formatted successfully"
+    elif [[ "$fs_type" != "xfs" ]]; then
+        log_warn "Volume ${DATA_DEVICE} has filesystem type '${fs_type}' (expected xfs)"
+        log_warn "Skipping data volume configuration — manual intervention required"
+        return 0
+    else
+        log_skip "Volume ${DATA_DEVICE} already formatted as XFS"
+    fi
+    
+    # Check if there's existing PostgreSQL data on root
+    if [[ -d "$DATA_MOUNT" ]] && [[ -f "${DATA_MOUNT}/data/PG_VERSION" ]]; then
+        log_warn "╔══════════════════════════════════════════════════════════════╗"
+        log_warn "║  EXISTING POSTGRESQL DATA FOUND ON ROOT VOLUME               ║"
+        log_warn "╚══════════════════════════════════════════════════════════════╝"
+        log_warn "PostgreSQL data exists at ${DATA_MOUNT}/data"
+        log_warn "This data needs to be migrated to the data volume manually."
+        log_warn ""
+        log_warn "Migration steps:"
+        log_warn "  1. Stop PostgreSQL: sudo systemctl stop postgresql"
+        log_warn "  2. Backup data: sudo mv ${DATA_MOUNT} ${DATA_MOUNT}.backup"
+        log_warn "  3. Re-run setup-ec2.sh to mount data volume"
+        log_warn "  4. Copy data: sudo cp -a ${DATA_MOUNT}.backup/* ${DATA_MOUNT}/"
+        log_warn "  5. Fix ownership: sudo chown -R postgres:postgres ${DATA_MOUNT}"
+        log_warn "  6. Start PostgreSQL: sudo systemctl start postgresql"
+        log_warn ""
+        log_warn "Skipping data volume mount to preserve existing data."
+        return 0
+    fi
+    
+    # Create mount point if needed
+    if [[ ! -d "$DATA_MOUNT" ]]; then
+        mkdir -p "$DATA_MOUNT"
+        log_info "Created mount point ${DATA_MOUNT}"
+    fi
+    
+    # Mount the volume
+    log_info "Mounting ${DATA_DEVICE} to ${DATA_MOUNT}..."
+    mount "$DATA_DEVICE" "$DATA_MOUNT"
+    
+    # Set ownership for postgres user (will be created by PostgreSQL install)
+    # For now, set to root — step_install_postgresql will fix ownership
+    chown root:root "$DATA_MOUNT"
+    chmod 755 "$DATA_MOUNT"
+    
+    # Add to fstab for persistence (if not already there)
+    local vol_uuid
+    vol_uuid=$(blkid -o value -s UUID "$DATA_DEVICE")
+    
+    if ! grep -q "$vol_uuid" /etc/fstab; then
+        log_info "Adding data volume to /etc/fstab..."
+        echo "UUID=${vol_uuid}  ${DATA_MOUNT}  xfs  defaults,noatime,nodiratime  0 2" >> /etc/fstab
+        log_info "Data volume will persist across reboots"
+    else
+        log_skip "Data volume already in /etc/fstab"
+    fi
+    
+    log_success "Data volume configured: ${DATA_DEVICE} → ${DATA_MOUNT}"
+}
+
 step_install_postgresql() {
-    log_info "[5/11] Installing PostgreSQL ${PG_VERSION}..."
+    log_info "[6/12] Installing PostgreSQL ${PG_VERSION}..."
     
     # Check if already installed from native AL2023 repos
     if rpm -q postgresql${PG_VERSION}-server &> /dev/null; then
@@ -265,7 +372,7 @@ step_install_postgresql() {
 }
 
 step_install_cloudflared() {
-    log_info "[6/11] Installing cloudflared..."
+    log_info "[7/12] Installing cloudflared..."
     
     if command -v cloudflared &> /dev/null; then
         log_skip "cloudflared $(cloudflared --version | head -1) already installed"
@@ -319,7 +426,7 @@ step_install_cloudflared() {
 }
 
 step_create_strapi_user() {
-    log_info "[2/11] Creating strapi system user..."
+    log_info "[2/12] Creating strapi system user..."
     
     if id "$STRAPI_USER" &> /dev/null; then
         log_skip "User ${STRAPI_USER} already exists"
@@ -335,7 +442,7 @@ step_create_strapi_user() {
 }
 
 step_create_directories() {
-    log_info "[7/11] Creating directories..."
+    log_info "[8/12] Creating directories..."
     
     # Application directory
     if [[ ! -d "$APP_DIR" ]]; then
@@ -388,7 +495,7 @@ step_create_directories() {
 }
 
 step_configure_postgresql() {
-    log_info "[8/11] Configuring PostgreSQL..."
+    log_info "[9/12] Configuring PostgreSQL..."
     
     # Check if strapi database exists
     if sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw strapi; then
@@ -503,7 +610,7 @@ step_setup_pm2_startup() {
 }
 
 step_generate_ssh_key() {
-    log_info "[9/11] Generating SSH deploy key for ${STRAPI_USER}..."
+    log_info "[10/12] Generating SSH deploy key for ${STRAPI_USER}..."
     
     local SSH_KEY="${STRAPI_HOME}/.ssh/id_ed25519"
     
@@ -533,7 +640,7 @@ SSHCONFIG"
 }
 
 step_generate_strapi_secrets() {
-    log_info "[10/11] Generating Strapi secrets..."
+    log_info "[11/12] Generating Strapi secrets..."
     
     # Check if secrets already exist in env file
     if grep -q "^APP_KEYS=" "$ENV_FILE" 2>/dev/null; then
@@ -556,7 +663,7 @@ step_generate_strapi_secrets() {
 }
 
 step_clone_repository() {
-    log_info "[11/11] Cloning repository..."
+    log_info "[12/12] Cloning repository..."
     
     local REPO_URL="git@github.com:Cshion/godatify-landing.git"
     local SSH_PUB_KEY="${STRAPI_HOME}/.ssh/id_ed25519.pub"
@@ -629,13 +736,9 @@ step_clone_repository() {
     # Mark directory as safe to avoid "dubious ownership" errors
     sudo -u "$STRAPI_USER" git config --global --add safe.directory "$APP_DIR"
     
-    # Copy deploy scripts to /opt/godatify/scripts/
-    if [[ -f "${APP_DIR}/scripts/infra/deploy-backend.sh" ]]; then
-        cp "${APP_DIR}/scripts/infra/deploy-backend.sh" "${OPT_DIR}/scripts/"
-        chmod +x "${OPT_DIR}/scripts/deploy-backend.sh"
-        log_info "Copied deploy-backend.sh to ${OPT_DIR}/scripts/"
-    fi
-    
+    # Copy PM2 config to /opt/godatify/scripts/
+    # NOTE: deploy-backend.sh is NOT copied — we use local deploys now.
+    # The server is too small to build Strapi. Deploy from Mac: make deploy
     if [[ -f "${APP_DIR}/scripts/infra/ecosystem.config.js" ]]; then
         cp "${APP_DIR}/scripts/infra/ecosystem.config.js" "${OPT_DIR}/scripts/"
         log_info "Copied ecosystem.config.js to ${OPT_DIR}/scripts/"
@@ -665,7 +768,8 @@ alias strapi-env-edit='sudo vim /etc/strapi/env'
 alias strapi-logs='sudo -u strapi bash -c "source ~/.nvm/nvm.sh && pm2 logs strapi"'
 alias strapi-status='sudo -u strapi bash -c "source ~/.nvm/nvm.sh && pm2 status"'
 alias strapi-restart='sudo -u strapi bash -c "source ~/.nvm/nvm.sh && pm2 restart strapi"'
-alias strapi-deploy='sudo /opt/godatify/scripts/deploy-backend.sh'
+# NOTE: Standard deploys run from Mac via 'make deploy' (local build strategy)
+# Server-side deploy-backend.sh is for emergencies only (git pull hot-fixes)
 ALIASES
 
     log_info "Aliases configured. Available commands:"
@@ -674,7 +778,8 @@ ALIASES
     log_info "  strapi-logs       - View Strapi logs"
     log_info "  strapi-status     - Check PM2 status"
     log_info "  strapi-restart    - Restart Strapi"
-    log_info "  strapi-deploy     - Run deployment script"
+    log_info ""
+    log_info "Deployment: Run 'make deploy' from your Mac (local build strategy)"
 }
 
 # ==============================================================================
@@ -707,6 +812,7 @@ main() {
     step_create_strapi_user      # Must be before Node.js (NVM is per-user)
     step_install_nodejs           # Installs NVM + Node.js for strapi user
     step_install_pm2              # Installs PM2 via NVM for strapi user
+    step_configure_data_volume    # Configure EBS data volume BEFORE PostgreSQL
     step_install_postgresql
     step_install_cloudflared
     step_create_directories
@@ -732,14 +838,18 @@ main() {
     echo "  strapi-logs       - View Strapi logs (real-time)"
     echo "  strapi-status     - Check PM2 process status"
     echo "  strapi-restart    - Restart Strapi"
-    echo "  strapi-deploy     - Run full deployment"
+    echo ""
+    echo -e "${BLUE}Deployment (LOCAL BUILD STRATEGY):${NC}"
+    echo "  From your Mac:  cd backend && make deploy"
+    echo "  (Server is too small to build — deploys build locally, sync via rsync)"
     echo ""
     
     # Check if repo was cloned successfully
     if [[ -d "${APP_DIR}/.git" ]]; then
         echo -e "${BLUE}Next steps:${NC}"
         echo "  1. Configure Cloudflare Tunnel (see docs/cloudflare-setup.md)"
-        echo "  2. Run first deploy: strapi-deploy"
+        echo "  2. From your Mac, run first deploy:"
+        echo "     cd backend && make deploy"
         echo ""
     else
         echo -e "${BLUE}Next steps:${NC}"
@@ -747,7 +857,8 @@ main() {
         echo "  2. Re-run this setup or clone manually:"
         echo "     sudo -u strapi git clone git@github.com:Cshion/godatify-landing.git ${APP_DIR}"
         echo "  3. Configure Cloudflare Tunnel (see docs/cloudflare-setup.md)"
-        echo "  4. Run: strapi-deploy"
+        echo "  4. From your Mac, run first deploy:"
+        echo "     cd backend && make deploy"
         echo ""
     fi
 }

@@ -1,16 +1,24 @@
 #!/bin/bash
 # ==============================================================================
-# Backend Deployment Script — godatify-landing
+# Backend Deployment Script — godatify-landing (SERVER-SIDE)
 # ==============================================================================
-# Deploys the Strapi backend to EC2
+# ⚠️  WARNING: This runs ON the server. Prefer `make deploy` from your Mac!
+#
+# The recommended deploy workflow is:
+#   cd backend && make deploy   # Builds locally, syncs to server
+#
+# This script is for:
+#   - Emergency deploys without access to dev machine
+#   - Hot-fixes that only need git pull (no build changes)
+#   - Initial first deploy after setup-ec2.sh
 #
 # Usage:
 #   ./deploy-backend.sh [OPTIONS]
 #
 # Options:
 #   --branch BRANCH     Git branch to deploy (default: main)
-#   --env ENV           Environment (default: production)
-#   --skip-build        Skip npm run build step
+#   --skip-build        Skip npm run build (DEFAULT - server is too small)
+#   --force-build       Force build on server (⚠️ may OOM on t4g.small)
 #   --help              Show this help message
 #
 # This script should be run on the EC2 instance after setup-ec2.sh
@@ -69,7 +77,8 @@ readonly PM2_APP_NAME="strapi"
 # Default options
 BRANCH="main"
 ENVIRONMENT="production"
-SKIP_BUILD=false
+SKIP_BUILD=true  # Default: skip build on server (too small for Strapi builds)
+FORCE_BUILD=false
 
 # Colors for output
 readonly RED='\033[0;31m'
@@ -119,27 +128,35 @@ run_as_strapi_with_env() {
 
 show_help() {
     cat << EOF
-Backend Deployment Script — godatify-landing
+Backend Deployment Script — godatify-landing (SERVER-SIDE)
+
+⚠️  RECOMMENDED: Use 'make deploy' from your Mac instead!
+    This builds locally and syncs to server — zero production impact.
+
+This script is for:
+    - Emergency deploys without access to dev machine
+    - Hot-fixes that only need git pull (no build changes)
+    - Initial first deploy after setup-ec2.sh
 
 Usage:
     ./deploy-backend.sh [OPTIONS]
 
 Options:
     --branch BRANCH     Git branch to deploy (default: main)
-    --env ENV           Environment name (default: production)
-    --skip-build        Skip the npm run build step
+    --skip-build        Skip build (DEFAULT — server is too small)
+    --force-build       Force build on server (⚠️ may OOM on t4g.small)
     --help              Show this help message
 
 Examples:
-    ./deploy-backend.sh
-    ./deploy-backend.sh --branch develop
-    ./deploy-backend.sh --branch main --skip-build
+    ./deploy-backend.sh                     # Pull + install deps + reload (no build)
+    ./deploy-backend.sh --branch develop    # Deploy develop branch
+    ./deploy-backend.sh --force-build       # Force build on server (risky!)
 
 What this script does:
     1. Checks prerequisites (Node.js, PM2, PostgreSQL)
     2. Pulls latest code from git
     3. Installs npm dependencies
-    4. Runs Strapi build (unless --skip-build)
+    4. Skips build by default (build should be done locally)
     5. Copies PM2 ecosystem config
     6. Restarts PM2
     7. Performs health check
@@ -393,12 +410,13 @@ main() {
                 BRANCH="$2"
                 shift 2
                 ;;
-            --env)
-                ENVIRONMENT="$2"
-                shift 2
-                ;;
             --skip-build)
                 SKIP_BUILD=true
+                shift
+                ;;
+            --force-build)
+                SKIP_BUILD=false
+                FORCE_BUILD=true
                 shift
                 ;;
             --help)
@@ -411,13 +429,30 @@ main() {
         esac
     done
     
+    # Warning if forcing build on server
+    if [[ "$FORCE_BUILD" == "true" ]]; then
+        echo ""
+        log_warn "╔══════════════════════════════════════════════════════════════╗"
+        log_warn "║  ⚠️  BUILDING ON SERVER - THIS MAY CAUSE ISSUES              ║"
+        log_warn "║  • t4g.small (2GB RAM) may OOM during build                  ║"
+        log_warn "║  • Production site may slow down or crash                    ║"
+        log_warn "║  • Recommended: Use 'make deploy' from your Mac instead      ║"
+        log_warn "╚══════════════════════════════════════════════════════════════╝"
+        echo ""
+        echo -n "Continue anyway? (y/N): "
+        read -r response
+        if [[ ! "$response" =~ ^[yY]$ ]]; then
+            log_info "Aborted. Use 'make deploy' from your Mac for safe deploys."
+            exit 0
+        fi
+    fi
+    
     echo ""
     echo "=========================================="
     echo "godatify-landing Backend Deployment"
     echo "=========================================="
     echo "Branch: ${BRANCH}"
-    echo "Environment: ${ENVIRONMENT}"
-    echo "Skip Build: ${SKIP_BUILD}"
+    echo "Skip Build: ${SKIP_BUILD} (build should be done locally via 'make deploy')"
     echo "Timestamp: $(date -Iseconds)"
     echo "=========================================="
     echo ""

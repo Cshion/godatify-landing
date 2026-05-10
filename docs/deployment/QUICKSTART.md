@@ -377,36 +377,44 @@ sudo cloudflared tunnel info
 
 > **Time:** 10 minutes
 
-Clone the repository and deploy Strapi.
+Clone the repository on server, then deploy from your local Mac.
 
-### Step 1: Clone Repository
+> ⚠️ **Important:** The t4g.small instance (2GB RAM) cannot build Strapi locally. We use a **local-build strategy**: build on your Mac, rsync to server.
+
+### Step 1: Clone Repository (on server)
 
 ```bash
-# As strapi user
+# SSH to server
+ssh godatify-backend
+
+# Clone repo as strapi user
 sudo -u strapi git clone https://github.com/YOUR_ORG/godatify-landing.git /var/www/godatify
 ```
 
-### Step 2: Copy Deploy Script
+### Step 2: Copy PM2 Config (on server)
 
 ```bash
 # Copy ecosystem config to scripts location
 sudo mkdir -p /opt/godatify/scripts
 sudo cp /var/www/godatify/scripts/infra/ecosystem.config.js /opt/godatify/scripts/
+
+# Also copy deploy script for emergency use only
 sudo cp /var/www/godatify/scripts/infra/deploy-backend.sh /opt/godatify/scripts/
 sudo chmod +x /opt/godatify/scripts/deploy-backend.sh
 ```
 
-### Step 3: Run Deployment
+### Step 3: Deploy from Your Mac
 
 ```bash
-# Run deploy script
-sudo /opt/godatify/scripts/deploy-backend.sh
+# On your local Mac
+cd backend
+make deploy
 ```
 
-The script will:
-1. Pull latest code
-2. Install npm dependencies
-3. Build Strapi
+The deploy script will:
+1. Build Strapi locally (on your Mac)
+2. Rsync dist/, config/, and packages to server
+3. Run `npm ci --omit=dev` on server (fast, no compilation)
 4. Start/restart PM2
 5. Run health check
 

@@ -5,7 +5,7 @@
 # Run `make help` to see available commands.
 # ============================================================================
 
-.PHONY: help install dev build start seed seed-mock clean reset-db reset-db-no-mock
+.PHONY: help install dev build start seed seed-mock clean reset-db reset-db-no-mock deploy deploy-dry deploy-fast
 
 .DEFAULT_GOAL := help
 
@@ -28,6 +28,10 @@ help:
 	@echo "║  make seed-mock       → Seed mock data (dev only)              ║"
 	@echo "║  make reset-db        → Reset DB + seed all (DESTRUCTIVE)      ║"
 	@echo "║  make reset-db-no-mock→ Reset DB + master only (DESTRUCTIVE)   ║"
+	@echo "╠════════════════════════════════════════════════════════════════╣"
+	@echo "║  make deploy     → Build local + deploy to production          ║"
+	@echo "║  make deploy-dry → Show what would be deployed (dry run)       ║"
+	@echo "║  make deploy-fast→ Deploy without rebuilding                   ║"
 	@echo "╠════════════════════════════════════════════════════════════════╣"
 	@echo "║  make clean      → Remove build artifacts                      ║"
 	@echo "╚════════════════════════════════════════════════════════════════╝"
@@ -119,3 +123,29 @@ clean:
 	rm -rf .cache
 	rm -f data.db
 	@echo "✅ Clean complete."
+
+# ----------------------------------------------------------------------------
+# Production Deployment
+# ----------------------------------------------------------------------------
+# Calls scripts/infra/deploy-local.sh which:
+#   1. Builds locally (Mac ARM64 = compatible with EC2 Graviton ARM64)
+#   2. Syncs to server via rsync
+#   3. Installs production dependencies
+#   4. Reloads PM2
+#
+# Configuration is in deploy-local.sh. Override via environment:
+#   EC2_HOST=1.2.3.4 make deploy
+# ----------------------------------------------------------------------------
+
+## deploy: Build locally + deploy to production server
+## Usage: make deploy [EC2_HOST=ip] [EC2_KEY=path]
+deploy:
+	@../scripts/infra/deploy-local.sh
+
+## deploy-dry: Show what would be deployed (rsync dry-run)
+deploy-dry:
+	@../scripts/infra/deploy-local.sh --dry-run
+
+## deploy-fast: Deploy without rebuilding (use existing dist/)
+deploy-fast:
+	@../scripts/infra/deploy-local.sh --skip-build

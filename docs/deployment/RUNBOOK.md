@@ -117,55 +117,71 @@ The script is idempotent — it checks before making changes:
 
 ### Overview
 
-Code deployment is separate from instance setup, allowing frequent deploys without re-running setup.
+Code deployment uses a **local-build strategy**: build on your Mac, rsync to server. This is required because the t4g.small instance (2GB RAM) cannot handle Strapi builds (requires 4GB+).
 
-**Script:** `scripts/infra/deploy-backend.sh`
+### Primary Method: Local Deploy (Recommended)
 
-### Basic Deployment
+Run from your Mac in the project root:
 
 ```bash
-# Standard deployment (main branch)
-./scripts/infra/deploy-backend.sh
+# Standard deployment (builds locally, syncs to server)
+cd backend && make deploy
 
-# Deploy specific branch
-./scripts/infra/deploy-backend.sh --branch develop
+# Dry run — preview what would be synced
+make deploy-dry
 
-# Skip build (for config-only changes)
-./scripts/infra/deploy-backend.sh --skip-build
+# Quick deploy — skip build, sync existing dist/
+make deploy-fast
 ```
 
-### What Deploy Does
+**What `make deploy` Does:**
 
-1. **Checks prerequisites** — Node.js, PM2, PostgreSQL running, env file exists
-2. **Pulls latest code** — `git fetch && git pull` on specified branch
-3. **Installs dependencies** — `npm ci --omit=dev`
-4. **Builds Strapi** — `npm run build` (unless `--skip-build`)
-5. **Copies PM2 config** — Updates ecosystem.config.js
-6. **Restarts PM2** — Zero-downtime reload if already running
-7. **Health check** — Polls `/_health` endpoint until healthy (HTTP 204)
+1. **Builds locally** — `npm run build` on your Mac
+2. **Syncs to server** — rsync transfers `dist/`, `package*.json`, `config/`, etc.
+3. **Installs deps on server** — `npm ci --omit=dev` (fast, no compilation)
+4. **Reloads PM2** — Zero-downtime reload
+5. **Health check** — Polls `/_health` until healthy (HTTP 204)
 
-### Deployment Options
+### Deploy Options
+
+| Command | Description | When to Use |
+|---------|-------------|-------------|
+| `make deploy` | Full build + sync + reload | Normal deploys |
+| `make deploy-dry` | Preview rsync (no changes) | Verify what will sync |
+| `make deploy-fast` | Sync existing dist/ | Config changes, quick fixes |
+
+### Emergency Only: Server-Side Deploy
+
+> ⚠️ **Use only when you cannot access your dev machine** — for git-pull hot-fixes.
 
 ```bash
-./deploy-backend.sh [OPTIONS]
+# SSH to server
+ssh godatify-backend
 
-Options:
-    --branch BRANCH     Git branch to deploy (default: main)
-    --env ENV           Environment name (default: production)
-    --skip-build        Skip npm run build step
-    --help              Show help
+# Run emergency deploy (pulls from git, skips build)
+sudo /opt/godatify/scripts/deploy-backend.sh --skip-build
 ```
 
-### First-Time Deployment
+**Why emergency only?**
+- Server has 2GB RAM; Strapi build needs 4GB+
+- Build will likely OOM or take 10+ minutes
+- Use `--skip-build` and only pull code changes
 
-Before first deployment, clone the repository:
+### First-Time Setup
+
+Before first deployment, the server needs the repo cloned:
 
 ```bash
-# As ec2-user or with sudo
+# SSH to server
+ssh godatify-backend
+
+# Clone repo (one-time)
 sudo -u strapi git clone https://github.com/your-org/godatify-landing.git /var/www/godatify
+```
 
-# Then deploy
-./scripts/infra/deploy-backend.sh
+Then from your Mac:
+```bash
+cd backend && make deploy
 ```
 
 ### Rollback
@@ -173,13 +189,18 @@ sudo -u strapi git clone https://github.com/your-org/godatify-landing.git /var/w
 To rollback to a previous version:
 
 ```bash
-# Check recent commits
+# On your Mac — checkout previous commit
+cd backend
+git log --oneline -10
+git checkout <commit-hash>
+make deploy
+
+# Or for emergency rollback (server-side)
+ssh godatify-backend
 cd /var/www/godatify
 git log --oneline -10
-
-# Deploy specific commit
 git checkout <commit-hash>
-./scripts/infra/deploy-backend.sh --skip-build  # Only if build unchanged
+sudo /opt/godatify/scripts/deploy-backend.sh --skip-build
 ```
 
 ---

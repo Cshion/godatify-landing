@@ -157,26 +157,36 @@ Instance configuration uses idempotent scripts that can be run multiple times sa
 
 ```
 scripts/infra/
-├── setup-ec2.sh        # Instance configuration (idempotent)
-├── deploy-backend.sh   # Code deployment
-├── ecosystem.config.js # PM2 configuration
-├── backup-db.sh        # Database backup
-├── cloudflared.service # Tunnel systemd service
+├── setup-ec2.sh         # Instance configuration (idempotent)
+├── deploy-local.sh      # LOCAL BUILD deploys from Mac (primary method)
+├── deploy-backend.sh    # Server-side deploy (emergency hot-fixes only)
+├── ecosystem.config.js  # PM2 configuration
+├── backup-db.sh         # Database backup
+├── cloudflared.service  # Tunnel systemd service
 └── archive/
     └── user-data.sh.bak # Archived (replaced by setup-ec2.sh)
 ```
 
 **setup-ec2.sh** — Configures a fresh or existing EC2 instance:
+- Configures EBS data volume for PostgreSQL (if attached)
 - Installs Node.js, PostgreSQL, PM2, cloudflared
 - Creates strapi user and directories
 - Configures PostgreSQL database
 - Sets up PM2 startup
 
-**deploy-backend.sh** — Deploys the Strapi application:
-- Pulls latest code from git
-- Installs npm dependencies
-- Builds Strapi
-- Restarts PM2 with zero downtime
+**deploy-local.sh** — Primary deployment method (LOCAL BUILD strategy):
+- Builds Strapi locally on your Mac (ARM64 M1/M2/M3 compatible)
+- Syncs built artifacts to EC2 via rsync over SSH
+- Installs npm dependencies on server (npm ci --omit=dev)
+- Reloads PM2 with zero downtime
+
+> **Why local build?** The t4g.small instance (2GB RAM) is too small to build Strapi.
+> Building locally leverages Mac's resources and avoids OOM issues on the server.
+
+**deploy-backend.sh** — Emergency server-side deploys:
+- For hot-fixes that only need `git pull` (no build changes)
+- For emergencies without access to dev machine
+- Skips build by default (server is too small)
 
 See [RUNBOOK.md](./RUNBOOK.md) for detailed usage.
 
@@ -265,6 +275,14 @@ Benefits:
 # NOTE: Native AL2023 uses /var/lib/pgsql, NOT /var/lib/postgresql (Debian/Ubuntu path)
 UUID=<data-vol-uuid>  /var/lib/pgsql  xfs  defaults,noatime,nodiratime  0 2
 ```
+
+**setup-ec2.sh handles this automatically:**
+1. Detects if a data volume is attached (`/dev/nvme1n1` on Nitro or `/dev/xvdf`)
+2. Formats as XFS if unformatted
+3. Mounts to `/var/lib/pgsql`
+4. Adds fstab entry for persistence
+
+If no data volume is attached, PostgreSQL uses the root volume (not recommended for production).
 
 ### Why Separate Data Volume?
 
