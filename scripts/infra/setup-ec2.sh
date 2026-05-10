@@ -160,6 +160,17 @@ step_system_update() {
         fi
     done
     log_info "System packages updated"
+    
+    # Set timezone to Peru (LATAM target market)
+    local target_tz="America/Lima"
+    local current_tz
+    current_tz=$(timedatectl show --property=Timezone --value 2>/dev/null || echo "UTC")
+    if [[ "$current_tz" != "$target_tz" ]]; then
+        timedatectl set-timezone "$target_tz"
+        log_info "Timezone set to ${target_tz}"
+    else
+        log_skip "Timezone already set to ${target_tz}"
+    fi
 }
 
 step_install_nodejs() {
@@ -307,10 +318,19 @@ step_configure_data_volume() {
     log_info "Mounting ${DATA_DEVICE} to ${DATA_MOUNT}..."
     mount "$DATA_DEVICE" "$DATA_MOUNT"
     
-    # Set ownership for postgres user (will be created by PostgreSQL install)
-    # For now, set to root — step_install_postgresql will fix ownership
-    chown root:root "$DATA_MOUNT"
-    chmod 755 "$DATA_MOUNT"
+    # Set ownership for postgres user
+    # PostgreSQL install creates the postgres user, but we need to ensure it exists first
+    # If postgres user doesn't exist yet, postgresql-setup --initdb will handle ownership
+    if id postgres &>/dev/null; then
+        chown postgres:postgres "$DATA_MOUNT"
+        chmod 700 "$DATA_MOUNT"
+        log_info "Set ownership to postgres:postgres"
+    else
+        # postgres user doesn't exist yet — set permissive and let postgresql install fix it
+        chown root:root "$DATA_MOUNT"
+        chmod 777 "$DATA_MOUNT"
+        log_info "postgres user not yet created — will fix ownership after PostgreSQL install"
+    fi
     
     # Add to fstab for persistence (if not already there)
     local vol_uuid
@@ -339,6 +359,15 @@ step_install_postgresql() {
         log_info "Installing PostgreSQL ${PG_VERSION} from native AL2023 repos..."
         dnf install -y postgresql${PG_VERSION}-server postgresql${PG_VERSION}-contrib
         log_info "PostgreSQL ${PG_VERSION} installed from native AL2023 repos"
+    fi
+    
+    # Ensure data directory has correct ownership BEFORE initdb
+    # This is critical when using a separate data volume
+    local DATA_MOUNT="/var/lib/pgsql"
+    if [[ -d "$DATA_MOUNT" ]]; then
+        chown postgres:postgres "$DATA_MOUNT"
+        chmod 700 "$DATA_MOUNT"
+        log_info "Set ${DATA_MOUNT} ownership to postgres:postgres"
     fi
     
     # Initialize database if not already done
