@@ -154,6 +154,8 @@ sync_to_server() {
         log_warn "DRY RUN - showing what would be synced:"
     fi
 
+    # Use sudo rsync with --chown to write files directly as strapi user
+    # This is cleaner than rsync + separate chown step
     rsync $rsync_opts \
         --exclude 'node_modules' \
         --exclude '.cache' \
@@ -161,6 +163,8 @@ sync_to_server() {
         --exclude '.env' \
         --exclude '*.log' \
         --exclude '.git' \
+        --rsync-path="sudo rsync" \
+        --chown="${STRAPI_USER}:${STRAPI_USER}" \
         -e "ssh -i ${EC2_KEY} -p ${EC2_PORT}" \
         ./ "${EC2_USER}@${EC2_HOST}:${REMOTE_PATH}/"
 

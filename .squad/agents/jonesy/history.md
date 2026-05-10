@@ -49,6 +49,28 @@
 - Node 20 via nvm for version management
 - Health check at `/_health` endpoint
 
+### 2026-05-10: Added ZRAM Configuration
+
+**Context:** t4g.small instances have only 2GB RAM. Memory pressure during Strapi admin operations or content imports could cause OOM kills.
+
+**Added `step_configure_zram()` to setup-ec2.sh:**
+- Config file: `/etc/systemd/zram-generator.conf`
+- Size: RAM / 2 (~1GB, effective ~2-4GB after compression)
+- Algorithm: `zstd` (best ratio for text/JSON workloads)
+- Idempotent: checks for existing config before creating
+
+**Why ZRAM over EBS swap:**
+- CPU decompression faster than 3ms EBS latency
+- No IOPS consumption (shared with PostgreSQL)
+- Graceful degradation vs OOM kills
+
+**Memory budget with ZRAM:**
+- OS + caches: ~300MB
+- PostgreSQL: ~100MB
+- PM2 daemon: ~50-100MB
+- Strapi: ~300-500MB
+- Available with ZRAM: ~2-4GB effective for bursts
+
 ### 2026-04-19: Cloudflare Proxy + EC2 Integration
 
 **Aaron's request:** Update deployment scripts to integrate Cloudflare proxy mode with EC2 backend.

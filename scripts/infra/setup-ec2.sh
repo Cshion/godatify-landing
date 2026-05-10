@@ -104,17 +104,23 @@ Options:
 
 What this script does:
     1. Updates system packages
-    2. Creates strapi system user
-    3. Installs Node.js ${NODE_VERSION} via NVM (for strapi user)
-    4. Installs PM2 globally (via NVM for strapi user)
-    5. Configures data volume (if attached) for PostgreSQL
-    6. Installs PostgreSQL ${PG_VERSION}
-    7. Installs cloudflared (Cloudflare Tunnel)
-    8. Creates required directories
-    9. Configures PostgreSQL (db/user)
-    10. Generates SSH deploy key for GitHub
-    11. Generates Strapi secrets (APP_KEYS, JWT, etc.)
-    12. Clones the repository (asks for GitHub key if needed)
+    2. Configures kernel parameters (TCP tuning, swappiness)
+    3. Configures security hardening (fail2ban, automatic updates)
+    4. Configures ZRAM swap (compressed memory, critical for 2GB RAM)
+    5. Creates strapi system user
+    6. Installs Node.js ${NODE_VERSION} via NVM (for strapi user)
+    7. Installs PM2 globally (via NVM for strapi user)
+    8. Configures data volume (if attached) for PostgreSQL
+    9. Installs PostgreSQL ${PG_VERSION}
+    10. Installs cloudflared (Cloudflare Tunnel)
+    11. Creates required directories
+    12. Configures log rotation (daily, 7-day retention)
+    13. Configures PostgreSQL (db/user)
+    14. Sets up PM2 startup (systemd service)
+    15. Generates SSH deploy key for GitHub
+    16. Generates Strapi secrets (APP_KEYS, JWT, etc.)
+    17. Configures convenience aliases (strapi-logs, strapi-status, etc.)
+    18. Clones the repository (asks for GitHub key if needed)
 
 This script is idempotent — safe to run multiple times.
 
@@ -142,12 +148,38 @@ check_root() {
     fi
 }
 
+configure_git_safe_directory() {
+    # Git 2.35.2+ introduced CVE-2022-24765 fix: refuses to operate in directories
+    # owned by different users. Since /var/www/godatify is owned by strapi but
+    # ec2-user runs deploy operations, both users need safe.directory configured.
+    
+    local dir="$APP_DIR"
+    
+    # Configure for ec2-user (runs deploys via rsync + git commands)
+    local ec2_gitconfig="/home/ec2-user/.gitconfig"
+    if [[ -f "$ec2_gitconfig" ]] && grep -q "safe.*directory.*${dir}" "$ec2_gitconfig" 2>/dev/null; then
+        log_skip "git safe.directory already configured for ec2-user"
+    else
+        sudo -u ec2-user git config --global --add safe.directory "$dir"
+        log_info "Configured git safe.directory for ec2-user → ${dir}"
+    fi
+    
+    # Configure for strapi user (runs the app, may need git for version checks)
+    local strapi_gitconfig="${STRAPI_HOME}/.gitconfig"
+    if [[ -f "$strapi_gitconfig" ]] && grep -q "safe.*directory.*${dir}" "$strapi_gitconfig" 2>/dev/null; then
+        log_skip "git safe.directory already configured for ${STRAPI_USER}"
+    else
+        sudo -u "$STRAPI_USER" git config --global --add safe.directory "$dir"
+        log_info "Configured git safe.directory for ${STRAPI_USER} → ${dir}"
+    fi
+}
+
 # ==============================================================================
 # Main Setup Steps
 # ==============================================================================
 
 step_system_update() {
-    log_info "[1/12] Updating system packages..."
+    log_info "[1/18] Updating system packages..."
     dnf update -y
     
     # Install essential tools
@@ -173,8 +205,99 @@ step_system_update() {
     fi
 }
 
+step_configure_zram() {
+    log_info "[4/18] Configuring ZRAM swap..."
+    
+    # ZRAM provides compressed in-memory swap, critical for t4g.small (2GB RAM).
+    # Benefits:
+    #   - Faster than EBS swap (CPU decompression < 3ms disk latency)
+    #   - No EBS IOPS consumption (important for PostgreSQL)
+    #   - ~2-4x compression on text/JSON (Strapi's primary workload)
+    #   - Graceful degradation under memory pressure (compress, don't OOM)
+    
+    local ZRAM_CONF="/etc/systemd/zram-generator.conf"
+    
+    # Check if already configured
+    if [[ -f "$ZRAM_CONF" ]]; then
+        log_skip "ZRAM already configured at ${ZRAM_CONF}"
+        
+        # Verify it's actually working
+        if swapon --show | grep -q "zram"; then
+            local zram_size
+            zram_size=$(swapon --show=SIZE,NAME --noheadings | grep zram | awk '{print $1}')
+            log_info "ZRAM swap active: ${zram_size}"
+        else
+            log_warn "ZRAM config exists but swap not active. Attempting to start..."
+            systemctl daemon-reload
+            systemctl restart systemd-zram-setup@zram0.service 2>/dev/null || true
+        fi
+        return
+    fi
+    
+    # Install zram-generator if not present (available in AL2023 repos)
+    if ! rpm -q zram-generator &> /dev/null; then
+        log_info "Installing zram-generator..."
+        dnf install -y zram-generator
+    fi
+    
+    # Create ZRAM configuration
+    # - zram-size = ram / 2 → ~1GB on 2GB instance (after compression, effective ~2-4GB)
+    # - compression-algorithm = zstd → best ratio for text/JSON workloads
+    log_info "Creating ZRAM configuration..."
+    cat > "$ZRAM_CONF" << 'ZRAMCONF'
+# ZRAM configuration for godatify-landing
+# t4g.small (2GB RAM) - provides compressed swap to handle memory pressure
+#
+# Why ZRAM over EBS swap:
+#   - CPU decompression is faster than EBS disk latency (~3ms)
+#   - Doesn't consume EBS IOPS (shared with PostgreSQL)
+#   - zstd achieves 2-4x compression on text/JSON (Strapi workload)
+
+[zram0]
+# Size = 50% of RAM → ~1GB uncompressed, ~2-4GB effective after compression
+zram-size = ram / 2
+
+# zstd: best compression ratio for text/JSON, good speed
+compression-algorithm = zstd
+
+# Swap priority (higher = preferred over disk swap if any)
+swap-priority = 100
+
+# Filesystem type (swap is most efficient for this use case)
+fs-type = swap
+ZRAMCONF
+    
+    log_info "ZRAM config created at ${ZRAM_CONF}"
+    
+    # Reload systemd to pick up the new generator config
+    log_info "Reloading systemd and starting ZRAM..."
+    systemctl daemon-reload
+    
+    # The zram-generator creates a systemd unit automatically
+    # Trigger it by starting the swap target or the specific device
+    systemctl start /dev/zram0 2>/dev/null || systemctl start systemd-zram-setup@zram0.service 2>/dev/null || true
+    
+    # Give it a moment to initialize
+    sleep 1
+    
+    # Verify ZRAM is active
+    if swapon --show | grep -q "zram"; then
+        local zram_size
+        zram_size=$(swapon --show=SIZE,NAME --noheadings | grep zram | awk '{print $1}')
+        log_success "ZRAM swap configured and active: ${zram_size}"
+        
+        # Show compression stats if available
+        if [[ -f /sys/block/zram0/mm_stat ]]; then
+            log_info "ZRAM device created at /dev/zram0"
+        fi
+    else
+        log_warn "ZRAM configuration created but swap not yet active."
+        log_warn "It will activate on next boot, or run: systemctl start systemd-zram-setup@zram0.service"
+    fi
+}
+
 step_install_nodejs() {
-    log_info "[3/12] Installing Node.js ${NODE_VERSION} via NVM for user ${STRAPI_USER}..."
+    log_info "[6/18] Installing Node.js ${NODE_VERSION} via NVM for user ${STRAPI_USER}..."
     
     # NVM is installed per-user. We install it for strapi user since PM2 runs as strapi.
     # This makes node available whenever strapi user runs anything (including PM2).
@@ -217,7 +340,7 @@ step_install_nodejs() {
 }
 
 step_install_pm2() {
-    log_info "[4/12] Installing PM2 for user ${STRAPI_USER}..."
+    log_info "[7/18] Installing PM2 for user ${STRAPI_USER}..."
     
     local NVM_DIR="${STRAPI_HOME}/.nvm"
     
@@ -241,7 +364,7 @@ step_install_pm2() {
 }
 
 step_configure_data_volume() {
-    log_info "[5/12] Configuring data volume for PostgreSQL..."
+    log_info "[8/18] Configuring data volume for PostgreSQL..."
     
     local DATA_MOUNT="/var/lib/pgsql"
     local DATA_DEVICE=""
@@ -348,7 +471,7 @@ step_configure_data_volume() {
 }
 
 step_install_postgresql() {
-    log_info "[6/12] Installing PostgreSQL ${PG_VERSION}..."
+    log_info "[9/18] Installing PostgreSQL ${PG_VERSION}..."
     
     # Check if already installed from native AL2023 repos
     if rpm -q postgresql${PG_VERSION}-server &> /dev/null; then
@@ -401,7 +524,7 @@ step_install_postgresql() {
 }
 
 step_install_cloudflared() {
-    log_info "[7/12] Installing cloudflared..."
+    log_info "[10/18] Installing cloudflared..."
     
     if command -v cloudflared &> /dev/null; then
         log_skip "cloudflared $(cloudflared --version | head -1) already installed"
@@ -455,7 +578,7 @@ step_install_cloudflared() {
 }
 
 step_create_strapi_user() {
-    log_info "[2/12] Creating strapi system user..."
+    log_info "[5/18] Creating strapi system user..."
     
     if id "$STRAPI_USER" &> /dev/null; then
         log_skip "User ${STRAPI_USER} already exists"
@@ -471,7 +594,7 @@ step_create_strapi_user() {
 }
 
 step_create_directories() {
-    log_info "[8/12] Creating directories..."
+    log_info "[11/18] Creating directories..."
     
     # Application directory
     if [[ ! -d "$APP_DIR" ]]; then
@@ -521,10 +644,15 @@ step_create_directories() {
     else
         log_skip "${OPT_DIR}/scripts already exists"
     fi
+    
+    # Configure git safe.directory for multi-user access (CVE-2022-24765 fix)
+    # Git 2.35.2+ refuses to operate in directories owned by different users.
+    # /var/www/godatify is owned by strapi, but ec2-user runs deploy operations.
+    configure_git_safe_directory
 }
 
 step_configure_postgresql() {
-    log_info "[9/12] Configuring PostgreSQL..."
+    log_info "[13/18] Configuring PostgreSQL..."
     
     # Check if strapi database exists
     if sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw strapi; then
@@ -610,7 +738,7 @@ EOSQL
 }
 
 step_setup_pm2_startup() {
-    log_info "Setting up PM2 startup..."
+    log_info "[14/18] Setting up PM2 startup..."
     
     # Check if PM2 startup is already configured
     if systemctl list-unit-files | grep -q "pm2-${STRAPI_USER}"; then
@@ -639,7 +767,7 @@ step_setup_pm2_startup() {
 }
 
 step_generate_ssh_key() {
-    log_info "[10/12] Generating SSH deploy key for ${STRAPI_USER}..."
+    log_info "[15/18] Generating SSH deploy key for ${STRAPI_USER}..."
     
     local SSH_KEY="${STRAPI_HOME}/.ssh/id_ed25519"
     
@@ -669,7 +797,7 @@ SSHCONFIG"
 }
 
 step_generate_strapi_secrets() {
-    log_info "[11/12] Generating Strapi secrets..."
+    log_info "[16/18] Generating Strapi secrets..."
     
     # Check if secrets already exist in env file
     if grep -q "^APP_KEYS=" "$ENV_FILE" 2>/dev/null; then
@@ -692,7 +820,7 @@ step_generate_strapi_secrets() {
 }
 
 step_clone_repository() {
-    log_info "[12/12] Cloning repository..."
+    log_info "[18/18] Cloning repository..."
     
     local REPO_URL="git@github.com:Cshion/godatify-landing.git"
     local SSH_PUB_KEY="${STRAPI_HOME}/.ssh/id_ed25519.pub"
@@ -762,8 +890,8 @@ step_clone_repository() {
     log_info "Cloning repository to ${APP_DIR}..."
     sudo -u "$STRAPI_USER" git clone "$REPO_URL" "$APP_DIR"
     
-    # Mark directory as safe to avoid "dubious ownership" errors
-    sudo -u "$STRAPI_USER" git config --global --add safe.directory "$APP_DIR"
+    # Note: git safe.directory is configured in step_create_directories() via
+    # configure_git_safe_directory() — runs before clone and handles both users.
     
     # Copy PM2 config to /opt/godatify/scripts/
     # NOTE: deploy-backend.sh is NOT copied — we use local deploys now.
@@ -776,8 +904,131 @@ step_clone_repository() {
     log_success "Repository cloned successfully!"
 }
 
+step_kernel_tuning() {
+    log_info "[2/18] Configuring kernel parameters for Node.js/PostgreSQL..."
+    
+    local SYSCTL_CONF="/etc/sysctl.d/99-godatify.conf"
+    
+    if [[ -f "$SYSCTL_CONF" ]]; then
+        log_skip "Kernel tuning already configured at ${SYSCTL_CONF}"
+        return
+    fi
+    
+    cat > "$SYSCTL_CONF" << 'SYSCTL'
+# Kernel tuning for Node.js/PostgreSQL on t4g.small (2GB RAM)
+# Applied by setup-ec2.sh for godatify-landing
+
+# Increase TCP SYN backlog (default 128 is too low)
+net.ipv4.tcp_max_syn_backlog = 1024
+
+# Reduce swappiness - prefer keeping app in RAM, use ZRAM only under pressure
+vm.swappiness = 10
+
+# TCP keepalive tuning (faster dead connection detection for DB connections)
+net.ipv4.tcp_keepalive_time = 600
+net.ipv4.tcp_keepalive_intvl = 60
+net.ipv4.tcp_keepalive_probes = 5
+
+# Increase local port range (more outbound connections)
+net.ipv4.ip_local_port_range = 1024 65535
+
+# Allow reuse of TIME_WAIT sockets (more efficient connection handling)
+net.ipv4.tcp_tw_reuse = 1
+SYSCTL
+
+    sysctl -p "$SYSCTL_CONF"
+    log_success "Kernel parameters configured"
+}
+
+step_security_hardening() {
+    log_info "[3/18] Configuring security hardening..."
+    
+    # fail2ban for SSH protection
+    if ! rpm -q fail2ban &> /dev/null; then
+        log_info "Installing fail2ban..."
+        dnf install -y fail2ban
+    else
+        log_skip "fail2ban already installed"
+    fi
+    
+    # Configure fail2ban jail for SSH
+    local JAIL_CONF="/etc/fail2ban/jail.local"
+    if [[ ! -f "$JAIL_CONF" ]]; then
+        cat > "$JAIL_CONF" << 'JAILCONF'
+[DEFAULT]
+bantime = 1h
+findtime = 10m
+maxretry = 5
+
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+logpath = /var/log/secure
+maxretry = 3
+JAILCONF
+        log_info "fail2ban SSH jail configured"
+    else
+        log_skip "fail2ban jail already configured"
+    fi
+    
+    systemctl enable fail2ban
+    systemctl start fail2ban
+    log_success "fail2ban enabled and active"
+    
+    # Automatic security updates
+    if ! rpm -q dnf-automatic &> /dev/null; then
+        log_info "Installing dnf-automatic for security updates..."
+        dnf install -y dnf-automatic
+    else
+        log_skip "dnf-automatic already installed"
+    fi
+    
+    # Enable automatic updates
+    sed -i 's/apply_updates = no/apply_updates = yes/' /etc/dnf/automatic.conf 2>/dev/null || true
+    systemctl enable --now dnf-automatic.timer
+    log_success "Automatic security updates enabled"
+}
+
+step_logrotate() {
+    log_info "[12/18] Configuring log rotation for Strapi..."
+    
+    local LOGROTATE_CONF="/etc/logrotate.d/strapi"
+    
+    if [[ -f "$LOGROTATE_CONF" ]]; then
+        log_skip "Logrotate already configured at ${LOGROTATE_CONF}"
+        return
+    fi
+    
+    # Ensure log directory exists (created by step_create_directories, but be safe)
+    mkdir -p "${LOG_DIR}"
+    chown "${STRAPI_USER}:${STRAPI_USER}" "${LOG_DIR}"
+    
+    cat > "$LOGROTATE_CONF" << LOGROTATE
+/var/log/strapi/*.log {
+    daily
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    create 640 ${STRAPI_USER} ${STRAPI_USER}
+    postrotate
+        ${STRAPI_HOME}/.nvm/versions/node/v${NODE_VERSION}*/bin/pm2 reloadLogs > /dev/null 2>&1 || true
+    endscript
+    sharedscripts
+    dateext
+    dateformat -%Y%m%d
+    maxage 30
+}
+LOGROTATE
+
+    chmod 644 "$LOGROTATE_CONF"
+    log_success "Strapi logrotate configured"
+}
+
 step_configure_aliases() {
-    log_info "Configuring convenience aliases..."
+    log_info "[17/18] Configuring convenience aliases..."
     
     local BASHRC="/home/ec2-user/.bashrc"
     local ALIAS_MARKER="# godatify aliases"
@@ -838,13 +1089,17 @@ main() {
     echo ""
     
     step_system_update
-    step_create_strapi_user      # Must be before Node.js (NVM is per-user)
+    step_kernel_tuning            # Optimize kernel for Node.js/PostgreSQL
+    step_security_hardening       # fail2ban, automatic updates
+    step_configure_zram           # ZRAM swap before memory-hungry apps
+    step_create_strapi_user       # Must be before Node.js (NVM is per-user)
     step_install_nodejs           # Installs NVM + Node.js for strapi user
     step_install_pm2              # Installs PM2 via NVM for strapi user
     step_configure_data_volume    # Configure EBS data volume BEFORE PostgreSQL
     step_install_postgresql
     step_install_cloudflared
     step_create_directories
+    step_logrotate                # Log rotation (after directories exist)
     step_configure_postgresql
     step_setup_pm2_startup
     step_generate_ssh_key         # Generate SSH key for git clone
