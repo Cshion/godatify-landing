@@ -58,5 +58,9 @@ export default ({ env }) => {
       ...connections[client],
       acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),
     },
+    settings: {
+      // Enable TypeScript migrations (looks in build dir instead of source)
+      useTypescriptMigrations: true,
+    },
   };
 };

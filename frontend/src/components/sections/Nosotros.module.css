@@ -35,6 +35,20 @@
     border: 0;
 }
 
+.sectionImage {
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Video element needs explicit sizing since it doesn't use Next.js Image fill */
+video.sectionImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
 .contentSide {
     padding-left: var(--space-8);
 }

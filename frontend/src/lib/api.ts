@@ -167,6 +167,7 @@ export const api = {
             hero: HeroContent;
             stats: Stat[];
             videoConfig: VideoConfig;
+            sectionImageUrl: string | null;
             carouselConfig: CarouselConfig;
             sectionLabels: any;
             clients: Client[];
@@ -208,6 +209,7 @@ export const api = {
 
             const stats: Stat[] = homeData.stats || [];
             const videoConfig: VideoConfig = homeData.videoConfig || { url: '', title: '', caption: '' };
+            const sectionImageUrl: string | null = homeData.sectionImageUrl || null;
             const carouselConfig: CarouselConfig = homeData.carouselConfig || { cardsPerView: 3, autoPlayInterval: 5000 };
             const sectionLabels = homeData.sectionLabels || {};
 
@@ -249,6 +251,7 @@ export const api = {
                 hero,
                 stats,
                 videoConfig,
+                sectionImageUrl,
                 carouselConfig,
                 sectionLabels,
                 clients,

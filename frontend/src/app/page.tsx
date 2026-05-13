@@ -28,6 +28,7 @@ export default async function Home() {
     hero,
     stats,
     videoConfig,
+    sectionImageUrl,
     carouselConfig,
     sectionLabels,
     clients,
@@ -43,6 +44,7 @@ export default async function Home() {
         <Nosotros
           stats={stats}
           videoConfig={videoConfig}
+          sectionImageUrl={sectionImageUrl ?? undefined}
           title={sectionLabels.about.title}
           buttonText={sectionLabels.about.button}
         />

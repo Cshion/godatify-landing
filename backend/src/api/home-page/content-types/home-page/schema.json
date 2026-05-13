@@ -42,6 +42,11 @@
         "videoConfig": {
             "type": "json"
         },
+        "sectionImageUrl": {
+            "type": "string",
+            "pluginOptions": {},
+            "displayName": "Section Image URL"
+        },
         "clients": {
             "type": "relation",
             "relation": "oneToMany",

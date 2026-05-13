@@ -219,6 +219,11 @@ export interface VideoConfig {
     caption: string;
 }
 
+export interface NosotrosSectionConfig {
+    sectionImageUrl?: string;
+    videoConfig?: VideoConfig;
+}
+
 export interface CarouselConfig {
     cardsPerView: number;
     autoPlayInterval: number;

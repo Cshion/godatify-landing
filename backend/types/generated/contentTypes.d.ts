@@ -913,6 +913,7 @@ export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    sectionImageUrl: Schema.Attribute.String;
     sectionLabels: Schema.Attribute.JSON;
     stats: Schema.Attribute.JSON;
     updatedAt: Schema.Attribute.DateTime;
