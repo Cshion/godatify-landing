@@ -34,12 +34,20 @@ export default async function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/images/favicon.png" type="image/png" />
-        {/* Preload hero background image for better LCP - responsive */}
+        {/* Preload hero background - mobile */}
         <link
           rel="preload"
           as="image"
-          imageSrcSet="/images/hero-bg-mobile.webp 768w, /images/hero-bg.webp 1920w"
-          imageSizes="100vw"
+          href="/images/hero-bg-mobile.webp"
+          media="(max-width: 768px)"
+          fetchPriority="high"
+        />
+        {/* Preload hero background - desktop */}
+        <link
+          rel="preload"
+          as="image"
+          href="/images/hero-bg.webp"
+          media="(min-width: 769px)"
           fetchPriority="high"
         />
       </head>

@@ -4,7 +4,7 @@
     "heroCtaText": "Contáctanos",
     "heroCtaHref": "/contacto",
     "heroScrollText": "Descubre más",
-    "heroBackgroundImageUrl": "/images/hero-bg.jpg",
+    "heroBackgroundImageUrl": "/images/hero-bg.webp",
     "heroGradient": "linear-gradient(90deg, rgba(19, 92, 81, 0.85) 0%, rgba(19, 92, 81, 0.6) 50%, rgba(19, 92, 81, 0.4) 100%)",
     "stats": [
         {

@@ -71,7 +71,9 @@ export default function PageHero({ title, subtitle, backgroundImage = '/images/h
         <section
             ref={sectionRef}
             className={styles.heroSection}
-            style={{
+            // Only set custom background if not using the default hero-bg
+            // This allows CSS media queries to handle responsive images
+            style={backgroundImage.includes('/images/hero-bg.webp') ? undefined : {
                 '--hero-bg-image': `url('${backgroundImage}')`
             } as React.CSSProperties}
         >

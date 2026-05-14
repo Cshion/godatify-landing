@@ -41,8 +41,8 @@ export default function Services({ services, title, buttonText }: ServicesProps)
               href={`/servicios/${service.slug || service.id}`}
               className={styles.methodologyCard}
             >
-              {/* Phase Number */}
-              <span className={styles.phaseNumber}>
+              {/* Phase Number - decorative */}
+              <span className={styles.phaseNumber} aria-hidden="true">
                 {String(index + 1).padStart(2, '0')}
               </span>
 
