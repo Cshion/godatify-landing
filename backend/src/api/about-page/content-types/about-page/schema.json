@@ -62,6 +62,9 @@
         },
         "tabs": {
             "type": "json"
+        },
+        "sectionImageUrl": {
+            "type": "string"
         }
     }
 }

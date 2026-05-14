@@ -75,6 +75,7 @@ export interface NosotrosContent {
         image: string;
     };
     tabs: TabLabel[];
+    sectionImageUrl?: string;
 }
 
 // Helper type for Industries Page Content

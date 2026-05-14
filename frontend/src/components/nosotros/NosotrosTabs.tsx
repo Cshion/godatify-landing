@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { NosotrosContent, VideoConfig } from '@/types';
+import { NosotrosContent } from '@/types';
 import Icon from '@/components/ui/Icon';
 import styles from './NosotrosTabs.module.css';
 
@@ -10,12 +10,11 @@ type Tab = 'quienes' | 'mision' | 'valores' | 'cultura';
 
 interface NosotrosTabsProps {
     content: NosotrosContent;
-    videoConfig: VideoConfig;
 }
 
-export default function NosotrosTabs({ content, videoConfig }: NosotrosTabsProps) {
+export default function NosotrosTabs({ content }: NosotrosTabsProps) {
     const [activeTab, setActiveTab] = useState<Tab>('quienes');
-    const { hero, mission, vision, values, culture, tabs } = content;
+    const { hero, mission, vision, values, culture, tabs, sectionImageUrl } = content;
 
     return (
         <section className={styles.tabsSection}>
@@ -48,17 +47,16 @@ export default function NosotrosTabs({ content, videoConfig }: NosotrosTabsProps
                     {/* Quiénes Somos */}
                     {activeTab === 'quienes' && (
                         <div className={styles.splitLayout}>
-                            {/* Video Section (Left) */}
-                            <div className={styles.videoContainer}>
-                                <div className={styles.videoWrapper}>
-                                    <iframe
-                                        src={videoConfig.url}
-                                        title={videoConfig.title}
-                                        className={styles.videoFrame}
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    />
-                                </div>
+                            {/* Image Section (Left) */}
+                            <div className={styles.imageWrapper}>
+                                <Image
+                                    src={sectionImageUrl || '/images/nosotros-quienes.webp'}
+                                    alt="Quiénes Somos - Datify"
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                    className={styles.image}
+                                    priority
+                                />
                             </div>
 
                             {/* Text Content (Right) */}
@@ -76,6 +74,7 @@ export default function NosotrosTabs({ content, videoConfig }: NosotrosTabsProps
                                     src={mission.image}
                                     alt="Misión y Visión"
                                     fill
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                     className={styles.image}
                                 />
                             </div>
@@ -115,6 +114,7 @@ export default function NosotrosTabs({ content, videoConfig }: NosotrosTabsProps
                                     src={culture.image}
                                     alt="Cultura Datify"
                                     fill
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                     className={styles.image}
                                 />
                             </div>

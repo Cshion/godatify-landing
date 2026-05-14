@@ -644,7 +644,6 @@ export const api = {
     about: {
         getContent: async (): Promise<NosotrosContent & {
             clients: Client[];
-            videoConfig: VideoConfig;
             sectionLabels: any;
         }> => {
             const clientsQuery = qs.stringify({
@@ -703,13 +702,13 @@ export const api = {
                     stats: aboutData.cultureStats || [],
                     image: aboutData.cultureImageUrl || '/images/placeholder.png'
                 },
-                tabs: aboutData.tabs || []
+                tabs: aboutData.tabs || [],
+                sectionImageUrl: aboutData.sectionImageUrl || '/images/nosotros-quienes.webp'
             };
 
             return {
                 ...content,
                 clients,
-                videoConfig: homeData?.videoConfig || { url: '', title: '', caption: '' },
                 sectionLabels: homeData?.sectionLabels || {}
             };
         }

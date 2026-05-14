@@ -464,6 +464,7 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
     missionText: Schema.Attribute.Text;
     missionTitle: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    sectionImageUrl: Schema.Attribute.String;
     tabs: Schema.Attribute.JSON;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
