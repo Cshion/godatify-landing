@@ -60,7 +60,7 @@ export default function Footer({ companyInfo, footerLinks, socialLinks, labels }
 
           {/* Quick Links */}
           <div className={styles.footerColumn}>
-            <h4 className={styles.footerHeading}>{labels.quickLinks}</h4>
+            <p className={styles.footerHeading}>{labels.quickLinks}</p>
             <ul className={styles.footerLinks}>
               {footerLinks.quickLinks.map((link) => (
                 <li key={link.href}>
@@ -72,7 +72,7 @@ export default function Footer({ companyInfo, footerLinks, socialLinks, labels }
 
           {/* Services */}
           <div className={styles.footerColumn}>
-            <h4 className={styles.footerHeading}>{labels.services}</h4>
+            <p className={styles.footerHeading}>{labels.services}</p>
             <ul className={styles.footerLinks}>
               {footerLinks.services.map((link) => (
                 <li key={link.href}>
@@ -84,7 +84,7 @@ export default function Footer({ companyInfo, footerLinks, socialLinks, labels }
 
           {/* Contact */}
           <div className={styles.footerColumn}>
-            <h4 className={styles.footerHeading}>{labels.contact}</h4>
+            <p className={styles.footerHeading}>{labels.contact}</p>
             <ul className={styles.footerLinks}>
               {footerLinks.contact.map((link) => (
                 <li key={link.href}>

@@ -29,6 +29,8 @@ export default function PartnerLogos() {
                                 src={partner.logo} 
                                 alt={partner.name}
                                 className={styles.logo}
+                                width={60}
+                                height={32}
                                 loading="lazy"
                             />
                         </div>
