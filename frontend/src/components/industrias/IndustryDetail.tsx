@@ -30,7 +30,7 @@ export default function IndustryDetail({ industry }: IndustryDetailProps) {
             <section className={styles.hero}>
                 <div className={styles.heroBackground}>
                     <Image
-                        src={industry.image || '/images/hero-industries.png'}
+                        src={industry.image || '/images/hero-industries.webp'}
                         alt={industry.title}
                         fill
                         className={styles.heroImage}
@@ -138,7 +138,7 @@ export default function IndustryDetail({ industry }: IndustryDetailProps) {
                     </div>
                     <div className={styles.valueImage}>
                         <Image
-                            src={industry.image || '/images/hero-industries.png'}
+                            src={industry.image || '/images/hero-industries.webp'}
                             alt={`Soluciones para ${industry.title}`}
                             fill
                             className={styles.valueImg}

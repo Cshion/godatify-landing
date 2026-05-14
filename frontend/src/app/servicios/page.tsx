@@ -57,7 +57,7 @@ export default async function ServiciosPage() {
             {/* Hero */}
             <section
                 style={{
-                    backgroundImage: "url('/images/hero-services.png')",
+                    backgroundImage: "url('/images/hero-services.webp')",
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                 }}

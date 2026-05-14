@@ -9,16 +9,14 @@
             "city": "Lima",
             "address": "Lima, Perú",
             "phone": "+51-1-7621-8900",
-            "email": "contacto.pe@godatify.com",
-            "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800"
+            "email": "contacto.pe@godatify.com"
         },
         {
             "country": "España",
             "city": "Madrid",
             "address": "Madrid, España",
             "phone": "+34 91 123 45 67",
-            "email": "contacto.es@godatify.com",
-            "image": "https://images.unsplash.com/photo-1577916960096-7c9b32e04eab?auto=format&fit=crop&q=80&w=800"
+            "email": "contacto.es@godatify.com"
         }
     ],
     "formTitle": "Agenda una Llamada",

@@ -7,13 +7,13 @@
         "Cultura de Datos",
         "Innovación Humana"
     ],
-    "heroBackgroundImageUrl": "/images/hero-nosotros.png",
+    "heroBackgroundImageUrl": "/images/hero-nosotros.webp",
     "missionTitle": "Nuestra Misión",
     "missionText": "Empoderar a las organizaciones para que tomen decisiones estratégicas basadas en datos. Convertimos información dispersa en insights accionables, implementando soluciones que generan valor desde el primer día. Creemos que cada empresa, sin importar su tamaño, merece acceso a las mejores prácticas de gestión de datos.",
-    "missionImageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
+    "missionImageUrl": "/images/nosotros-mission-vision.webp",
     "visionTitle": "Nuestra Visión",
     "visionText": "Ser el referente líder en consultoría de datos y transformación digital en Latinoamérica. Aspiramos a construir un ecosistema donde las organizaciones de la región compitan con las mejores del mundo, potenciadas por una cultura de datos sólida y tecnología de vanguardia.",
-    "visionImageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
+    "visionImageUrl": "/images/nosotros-mission-vision.webp",
     "values": [
         {
             "id": "compromiso",
@@ -62,7 +62,7 @@
             "label": "Soporte"
         }
     ],
-    "cultureImageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800",
+    "cultureImageUrl": "/images/nosotros-culture.webp",
     "tabs": [
         {
             "id": "quienes",

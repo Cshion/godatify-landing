@@ -8,5 +8,5 @@ interface ServiceHeroProps {
 }
 
 export default function ServiceHero({ title, description, phrases, backgroundImage }: ServiceHeroProps) {
-    return <PageHero title={title} subtitle={description} backgroundImage={backgroundImage || "/images/hero-services.png"} phrases={phrases} />;
+    return <PageHero title={title} subtitle={description} backgroundImage={backgroundImage || "/images/hero-services.webp"} phrases={phrases} />;
 }

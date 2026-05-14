@@ -374,7 +374,7 @@ export const api = {
             const hero = {
                 title: pageData.heroTitle,
                 subtitle: pageData.heroSubtitle,
-                backgroundImage: pageData.heroBackgroundImageUrl || '/images/hero-cases.png',
+                backgroundImage: pageData.heroBackgroundImageUrl || '/images/hero-cases.webp',
                 phrases: pageData.heroPhrases || []
             };
 
@@ -543,7 +543,7 @@ export const api = {
                 subtitle: pageData.heroSubtitle,
                 description: pageData.heroDescription || '',
                 phrases: pageData.heroPhrases || [],
-                backgroundImage: pageData.heroBackgroundImageUrl || '/images/hero-industries.png'
+                backgroundImage: pageData.heroBackgroundImageUrl || '/images/hero-industries.webp'
             };
 
             const cases: CaseStudy[] = casesData.map((item: any) => ({

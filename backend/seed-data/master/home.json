@@ -21,7 +21,6 @@
         }
     ],
     "videoConfig": {
-        "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
         "title": "Video Introductorio Datify",
         "caption": "Descubre cómo transformamos datos en decisiones"
     },

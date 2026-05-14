@@ -8,7 +8,7 @@
             "Valor Específico",
             "Transformación Vertical"
         ],
-        "heroBackgroundImageUrl": "/images/hero-industries.png"
+        "heroBackgroundImageUrl": "/images/hero-industries.webp"
     },
     "industries": [
         {
@@ -16,7 +16,7 @@
             "title": "Industria Cervecera",
             "sector": "consumo-masivo",
             "description": "Transformamos la cadena de valor cervecera con inteligencia de datos: desde la planta de producción hasta el punto de venta, ofrecemos visibilidad completa para decisiones comerciales y operativas precisas.",
-            "imageUrl": "https://images.unsplash.com/photo-1600256698643-1d9345bfd9ee?auto=format&fit=crop&q=80&w=1000",
+            "imageUrl": "/images/industry-cervecera.webp",
             "stats": [
                 {
                     "label": "Eficiencia Operativa",
@@ -55,7 +55,7 @@
             "title": "Industria Logística",
             "sector": "logistica-transporte",
             "description": "Optimizamos cada eslabón de la cadena logística con analítica avanzada: rutas inteligentes, gestión predictiva de flotas y visibilidad end-to-end para cumplir con entregas a tiempo y reducir costos operativos.",
-            "imageUrl": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000",
+            "imageUrl": "/images/industry-logistica.webp",
             "stats": [
                 {
                     "label": "Entregas On-Time",
@@ -94,7 +94,7 @@
             "title": "Industria Agrícola",
             "sector": "agro-pesca",
             "description": "Llevamos la agricultura de precisión a otro nivel: imágenes satelitales, sensores IoT y modelos predictivos que permiten maximizar rendimiento por hectárea, optimizar recursos hídricos y garantizar calidad de exportación.",
-            "imageUrl": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=1000",
+            "imageUrl": "/images/industry-agricola.webp",
             "stats": [
                 {
                     "label": "Rendimiento",
@@ -133,7 +133,7 @@
             "title": "Industria Pesquera",
             "sector": "agro-pesca",
             "description": "Digitalizamos operaciones pesqueras complejas: desde la captura hasta la planta de procesamiento, integramos datos para cumplimiento normativo, trazabilidad total y optimización de la flota en tiempo real.",
-            "imageUrl": "https://images.unsplash.com/photo-1534951009808-766178b47a8e?auto=format&fit=crop&q=80&w=1000",
+            "imageUrl": "/images/industry-pesquera.webp",
             "stats": [
                 {
                     "label": "Trazabilidad",
