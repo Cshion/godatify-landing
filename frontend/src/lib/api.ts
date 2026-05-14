@@ -203,7 +203,7 @@ export const api = {
                 ctaText: homeData.heroCtaText,
                 ctaHref: homeData.heroCtaHref,
                 scrollText: homeData.heroScrollText ?? '',
-                backgroundImage: homeData.heroBackgroundImageUrl || '/images/hero-bg.jpg',
+                backgroundImage: homeData.heroBackgroundImageUrl || '/images/hero-bg.webp',
                 gradient: homeData.heroGradient || 'linear-gradient(90deg, rgba(19, 92, 81, 0.85) 0%, rgba(19, 92, 81, 0.6) 50%, rgba(19, 92, 81, 0.4) 100%)',
             };
 

@@ -10,7 +10,7 @@ interface PageHeroProps {
     phrases?: string[];
 }
 
-export default function PageHero({ title, subtitle, backgroundImage = '/images/hero-bg.jpg', phrases = [] }: PageHeroProps) {
+export default function PageHero({ title, subtitle, backgroundImage = '/images/hero-bg.webp', phrases = [] }: PageHeroProps) {
     const sectionRef = useRef<HTMLElement>(null);
     // Start with the first phrase if available to avoid "Title -> Phrase -> Title" jump
     const safePhrases = phrases || [];

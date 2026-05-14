@@ -34,12 +34,15 @@ export default function Nosotros({ stats, videoConfig, sectionImageUrl, title, b
                 {hasImage ? (
                   isVideoFile ? (
                     // Local video file (MP4, WebM, MOV) - renders as looping video
+                    // Uses preload="none" and poster for faster initial paint
                     <video
                       src={sectionImageUrl!}
                       autoPlay
                       loop
                       muted
                       playsInline
+                      preload="none"
+                      poster={sectionImageUrl!.replace(/\.(mp4|webm|mov)$/i, '-poster.webp')}
                       className={styles.sectionImage}
                     />
                   ) : (

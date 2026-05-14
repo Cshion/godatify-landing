@@ -16,12 +16,19 @@
     content: '';
     position: absolute;
     inset: 0;
-    background-image: var(--hero-bg-image, url('/images/hero-bg.jpg'));
+    background-image: var(--hero-bg-image, url('/images/hero-bg.webp'));
     background-size: cover;
     background-position: center;
     opacity: 0.2;
     mix-blend-mode: overlay;
     z-index: 1;
+}
+
+/* Responsive hero background - smaller image for mobile */
+@media (max-width: 768px) {
+    .heroSection::before {
+        background-image: var(--hero-bg-image, url('/images/hero-bg-mobile.webp'));
+    }
 }
 
 /* Grid Overlay */
