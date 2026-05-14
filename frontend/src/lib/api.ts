@@ -204,7 +204,7 @@ export const api = {
                 ctaHref: homeData.heroCtaHref,
                 scrollText: homeData.heroScrollText ?? '',
                 // Always use webp format for hero background (optimized)
-                backgroundImage: (homeData.heroBackgroundImageUrl || '/images/hero-bg.webp').replace(/\.jpg$/, '.webp'),
+                backgroundImage: (homeData.heroBackgroundImageUrl || '/images/hero-bg.webp').replace(/\.(png|jpg)$/, '.webp'),
                 gradient: homeData.heroGradient || 'linear-gradient(90deg, rgba(19, 92, 81, 0.85) 0%, rgba(19, 92, 81, 0.6) 50%, rgba(19, 92, 81, 0.4) 100%)',
             };
 
@@ -375,7 +375,8 @@ export const api = {
             const hero = {
                 title: pageData.heroTitle,
                 subtitle: pageData.heroSubtitle,
-                backgroundImage: pageData.heroBackgroundImageUrl || '/images/hero-cases.webp',
+                // Always use webp format for hero background (optimized)
+                backgroundImage: (pageData.heroBackgroundImageUrl || '/images/hero-cases.webp').replace(/\.(png|jpg)$/, '.webp'),
                 phrases: pageData.heroPhrases || []
             };
 
@@ -544,7 +545,8 @@ export const api = {
                 subtitle: pageData.heroSubtitle,
                 description: pageData.heroDescription || '',
                 phrases: pageData.heroPhrases || [],
-                backgroundImage: pageData.heroBackgroundImageUrl || '/images/hero-industries.webp'
+                // Always use webp format for hero background (optimized)
+                backgroundImage: (pageData.heroBackgroundImageUrl || '/images/hero-industries.webp').replace(/\.(png|jpg)$/, '.webp')
             };
 
             const cases: CaseStudy[] = casesData.map((item: any) => ({
@@ -684,7 +686,8 @@ export const api = {
                     subtitle: aboutData.heroSubtitle,
                     description: aboutData.heroDescription,
                     phrases: aboutData.heroPhrases || [],
-                    backgroundImage: aboutData.heroBackgroundImageUrl
+                    // Always use webp format for hero background (optimized)
+                    backgroundImage: aboutData.heroBackgroundImageUrl?.replace(/\.(png|jpg)$/, '.webp')
                 },
                 mission: {
                     title: aboutData.missionTitle,

@@ -60,7 +60,7 @@
 .phaseNumber {
     font-size: var(--font-size-5xl);
     font-weight: var(--font-weight-bold);
-    color: #767676;  /* Neutral gray that passes WCAG AA contrast (4.54:1 against white) */
+    color: var(--color-gray-500);  /* Passes WCAG AA contrast (4.6:1 against white) */
     line-height: 1;
     margin-bottom: var(--space-4);
 }

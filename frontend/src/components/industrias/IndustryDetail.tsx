@@ -157,7 +157,7 @@ export default function IndustryDetail({ industry }: IndustryDetailProps) {
                         <div className={styles.projectsGrid}>
                             {industry.projects.map((project, idx) => (
                                 <div key={idx} className={styles.projectCard}>
-                                    <div className={styles.projectNumber}>{String(idx + 1).padStart(2, '0')}</div>
+                                    <div className={styles.projectNumber} aria-hidden="true">{String(idx + 1).padStart(2, '0')}</div>
                                     <p className={styles.projectText}>{project}</p>
                                 </div>
                             ))}
