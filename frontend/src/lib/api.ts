@@ -55,6 +55,14 @@ export const FOOTER_LINKS: FooterLinks = {
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
+// ISR Revalidation times (in seconds)
+// See: https://nextjs.org/docs/app/building-your-application/data-fetching/incremental-static-regeneration
+const REVALIDATE = {
+    GLOBAL: 3600,   // 1 hour - company info, nav, social links (rarely changes)
+    PAGE: 900,      // 15 min - page chrome, hero sections, about/contact
+    CONTENT: 300,   // 5 min - cases, blog, services, industries (content updates)
+} as const;
+
 // Helper for images
 const getStrapiMedia = (url: string | null | undefined) => {
     if (!url) return '/images/placeholder.png';
@@ -77,15 +85,15 @@ export const api = {
             const [infoRes, servicesRes, socialRes] = await Promise.all([
                 fetch(`${STRAPI_URL}/api/company-info`, {
                     headers: { 'Content-Type': 'application/json' },
-                    cache: 'no-store'
+                    next: { revalidate: REVALIDATE.GLOBAL }
                 }),
                 fetch(`${STRAPI_URL}/api/services?fields[0]=title&fields[1]=slug&fields[2]=description&pagination[limit]=20`, {
                     headers: { 'Content-Type': 'application/json' },
-                    cache: 'no-store'
+                    next: { revalidate: REVALIDATE.GLOBAL }
                 }),
                 fetch(`${STRAPI_URL}/api/social-links`, {
                     headers: { 'Content-Type': 'application/json' },
-                    cache: 'no-store'
+                    next: { revalidate: REVALIDATE.GLOBAL }
                 })
             ]);
 
@@ -136,7 +144,7 @@ export const api = {
             const sectors = await api.industries.getSectors();
 
             // Section labels from home page
-            const homeRes = await fetch(`${STRAPI_URL}/api/home-page`, { cache: 'no-store' });
+            const homeRes = await fetch(`${STRAPI_URL}/api/home-page`, { next: { revalidate: REVALIDATE.PAGE } });
             const homeJson = homeRes.ok ? await homeRes.json() : { data: null };
             const sectionLabels = homeJson.data?.sectionLabels || {};
 
@@ -151,7 +159,7 @@ export const api = {
             };
         },
         getSocialLinks: async (): Promise<SocialLink[]> => {
-            const res = await fetch(`${STRAPI_URL}/api/social-links`, { cache: 'no-store' });
+            const res = await fetch(`${STRAPI_URL}/api/social-links`, { next: { revalidate: REVALIDATE.GLOBAL } });
             if (!res.ok) throw new Error(`Failed to fetch social links: ${res.status}`);
             const json = await res.json();
             return (json.data || []).map((item: any) => ({
@@ -177,11 +185,11 @@ export const api = {
         }> => {
             // Parallel fetch for Home Page components
             const [homePageRes, testimonialsRes, servicesRes, casesRes, clientsRes] = await Promise.all([
-                fetch(`${STRAPI_URL}/api/home-page`, { cache: 'no-store' }),
-                fetch(`${STRAPI_URL}/api/testimonials?pagination[limit]=6&populate=*`, { cache: 'no-store' }),
-                fetch(`${STRAPI_URL}/api/services?fields[0]=title&fields[1]=slug&fields[2]=description&fields[3]=icon&pagination[limit]=10`, { cache: 'no-store' }),
-                fetch(`${STRAPI_URL}/api/case-studies?sort[0]=publishedAt:desc&sort[1]=slug:asc&pagination[limit]=6&fields[0]=slug&fields[1]=title&fields[2]=description&fields[3]=mainImageUrl`, { cache: 'no-store' }),
-                fetch(`${STRAPI_URL}/api/clients?fields[0]=name&fields[1]=logoUrl&pagination[limit]=20`, { cache: 'no-store' })
+                fetch(`${STRAPI_URL}/api/home-page`, { next: { revalidate: REVALIDATE.PAGE } }),
+                fetch(`${STRAPI_URL}/api/testimonials?pagination[limit]=6&populate=*`, { next: { revalidate: REVALIDATE.CONTENT } }),
+                fetch(`${STRAPI_URL}/api/services?fields[0]=title&fields[1]=slug&fields[2]=description&fields[3]=icon&pagination[limit]=10`, { next: { revalidate: REVALIDATE.CONTENT } }),
+                fetch(`${STRAPI_URL}/api/case-studies?sort[0]=publishedAt:desc&sort[1]=slug:asc&pagination[limit]=6&fields[0]=slug&fields[1]=title&fields[2]=description&fields[3]=mainImageUrl`, { next: { revalidate: REVALIDATE.CONTENT } }),
+                fetch(`${STRAPI_URL}/api/clients?fields[0]=name&fields[1]=logoUrl&pagination[limit]=20`, { next: { revalidate: REVALIDATE.PAGE } })
             ]);
 
             if (!homePageRes.ok) throw new Error(`Failed to fetch home page: ${homePageRes.status}`);
@@ -285,7 +293,7 @@ export const api = {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                cache: 'no-store'
+                next: { revalidate: REVALIDATE.CONTENT }
             });
 
             if (!res.ok) {
@@ -332,7 +340,7 @@ export const api = {
 
             const res = await fetch(`${STRAPI_URL}/api/services?${queryParams}`, {
                 headers: { 'Content-Type': 'application/json' },
-                cache: 'no-store'
+                next: { revalidate: REVALIDATE.CONTENT }
             });
             
             if (!res.ok) throw new Error(`Failed to fetch services: ${res.status}`);
@@ -352,12 +360,12 @@ export const api = {
     cases: {
         getPageData: async (): Promise<{ hero: any, cases: CaseStudy[] }> => {
             const [pageRes, casesRes] = await Promise.all([
-                fetch(`${STRAPI_URL}/api/cases-page`, { cache: 'no-store' }),
+                fetch(`${STRAPI_URL}/api/cases-page`, { next: { revalidate: REVALIDATE.PAGE } }),
                 fetch(`${STRAPI_URL}/api/case-studies?${qs.stringify({
                     sort: ['publishedAt:desc'],
                     pagination: { limit: 50 },
                     populate: '*',
-                }, { encodeValuesOnly: true })}`, { cache: 'no-store' })
+                }, { encodeValuesOnly: true })}`, { next: { revalidate: REVALIDATE.CONTENT } })
             ]);
 
             if (!pageRes.ok) throw new Error(`Failed to fetch cases page: ${pageRes.status}`);
@@ -410,8 +418,8 @@ export const api = {
             }, { encodeValuesOnly: true });
 
             const [caseRes, recentRes] = await Promise.all([
-                fetch(`${STRAPI_URL}/api/case-studies?${caseQuery}`, { cache: 'no-store' }),
-                fetch(`${STRAPI_URL}/api/case-studies?${recentQuery}`, { cache: 'no-store' })
+                fetch(`${STRAPI_URL}/api/case-studies?${caseQuery}`, { next: { revalidate: REVALIDATE.CONTENT } }),
+                fetch(`${STRAPI_URL}/api/case-studies?${recentQuery}`, { next: { revalidate: REVALIDATE.CONTENT } })
             ]);
 
             if (!caseRes.ok) throw new Error(`Failed to fetch case study: ${caseRes.status}`);
@@ -471,7 +479,7 @@ export const api = {
                 populate: '*',
             }, { encodeValuesOnly: true });
 
-            const res = await fetch(`${STRAPI_URL}/api/case-studies?${queryParams}`, { cache: 'no-store' });
+            const res = await fetch(`${STRAPI_URL}/api/case-studies?${queryParams}`, { next: { revalidate: REVALIDATE.CONTENT } });
             
             if (!res.ok) throw new Error(`Failed to fetch cases: ${res.status}`);
             
@@ -501,7 +509,7 @@ export const api = {
                 pagination: { limit: 100 }
             }, { encodeValuesOnly: true });
 
-            const res = await fetch(`${STRAPI_URL}/api/case-studies?${queryParams}`, { cache: 'no-store' });
+            const res = await fetch(`${STRAPI_URL}/api/case-studies?${queryParams}`, { next: { revalidate: REVALIDATE.CONTENT } });
             
             if (!res.ok) throw new Error(`Failed to fetch all cases: ${res.status}`);
             
@@ -525,8 +533,8 @@ export const api = {
         getPageData: async (): Promise<{ hero: any, sectors: Sector[], cases: CaseStudy[] }> => {
             const [sectorsRes, pageRes, casesRes] = await Promise.all([
                 api.industries.getSectors(),
-                fetch(`${STRAPI_URL}/api/industries-page`, { cache: 'no-store' }),
-                fetch(`${STRAPI_URL}/api/case-studies?pagination[limit]=20&populate=*`, { cache: 'no-store' })
+                fetch(`${STRAPI_URL}/api/industries-page`, { next: { revalidate: REVALIDATE.PAGE } }),
+                fetch(`${STRAPI_URL}/api/case-studies?pagination[limit]=20&populate=*`, { next: { revalidate: REVALIDATE.CONTENT } })
             ]);
 
             if (!pageRes.ok) throw new Error(`Failed to fetch industries page: ${pageRes.status}`);
@@ -569,7 +577,7 @@ export const api = {
                 sort: ['title:asc']
             }, { encodeValuesOnly: true });
 
-            const res = await fetch(`${STRAPI_URL}/api/sectors?${queryParams}`, { cache: 'no-store' });
+            const res = await fetch(`${STRAPI_URL}/api/sectors?${queryParams}`, { next: { revalidate: REVALIDATE.CONTENT } });
             
             if (!res.ok) throw new Error(`Failed to fetch sectors: ${res.status}`);
             
@@ -598,7 +606,7 @@ export const api = {
                 }
             }, { encodeValuesOnly: true });
 
-            const res = await fetch(`${STRAPI_URL}/api/industries?${queryParams}`, { cache: 'no-store' });
+            const res = await fetch(`${STRAPI_URL}/api/industries?${queryParams}`, { next: { revalidate: REVALIDATE.CONTENT } });
             
             if (!res.ok) throw new Error(`Failed to fetch industry: ${res.status}`);
             
@@ -629,7 +637,7 @@ export const api = {
                 pagination: { limit: 3 }
             }, { encodeValuesOnly: true });
 
-            const casesRes = await fetch(`${STRAPI_URL}/api/case-studies?${casesQuery}`, { cache: 'no-store' });
+            const casesRes = await fetch(`${STRAPI_URL}/api/case-studies?${casesQuery}`, { next: { revalidate: REVALIDATE.CONTENT } });
             const casesJson = await casesRes.json();
 
             const relatedCases: CaseStudy[] = (casesJson.data || []).map((c: any) => ({
@@ -655,9 +663,9 @@ export const api = {
             }, { encodeValuesOnly: true });
 
             const [aboutRes, clientsRes, homeRes] = await Promise.all([
-                fetch(`${STRAPI_URL}/api/about-page`, { cache: 'no-store' }),
-                fetch(`${STRAPI_URL}/api/clients?${clientsQuery}`, { cache: 'no-store' }),
-                fetch(`${STRAPI_URL}/api/home-page`, { cache: 'no-store' })
+                fetch(`${STRAPI_URL}/api/about-page`, { next: { revalidate: REVALIDATE.PAGE } }),
+                fetch(`${STRAPI_URL}/api/clients?${clientsQuery}`, { next: { revalidate: REVALIDATE.PAGE } }),
+                fetch(`${STRAPI_URL}/api/home-page`, { next: { revalidate: REVALIDATE.PAGE } })
             ]);
 
             if (!aboutRes.ok) throw new Error(`Failed to fetch about page: ${aboutRes.status}`);
@@ -719,7 +727,7 @@ export const api = {
     },
     contact: {
         getPageContent: async (): Promise<ContactPageContent> => {
-            const res = await fetch(`${STRAPI_URL}/api/contact-page`, { cache: 'no-store' });
+            const res = await fetch(`${STRAPI_URL}/api/contact-page`, { next: { revalidate: REVALIDATE.GLOBAL } });
             
             if (!res.ok) throw new Error(`Failed to fetch contact page: ${res.status}`);
             
@@ -757,7 +765,7 @@ export const api = {
 
     blog: {
         getPageData: async (): Promise<{ hero: { title: string; subtitle: string; description: string } }> => {
-            const res = await fetch(`${STRAPI_URL}/api/blog-page`, { cache: 'no-store' });
+            const res = await fetch(`${STRAPI_URL}/api/blog-page`, { next: { revalidate: REVALIDATE.PAGE } });
             
             if (!res.ok) throw new Error(`Failed to fetch blog page: ${res.status}`);
             
@@ -782,7 +790,7 @@ export const api = {
                 pagination: { start, limit }
             }, { encodeValuesOnly: true });
 
-            const res = await fetch(`${STRAPI_URL}/api/blog-posts?${queryParams}`, { cache: 'no-store' });
+            const res = await fetch(`${STRAPI_URL}/api/blog-posts?${queryParams}`, { next: { revalidate: REVALIDATE.CONTENT } });
             
             if (!res.ok) throw new Error(`Failed to fetch blog posts: ${res.status}`);
             
@@ -817,7 +825,7 @@ export const api = {
                 fields: ['title', 'slug', 'excerpt', 'date', 'readingTime', 'tags', 'featured', 'coverImageUrl']
             }, { encodeValuesOnly: true });
 
-            const res = await fetch(`${STRAPI_URL}/api/blog-posts?${queryParams}`, { cache: 'no-store' });
+            const res = await fetch(`${STRAPI_URL}/api/blog-posts?${queryParams}`, { next: { revalidate: REVALIDATE.CONTENT } });
             
             if (!res.ok) throw new Error(`Failed to fetch all blog posts: ${res.status}`);
             
@@ -849,7 +857,7 @@ export const api = {
                 fields: ['title', 'slug', 'excerpt', 'date', 'readingTime', 'tags', 'featured', 'content', 'coverImageUrl']
             }, { encodeValuesOnly: true });
 
-            const res = await fetch(`${STRAPI_URL}/api/blog-posts?${queryParams}`, { cache: 'no-store' });
+            const res = await fetch(`${STRAPI_URL}/api/blog-posts?${queryParams}`, { next: { revalidate: REVALIDATE.CONTENT } });
             
             if (!res.ok) throw new Error(`Failed to fetch blog post: ${res.status}`);
             
