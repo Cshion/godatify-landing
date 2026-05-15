@@ -7,26 +7,15 @@ import Clients from '@/components/sections/Clients';
 import PartnerLogos from '@/components/common/PartnerLogos';
 import Testimonials from '@/components/sections/Testimonials';
 import { generateBreadcrumbSchema } from '@/lib/schemas';
+import { generatePageMetadata } from '@/lib/seo';
 
 import { api } from '@/lib/api';
 
-export async function generateMetadata(): Promise<Metadata> {
-    const content = await api.about.getContent();
-    return {
-        title: 'Nosotros - Expertos en Data Analytics | Datify',
-        description: 'Conoce al equipo de Datify, tu aliado estratégico en transformación de datos. Descubre nuestra misión, visión y valores. →',
-        alternates: {
-            canonical: '/nosotros',
-        },
-        openGraph: {
-            title: 'Nosotros - Expertos en Data Analytics | Datify',
-            description: 'Conoce al equipo de Datify, tu aliado estratégico en transformación de datos. Descubre nuestra misión, visión y valores.',
-            url: 'https://godatify.com/nosotros',
-            type: 'website',
-            images: [{ url: 'https://godatify.com/images/og-image.png', width: 1200, height: 630 }],
-        },
-    };
-}
+export const metadata: Metadata = generatePageMetadata(
+    'Nosotros - Expertos en Data Analytics',
+    'Conoce al equipo de Datify, tu aliado estratégico en transformación de datos. Descubre nuestra misión, visión y valores. →',
+    '/nosotros'
+);
 
 export default async function NosotrosPage() {
     const content = await api.about.getContent();

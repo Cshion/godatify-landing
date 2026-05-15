@@ -3,21 +3,13 @@ import CasesHero from '@/components/casos/CasesHero';
 import CasesGrid from '@/components/casos/CasesGrid';
 import { api } from '@/lib/api';
 import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/schemas';
+import { generatePageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-    title: 'Casos de Éxito | Datify',
-    description: 'Descubre cómo hemos ayudado a empresas líderes a transformar sus datos en resultados tangibles. Ver casos de éxito en Data Analytics y BI. →',
-    alternates: {
-        canonical: '/casos',
-    },
-    openGraph: {
-        title: 'Casos de Éxito | Datify',
-        description: 'Descubre cómo hemos ayudado a empresas líderes a transformar sus datos en resultados tangibles.',
-        url: 'https://godatify.com/casos',
-        type: 'website',
-        images: [{ url: 'https://godatify.com/images/og-image.png', width: 1200, height: 630 }],
-    },
-};
+export const metadata: Metadata = generatePageMetadata(
+    'Casos de Éxito',
+    'Descubre cómo hemos ayudado a empresas líderes a transformar sus datos en resultados tangibles. Ver casos de éxito en Data Analytics y BI. →',
+    '/casos'
+);
 
 export const revalidate = 3600; // Revalidate every hour
 

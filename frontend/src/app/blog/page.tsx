@@ -3,21 +3,13 @@ import BlogHero from '@/components/blog/BlogHero';
 import BlogList from '@/components/blog/BlogList';
 import { api } from '@/lib/api';
 import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/schemas';
+import { generatePageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-    title: 'Blog de Data & AI para Empresas | Datify',
-    description: 'Explora artículos sobre Data Analytics, Machine Learning e Inteligencia Artificial. Estrategias prácticas para transformar tu negocio. →',
-    alternates: {
-        canonical: '/blog',
-    },
-    openGraph: {
-        title: 'Blog de Data & AI para Empresas | Datify',
-        description: 'Explora artículos sobre Data Analytics, Machine Learning e Inteligencia Artificial. Estrategias prácticas para transformar tu negocio.',
-        url: 'https://godatify.com/blog',
-        type: 'website',
-        images: [{ url: 'https://godatify.com/images/og-image.png', width: 1200, height: 630 }],
-    },
-};
+export const metadata: Metadata = generatePageMetadata(
+    'Blog de Data & AI para Empresas',
+    'Explora artículos sobre Data Analytics, Machine Learning e Inteligencia Artificial. Estrategias prácticas para transformar tu negocio. →',
+    '/blog'
+);
 
 export default async function BlogPage() {
     // Fetch page data and posts from CMS
