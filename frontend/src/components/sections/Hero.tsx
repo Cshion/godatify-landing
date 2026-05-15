@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { HeroContent } from '@/types';
 import Icon from '@/components/ui/Icon';
 import styles from './Hero.module.css';
@@ -34,10 +35,10 @@ export default function Hero({ heroContent }: HeroProps) {
           <p className={styles.heroSubtitle}>
             {heroContent.subtitle}
           </p>
-          <a href={heroContent.ctaHref} className={`${styles.heroCta} reveal`}>
+          <Link href={heroContent.ctaHref} className={`${styles.heroCta} reveal`}>
             {heroContent.ctaText}
             <Icon name="arrow-right" />
-          </a>
+          </Link>
         </div>
       </div>
 
