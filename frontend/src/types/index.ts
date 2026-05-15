@@ -157,6 +157,7 @@ export interface CompanyInfo {
     name: string;
     description: string;
     email: string;
+    phone: string;
     website: string;
     logo: {
         url: string;

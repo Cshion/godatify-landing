@@ -72,7 +72,7 @@ export default async function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(generateOrganizationSchema())
+            __html: JSON.stringify(generateOrganizationSchema(companyInfo, socialLinks))
           }}
         />
         <Header

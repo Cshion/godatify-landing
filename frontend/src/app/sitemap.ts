@@ -1,6 +1,10 @@
 import { MetadataRoute } from 'next';
 import { api } from '@/lib/api';
 
+// Build date is evaluated once at build/deploy time (not per-request)
+// This gives Google a stable date that updates with each deploy
+const BUILD_DATE = new Date();
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://godatify.com';
 
@@ -12,43 +16,43 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticRoutes: MetadataRoute.Sitemap = [
         {
             url: baseUrl,
-            lastModified: new Date(),
+            lastModified: BUILD_DATE,
             changeFrequency: 'weekly',
             priority: 1,
         },
         {
             url: `${baseUrl}/nosotros`,
-            lastModified: new Date(),
+            lastModified: BUILD_DATE,
             changeFrequency: 'monthly',
             priority: 0.8,
         },
         {
             url: `${baseUrl}/servicios`,
-            lastModified: new Date(),
+            lastModified: BUILD_DATE,
             changeFrequency: 'monthly',
             priority: 0.8,
         },
         {
             url: `${baseUrl}/casos`,
-            lastModified: new Date(),
+            lastModified: BUILD_DATE,
             changeFrequency: 'monthly',
             priority: 0.8,
         },
         {
             url: `${baseUrl}/contacto`,
-            lastModified: new Date(),
+            lastModified: BUILD_DATE,
             changeFrequency: 'monthly',
             priority: 0.7,
         },
         {
             url: `${baseUrl}/industrias`,
-            lastModified: new Date(),
+            lastModified: BUILD_DATE,
             changeFrequency: 'monthly',
             priority: 0.8,
         },
         {
             url: `${baseUrl}/blog`,
-            lastModified: new Date(),
+            lastModified: BUILD_DATE,
             changeFrequency: 'weekly',
             priority: 0.9,
         },
@@ -63,14 +67,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const serviceRoutes: MetadataRoute.Sitemap = services.map((service) => ({
         url: `${baseUrl}/servicios/${service.slug}`,
-        lastModified: new Date(),
+        lastModified: BUILD_DATE,
         changeFrequency: 'monthly',
         priority: 0.8,
     }));
 
     const caseRoutes: MetadataRoute.Sitemap = cases.map((c) => ({
         url: `${baseUrl}/casos/${c.slug}`,
-        lastModified: new Date(),
+        lastModified: BUILD_DATE,
         changeFrequency: 'monthly',
         priority: 0.6,
     }));
@@ -79,7 +83,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const industries = sectors.flatMap((sector) => sector.industries || []);
     const industryRoutes: MetadataRoute.Sitemap = industries.map((industry) => ({
         url: `${baseUrl}/industrias/${industry.slug}`,
-        lastModified: new Date(),
+        lastModified: BUILD_DATE,
         changeFrequency: 'monthly',
         priority: 0.7,
     }));

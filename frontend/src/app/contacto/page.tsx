@@ -12,7 +12,7 @@ export const metadata: Metadata = generatePageMetadata(
 
 export default async function ContactPage() {
     const contactContent = await api.contact.getPageContent();
-    const socialLinks = await api.company.getSocialLinks();
+    const { socialLinks, companyInfo } = await api.company.getGlobalData();
 
     return (
         <main id="main-content">
@@ -28,7 +28,7 @@ export default async function ContactPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(generateLocalBusinessSchema())
+                    __html: JSON.stringify(generateLocalBusinessSchema(companyInfo, socialLinks))
                 }}
             />
             

@@ -5,11 +5,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import BlogCTA from "@/components/blog/BlogCTA";
 import BlogCard from "@/components/blog/BlogCard";
+import RelatedServices from "@/components/blog/RelatedServices";
 import Icon from "@/components/ui/Icon";
 import styles from "./page.module.css";
 import { Metadata } from "next";
 import { formatDate } from "@/lib/formatDate";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/schemas";
+import { getRelatedServiceSlugs } from "@/lib/tagServiceMap";
 
 import { BLOG_STATIC_DATA } from "@/data/blog-data";
 
@@ -63,6 +65,13 @@ export default async function BlogPostPage({ params }: Props) {
     const relatedPosts = allPosts
         .filter((p) => p.id !== post.id && p.tags.some((tag) => post.tags.includes(tag)))
         .slice(0, 3);
+
+    // Get related services based on post tags
+    const allServices = await api.services.getAll();
+    const relatedServiceSlugs = getRelatedServiceSlugs(post.tags);
+    const relatedServices = allServices.filter((s) => 
+        s.slug && relatedServiceSlugs.includes(s.slug)
+    );
 
     return (
         <article className={styles.articleContainer}>
@@ -142,6 +151,7 @@ export default async function BlogPostPage({ params }: Props) {
                     <div className={styles.ctaWrapper}>
                         <BlogCTA />
                     </div>
+                    <RelatedServices services={relatedServices} />
                 </div>
 
                 {relatedPosts.length > 0 && (

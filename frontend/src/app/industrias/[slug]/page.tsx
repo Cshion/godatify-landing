@@ -5,7 +5,7 @@ import IndustryDetail from '@/components/industrias/IndustryDetail';
 import Cases from '@/components/sections/Cases';
 import Clients from '@/components/sections/Clients';
 import BlogCTA from '@/components/blog/BlogCTA';
-import { generateBreadcrumbSchema } from '@/lib/schemas';
+import { generateBreadcrumbSchema, generateIndustrySchema } from '@/lib/schemas';
 import { generatePageMetadata } from '@/lib/seo';
 import styles from '@/components/industrias/IndustryDetail.module.css';
 
@@ -59,6 +59,14 @@ export default async function IndustryDetailPage({ params }: IndustryPageProps) 
                         { name: 'Industrias', url: 'https://godatify.com/industrias' },
                         { name: industry.title }
                     ]))
+                }}
+            />
+
+            {/* Industry/ProfessionalService Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(generateIndustrySchema(industry, slug))
                 }}
             />
             

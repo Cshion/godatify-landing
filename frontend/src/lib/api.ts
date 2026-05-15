@@ -116,6 +116,7 @@ export const api = {
                 name: info.name,
                 description: info.description,
                 email: info.email,
+                phone: info.phone || '',
                 website: info.website,
                 logo: {
                     url: info.logoUrl || '/images/logo.png',
