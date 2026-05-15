@@ -15,7 +15,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
 
     const title = post?.title || 'Blog Post';
     const excerpt = post?.excerpt
-        ? (post.excerpt.length > 80 ? `${post.excerpt.slice(0, 80)}...` : post.excerpt)
+        ? (post.excerpt.length > 150 ? `${post.excerpt.slice(0, 150)}...` : post.excerpt)
         : '';
     const postImage = post?.image || '';
 
@@ -32,7 +32,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 {/* Left side: Post image */}
                 <div
                     style={{
-                        width: '40%',
+                        width: '50%',
                         height: '100%',
                         display: 'flex',
                         position: 'relative',
@@ -69,106 +69,40 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 {/* Right side: Content */}
                 <div
                     style={{
-                        width: '60%',
+                        width: '50%',
                         height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
-                        padding: '50px',
+                        justifyContent: 'center',
+                        padding: '60px 50px',
                         backgroundColor: 'white',
                     }}
                 >
-                    {/* Header */}
-                    <div
+                    <h1
                         style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            marginBottom: '30px',
+                            fontSize: '42px',
+                            fontWeight: 700,
+                            color: '#111827',
+                            margin: 0,
+                            marginBottom: '24px',
+                            lineHeight: 1.2,
+                            letterSpacing: '-0.5px',
                         }}
                     >
-                        {/* Logo */}
-                        <div
+                        {title}
+                    </h1>
+                    {excerpt && (
+                        <p
                             style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '10px',
-                            }}
-                        >
-                            <div
-                                style={{
-                                    width: '36px',
-                                    height: '36px',
-                                    backgroundColor: '#135c51',
-                                    borderRadius: '6px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '18px',
-                                    fontWeight: 700,
-                                    color: 'white',
-                                }}
-                            >
-                                D
-                            </div>
-                            <span style={{ fontSize: '20px', fontWeight: 600, color: '#135c51' }}>
-                                Datify
-                            </span>
-                        </div>
-                        <span style={{ fontSize: '13px', color: '#6b7280', fontWeight: 500 }}>
-                            BLOG
-                        </span>
-                    </div>
-
-                    {/* Main content */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            flex: 1,
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <h1
-                            style={{
-                                fontSize: '36px',
-                                fontWeight: 700,
-                                color: '#111827',
+                                fontSize: '20px',
+                                color: '#4b5563',
                                 margin: 0,
-                                marginBottom: '16px',
-                                lineHeight: 1.2,
-                                letterSpacing: '-0.5px',
+                                lineHeight: 1.6,
                             }}
                         >
-                            {title}
-                        </h1>
-                        {excerpt && (
-                            <p
-                                style={{
-                                    fontSize: '16px',
-                                    color: '#6b7280',
-                                    margin: 0,
-                                    lineHeight: 1.5,
-                                }}
-                            >
-                                {excerpt}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Footer */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-end',
-                            paddingTop: '20px',
-                            borderTop: '1px solid #e5e7eb',
-                        }}
-                    >
-                        <span style={{ fontSize: '14px', color: '#9ca3af' }}>
-                            godatify.com
-                        </span>
-                    </div>
+                            {excerpt}
+                        </p>
+                    )}
                 </div>
             </div>
         ),

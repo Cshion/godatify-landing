@@ -14,9 +14,9 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     const { caseStudy } = await api.cases.getDetailPageData(slug);
 
     const title = caseStudy?.title || 'Caso de Éxito';
-    const clientName = caseStudy?.client?.anonymous ? 'Confidencial' : (caseStudy?.client?.name || '');
+    const clientName = caseStudy?.client?.anonymous ? '' : (caseStudy?.client?.name || '');
     const description = caseStudy?.description
-        ? (caseStudy.description.length > 80 ? `${caseStudy.description.slice(0, 80)}...` : caseStudy.description)
+        ? (caseStudy.description.length > 150 ? `${caseStudy.description.slice(0, 150)}...` : caseStudy.description)
         : '';
     const caseImage = caseStudy?.image || '';
 
@@ -27,13 +27,13 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                     height: '100%',
                     width: '100%',
                     display: 'flex',
-                    backgroundColor: '#0e4a42',
+                    backgroundColor: 'white',
                 }}
             >
                 {/* Left side: Case image */}
                 <div
                     style={{
-                        width: '40%',
+                        width: '50%',
                         height: '100%',
                         display: 'flex',
                         position: 'relative',
@@ -60,7 +60,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                                 justifyContent: 'center',
                             }}
                         >
-                            <span style={{ fontSize: '100px', color: 'rgba(255,255,255,0.1)', fontWeight: 700 }}>
+                            <span style={{ fontSize: '80px', color: 'white', fontWeight: 700 }}>
                                 D
                             </span>
                         </div>
@@ -70,119 +70,53 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 {/* Right side: Content */}
                 <div
                     style={{
-                        width: '60%',
+                        width: '50%',
                         height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
-                        padding: '50px',
+                        justifyContent: 'center',
+                        padding: '60px 50px',
+                        backgroundColor: 'white',
                     }}
                 >
-                    {/* Header */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            marginBottom: '30px',
-                        }}
-                    >
-                        {/* Logo */}
-                        <div
+                    {clientName && (
+                        <span
                             style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '10px',
-                            }}
-                        >
-                            <div
-                                style={{
-                                    width: '40px',
-                                    height: '40px',
-                                    backgroundColor: 'white',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '20px',
-                                    fontWeight: 700,
-                                    color: '#135c51',
-                                }}
-                            >
-                                D
-                            </div>
-                            <span style={{ fontSize: '22px', fontWeight: 600, color: 'white' }}>
-                                Datify
-                            </span>
-                        </div>
-                        <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', letterSpacing: '1px' }}>
-                            CASO DE ÉXITO
-                        </span>
-                    </div>
-
-                    {/* Main content */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            flex: 1,
-                            justifyContent: 'center',
-                        }}
-                    >
-                        {/* Client name */}
-                        {clientName && (
-                            <span
-                                style={{
-                                    fontSize: '14px',
-                                    color: 'rgba(255,255,255,0.6)',
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '2px',
-                                    marginBottom: '12px',
-                                }}
-                            >
-                                {clientName}
-                            </span>
-                        )}
-                        <h1
-                            style={{
-                                fontSize: '38px',
-                                fontWeight: 700,
-                                color: 'white',
-                                margin: 0,
+                                fontSize: '16px',
+                                color: '#6b7280',
+                                textTransform: 'uppercase',
+                                letterSpacing: '2px',
                                 marginBottom: '16px',
-                                lineHeight: 1.15,
-                                letterSpacing: '-0.5px',
                             }}
                         >
-                            {title}
-                        </h1>
-                        {description && (
-                            <p
-                                style={{
-                                    fontSize: '16px',
-                                    color: 'rgba(255,255,255,0.75)',
-                                    margin: 0,
-                                    lineHeight: 1.5,
-                                }}
-                            >
-                                {description}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Footer */}
-                    <div
+                            {clientName}
+                        </span>
+                    )}
+                    <h1
                         style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-end',
-                            paddingTop: '20px',
-                            borderTop: '1px solid rgba(255,255,255,0.2)',
+                            fontSize: '40px',
+                            fontWeight: 700,
+                            color: '#111827',
+                            margin: 0,
+                            marginBottom: '24px',
+                            lineHeight: 1.2,
+                            letterSpacing: '-0.5px',
                         }}
                     >
-                        <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>
-                            godatify.com
-                        </span>
-                    </div>
+                        {title}
+                    </h1>
+                    {description && (
+                        <p
+                            style={{
+                                fontSize: '20px',
+                                color: '#4b5563',
+                                margin: 0,
+                                lineHeight: 1.6,
+                            }}
+                        >
+                            {description}
+                        </p>
+                    )}
                 </div>
             </div>
         ),
