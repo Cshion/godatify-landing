@@ -40,7 +40,6 @@ export const FOOTER_LINKS: FooterLinks = {
     services: [], // Populated dynamically from Strapi in getGlobalData()
     contact: [
         { href: '/contacto', label: 'Contacto' },
-        { href: '#', label: 'Términos y Políticas' },
     ],
 };
 
