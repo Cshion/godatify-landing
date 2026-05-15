@@ -37,16 +37,9 @@ export const FOOTER_LINKS: FooterLinks = {
         { href: '/industrias', label: 'Industrias' },
         { href: '/casos', label: 'Casos de éxito' },
     ],
-    services: [
-        { href: '/servicios/digital-platform', label: 'Digital Platform' },
-        { href: '/servicios/data-engineering', label: 'Data Engineering' },
-        { href: '/servicios/big-data-management', label: 'Big Data Management' },
-        { href: '/servicios/business-intelligence', label: 'Business Intelligence' },
-        { href: '/servicios/business-analytics', label: 'Business Analytics' },
-    ],
+    services: [], // Populated dynamically from Strapi in getGlobalData()
     contact: [
         { href: '/contacto', label: 'Contacto' },
-        { href: 'https://www.linkedin.com/company/godatify/', label: 'LinkedIn' },
         { href: '#', label: 'Términos y Políticas' },
     ],
 };
@@ -149,13 +142,22 @@ export const api = {
             const homeJson = homeRes.ok ? await homeRes.json() : { data: null };
             const sectionLabels = homeJson.data?.sectionLabels || {};
 
+            // Build footer links dynamically from Strapi services
+            const footerLinks: FooterLinks = {
+                ...FOOTER_LINKS,
+                services: servicesNav.map((s) => ({
+                    href: `/servicios/${s.slug}`,
+                    label: s.title,
+                })),
+            };
+
             return {
                 companyInfo,
                 servicesNav,
                 sectorsNav: sectors,
                 navLinks: NAV_LINKS,
                 socialLinks,
-                footerLinks: FOOTER_LINKS,
+                footerLinks,
                 sectionLabels
             };
         },

@@ -12,6 +12,7 @@ import { Metadata } from "next";
 import { formatDate } from "@/lib/formatDate";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/schemas";
 import { getRelatedServiceSlugs } from "@/lib/tagServiceMap";
+import { SITE_URL } from "@/lib/seo";
 
 import { BLOG_STATIC_DATA } from "@/data/blog-data";
 
@@ -138,8 +139,8 @@ export default async function BlogPostPage({ params }: Props) {
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
                         __html: JSON.stringify(generateBreadcrumbSchema([
-                            { name: 'Inicio', url: 'https://godatify.com/' },
-                            { name: 'Blog', url: 'https://godatify.com/blog' },
+                            { name: 'Inicio', url: `${SITE_URL}/` },
+                            { name: 'Blog', url: `${SITE_URL}/blog` },
                             { name: post.title }
                         ]))
                     }}

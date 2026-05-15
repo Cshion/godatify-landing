@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/schemas';
-import { generatePageMetadata } from '@/lib/seo';
+import { generatePageMetadata, SITE_URL } from '@/lib/seo';
 
 export const metadata: Metadata = generatePageMetadata(
     'Servicios de Data Analytics & BI',
@@ -34,7 +34,7 @@ export default async function ServiciosPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html: JSON.stringify(generateBreadcrumbSchema([
-                        { name: 'Inicio', url: 'https://godatify.com/' },
+                        { name: 'Inicio', url: `${SITE_URL}/` },
                         { name: 'Servicios' }
                     ]))
                 }}

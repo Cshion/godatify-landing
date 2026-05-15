@@ -8,6 +8,7 @@ import Testimonials from '@/components/sections/Testimonials';
 import PartnerLogos from '@/components/common/PartnerLogos';
 import ScrollReveal from '@/components/ui/ScrollReveal';
 import { api } from '@/lib/api';
+import { SITE_URL } from '@/lib/seo';
 
 export const metadata: Metadata = {
     title: 'Datify – Datificando las Organizaciones',
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'Datify – Datificando las Organizaciones',
         description: 'Transformamos datos en decisiones de negocio. Consultoría en Data Analytics, BI y AI para LATAM.',
-        url: 'https://godatify.com/',
+        url: `${SITE_URL}/`,
         type: 'website',
         // Image inherited from defaultMetadata in layout.tsx
     },

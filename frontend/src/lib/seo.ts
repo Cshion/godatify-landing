@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 
-const siteConfig = {
+// Centralized site configuration - import this in other files
+export const siteConfig = {
     name: "Datify",
     url: "https://godatify.com",
     description: "Transformamos datos en decisiones de negocio. Consultoría especializada en Data Analytics, BI y AI para empresas en LATAM. →",
     locale: "es_PE",
 };
+
+// Convenience export for URL
+export const SITE_URL = siteConfig.url;
 
 export const defaultMetadata: Metadata = {
     metadataBase: new URL(siteConfig.url),

@@ -1,12 +1,13 @@
 import { MetadataRoute } from 'next';
 import { api } from '@/lib/api';
+import { SITE_URL } from '@/lib/seo';
 
 // Build date is evaluated once at build/deploy time (not per-request)
 // This gives Google a stable date that updates with each deploy
 const BUILD_DATE = new Date();
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = 'https://godatify.com';
+    const baseUrl = SITE_URL;
 
     const posts = await api.blog.getAll();
     const services = await api.services.getAll();

@@ -6,7 +6,7 @@ import Cases from '@/components/sections/Cases';
 import Clients from '@/components/sections/Clients';
 import BlogCTA from '@/components/blog/BlogCTA';
 import { generateBreadcrumbSchema, generateIndustrySchema } from '@/lib/schemas';
-import { generatePageMetadata } from '@/lib/seo';
+import { generatePageMetadata, SITE_URL } from '@/lib/seo';
 import styles from '@/components/industrias/IndustryDetail.module.css';
 
 interface IndustryPageProps {
@@ -55,8 +55,8 @@ export default async function IndustryDetailPage({ params }: IndustryPageProps) 
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html: JSON.stringify(generateBreadcrumbSchema([
-                        { name: 'Inicio', url: 'https://godatify.com/' },
-                        { name: 'Industrias', url: 'https://godatify.com/industrias' },
+                        { name: 'Inicio', url: `${SITE_URL}/` },
+                        { name: 'Industrias', url: `${SITE_URL}/industrias` },
                         { name: industry.title }
                     ]))
                 }}

@@ -4,8 +4,8 @@
  */
 
 import { BlogPost, CaseStudy, CompanyInfo, Industry, Service, SocialLink } from '@/types';
+import { SITE_URL } from '@/lib/seo';
 
-const SITE_URL = 'https://godatify.com';
 const SITE_NAME = 'Datify';
 const LOGO_URL = `${SITE_URL}/images/logo.png`;
 

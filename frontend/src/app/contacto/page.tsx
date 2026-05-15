@@ -2,7 +2,7 @@ import { api } from '@/lib/api';
 import ContactHero from '@/components/contact/ContactHero';
 import { Metadata } from 'next';
 import { generateContactPageSchema, generateLocalBusinessSchema, generateBreadcrumbSchema } from '@/lib/schemas';
-import { generatePageMetadata } from '@/lib/seo';
+import { generatePageMetadata, SITE_URL } from '@/lib/seo';
 
 export const metadata: Metadata = generatePageMetadata(
     'Contacto - Consultoría de Datos',
@@ -37,7 +37,7 @@ export default async function ContactPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html: JSON.stringify(generateBreadcrumbSchema([
-                        { name: 'Inicio', url: 'https://godatify.com/' },
+                        { name: 'Inicio', url: `${SITE_URL}/` },
                         { name: 'Contacto' }
                     ]))
                 }}

@@ -3,7 +3,7 @@ import CasesHero from '@/components/casos/CasesHero';
 import CasesGrid from '@/components/casos/CasesGrid';
 import { api } from '@/lib/api';
 import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/schemas';
-import { generatePageMetadata } from '@/lib/seo';
+import { generatePageMetadata, SITE_URL } from '@/lib/seo';
 
 export const metadata: Metadata = generatePageMetadata(
     'Casos de Éxito',
@@ -36,7 +36,7 @@ export default async function CasosPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html: JSON.stringify(generateBreadcrumbSchema([
-                        { name: 'Inicio', url: 'https://godatify.com/' },
+                        { name: 'Inicio', url: `${SITE_URL}/` },
                         { name: 'Casos de Éxito' }
                     ]))
                 }}

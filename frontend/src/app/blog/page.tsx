@@ -3,7 +3,7 @@ import BlogHero from '@/components/blog/BlogHero';
 import BlogList from '@/components/blog/BlogList';
 import { api } from '@/lib/api';
 import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/schemas';
-import { generatePageMetadata } from '@/lib/seo';
+import { generatePageMetadata, SITE_URL } from '@/lib/seo';
 
 export const metadata: Metadata = generatePageMetadata(
     'Blog de Data & AI para Empresas',
@@ -37,7 +37,7 @@ export default async function BlogPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html: JSON.stringify(generateBreadcrumbSchema([
-                        { name: 'Inicio', url: 'https://godatify.com/' },
+                        { name: 'Inicio', url: `${SITE_URL}/` },
                         { name: 'Blog' }
                     ]))
                 }}

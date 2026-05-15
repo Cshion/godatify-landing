@@ -7,7 +7,7 @@ import Clients from '@/components/sections/Clients';
 import PartnerLogos from '@/components/common/PartnerLogos';
 import Testimonials from '@/components/sections/Testimonials';
 import { generateBreadcrumbSchema } from '@/lib/schemas';
-import { generatePageMetadata } from '@/lib/seo';
+import { generatePageMetadata, SITE_URL } from '@/lib/seo';
 
 import { api } from '@/lib/api';
 
@@ -30,7 +30,7 @@ export default async function NosotrosPage() {
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
                         __html: JSON.stringify(generateBreadcrumbSchema([
-                            { name: 'Inicio', url: 'https://godatify.com/' },
+                            { name: 'Inicio', url: `${SITE_URL}/` },
                             { name: 'Nosotros' }
                         ]))
                     }}
