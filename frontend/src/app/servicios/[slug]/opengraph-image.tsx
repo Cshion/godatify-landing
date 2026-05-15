@@ -14,9 +14,10 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     const { service } = await api.services.getDetailPageData(slug);
 
     const title = service?.title || 'Servicio';
-    const description = service?.description 
-        ? `${service.description.slice(0, 120)}...` 
-        : 'Servicios de Data Analytics para tu empresa';
+    const description = service?.description
+        ? (service.description.length > 80 ? `${service.description.slice(0, 80)}...` : service.description)
+        : 'Soluciones de data analytics para tu empresa';
+    const serviceImage = service?.backgroundImage || '';
 
     return new ImageResponse(
         (
@@ -25,43 +26,54 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                     height: '100%',
                     width: '100%',
                     display: 'flex',
-                    flexDirection: 'column',
                     backgroundColor: '#135c51',
-                    position: 'relative',
-                    overflow: 'hidden',
                 }}
             >
-                {/* Background pattern */}
+                {/* Left side: Service image */}
                 <div
                     style={{
-                        position: 'absolute',
-                        top: '-100px',
-                        right: '-100px',
-                        width: '400px',
-                        height: '400px',
-                        borderRadius: '50%',
-                        border: '1px solid rgba(255,255,255,0.1)',
+                        width: '40%',
+                        height: '100%',
+                        display: 'flex',
+                        position: 'relative',
+                        overflow: 'hidden',
                     }}
-                />
-                <div
-                    style={{
-                        position: 'absolute',
-                        bottom: '-150px',
-                        left: '-150px',
-                        width: '500px',
-                        height: '500px',
-                        borderRadius: '50%',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                    }}
-                />
+                >
+                    {serviceImage ? (
+                        <img
+                            src={serviceImage}
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                            }}
+                        />
+                    ) : (
+                        <div
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                backgroundColor: '#0e4a42',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <span style={{ fontSize: '100px', color: 'rgba(255,255,255,0.1)', fontWeight: 700 }}>
+                                D
+                            </span>
+                        </div>
+                    )}
+                </div>
 
+                {/* Right side: Content */}
                 <div
                     style={{
+                        width: '60%',
+                        height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
-                        padding: '60px',
-                        flex: 1,
-                        position: 'relative',
+                        padding: '50px',
                     }}
                 >
                     {/* Header */}
@@ -70,7 +82,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            marginBottom: '40px',
+                            marginBottom: '30px',
                         }}
                     >
                         {/* Logo */}
@@ -78,50 +90,32 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '12px',
+                                gap: '10px',
                             }}
                         >
                             <div
                                 style={{
-                                    width: '48px',
-                                    height: '48px',
+                                    width: '40px',
+                                    height: '40px',
                                     backgroundColor: 'white',
                                     borderRadius: '8px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    fontSize: '24px',
+                                    fontSize: '20px',
                                     fontWeight: 700,
                                     color: '#135c51',
                                 }}
                             >
                                 D
                             </div>
-                            <span
-                                style={{
-                                    fontSize: '28px',
-                                    fontWeight: 600,
-                                    color: 'white',
-                                }}
-                            >
+                            <span style={{ fontSize: '22px', fontWeight: 600, color: 'white' }}>
                                 Datify
                             </span>
                         </div>
-
-                        {/* Badge */}
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                backgroundColor: 'rgba(255,255,255,0.15)',
-                                padding: '8px 16px',
-                                borderRadius: '20px',
-                            }}
-                        >
-                            <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.9)' }}>
-                                SERVICIOS
-                            </span>
-                        </div>
+                        <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', letterSpacing: '1px' }}>
+                            SERVICIOS
+                        </span>
                     </div>
 
                     {/* Main content */}
@@ -133,29 +127,25 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                             justifyContent: 'center',
                         }}
                     >
-                        {/* Title */}
                         <h1
                             style={{
-                                fontSize: '54px',
+                                fontSize: '42px',
                                 fontWeight: 700,
                                 color: 'white',
                                 margin: 0,
                                 marginBottom: '16px',
-                                lineHeight: 1.1,
-                                letterSpacing: '-1px',
+                                lineHeight: 1.15,
+                                letterSpacing: '-0.5px',
                             }}
                         >
                             {title}
                         </h1>
-
-                        {/* Description */}
                         <p
                             style={{
-                                fontSize: '22px',
+                                fontSize: '18px',
                                 color: 'rgba(255,255,255,0.85)',
                                 margin: 0,
-                                lineHeight: 1.4,
-                                maxWidth: '750px',
+                                lineHeight: 1.5,
                             }}
                         >
                             {description}
@@ -166,18 +156,14 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                     <div
                         style={{
                             display: 'flex',
-                            justifyContent: 'space-between',
                             alignItems: 'center',
-                            marginTop: '40px',
-                            paddingTop: '24px',
+                            justifyContent: 'flex-end',
+                            paddingTop: '20px',
                             borderTop: '1px solid rgba(255,255,255,0.2)',
                         }}
                     >
-                        <span style={{ fontSize: '16px', color: 'rgba(255,255,255,0.7)' }}>
-                            godatify.com/servicios
-                        </span>
                         <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>
-                            Data Analytics • Business Intelligence • AI
+                            godatify.com
                         </span>
                     </div>
                 </div>

@@ -15,10 +15,10 @@ export default async function Image({ params }: { params: Promise<{ slug: string
 
     const title = caseStudy?.title || 'Caso de Éxito';
     const clientName = caseStudy?.client?.anonymous ? 'Confidencial' : (caseStudy?.client?.name || '');
-    const industry = caseStudy?.industry || '';
-    const description = caseStudy?.description 
-        ? (caseStudy.description.length > 100 ? `${caseStudy.description.slice(0, 100)}...` : caseStudy.description)
+    const description = caseStudy?.description
+        ? (caseStudy.description.length > 80 ? `${caseStudy.description.slice(0, 80)}...` : caseStudy.description)
         : '';
+    const caseImage = caseStudy?.image || '';
 
     return new ImageResponse(
         (
@@ -27,29 +27,54 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                     height: '100%',
                     width: '100%',
                     display: 'flex',
-                    flexDirection: 'column',
                     backgroundColor: '#0e4a42',
                 }}
             >
-                {/* Decorative gradient overlay */}
+                {/* Left side: Case image */}
                 <div
                     style={{
-                        position: 'absolute',
-                        top: 0,
-                        right: 0,
-                        width: '50%',
+                        width: '40%',
                         height: '100%',
-                        background: 'linear-gradient(135deg, transparent 0%, rgba(19, 92, 81, 0.5) 100%)',
+                        display: 'flex',
+                        position: 'relative',
+                        overflow: 'hidden',
                     }}
-                />
+                >
+                    {caseImage ? (
+                        <img
+                            src={caseImage}
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                            }}
+                        />
+                    ) : (
+                        <div
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                backgroundColor: '#135c51',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <span style={{ fontSize: '100px', color: 'rgba(255,255,255,0.1)', fontWeight: 700 }}>
+                                D
+                            </span>
+                        </div>
+                    )}
+                </div>
 
+                {/* Right side: Content */}
                 <div
                     style={{
+                        width: '60%',
+                        height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
-                        padding: '60px',
-                        flex: 1,
-                        position: 'relative',
+                        padding: '50px',
                     }}
                 >
                     {/* Header */}
@@ -58,7 +83,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            marginBottom: '50px',
+                            marginBottom: '30px',
                         }}
                     >
                         {/* Logo */}
@@ -66,50 +91,32 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '12px',
+                                gap: '10px',
                             }}
                         >
                             <div
                                 style={{
-                                    width: '48px',
-                                    height: '48px',
+                                    width: '40px',
+                                    height: '40px',
                                     backgroundColor: 'white',
                                     borderRadius: '8px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    fontSize: '24px',
+                                    fontSize: '20px',
                                     fontWeight: 700,
                                     color: '#135c51',
                                 }}
                             >
                                 D
                             </div>
-                            <span
-                                style={{
-                                    fontSize: '28px',
-                                    fontWeight: 600,
-                                    color: 'white',
-                                }}
-                            >
+                            <span style={{ fontSize: '22px', fontWeight: 600, color: 'white' }}>
                                 Datify
                             </span>
                         </div>
-
-                        {/* Badge */}
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                backgroundColor: 'rgba(255,255,255,0.15)',
-                                padding: '10px 20px',
-                                borderRadius: '24px',
-                            }}
-                        >
-                            <span style={{ fontSize: '14px', color: 'white', fontWeight: 500 }}>
-                                CASO DE ÉXITO
-                            </span>
-                        </div>
+                        <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', letterSpacing: '1px' }}>
+                            CASO DE ÉXITO
+                        </span>
                     </div>
 
                     {/* Main content */}
@@ -121,76 +128,59 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                             justifyContent: 'center',
                         }}
                     >
-                        {/* Client name if available */}
+                        {/* Client name */}
                         {clientName && (
-                            <div
+                            <span
                                 style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    marginBottom: '16px',
+                                    fontSize: '14px',
+                                    color: 'rgba(255,255,255,0.6)',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '2px',
+                                    marginBottom: '12px',
                                 }}
                             >
-                                <span
-                                    style={{
-                                        fontSize: '18px',
-                                        color: 'rgba(255,255,255,0.7)',
-                                        textTransform: 'uppercase',
-                                        letterSpacing: '2px',
-                                    }}
-                                >
-                                    {clientName}
-                                </span>
-                            </div>
+                                {clientName}
+                            </span>
                         )}
-
-                        {/* Title */}
                         <h1
                             style={{
-                                fontSize: '52px',
+                                fontSize: '38px',
                                 fontWeight: 700,
                                 color: 'white',
                                 margin: 0,
-                                marginBottom: '20px',
-                                lineHeight: 1.1,
-                                letterSpacing: '-1px',
-                                maxWidth: '850px',
+                                marginBottom: '16px',
+                                lineHeight: 1.15,
+                                letterSpacing: '-0.5px',
                             }}
                         >
                             {title}
                         </h1>
-
-                        {/* Description */}
-                        <p
-                            style={{
-                                fontSize: '20px',
-                                color: 'rgba(255,255,255,0.8)',
-                                margin: 0,
-                                lineHeight: 1.5,
-                                maxWidth: '700px',
-                            }}
-                        >
-                            {description}
-                        </p>
+                        {description && (
+                            <p
+                                style={{
+                                    fontSize: '16px',
+                                    color: 'rgba(255,255,255,0.75)',
+                                    margin: 0,
+                                    lineHeight: 1.5,
+                                }}
+                            >
+                                {description}
+                            </p>
+                        )}
                     </div>
 
                     {/* Footer */}
                     <div
                         style={{
                             display: 'flex',
-                            justifyContent: 'space-between',
                             alignItems: 'center',
-                            marginTop: '40px',
-                            paddingTop: '24px',
+                            justifyContent: 'flex-end',
+                            paddingTop: '20px',
                             borderTop: '1px solid rgba(255,255,255,0.2)',
                         }}
                     >
-                        {industry && (
-                            <span style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)' }}>
-                                {industry}
-                            </span>
-                        )}
                         <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>
-                            godatify.com/casos
+                            godatify.com
                         </span>
                     </div>
                 </div>
