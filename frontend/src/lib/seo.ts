@@ -82,14 +82,7 @@ export const defaultMetadata: Metadata = {
             },
         ],
     },
-    twitter: {
-        card: "summary_large_image",
-        site: "@godatify",
-        creator: "@godatify",
-        title: `${siteConfig.name} - Datificando las Organizaciones`,
-        description: siteConfig.description,
-        images: [`${siteConfig.url}/images/og-image.png`],
-    },
+    // Note: Twitter cards removed per team decision (2026-05-09) — LinkedIn is the target social network
 };
 
 /**

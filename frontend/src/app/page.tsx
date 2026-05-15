@@ -17,7 +17,7 @@ export const metadata: Metadata = {
         description: 'Transformamos datos en decisiones de negocio. Consultoría en Data Analytics, BI y AI para LATAM.',
         url: 'https://godatify.com/',
         type: 'website',
-        images: [{ url: 'https://godatify.com/images/og-image.png', width: 1200, height: 630 }],
+        // Image inherited from defaultMetadata in layout.tsx
     },
 };
 

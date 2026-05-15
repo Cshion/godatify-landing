@@ -2,27 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/schemas';
+import { generatePageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-    title: 'Servicios de Data Analytics & BI | Datify',
-    description: 'Consultoría especializada en Data Analytics, Business Intelligence, Data Engineering e IA para empresas líderes de LATAM. Transforma tus datos en decisiones.',
-    alternates: {
-        canonical: '/servicios',
-    },
-    openGraph: {
-        type: 'website',
-        url: '/servicios',
-        title: 'Servicios de Data Analytics & BI | Datify',
-        description: 'Consultoría especializada en Data Analytics, Business Intelligence, Data Engineering e IA para empresas líderes de LATAM. Transforma tus datos en decisiones.',
-        images: ['/images/og-image.png'],
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title: 'Servicios de Data Analytics & BI | Datify',
-        description: 'Consultoría especializada en Data Analytics, Business Intelligence, Data Engineering e IA para empresas líderes de LATAM. Transforma tus datos en decisiones.',
-        images: ['/images/og-image.png'],
-    },
-};
+export const metadata: Metadata = generatePageMetadata(
+    'Servicios de Data Analytics & BI',
+    'Consultoría especializada en Data Analytics, Business Intelligence, Data Engineering e IA para empresas líderes de LATAM. Transforma tus datos en decisiones.',
+    '/servicios'
+);
 
 export const revalidate = 3600;
 
